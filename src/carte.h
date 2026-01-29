@@ -21,6 +21,7 @@ typedef struct case_s {
 
     biome_t biome;
     batiment_t batiment;
+    int estVisible;
 
 } case_t;
 
