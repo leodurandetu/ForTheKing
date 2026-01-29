@@ -1,7 +1,8 @@
 # ForTheKing
 
 Ceci est le répertoire GitHub d'un projet de Licence 2 Informatique à l'université du Mans.
-Il s'agit d'un jeu fait en C avec SDL.
+Ce projet commence le 5 janvier 2026 avec le choix du sujet et se termine le 16 avril 2026, la veille d'une soutenance orale.
+Il s'agit d'un jeu fait en C avec SDL2.
 
 ## Membres du Groupe
 - MOHAMED Saandi
