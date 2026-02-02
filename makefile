@@ -6,9 +6,15 @@ SDL_INC_DIR=${SDL_DIR}/include
 LIBS=-L${SDL_LIB_DIR} -lSDL2 -lSDL2_image -lSDL2_ttf
 INCS=-I${SDL_INC_DIR}
 PROG=bin/fortheking
-all: sdl_text
-sdl_text: src/fortheking.c
-	${CC} -o ${PROG} src/fortheking.c ${LIBS} ${INCS} ${FLAGS}
+all: mon_prog
+
+mon_prog: src/fortheking.c
+	${CC} -o ${PROG} src/fortheking.c src/carte.c src/couleur.c $^ ${LIBS} ${INCS} ${FLAGS}
+
+test_carte:
+	${CC} -o bin/test_carte src/test_carte.c src/carte.c src/couleur.c $^ -L${SDL_LIB_DIR} ${INCS} ${FLAGS}
+
 clean:
 	rm -f ${PROG}
+	rm -f bin/test_carte
 	rm -f *.o

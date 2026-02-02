@@ -6,7 +6,7 @@ typedef enum {
 } biome_t;
 
 typedef enum {
-    RIEN,
+    PAS_DE_BATIMENT,
     CAMPEMENT,
     MAGASIN
 } type_bat_t;
@@ -25,9 +25,7 @@ typedef struct case_s {
 
 } case_t;
 
-#define TAILLE_CARTE 500
-
-case_t carte[TAILLE_CARTE][TAILLE_CARTE];
+#define TAILLE_CARTE 20
 
 /* Prototypes des fonctions */
 void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);

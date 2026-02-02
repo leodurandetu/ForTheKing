@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include "carte.h"
 
 int main() {
     printf("For The King!\n");
-
+    
     SDL_Window* pFenetre = NULL;
     SDL_Renderer * renderer = NULL;
 
