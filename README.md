@@ -18,6 +18,8 @@ Le monde est généré aléatoirement à chaque partie, ce qui rend chaque avent
   
 Le jeu comporte une dimension de survie : si tous les héros meurent, la partie s’arrête. L’objectif principal est donc d’explorer, progresser, devenir plus fort et rétablir la paix dans le royaume.
 
+## Fonctionnalités détaillées
+
 **Composition de l’équipe**  
 Le joueur contrôle une équipe de 1 à 3 personnages. Chaque personnage a une classe, des statistiques et un rôle différent.
 
