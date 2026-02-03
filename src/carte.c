@@ -46,6 +46,14 @@ void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAIL
 						SDL_SetRenderDrawColor (renderer, 232, 231, 114, 255);
 						break;
 
+					case NEIGE:
+						SDL_SetRenderDrawColor (renderer, 235, 250, 250, 255);
+						break;
+
+					case FORET:
+						SDL_SetRenderDrawColor (renderer, 34, 191, 27, 255);
+						break;
+
 					default:
 						SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
 						break;
@@ -103,6 +111,14 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 					case DESERT:
 						couleur_fond(ORANGE_BG);
+						break;
+
+					case NEIGE:
+						couleur_fond(WHITE_BG);
+						break;
+
+					case FORET:
+						couleur_fond(GREEN_BG);
 						break;
 
 					default:
@@ -163,21 +179,6 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 			maCase.estVisible = 1;
 
 			carte[x][y] = maCase;
-		}
-
-	}
-
-	/* pour tester (à remplacer par generer_biomes 
-	et generer_eau une fois qu'elles seront terminées)*/
-	carte[5][8].biome = EAU;
-
-	int i, j;
-
-	for (i = 8; i <= 10; i++) {
-
-		for (j = 1; j <= 6; j++) {
-			carte[i][j].batiment.type = CAMPEMENT;
-			carte[i][j].biome = DESERT;
 		}
 
 	}

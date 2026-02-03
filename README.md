@@ -1,6 +1,6 @@
 # ForTheKing
 
-Ceci est le répertoire GitHub d'un projet de Licence 2 Informatique à l'université du Mans. Ce projet commence le 5 janvier 2026 avec le choix du sujet et se termine le 16 avril 2026, la veille d'une soutenance orale. Il s'agit d'un jeu en 2D programmé en C. Nous utilisons la librairie SDL2 pour gérer l'interface graphique.
+Ceci est le répertoire GitHub d'un projet de Licence 2 Informatique à l'université du Mans. Ce projet commence le 5 janvier 2026 avec le choix du sujet et se termine le 16 avril 2026, la veille d'une soutenance orale. Il s'agit d'un jeu en 2D programmé en C.
 
 ## Membres du Groupe
 - MOHAMED Saandi
@@ -46,3 +46,9 @@ Si un personnage meurt, il peut parfois être ressuscité. Si toute l’équipe 
 
 **Objectif final**  
 Pour gagner, il faut accomplir les quêtes principales et vaincre le boss final afin de sauver le royaume.
+
+## Outils Techniques utilisés
+Nous utilisons la librairie SDL2 pour gérer l'interface graphique.  
+Gcc est notre choix pour compiler les programmes en C.  
+Le makefile est utilisé pour compiler un projet en plusieurs parties, et de recompiler seulement les fichiers modifiés.  
+Nous utilisons également Git pour pouvoir travailler en équipe sur un projet informatique.

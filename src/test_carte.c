@@ -11,8 +11,7 @@ int main() {
     printf("Test de la carte de For The King :\n");
 
     init_carte(carte);
-
     generer_eau(carte);
-
+    generer_biomes(carte);
     afficher_carte(carte);
 }

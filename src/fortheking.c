@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <time.h>
 #include "carte.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
@@ -37,6 +38,7 @@ int main() {
     srand(time(NULL));
     init_carte(carte);
     generer_eau(carte);
+    generer_biomes(carte);
 
     if (pFenetre) {
         int running = 1;
