@@ -49,6 +49,6 @@ Pour gagner, il faut accomplir les quêtes principales et vaincre le boss final 
 
 ## Outils Techniques utilisés
 Nous utilisons la librairie SDL2 pour gérer l'interface graphique.  
-Gcc est notre choix pour compiler les programmes en C.  
+Gcc nous sert à compiler les programmes en C.  
 Le makefile est utilisé pour compiler un projet en plusieurs parties, et de recompiler seulement les fichiers modifiés.  
 Nous utilisons également Git pour pouvoir travailler en équipe sur un projet informatique.
