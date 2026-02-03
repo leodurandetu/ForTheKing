@@ -11,10 +11,6 @@ all: mon_prog
 mon_prog: src/fortheking.c
 	${CC} -o ${PROG} src/fortheking.c src/carte.c src/couleur.c ${LIBS} ${INCS} ${FLAGS}
 
-test_carte:
-	${CC} -o bin/test_carte src/test_carte.c src/carte.c src/couleur.c ${LIBS} ${INCS} ${FLAGS}
-
 clean:
 	rm -f ${PROG}
-	rm -f bin/test_carte
 	rm -f *.o
