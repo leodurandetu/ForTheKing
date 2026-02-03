@@ -34,8 +34,8 @@ int main() {
         exit ( EXIT_FAILURE );
     }
 
+    srand(time(NULL));
     init_carte(carte);
-
     generer_eau(carte);
 
     if (pFenetre) {

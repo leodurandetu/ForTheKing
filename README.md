@@ -1,8 +1,6 @@
 # ForTheKing
 
-Ceci est le répertoire GitHub d'un projet de Licence 2 Informatique à l'université du Mans.
-Ce projet commence le 5 janvier 2026 avec le choix du sujet et se termine le 16 avril 2026, la veille d'une soutenance orale.
-Il s'agit d'un jeu fait en C avec SDL2.
+Ceci est le répertoire GitHub d'un projet de Licence 2 Informatique à l'université du Mans. Ce projet commence le 5 janvier 2026 avec le choix du sujet et se termine le 16 avril 2026, la veille d'une soutenance orale. Il s'agit d'un jeu en 2D programmé en C. Nous utilisons la librairie SDL2 pour gérer l'interface graphique.
 
 ## Membres du Groupe
 - MOHAMED Saandi
@@ -12,8 +10,12 @@ Il s'agit d'un jeu fait en C avec SDL2.
 ## Description du Jeu
 
 Notre projet est basé sur le jeu For The King.
-For The King est un jeu de rôle et d’aventure au tour par tour. Le but du jeu est de sauver le royaume de Fahrul, plongé dans le chaos après la mort du roi. Le joueur contrôle un groupe de un à trois héros qui doivent explorer le monde, accomplir des quêtes, combattre des ennemis et vaincre une menace finale.
-Le monde est généré aléatoirement à chaque partie, ce qui rend chaque aventure différente. Les déplacements se font sur une carte où l’on découvre des villes, des donjons et des événements. Les combats sont au tour par tour et reposent sur des statistiques et des jets de dés.
+For The King est un jeu de rôle et d’aventure au tour par tour.  
+  
+Le but du jeu est de sauver le royaume de Fahrul, plongé dans le chaos après la mort du roi. Le joueur contrôle un groupe de un à trois héros qui doivent explorer le monde, accomplir des quêtes, combattre des ennemis et vaincre une menace finale.  
+  
+Le monde est généré aléatoirement à chaque partie, ce qui rend chaque aventure différente. Les déplacements se font sur une carte où l’on découvre des villes, des donjons et des événements. Les combats sont au tour par tour et reposent sur des statistiques et des jets de dés.  
+  
 Le jeu comporte une dimension de survie : si tous les héros meurent, la partie s’arrête. L’objectif principal est donc d’explorer, progresser, devenir plus fort et rétablir la paix dans le royaume.
 
 **Composition de l’équipe**  
