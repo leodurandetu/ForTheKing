@@ -28,8 +28,9 @@ typedef struct case_s {
 #define TAILLE_CARTE 20
 
 /* Prototypes des fonctions */
-void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+void afficher_carte_terminal(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+void afficher_carte(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
-case_t test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
+int test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);

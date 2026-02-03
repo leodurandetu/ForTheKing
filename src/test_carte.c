@@ -8,5 +8,5 @@ int main() {
 
     init_carte(carte);
 
-    afficher_carte(carte);
+    afficher_carte_terminal(carte);
 }

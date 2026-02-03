@@ -1,9 +1,78 @@
 #include <stdio.h>
+#include <SDL2/SDL.h>
 #include "carte.h"
 #include "couleur.h"
 
 /* Leo */
-void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+
+/*
+REMARQUE :
+il manque l'affichage des batiments (campements et magasins)
+on pourrait améliorer aussi l'affichage plus tard
+*/
+void afficher_carte(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+	SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+
+	/* On en a besoin pour centrer la carte dans la fenêtre */
+	int lFenetre; /* largeur de la fenêtre */
+	int hFenetre; /* hauteur de la fenêtre */
+
+	SDL_GetRendererOutputSize(renderer, &lFenetre, &hFenetre);
+
+	int i, j;
+
+	int tailleCase = 20;
+
+	for (i = 0; i < TAILLE_CARTE; i++) {
+
+		for (j = 0; j < TAILLE_CARTE; j++) {
+			case_t maCase = carte[i][j];
+
+			if (!maCase.estVisible) {
+				SDL_SetRenderDrawColor (renderer, 0, 0, 0, 255);
+			} else {
+
+				switch (maCase.biome) {
+
+					case TERRE:
+						SDL_SetRenderDrawColor (renderer, 163, 130, 33, 255);
+						break;
+
+					case EAU:
+						SDL_SetRenderDrawColor (renderer, 33, 66, 163, 255);
+						break;
+
+					case DESERT:
+						SDL_SetRenderDrawColor (renderer, 232, 231, 114, 255);
+						break;
+
+					default:
+						SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+						break;
+
+				}
+
+			}
+
+			SDL_Rect rect;
+
+			/* ce code un peu compliqué permet de 
+			centrer la carte au milieu de la fenêtre */
+			rect.y = i * tailleCase + (hFenetre / 2) - (TAILLE_CARTE * tailleCase / 2);
+			rect.x = j * tailleCase + (lFenetre / 2) - (TAILLE_CARTE * tailleCase / 2);
+
+			rect.w = tailleCase;
+			rect.h = tailleCase;
+
+			SDL_RenderFillRect(renderer, &rect);
+		}
+
+	}
+
+}
+
+/* Leo */
+void afficher_carte_terminal(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 	int x, y;
 
 	couleur_reset();
@@ -121,8 +190,8 @@ void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 }
 
 /* Massoud */
-case_t test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
-
+int test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
+	return 0;
 }
 
 

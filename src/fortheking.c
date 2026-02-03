@@ -2,6 +2,8 @@
 #include <SDL2/SDL.h>
 #include "carte.h"
 
+case_t carte[TAILLE_CARTE][TAILLE_CARTE];
+
 int main() {
     printf("For The King!\n");
     
@@ -32,6 +34,8 @@ int main() {
         exit ( EXIT_FAILURE );
     }
 
+    init_carte(carte);
+
     if (pFenetre) {
         int running = 1;
 
@@ -53,6 +57,8 @@ int main() {
 
                             SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
                             SDL_RenderClear (renderer);
+
+                            afficher_carte(renderer, carte);
 
                             SDL_RenderPresent(renderer);
 
