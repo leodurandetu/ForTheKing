@@ -36,6 +36,8 @@ int main() {
 
     init_carte(carte);
 
+    generer_eau(carte);
+
     if (pFenetre) {
         int running = 1;
 
@@ -58,7 +60,7 @@ int main() {
                             SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
                             SDL_RenderClear (renderer);
 
-                            afficher_carte(renderer, carte);
+                            afficher_carte_sdl(renderer, carte);
 
                             SDL_RenderPresent(renderer);
 

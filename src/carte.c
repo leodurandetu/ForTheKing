@@ -10,7 +10,7 @@ REMARQUE :
 il manque l'affichage des batiments (campements et magasins)
 on pourrait améliorer aussi l'affichage plus tard
 */
-void afficher_carte(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 	SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
 
 	/* On en a besoin pour centrer la carte dans la fenêtre */
@@ -72,7 +72,7 @@ void afficher_carte(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_C
 }
 
 /* Leo */
-void afficher_carte_terminal(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 	int x, y;
 
 	couleur_reset();
@@ -186,14 +186,32 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 /* Massoud */
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+    
 
+    for(int i_cmpt=0; i_cmpt < TAILLE_CARTE/3; i_cmpt++){
+        for(int j_cmpt=0; j_cmpt < TAILLE_CARTE/3; j_cmpt++){
+            int i = rand() % TAILLE_CARTE;
+            int j = rand() % TAILLE_CARTE;
+            int etat_case = test_etat_case(carte,i,j);
+            if(etat_case != 4 && etat_case != 5){
+                carte[i][j].biome = EAU;
+            }
+        }
+    }
 }
 
 /* Massoud */
 int test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
-	return 0;
-}
 
+    switch(carte[x][y].batiment.type){
+        
+        case CAMPEMENT: return 4;
+        case MAGASIN: return 5;
+        case PAS_DE_BATIMENT: return 6;
+        default: printf("Erreur dans le type de batiment.\n");
+                    return -2;
+    }
+}
 
 /* Saandi */
 void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {

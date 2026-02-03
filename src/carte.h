@@ -1,3 +1,5 @@
+#include <SDL2/SDL.h>
+
 /* Structures */
 typedef enum {
     TERRE,
@@ -28,8 +30,8 @@ typedef struct case_s {
 #define TAILLE_CARTE 20
 
 /* Prototypes des fonctions */
-void afficher_carte_terminal(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
-void afficher_carte(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
