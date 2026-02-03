@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <time.h>
-#include "carte.h"
+#include "../lib/carte.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "couleur.h"
+#include "../lib/couleur.h"
 
 // Change uniquement la couleur du texte (foreground)
 void couleur_texte(int code) {

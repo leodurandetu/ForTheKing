@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
-#include "carte.h"
-#include "couleur.h"
+#include "../lib/carte.h"
+#include "../lib/couleur.h"
 
 /* Leo */
 
