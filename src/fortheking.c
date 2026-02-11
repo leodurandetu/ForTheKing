@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <time.h>
 #include "../lib/carte.h"
 
@@ -35,6 +36,34 @@ int main() {
         exit ( EXIT_FAILURE );
     }
 
+    char * nom_images[NB_BIOMES] = {
+        "img/terre.png", "img/eau.png",
+        "img/desert.png", "img/neige.png",
+        "img/foret.png"
+    };
+
+    SDL_Texture * textures_cases[NB_BIOMES];
+
+    int i;
+
+    for (i = 0; i < NB_BIOMES; i++) {
+        SDL_RWops * rwop = SDL_RWFromFile(nom_images[i] , "rb" );
+        SDL_Surface * image = IMG_LoadPNG_RW (rwop);
+        
+        if (!image) {
+            printf ( "IMG_LoadPNG_RW : %s \n " , IMG_GetError ());
+        }
+
+        SDL_Texture * tex =  SDL_CreateTextureFromSurface( renderer , image );
+        if (! tex ){
+            fprintf ( stderr , " Erreur a la creation du rendu de l’image : %s \n " , SDL_GetError ());
+            exit ( EXIT_FAILURE );
+        }
+        SDL_FreeSurface ( image ); /* on a la texture , plus besoin de l ’ image */
+
+        textures_cases[i] = tex;
+    }
+
     srand(time(NULL));
     init_carte(carte);
     generer_eau(carte);
@@ -62,7 +91,7 @@ int main() {
                             SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
                             SDL_RenderClear (renderer);
 
-                            afficher_carte_sdl(renderer, carte);
+                            afficher_carte_sdl(renderer, carte, textures_cases);
 
                             SDL_RenderPresent(renderer);
 

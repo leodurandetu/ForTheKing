@@ -10,7 +10,8 @@ REMARQUE :
 il manque l'affichage des batiments (campements et magasins)
 on pourrait améliorer aussi l'affichage plus tard
 */
-void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE],
+	SDL_Texture * textures_cases[NB_BIOMES]) {
 	SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
 
 	/* On en a besoin pour centrer la carte dans la fenêtre */
@@ -21,58 +22,28 @@ void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAIL
 
 	int i, j;
 
-	int tailleCase = 20;
+	int tailleCase = 50;
 
 	for (i = 0; i < TAILLE_CARTE; i++) {
 
 		for (j = 0; j < TAILLE_CARTE; j++) {
 			case_t maCase = carte[i][j];
 
-			if (!maCase.estVisible) {
-				SDL_SetRenderDrawColor (renderer, 0, 0, 0, 255);
-			} else {
+			if (maCase.estVisible) {
+				SDL_Rect rect;
 
-				switch (maCase.biome) {
+				/* ce code un peu compliqué permet de 
+				centrer la carte au milieu de la fenêtre */
+				rect.y = i * tailleCase + (hFenetre / 2) - (TAILLE_CARTE * tailleCase / 2);
+				rect.x = j * tailleCase + (lFenetre / 2) - (TAILLE_CARTE * tailleCase / 2);
 
-					case TERRE:
-						SDL_SetRenderDrawColor (renderer, 163, 130, 33, 255);
-						break;
+				rect.w = tailleCase;
+				rect.h = tailleCase;
 
-					case EAU:
-						SDL_SetRenderDrawColor (renderer, 33, 66, 163, 255);
-						break;
-
-					case DESERT:
-						SDL_SetRenderDrawColor (renderer, 232, 231, 114, 255);
-						break;
-
-					case NEIGE:
-						SDL_SetRenderDrawColor (renderer, 235, 250, 250, 255);
-						break;
-
-					case FORET:
-						SDL_SetRenderDrawColor (renderer, 34, 191, 27, 255);
-						break;
-
-					default:
-						SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-						break;
-
-				}
+				SDL_RenderCopy(renderer, textures_cases[maCase.biome], NULL, &rect);
 
 			}
 
-			SDL_Rect rect;
-
-			/* ce code un peu compliqué permet de 
-			centrer la carte au milieu de la fenêtre */
-			rect.y = i * tailleCase + (hFenetre / 2) - (TAILLE_CARTE * tailleCase / 2);
-			rect.x = j * tailleCase + (lFenetre / 2) - (TAILLE_CARTE * tailleCase / 2);
-
-			rect.w = tailleCase;
-			rect.h = tailleCase;
-
-			SDL_RenderFillRect(renderer, &rect);
 		}
 
 	}

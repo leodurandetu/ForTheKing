@@ -6,7 +6,8 @@ typedef enum {
     EAU,
     DESERT,
     NEIGE,
-    FORET
+    FORET,
+    NB_BIOMES
 } biome_t;
 
 typedef enum {
@@ -33,7 +34,9 @@ typedef struct case_s {
 
 /* Prototypes des fonctions */
 void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
-void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+void afficher_carte_sdl(SDL_Renderer * renderer,
+    case_t carte[TAILLE_CARTE][TAILLE_CARTE],
+    SDL_Texture * textures_cases[NB_BIOMES]);
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
