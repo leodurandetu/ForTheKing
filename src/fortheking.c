@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <time.h>
 #include "../lib/carte.h"
+#include "../lib/perso.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
@@ -64,12 +65,17 @@ int main() {
         textures_cases[i] = tex;
     }
 
+     /* Texture du personnage */
+    SDL_Surface *img_perso = IMG_Load("img/mage.png");
+    SDL_Texture *texture_perso = SDL_CreateTextureFromSurface(renderer, img_perso);
+    SDL_FreeSurface(img_perso);
+
     srand(time(NULL));
     init_carte(carte);
     generer_eau(carte);
     generer_biomes(carte);
-
-    int tailleCase = 50;
+    
+    perso_t *perso = init_perso(MAGE); 
 
     if (pFenetre) {
         int running = 1;
@@ -83,30 +89,21 @@ int main() {
                         running = 0;
                         break;
 
-                    case SDL_MOUSEWHEEL:
-                        tailleCase += e.wheel.y;
-
-                        SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-                        SDL_RenderClear (renderer);
-
-                        afficher_carte_sdl(renderer, carte, textures_cases, tailleCase);
-
-                        SDL_RenderPresent(renderer);
-
                     case SDL_WINDOWEVENT:
                         switch(e.window.event) {
                             case SDL_WINDOWEVENT_EXPOSED:
                             case SDL_WINDOWEVENT_SIZE_CHANGED:
                             case SDL_WINDOWEVENT_RESIZED:
                             case SDL_WINDOWEVENT_SHOWN:
-                                SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-                                SDL_RenderClear (renderer);
 
-                                afficher_carte_sdl(renderer, carte, textures_cases, tailleCase);
+                            SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+                            SDL_RenderClear (renderer);
 
-                                SDL_RenderPresent(renderer);
+                            afficher_carte_sdl(renderer, carte, textures_cases);
+                            afficher_personnage(renderer, texture_perso, perso);
+                            SDL_RenderPresent(renderer);
 
-                                break;
+                            break;
                         }
 
                         break;
