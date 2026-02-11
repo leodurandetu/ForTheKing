@@ -219,23 +219,22 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 	int i,j;
 	int nb_biomes = 4;
 	biome_t biomes[] = {TERRE,DESERT,NEIGE,FORET};
-	for(int k = 0; k < TAILLE_CARTE / 3; k++){
-		for(int l = 0; l < TAILLE_CARTE / 3; l++){
-			int x = rand()%nb_biomes;
-			i = rand()%TAILLE_CARTE;
-			j = rand()%TAILLE_CARTE;
+	/* on couvre un tiers de la surface de la carte (longueur x largeur) */
+	for(int k = 0; k < (TAILLE_CARTE * TAILLE_CARTE) / 3; k++){
+		int x = rand()%nb_biomes;
+		i = rand()%TAILLE_CARTE;
+		j = rand()%TAILLE_CARTE;
 
-			switch (carte[i][j].biome)
-			{
-			case TERRE:
-			case DESERT:
-			case NEIGE:
-			case FORET:
-				carte[i][j].biome = biomes[x];
-				break;
-			default:
-				break;
-			}
+		switch (carte[i][j].biome)
+		{
+		case TERRE:
+		case DESERT:
+		case NEIGE:
+		case FORET:
+			carte[i][j].biome = biomes[x];
+			break;
+		default:
+			break;
 		}
 	}
 }

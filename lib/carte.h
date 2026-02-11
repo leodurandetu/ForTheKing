@@ -6,7 +6,7 @@ typedef enum {
     EAU,
     DESERT,
     NEIGE,
-    FORET,
+    FORET
 } biome_t;
 
 typedef enum {
