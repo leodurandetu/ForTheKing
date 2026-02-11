@@ -21,3 +21,11 @@ typedef struct {
     perso_type_t type;
 
 } perso_t;
+
+
+/* Prototypes des fonctions*/
+
+/* Massoud */
+void afficher_personnage(SDL_Renderer *renderer,SDL_Texture *texture,perso_t *pers);
+/* Leo */
+perso_t * init_perso(perso_type_t persoType);
