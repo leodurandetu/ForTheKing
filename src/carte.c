@@ -11,7 +11,7 @@ il manque l'affichage des batiments (campements et magasins)
 on pourrait améliorer aussi l'affichage plus tard
 */
 void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE],
-	SDL_Texture * textures_cases[NB_BIOMES]) {
+	SDL_Texture * textures_cases[NB_BIOMES], int tailleCase) {
 	SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
 
 	/* On en a besoin pour centrer la carte dans la fenêtre */
@@ -21,8 +21,6 @@ void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAIL
 	SDL_GetRendererOutputSize(renderer, &lFenetre, &hFenetre);
 
 	int i, j;
-
-	int tailleCase = 50;
 
 	for (i = 0; i < TAILLE_CARTE; i++) {
 

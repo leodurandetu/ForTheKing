@@ -69,6 +69,8 @@ int main() {
     generer_eau(carte);
     generer_biomes(carte);
 
+    int tailleCase = 50;
+
     if (pFenetre) {
         int running = 1;
 
@@ -81,21 +83,30 @@ int main() {
                         running = 0;
                         break;
 
+                    case SDL_MOUSEWHEEL:
+                        tailleCase += e.wheel.y;
+
+                        SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+                        SDL_RenderClear (renderer);
+
+                        afficher_carte_sdl(renderer, carte, textures_cases, tailleCase);
+
+                        SDL_RenderPresent(renderer);
+
                     case SDL_WINDOWEVENT:
                         switch(e.window.event) {
                             case SDL_WINDOWEVENT_EXPOSED:
                             case SDL_WINDOWEVENT_SIZE_CHANGED:
                             case SDL_WINDOWEVENT_RESIZED:
                             case SDL_WINDOWEVENT_SHOWN:
+                                SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+                                SDL_RenderClear (renderer);
 
-                            SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-                            SDL_RenderClear (renderer);
+                                afficher_carte_sdl(renderer, carte, textures_cases, tailleCase);
 
-                            afficher_carte_sdl(renderer, carte, textures_cases);
+                                SDL_RenderPresent(renderer);
 
-                            SDL_RenderPresent(renderer);
-
-                            break;
+                                break;
                         }
 
                         break;

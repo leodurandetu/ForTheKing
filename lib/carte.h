@@ -36,7 +36,9 @@ typedef struct case_s {
 void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void afficher_carte_sdl(SDL_Renderer * renderer,
     case_t carte[TAILLE_CARTE][TAILLE_CARTE],
-    SDL_Texture * textures_cases[NB_BIOMES]);
+    SDL_Texture * textures_cases[NB_BIOMES],
+    int taille_case
+);
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
