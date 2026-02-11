@@ -217,25 +217,22 @@ int test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
 /* Saandi */
 void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 	int i,j;
-	i = rand()%TAILLE_CARTE;
-	j = rand()%TAILLE_CARTE;
 	int nb_biomes = 4;
 	biome_t biomes[] = {TERRE,DESERT,NEIGE,FORET};
 	for(int k = 0; k < TAILLE_CARTE / 3; k++){
 		for(int l = 0; l < TAILLE_CARTE / 3; l++){
 			int x = rand()%nb_biomes;
-			/*int y = rand()%TAILLE_CARTE;*/
+			i = rand()%TAILLE_CARTE;
+			j = rand()%TAILLE_CARTE;
+
 			switch (carte[i][j].biome)
 			{
 			case TERRE:
-				carte[i][j].biome = biomes[x];
-				break;
 			case DESERT:
-				carte[i][j].biome = biomes[x];
 			case NEIGE:
-				carte[i][j].biome = biomes[x];
 			case FORET:
 				carte[i][j].biome = biomes[x];
+				break;
 			default:
 				break;
 			}
