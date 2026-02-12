@@ -30,7 +30,12 @@ typedef struct case_s {
 
 } case_t;
 
+typedef struct{
+    int x,y;
+}coordonnee_t;
+
 #define TAILLE_CARTE 20
+#define NB_COORD 4
 
 /* Prototypes des fonctions */
 void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
@@ -43,3 +48,4 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 int test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
+void remplir_zone(case_t carte[TAILLE_CARTE][TAILLE_CARTE], biome_t biome, coordonnee_t dep, coordonnee_t arr);
