@@ -183,27 +183,56 @@ int test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
     }
 }
 
-/* Saandi */
-void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
-	int i,j;
-	int nb_biomes = 4;
-	biome_t biomes[] = {TERRE,DESERT,NEIGE,FORET};
-	/* on couvre un tiers de la surface de la carte (longueur x largeur) */
-	for(int k = 0; k < (TAILLE_CARTE * TAILLE_CARTE) / 3; k++){
-		int x = rand()%nb_biomes;
-		i = rand()%TAILLE_CARTE;
-		j = rand()%TAILLE_CARTE;
-
-		switch (carte[i][j].biome)
-		{
-		case TERRE:
-		case DESERT:
-		case NEIGE:
-		case FORET:
-			carte[i][j].biome = biomes[x];
-			break;
-		default:
-			break;
+/*Saandi*/
+void remplir_zone(case_t carte[TAILLE_CARTE][TAILLE_CARTE], biome_t biome, coordonnee_t dep, coordonnee_t arr){
+	// Déterminer les bornes min et max
+	int x_min = (dep.x < arr.x) ? dep.x : arr.x;
+	int x_max = (dep.x > arr.x) ? dep.x : arr.x;
+	int y_min = (dep.y < arr.y) ? dep.y : arr.y;
+	int y_max = (dep.y > arr.y) ? dep.y : arr.y;
+	
+	// Limiter aux dimensions de la carte
+	if(x_max >= TAILLE_CARTE) x_max = TAILLE_CARTE - 1;
+	if(y_max >= TAILLE_CARTE) y_max = TAILLE_CARTE - 1;
+	if(x_min < 0) x_min = 0;
+	if(y_min < 0) y_min = 0;
+	
+	// Remplir la zone
+	for(int i = x_min; i <= x_max; i++){
+		for(int j = y_min; j <= y_max; j++){
+			carte[i][j].biome = biome;
 		}
 	}
 }
+
+/* Saandi */
+void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+	int nb_biomes = 4;
+	biome_t biomes[] = {TERRE, DESERT, NEIGE, FORET};
+	
+	// Pour chaque biome, créer plusieurs zones
+	for(int i = 0; i < nb_biomes; i++){
+		// Créer 2-3 zones par biome pour plus de variété
+		int nb_zones = 2 + rand() % 2; // 2 ou 3 zones
+		
+		for(int z = 0; z < nb_zones; z++){
+			// Générer un point de départ aléatoire
+			coordonnee_t dep;
+			dep.x = rand() % TAILLE_CARTE;
+			dep.y = rand() % TAILLE_CARTE;
+			
+			// Générer une taille de zone aléatoire (par exemple 5 à 15 cases)
+			int largeur = 5 + rand() % 10;
+			int hauteur = 5 + rand() % 10;
+			
+			// Calculer l'arrivée
+			coordonnee_t arr;
+			arr.x = dep.x + largeur;
+			arr.y = dep.y + hauteur;
+			
+			// Remplir la zone
+			remplir_zone(carte, biomes[i], dep, arr);
+		}
+	}
+}
+
