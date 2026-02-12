@@ -7,6 +7,9 @@
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
+#define TAILLE_CASE_MAXI 150
+#define TAILLE_CASE_MINI 16
+
 int main() {
     printf("For The King!\n");
     
@@ -93,6 +96,15 @@ int main() {
 
                     case SDL_MOUSEWHEEL:
                         tailleCase += e.wheel.y;
+
+                        if (tailleCase > TAILLE_CASE_MAXI)
+                        {
+                            tailleCase = TAILLE_CASE_MAXI;
+                        }
+                        else if (tailleCase < TAILLE_CASE_MINI)
+                        {
+                            tailleCase = TAILLE_CASE_MINI;
+                        }
 
                         SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
 

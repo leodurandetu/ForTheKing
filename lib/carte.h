@@ -34,7 +34,7 @@ typedef struct{
     int x,y;
 }coordonnee_t;
 
-#define TAILLE_CARTE 20
+#define TAILLE_CARTE 700
 #define NB_COORD 4
 
 /* Prototypes des fonctions */
