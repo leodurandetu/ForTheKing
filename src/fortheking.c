@@ -77,6 +77,8 @@ int main() {
     
     perso_t *perso = init_perso(MAGE); 
 
+    int tailleCase = 50;
+
     if (pFenetre) {
         int running = 1;
 
@@ -89,6 +91,17 @@ int main() {
                         running = 0;
                         break;
 
+                    case SDL_MOUSEWHEEL:
+                        tailleCase += e.wheel.y;
+
+                        SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+
+                        SDL_RenderClear (renderer);
+
+                        afficher_carte_sdl(renderer, carte, textures_cases, tailleCase);
+
+                        SDL_RenderPresent(renderer);
+
                     case SDL_WINDOWEVENT:
                         switch(e.window.event) {
                             case SDL_WINDOWEVENT_EXPOSED:
@@ -99,8 +112,8 @@ int main() {
                             SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
                             SDL_RenderClear (renderer);
 
-                            afficher_carte_sdl(renderer, carte, textures_cases);
-                            afficher_personnage(renderer, texture_perso, perso);
+                            afficher_carte_sdl(renderer, carte, textures_cases, tailleCase);
+                            afficher_personnage(renderer, texture_perso, perso, tailleCase);
                             SDL_RenderPresent(renderer);
 
                             break;
