@@ -8,7 +8,7 @@
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
 #define TAILLE_CASE_MAXI 150
-#define TAILLE_CASE_MINI 16
+#define TAILLE_CASE_MINI 1
 
 int main() {
     printf("For The King!\n");
@@ -43,7 +43,7 @@ int main() {
     char * nom_images[NB_BIOMES] = {
         "img/terre.png", "img/eau.png",
         "img/desert.png", "img/neige.png",
-        "img/foret.png"
+        "img/foret2.png"
     };
 
     SDL_Texture * textures_cases[NB_BIOMES];
