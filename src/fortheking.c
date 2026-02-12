@@ -99,6 +99,7 @@ int main() {
                         SDL_RenderClear (renderer);
 
                         afficher_carte_sdl(renderer, carte, textures_cases, tailleCase);
+                        afficher_personnage(renderer, texture_perso, perso, tailleCase);
 
                         SDL_RenderPresent(renderer);
 
