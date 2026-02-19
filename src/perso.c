@@ -52,21 +52,17 @@ perso_t * init_perso(perso_type_t persoType)
     return perso;
 }
 
-void afficher_personnage(SDL_Renderer *renderer,
-                         SDL_Texture *texture,
-                         perso_t *pers,
-                        int tailleCase)
+void afficher_personnage(SDL_Renderer *renderer, SDL_Texture *texture, perso_t *pers, int tailleCase)
 {
     int lFenetre, hFenetre;
-    int taillePerso = tailleCase / 2;
-
     SDL_GetRendererOutputSize(renderer, &lFenetre, &hFenetre);
 
+    int taillePerso = tailleCase / 2;
     SDL_Rect dest;
 
-    dest.y = pers->x * tailleCase + (hFenetre / 2) - (TAILLE_CARTE * tailleCase / 2) + (tailleCase - taillePerso) / 2;
-    dest.x = pers->y * tailleCase + (lFenetre / 2) - (TAILLE_CARTE * tailleCase / 2) + (tailleCase - taillePerso) / 2;
-
+    dest.x = (lFenetre / 2) - (taillePerso / 2);
+    dest.y = (hFenetre / 2) - (taillePerso / 2);
+    
     dest.w = taillePerso;
     dest.h = taillePerso;
 

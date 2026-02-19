@@ -3,15 +3,11 @@
 #include "../lib/carte.h"
 #include "../lib/couleur.h"
 
-/* Leo */
+#define EPAISSEUR_BORDURES 2
 
-/*
-REMARQUE :
-il manque l'affichage des batiments (campements et magasins)
-on pourrait améliorer aussi l'affichage plus tard
-*/
+/* Leo */
 void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE],
-	SDL_Texture * textures_cases[NB_BIOMES], int tailleCase) {
+	SDL_Texture * textures_cases[NB_BIOMES], int tailleCase, int persX, int persY) {
 	SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
 
 	/* On en a besoin pour centrer la carte dans la fenêtre */
@@ -20,30 +16,61 @@ void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAIL
 
 	SDL_GetRendererOutputSize(renderer, &lFenetre, &hFenetre);
 
+	int decalageX = (lFenetre / 2) - (persX * tailleCase + tailleCase / 2);
+    int decalageY = (hFenetre / 2) - (persY * tailleCase + tailleCase / 2);
+
 	int i, j;
 
+	/* Dessin des cases de la carte */
 	for (i = 0; i < TAILLE_CARTE; i++) {
 
 		for (j = 0; j < TAILLE_CARTE; j++) {
 			case_t maCase = carte[i][j];
 
 			if (maCase.estVisible) {
-				SDL_Rect rect;
+				SDL_Rect rect = {
+					j * tailleCase + decalageX,
+					i * tailleCase + decalageY,
+					tailleCase,
+					tailleCase
+				};
 
-				/* ce code un peu compliqué permet de 
-				centrer la carte au milieu de la fenêtre */
-				rect.y = i * tailleCase + (hFenetre / 2) - (TAILLE_CARTE * tailleCase / 2);
-				rect.x = j * tailleCase + (lFenetre / 2) - (TAILLE_CARTE * tailleCase / 2);
-
-				rect.w = tailleCase;
-				rect.h = tailleCase;
-
-				SDL_RenderCopy(renderer, textures_cases[maCase.biome], NULL, &rect);
-
+				SDL_RenderCopy(renderer,
+					textures_cases[carte[i][j].biome],
+					NULL,
+					&rect);
 			}
 
 		}
 
+	}
+
+	/* Dessin des bordures entre les cases */
+	SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+
+	int largeurTotale = TAILLE_CARTE * tailleCase;
+	int hauteurTotale = TAILLE_CARTE * tailleCase;
+
+	/* Lignes verticales */
+	for (int i = 0; i <= TAILLE_CARTE; i++) {
+		SDL_Rect barreVerticale = {
+			decalageX + (i * tailleCase),
+			decalageY,
+			EPAISSEUR_BORDURES,
+			hauteurTotale + EPAISSEUR_BORDURES
+		};
+		SDL_RenderFillRect(renderer, &barreVerticale);
+	}
+
+	/* Lignes horizontales */
+	for (int i = 0; i <= TAILLE_CARTE; i++) {
+		SDL_Rect barreHorizontale = {
+			decalageX,
+			decalageY + (i * tailleCase),
+			largeurTotale + EPAISSEUR_BORDURES,
+			EPAISSEUR_BORDURES
+		};
+		SDL_RenderFillRect(renderer, &barreHorizontale);
 	}
 
 }
