@@ -58,6 +58,30 @@ void afficher_personnage(SDL_Renderer *renderer, SDL_Texture *texture, perso_t *
     SDL_GetRendererOutputSize(renderer, &lFenetre, &hFenetre);
 
     int taillePerso = tailleCase / 2;
+    int marge = 2;
+    int epaisseurBord = 2;
+
+    SDL_Rect rectFond;
+    rectFond.w = taillePerso + (marge * 2);
+    rectFond.h = taillePerso + (marge * 2);
+    rectFond.x = (lFenetre / 2) - (rectFond.w / 2);
+    rectFond.y = (hFenetre / 2) - (rectFond.h / 2);
+
+    SDL_Rect rectBordure = {
+        rectFond.x - epaisseurBord,
+        rectFond.y - epaisseurBord,
+        rectFond.w + (epaisseurBord * 2),
+        rectFond.h + (epaisseurBord * 2)
+    };
+
+    /* Bordure Noire */
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &rectBordure);
+
+    /* Rectangle Blanc */
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderFillRect(renderer, &rectFond);
+
     SDL_Rect dest;
 
     dest.x = (lFenetre / 2) - (taillePerso / 2);
