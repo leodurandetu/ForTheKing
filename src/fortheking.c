@@ -85,6 +85,11 @@ int main() {
     if (pFenetre) {
         int running = 1;
 
+        /*
+        Vaut 1 si on doit mettre à jour l'affichage, et 0 sinon.
+        */
+        int majAffichage = 0;
+
         while (running) {
             SDL_Event e;
 
@@ -94,26 +99,53 @@ int main() {
                         running = 0;
                         break;
 
+                    /*
+                    Déplacement du personnage
+                    avec les clés du clavier
+                    */
+                    case SDL_KEYDOWN:
+
+                        switch(e.key.keysym.scancode)
+                        {
+
+                            case SDL_SCANCODE_W:
+                                majAffichage = 1;
+                                perso->y--;
+                                break;
+
+                            case SDL_SCANCODE_A:
+                                majAffichage = 1;
+                                perso->x--;
+                                break;
+
+                            case SDL_SCANCODE_S:
+                                majAffichage = 1;
+                                perso->y++;
+                                break;
+
+                            case SDL_SCANCODE_D:
+                                majAffichage = 1;
+                                perso->x++;
+                                break;
+
+                            default:
+                                break;
+
+                        }
+
+                        break;
+                        
+                    /* 
+                    Gestion du zoom avec la molette de la souris.
+                    On simule le zoom en affichant les cases avec une plus grande taille.
+                    */
                     case SDL_MOUSEWHEEL:
                         tailleCase += e.wheel.y;
 
-                        if (tailleCase > TAILLE_CASE_MAXI)
-                        {
-                            tailleCase = TAILLE_CASE_MAXI;
-                        }
-                        else if (tailleCase < TAILLE_CASE_MINI)
-                        {
-                            tailleCase = TAILLE_CASE_MINI;
-                        }
-
-                        SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-
-                        SDL_RenderClear (renderer);
-
-                        afficher_carte_sdl(renderer, carte, textures_cases, tailleCase, perso->x, perso->y);
-                        afficher_personnage(renderer, texture_perso, perso, tailleCase);
-
-                        SDL_RenderPresent(renderer);
+                        if (tailleCase > TAILLE_CASE_MAXI) tailleCase = TAILLE_CASE_MAXI;
+                        if (tailleCase < TAILLE_CASE_MINI) tailleCase = TAILLE_CASE_MINI;
+                        majAffichage = 1;
+                        break;
 
                     case SDL_WINDOWEVENT:
                         switch(e.window.event) {
@@ -121,19 +153,27 @@ int main() {
                             case SDL_WINDOWEVENT_SIZE_CHANGED:
                             case SDL_WINDOWEVENT_RESIZED:
                             case SDL_WINDOWEVENT_SHOWN:
-
-                            SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-                            SDL_RenderClear (renderer);
-
-                            afficher_carte_sdl(renderer, carte, textures_cases, tailleCase, perso->x, perso->y);
-                            afficher_personnage(renderer, texture_perso, perso, tailleCase);
-                            SDL_RenderPresent(renderer);
-
+                            majAffichage = 1;
                             break;
                         }
 
                         break;
                 }
+
+            }
+
+            if (majAffichage)
+            {
+                SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
+
+                SDL_RenderClear (renderer);
+
+                afficher_carte_sdl(renderer, carte, textures_cases, tailleCase, perso->x, perso->y);
+                afficher_personnage(renderer, texture_perso, perso, tailleCase);
+
+                SDL_RenderPresent(renderer);
+
+                majAffichage = 0;
             }
 
         }
