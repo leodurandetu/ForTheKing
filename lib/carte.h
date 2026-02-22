@@ -42,7 +42,9 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void afficher_carte_sdl(SDL_Renderer * renderer,
     case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     SDL_Texture * textures_cases[NB_BIOMES],
-    int taille_case, int persX, int persY
+    int taille_case, int persX, int persY,
+    int case_selection_x, int case_selection_y,
+    int perso_selectionne
 );
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);

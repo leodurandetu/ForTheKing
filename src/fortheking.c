@@ -82,6 +82,19 @@ int main() {
 
     int tailleCase = 50;
 
+    /*
+    Ce sont l'abscisse et l'ordonnée
+    de la case qui a été sélectionnée
+    (en cliquant dessus)
+
+    -1 = rien sélectionné
+    */
+    int case_selection_x = -1;
+    int case_selection_y = -1;
+
+
+    int perso_selectionne = 0;
+
     if (pFenetre) {
         int running = 1;
 
@@ -134,6 +147,83 @@ int main() {
                         }
 
                         break;
+
+                    case SDL_MOUSEBUTTONDOWN:
+
+                        /* clic droit avec la souris */
+                        if (e.button.button == SDL_BUTTON_LEFT)
+                        {
+                            int ecran_x = e.button.x;
+                            int ecran_y = e.button.y;
+
+                            int fenetre_taille_x;
+                            int fenetre_taille_y;
+
+                            SDL_GetRendererOutputSize(renderer, &fenetre_taille_x, &fenetre_taille_y);
+
+                            /* Ce sont les mêmes calculs que dans afficher_carte_sdl */
+                            int decalage_x = (fenetre_taille_x / 2) - (perso->x * tailleCase + tailleCase / 2);
+                            int decalage_y = (fenetre_taille_y / 2) - (perso->y * tailleCase + tailleCase / 2);
+
+                            int carte_x = (ecran_x - decalage_x) / tailleCase;
+                            int carte_y = (ecran_y - decalage_y) / tailleCase;
+
+                            if (carte_x >= 0 && carte_x < TAILLE_CARTE && carte_y >= 0 && carte_y < TAILLE_CARTE)
+                            {
+
+                                /* on clique sur le personnage */
+                                if (carte_x == perso->x && carte_y == perso->y)
+                                {
+
+                                    if (perso_selectionne)
+                                    {
+                                        perso_selectionne = 0;
+                                    }
+                                    else {
+                                        perso_selectionne = 1;
+                                    }
+
+                                    case_selection_x = -1;
+                                    case_selection_y = -1;
+                                    majAffichage = 1;
+                                }
+                                /* 
+                                personnage déjà selectionné, mais on clique sur une autre case.
+                                on déplace donc le personnage sur cette case
+                                */
+                                else if (perso_selectionne)
+                                {
+                                    perso->x = carte_x;
+                                    perso->y = carte_y;
+
+                                    perso_selectionne = 0;
+                                    case_selection_x = -1;
+                                    case_selection_y = -1;
+                                    majAffichage = 1;
+                                }
+                                /* on clique sur une case de biome */
+                                else
+                                {
+                                    case_selection_x = carte_x;
+                                    case_selection_y = carte_y;
+                                    perso_selectionne = 0;
+                                    majAffichage = 1;
+                                }
+
+                            }
+                            else
+                            {
+                                /* on a cliqué en dehors de la carte, donc on déselectionne tout */
+                                case_selection_x = -1;
+                                case_selection_y = -1;
+                                perso_selectionne = 0;
+                                majAffichage = 1;
+                            }
+
+
+                        }
+
+                        break;
                         
                     /* 
                     Gestion du zoom avec la molette de la souris.
@@ -168,7 +258,8 @@ int main() {
 
                 SDL_RenderClear (renderer);
 
-                afficher_carte_sdl(renderer, carte, textures_cases, tailleCase, perso->x, perso->y);
+                afficher_carte_sdl(renderer, carte, textures_cases, tailleCase,
+                    perso->x, perso->y, case_selection_x, case_selection_y, perso_selectionne);
                 afficher_personnage(renderer, texture_perso, perso, tailleCase);
 
                 SDL_RenderPresent(renderer);

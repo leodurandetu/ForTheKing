@@ -7,15 +7,19 @@
 
 /* Leo */
 void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAILLE_CARTE],
-	SDL_Texture * textures_cases[NB_BIOMES], int tailleCase, int persX, int persY) {
+	SDL_Texture * textures_cases[NB_BIOMES], int tailleCase, int persX, int persY, 
+	int case_selection_x, int case_selection_y, int perso_selectionne) {
 	SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
 
-	/* On en a besoin pour centrer la carte dans la fenêtre */
 	int lFenetre; /* largeur de la fenêtre */
 	int hFenetre; /* hauteur de la fenêtre */
 
 	SDL_GetRendererOutputSize(renderer, &lFenetre, &hFenetre);
 
+	/*
+	On centre la carte de telle sorte que
+	le personnage soit au milieu
+	*/
 	int decalageX = (lFenetre / 2) - (persX * tailleCase + tailleCase / 2);
     int decalageY = (hFenetre / 2) - (persY * tailleCase + tailleCase / 2);
 
@@ -71,6 +75,40 @@ void afficher_carte_sdl(SDL_Renderer * renderer, case_t carte[TAILLE_CARTE][TAIL
 			EPAISSEUR_BORDURES
 		};
 		SDL_RenderFillRect(renderer, &barreHorizontale);
+	}
+
+	if (case_selection_x >= 0 && case_selection_y >= 0)
+	{
+		SDL_Rect surlignageCase = {
+			case_selection_x * tailleCase + decalageX,
+			case_selection_y * tailleCase + decalageY,
+			tailleCase,
+			tailleCase
+		};
+
+		/* 
+		on affiche un rectangle blanc semi-transparent
+		sur la case qui est sélectionnée 
+		*/
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 90);
+		SDL_RenderFillRect(renderer, &surlignageCase);
+	}
+
+	if (perso_selectionne)
+	{
+		SDL_Rect surlignagePerso = {
+			persX * tailleCase + decalageX,
+			persY * tailleCase + decalageY,
+			tailleCase,
+			tailleCase
+		};
+
+		/* 
+		on affiche un rectangle bleu semi-transparent
+		sur le personnage si il est sélectionné
+		*/
+		SDL_SetRenderDrawColor(renderer, 60, 180, 255, 140);
+		SDL_RenderFillRect(renderer, &surlignagePerso);
 	}
 
 }
