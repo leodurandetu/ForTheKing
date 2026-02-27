@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+
 #include <time.h>
 #include "../lib/carte.h"
 #include "../lib/perso.h"
@@ -12,7 +14,24 @@ case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
 int main() {
     printf("For The King!\n");
-    
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+
+    Uint32 debutMusique = SDL_GetTicks();
+    int dureeBoucle = 30000; // durée musique 30 sec
+    int fadeOutTime = 5000;   // fade-out 5 sec
+    int fadeDeclenche = 0;
+
+    if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048) < 0){
+        fprintf(stderr,"Erreur SDL_mixer : %s\n",Mix_GetError());
+        return -1;
+    }
+
+    Mix_Music *musique = Mix_LoadMUS("audio/Main_theme.mp3");
+    if(!musique){
+        fprintf(stderr,"Erreur : %s\n",Mix_GetError());
+        return -1;
+    }
+
     SDL_Window* pFenetre = NULL;
     SDL_Renderer * renderer = NULL;
 
@@ -77,7 +96,8 @@ int main() {
     init_carte(carte);
     generer_eau(carte);
     generer_biomes(carte);
-    
+    Mix_FadeInMusic(musique, 1, 3000);
+
     perso_t *perso = init_perso(MAGE); 
 
     int tailleCase = 50;
@@ -106,6 +126,23 @@ int main() {
         while (running) {
             SDL_Event e;
 
+            /* ================= MUSIQUE ================= */
+            Uint32 maintenant = SDL_GetTicks();
+            Uint32 elapsed = maintenant - debutMusique;
+
+            // Déclenche fade-out avant la fin
+            if (!fadeDeclenche && elapsed >= dureeBoucle - fadeOutTime) {
+                Mix_FadeOutMusic(fadeOutTime);
+                fadeDeclenche = 1;
+            }
+
+            // Quand musique finie > relance avec fade-in
+            if (!Mix_PlayingMusic()) {
+                Mix_FadeInMusic(musique, 1, 3000);
+                debutMusique = SDL_GetTicks();
+                fadeDeclenche = 0;
+            }
+            /* ============================================ */
             while (SDL_PollEvent(&e)) {
                 switch(e.type) {
                     case SDL_QUIT:
@@ -273,9 +310,12 @@ int main() {
         fprintf(stderr, "Erreur de création de la fenêtre : %s\n", SDL_GetError());
     }
 
+    Mix_FreeMusic(musique);
+    Mix_CloseAudio();
     SDL_DestroyWindow(pFenetre);
 
     SDL_Quit();
 
     return 0;
 }
+
