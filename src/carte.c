@@ -13,6 +13,15 @@
 // ==================== AFFICHAGE HEX ==================
 // =====================================================*/
 
+
+/*
+On stocke les cos et sin une fois dans un tableau, au lieu de le faire à chaque boucle 
+Car les angles sont les mêmes pour chaque hexagone et ne changent pas.
+Cela permet de gagner en temps de calcul.
+*/
+float HEX_COS[6];
+float HEX_SIN[6];
+
 /*
  Dessine un anneau hexagonal (hexagone creux) vers l'intérieur.
  Utilisé ici pour créer une ombre portée interne sous le doré.
@@ -25,9 +34,8 @@ void dessiner_contour_ftk(SDL_Renderer* r, float cx, float cy, float rayon, int 
     float r_int = rayon - epaisseur;
 
     for (int i = 0; i < 6; i++) {
-        float angle = (60.0f * i) * M_PI / 180.0f;
-        float cos_a = cosf(angle);
-        float sin_a = sinf(angle);
+        float cos_a = HEX_COS[i];
+        float sin_a = HEX_SIN[i];
 
         vertices[i].position = (SDL_FPoint){ cx + r_ext * cos_a, cy + r_ext * sin_a };
         vertices[i].color = couleur;
@@ -57,20 +65,23 @@ void dessiner_contour_double_dore(SDL_Renderer* r, float cx, float cy, float ray
     SDL_Color or_sombre = {139, 101, 8, (Uint8)alpha};
 
     for (int k = 0; k < 6; k++) {
-        float a1 = (60.0f * k) * M_PI / 180.0f;
-        float a2 = (60.0f * (k + 1)) * M_PI / 180.0f;
-        
+        float cos_a1 = HEX_COS[k];
+        float cos_a2 = HEX_COS[k + 1];
+
+        float sin_a1 = HEX_SIN[k];
+        float sin_a2 = HEX_SIN[k + 1];
+
         // Filet extérieur (Or clair)
         thickLineRGBA(r, 
-            cx + rayon * cosf(a1), cy + rayon * sinf(a1),
-            cx + rayon * cosf(a2), cy + rayon * sinf(a2),
+            cx + rayon * cos_a1, cy + rayon * sin_a1,
+            cx + rayon * cos_a2, cy + rayon * sin_a2,
             1, or_clair.r, or_clair.g, or_clair.b, or_clair.a);
 
         // Filet intérieur (Or sombre, décalage de 2.2 pixels pour la finesse)
         float r_int = rayon - 2.2f; 
         thickLineRGBA(r, 
-            cx + r_int * cosf(a1), cy + r_int * sinf(a1),
-            cx + r_int * cosf(a2), cy + r_int * sinf(a2),
+            cx + r_int * cos_a1, cy + r_int * sin_a1,
+            cx + r_int * cos_a2, cy + r_int * sin_a2,
             1, or_sombre.r, or_sombre.g, or_sombre.b, or_sombre.a);
     }
 }
@@ -93,10 +104,8 @@ void afficher_hex_couleur(SDL_Renderer* renderer, float cx, float cy, float rayo
 
     /* Les 6 coins de l'hexagone (identique au dessin des contours) */
     for (int i = 0; i < 6; i++) {
-        /* Angle de départ à 0° pour avoir une orientation "plate" (flat-top) */
-        float angle_rad = (60.0f * i) * M_PI / 180.0f;
-        sommets[i+1].position.x = cx + rayon * cosf(angle_rad);
-        sommets[i+1].position.y = cy + rayon * sinf(angle_rad);
+        sommets[i+1].position.x = cx + rayon * HEX_COS[i];
+        sommets[i+1].position.y = cy + rayon * HEX_SIN[i];
         sommets[i+1].color = couleur;
     }
 
@@ -133,8 +142,18 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     int decalageX = (int)(lFenetre / 2 - camX - hex_w / 2);
     int decalageY = (int)(hFenetre / 2 - camY - hex_h / 2);
 
-    for (int i = 0; i < TAILLE_CARTE; i++) {
-        for (int j = 0; j < TAILLE_CARTE; j++) {
+    /*
+    Au lieu d'afficher toute la carte tout le temps,
+    on affiche que la partie de la carte qui est visible
+    sur l'écran, pour gagner du temps de calcul.
+    */
+    int j_min = fmax(0, (abs(decalageX) / espacement_colonnes) - 1);
+    int j_max = fmin(TAILLE_CARTE, j_min + (lFenetre / espacement_colonnes) + 2);
+    int i_min = fmax(0, (abs(decalageY) / hex_h) - 1);
+    int i_max = fmin(TAILLE_CARTE, i_min + (hFenetre / hex_h) + 2);
+
+    for (int j = j_min; j < j_max; j++) {
+        for (int i = i_min; i < i_max; i++) {
             case_t maCase = carte[i][j];
             if (!maCase.estVisible) continue;
 
@@ -151,9 +170,8 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                 sommets[0].color = (SDL_Color){ 255, 255, 255, 255 };
 
                 for (int k = 0; k < 6; k++) {
-                    float angle = (60.0f * k) * M_PI / 180.0f;
-                    sommets[k+1].position = (SDL_FPoint){ cx + rayon * cosf(angle), cy + rayon * sinf(angle) };
-                    sommets[k+1].tex_coord = (SDL_FPoint){ 0.5f + 0.5f * cosf(angle), 0.5f + 0.5f * sinf(angle) };
+                    sommets[k+1].position = (SDL_FPoint){ cx + rayon * HEX_COS[k], cy + rayon * HEX_SIN[k] };
+                    sommets[k+1].tex_coord = (SDL_FPoint){ 0.5f + 0.5f * HEX_COS[k], 0.5f + 0.5f * HEX_SIN[k] };
                     sommets[k+1].color = (SDL_Color){ 255, 255, 255, 255 };
                 }
                 SDL_RenderGeometry(renderer, tex_actuelle, sommets, 7, indices, 18);
@@ -280,6 +298,16 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
             carte[x][y] = maCase;
         }
 
+    }
+
+    /*
+    On calcule les cos et sin une fois, au lieu de le faire à chaque boucle 
+    Car les angles sont les mêmes pour chaque hexagone
+    */
+    for (int i = 0; i < 6; i++) {
+        float angle = (60.0f * i) * (M_PI / 180.0f);
+        HEX_COS[i] = cosf(angle);
+        HEX_SIN[i] = sinf(angle);
     }
 
 }

@@ -5,7 +5,7 @@
 #include <math.h>
 
 /* Définitions */
-#define TAILLE_CARTE 50
+#define TAILLE_CARTE 500
 #define NB_COORD 4
 
 /* Structures */
