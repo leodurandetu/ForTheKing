@@ -26,6 +26,6 @@ typedef struct {
 /* Prototypes des fonctions*/
 
 /* Massoud */
-void afficher_personnage(SDL_Renderer *renderer,SDL_Texture *texture,perso_t *pers, int tailleCase);
+void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, perso_t * perso, int tailleCase, int estSelectionne);
 /* Leo */
 perso_t * init_perso(perso_type_t persoType);
