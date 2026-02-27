@@ -251,7 +251,8 @@ int main() {
     }
     if (texture_perso) SDL_DestroyTexture(texture_perso);
     
-    // FAIRE une fonction detruire_perso(perso) dans perso.h pour libérer le malloc !(Léo)
+    // Déstruction du personnage
+    detruire_perso(&perso);
     
     Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
