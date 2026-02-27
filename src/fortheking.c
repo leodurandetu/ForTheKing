@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <math.h> // Indispensable pour sqrtf() (maths hexagonales)
+#include <time.h>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 
-#include <time.h>
 #include "../lib/carte.h"
 #include "../lib/perso.h"
 
@@ -14,308 +16,247 @@ case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
 int main() {
     printf("For The King!\n");
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
-    Uint32 debutMusique = SDL_GetTicks();
-    int dureeBoucle = 30000; // durée musique 30 sec
-    int fadeOutTime = 5000;   // fade-out 5 sec
-    int fadeDeclenche = 0;
+    // Initialisation globale de la SDL (Vidéo + Audio)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
+        fprintf(stderr, "Echec de l'initialisation de la SDL : %s\n", SDL_GetError());
+        return -1;
+    }
 
-    if(Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048) < 0){
-        fprintf(stderr,"Erreur SDL_mixer : %s\n",Mix_GetError());
+    // Préparation du son
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        fprintf(stderr, "Erreur SDL_mixer : %s\n", Mix_GetError());
         return -1;
     }
 
     Mix_Music *musique = Mix_LoadMUS("audio/Main_theme.mp3");
-    if(!musique){
-        fprintf(stderr,"Erreur : %s\n",Mix_GetError());
-        return -1;
+    if (!musique) {
+        fprintf(stderr, "Attention: Musique introuvable (%s)\n", Mix_GetError());
     }
 
-    SDL_Window* pFenetre = NULL;
-    SDL_Renderer * renderer = NULL;
+    Uint32 debutMusique = SDL_GetTicks();
+    int dureeBoucle = 30000;
+    int fadeOutTime = 5000;
+    int fadeDeclenche = 0;
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        fprintf ( stdout, "Echec de l’initialisation de la SDL (%s) \n", SDL_GetError ());
-        return -1;
-    }
-
-    /* Creation de la fenetre */
-    pFenetre = SDL_CreateWindow("For The King!", SDL_WINDOWPOS_UNDEFINED ,
-            SDL_WINDOWPOS_UNDEFINED ,
-            640 ,
-            480 ,
-            SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
-    );
+    // Création de la fenêtre
+    SDL_Window* pFenetre = SDL_CreateWindow("For The King!", 
+            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
     if (!pFenetre) {
-        fprintf(stderr, "Erreur à la création de la fenêtre : %s\n", SDL_GetError());
+        fprintf(stderr, "Erreur fenêtre : %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
-    renderer = SDL_CreateRenderer ( pFenetre , -1 , SDL_RENDERER_ACCELERATED );
-    if ( renderer == NULL ){
-        fprintf ( stderr , "Erreur a la creation du renderer \n" );
-        exit ( EXIT_FAILURE );
+    // Création du moteur de rendu (accéléré par la carte graphique)
+    SDL_Renderer *renderer = SDL_CreateRenderer(pFenetre, -1, SDL_RENDERER_ACCELERATED);
+    if (!renderer) {
+        fprintf(stderr, "Erreur renderer : %s\n", SDL_GetError());
+        exit(EXIT_FAILURE);
     }
 
-    char * nom_images[NB_BIOMES] = {
+    char *nom_images[NB_BIOMES] = {
         "img/terre.png", "img/eau.png",
         "img/desert.png", "img/neige.png",
         "img/foret.png"
     };
 
-    SDL_Texture * textures_cases[NB_BIOMES];
+    SDL_Texture *textures_cases[NB_BIOMES];
 
-    int i;
-
-    for (i = 0; i < NB_BIOMES; i++) {
-        SDL_RWops * rwop = SDL_RWFromFile(nom_images[i] , "rb" );
-        SDL_Surface * image = IMG_LoadPNG_RW (rwop);
-        
+    // Chargement sécurisé des textures de la carte
+    for (int i = 0; i < NB_BIOMES; i++) {
+        SDL_Surface *image = IMG_Load(nom_images[i]);
         if (!image) {
-            printf ( "IMG_LoadPNG_RW : %s \n " , IMG_GetError ());
+            fprintf(stderr, "Erreur critique : Image %s manquante !\n", nom_images[i]);
+            exit(EXIT_FAILURE);
         }
 
-        SDL_Texture * tex =  SDL_CreateTextureFromSurface( renderer , image );
-        if (! tex ){
-            fprintf ( stderr , " Erreur a la creation du rendu de l’image : %s \n " , SDL_GetError ());
-            exit ( EXIT_FAILURE );
-        }
-        SDL_FreeSurface ( image ); /* on a la texture , plus besoin de l ’ image */
-
-        textures_cases[i] = tex;
+        textures_cases[i] = SDL_CreateTextureFromSurface(renderer, image);
+        SDL_FreeSurface(image); // On vide la RAM une fois l'image envoyée à la carte graphique (optionnel mais mieux)
     }
 
-     /* Texture du personnage */
+    // Chargement du sprite du personnage
+    SDL_Texture *texture_perso = NULL;
     SDL_Surface *img_perso = IMG_Load("img/mage.png");
-    SDL_Texture *texture_perso = SDL_CreateTextureFromSurface(renderer, img_perso);
-    SDL_FreeSurface(img_perso);
+    if (img_perso) {
+        // Rend la couleur blanche (255, 255, 255) transparente
+        SDL_SetColorKey(img_perso, SDL_TRUE, SDL_MapRGB(img_perso->format, 255, 255, 255));
+        texture_perso = SDL_CreateTextureFromSurface(renderer, img_perso);
+        SDL_SetTextureBlendMode(texture_perso, SDL_BLENDMODE_BLEND);
+        SDL_FreeSurface(img_perso);
+    }
 
-    srand(time(NULL));
+    // Génération du monde
+    srand((unsigned int)time(NULL));
     init_carte(carte);
     generer_eau(carte);
     generer_biomes(carte);
-    Mix_FadeInMusic(musique, 1, 3000);
+    
+    if (musique) Mix_FadeInMusic(musique, 1, 3000);
 
     perso_t *perso = init_perso(MAGE); 
 
     int tailleCase = 50;
-
-    /*
-    Ce sont l'abscisse et l'ordonnée
-    de la case qui a été sélectionnée
-    (en cliquant dessus)
-
-    -1 = rien sélectionné
-    */
     int case_selection_x = -1;
     int case_selection_y = -1;
-
-
     int perso_selectionne = 0;
 
-    if (pFenetre) {
-        int running = 1;
+    int running = 1;
+    int majAffichage = 1; // Forcé à 1 pour afficher l'écran dès le lancement
 
-        /*
-        Vaut 1 si on doit mettre à jour l'affichage, et 0 sinon.
-        */
-        int majAffichage = 0;
+    while (running) {
+        SDL_Event e;
 
-        while (running) {
-            SDL_Event e;
-
-            /* ================= MUSIQUE ================= */
-            Uint32 maintenant = SDL_GetTicks();
-            Uint32 elapsed = maintenant - debutMusique;
-
-            // Déclenche fade-out avant la fin
+        // Gestion de la boucle musicale
+        if (musique) {
+            Uint32 elapsed = SDL_GetTicks() - debutMusique;
             if (!fadeDeclenche && elapsed >= dureeBoucle - fadeOutTime) {
                 Mix_FadeOutMusic(fadeOutTime);
                 fadeDeclenche = 1;
             }
-
-            // Quand musique finie > relance avec fade-in
             if (!Mix_PlayingMusic()) {
                 Mix_FadeInMusic(musique, 1, 3000);
                 debutMusique = SDL_GetTicks();
                 fadeDeclenche = 0;
             }
-            /* ============================================ */
-            while (SDL_PollEvent(&e)) {
-                switch(e.type) {
-                    case SDL_QUIT:
-                        running = 0;
-                        break;
-
-                    /*
-                    Déplacement du personnage
-                    avec les clés du clavier
-                    */
-                    case SDL_KEYDOWN:
-
-                        switch(e.key.keysym.scancode)
-                        {
-
-                            case SDL_SCANCODE_W:
-                                majAffichage = 1;
-                                perso->y--;
-                                break;
-
-                            case SDL_SCANCODE_A:
-                                majAffichage = 1;
-                                perso->x--;
-                                break;
-
-                            case SDL_SCANCODE_S:
-                                majAffichage = 1;
-                                perso->y++;
-                                break;
-
-                            case SDL_SCANCODE_D:
-                                majAffichage = 1;
-                                perso->x++;
-                                break;
-
-                            default:
-                                break;
-
-                        }
-
-                        break;
-
-                    case SDL_MOUSEBUTTONDOWN:
-
-                        /* clic droit avec la souris */
-                        if (e.button.button == SDL_BUTTON_LEFT)
-                        {
-                            int ecran_x = e.button.x;
-                            int ecran_y = e.button.y;
-
-                            int fenetre_taille_x;
-                            int fenetre_taille_y;
-
-                            SDL_GetRendererOutputSize(renderer, &fenetre_taille_x, &fenetre_taille_y);
-
-                            /* Ce sont les mêmes calculs que dans afficher_carte_sdl */
-                            int decalage_x = (fenetre_taille_x / 2) - (perso->x * tailleCase + tailleCase / 2);
-                            int decalage_y = (fenetre_taille_y / 2) - (perso->y * tailleCase + tailleCase / 2);
-
-                            int carte_x = (ecran_x - decalage_x) / tailleCase;
-                            int carte_y = (ecran_y - decalage_y) / tailleCase;
-
-                            if (carte_x >= 0 && carte_x < TAILLE_CARTE && carte_y >= 0 && carte_y < TAILLE_CARTE)
-                            {
-
-                                /* on clique sur le personnage */
-                                if (carte_x == perso->x && carte_y == perso->y)
-                                {
-
-                                    if (perso_selectionne)
-                                    {
-                                        perso_selectionne = 0;
-                                    }
-                                    else {
-                                        perso_selectionne = 1;
-                                    }
-
-                                    case_selection_x = -1;
-                                    case_selection_y = -1;
-                                    majAffichage = 1;
-                                }
-                                /* 
-                                personnage déjà selectionné, mais on clique sur une autre case.
-                                on déplace donc le personnage sur cette case
-                                */
-                                else if (perso_selectionne)
-                                {
-                                    perso->x = carte_x;
-                                    perso->y = carte_y;
-
-                                    perso_selectionne = 0;
-                                    case_selection_x = -1;
-                                    case_selection_y = -1;
-                                    majAffichage = 1;
-                                }
-                                /* on clique sur une case de biome */
-                                else
-                                {
-                                    case_selection_x = carte_x;
-                                    case_selection_y = carte_y;
-                                    perso_selectionne = 0;
-                                    majAffichage = 1;
-                                }
-
-                            }
-                            else
-                            {
-                                /* on a cliqué en dehors de la carte, donc on déselectionne tout */
-                                case_selection_x = -1;
-                                case_selection_y = -1;
-                                perso_selectionne = 0;
-                                majAffichage = 1;
-                            }
-
-
-                        }
-
-                        break;
-                        
-                    /* 
-                    Gestion du zoom avec la molette de la souris.
-                    On simule le zoom en affichant les cases avec une plus grande taille.
-                    */
-                    case SDL_MOUSEWHEEL:
-                        tailleCase += e.wheel.y;
-
-                        if (tailleCase > TAILLE_CASE_MAXI) tailleCase = TAILLE_CASE_MAXI;
-                        if (tailleCase < TAILLE_CASE_MINI) tailleCase = TAILLE_CASE_MINI;
-                        majAffichage = 1;
-                        break;
-
-                    case SDL_WINDOWEVENT:
-                        switch(e.window.event) {
-                            case SDL_WINDOWEVENT_EXPOSED:
-                            case SDL_WINDOWEVENT_SIZE_CHANGED:
-                            case SDL_WINDOWEVENT_RESIZED:
-                            case SDL_WINDOWEVENT_SHOWN:
-                            majAffichage = 1;
-                            break;
-                        }
-
-                        break;
-                }
-
-            }
-
-            if (majAffichage)
-            {
-                SDL_SetRenderDrawColor (renderer, 255, 255, 255, 255);
-
-                SDL_RenderClear (renderer);
-
-                afficher_carte_sdl(renderer, carte, textures_cases, tailleCase,
-                    perso->x, perso->y, case_selection_x, case_selection_y, perso_selectionne);
-                afficher_personnage(renderer, texture_perso, perso, tailleCase);
-
-                SDL_RenderPresent(renderer);
-
-                majAffichage = 0;
-            }
-
         }
 
-    } else {
-        fprintf(stderr, "Erreur de création de la fenêtre : %s\n", SDL_GetError());
+        // Traitement des actions du joueur
+        while (SDL_PollEvent(&e)) {
+            switch(e.type) {
+                case SDL_QUIT:
+                    running = 0;
+                    break;
+
+                case SDL_KEYDOWN:
+                    // Déplacements au clavier
+                    switch(e.key.keysym.scancode) {
+                        case SDL_SCANCODE_W: majAffichage = 1; perso->y--; break;
+                        case SDL_SCANCODE_A: majAffichage = 1; perso->x--; break;
+                        case SDL_SCANCODE_S: majAffichage = 1; perso->y++; break;
+                        case SDL_SCANCODE_D: majAffichage = 1; perso->x++; break;
+                        default: break;
+                    }
+                    break;
+
+                case SDL_MOUSEBUTTONDOWN:
+                    if (e.button.button == SDL_BUTTON_LEFT) {
+                        int fenetre_taille_x, fenetre_taille_y;
+                        SDL_GetRendererOutputSize(renderer, &fenetre_taille_x, &fenetre_taille_y);
+
+                        // Mathématiques de la grille "flat-top"
+                        float rayon = tailleCase / 2.0f;                    
+                        float hex_w = 2.0f * rayon;                        
+                        float hex_h = sqrtf(3) * rayon;                    
+                        float espacement_colonnes = hex_w * 0.75f; 
+
+                        // Décalage de la caméra centrée sur le joueur
+                        float camX = perso->x * espacement_colonnes;
+                        float camY = perso->y * hex_h + (perso->x % 2 ? hex_h / 2 : 0);
+                        int decalageX = (int)(fenetre_taille_x / 2 - camX - hex_w / 2);
+                        int decalageY = (int)(fenetre_taille_y / 2 - camY - hex_h / 2);
+
+                        // Détection du clic hexagonal par calcul de distance
+                        int carte_x = -1, carte_y = -1;
+                        float dist_min_carree = rayon * rayon; 
+
+                        // Approximation de la zone pour ne pas vérifier les milliers de cases
+                        int approx_x = (int)((e.button.x - decalageX) / espacement_colonnes);
+                        int approx_y = (int)((e.button.y - decalageY) / hex_h);
+
+                        // On teste un carré de 5x5 autour de la souris
+                        for (int i = approx_y - 2; i <= approx_y + 2; i++) {
+                            for (int j = approx_x - 2; j <= approx_x + 2; j++) {
+                                if (i >= 0 && i < TAILLE_CARTE && j >= 0 && j < TAILLE_CARTE) {
+                                    
+                                    float cx = j * espacement_colonnes + hex_w / 2 + decalageX;
+                                    float cy = i * hex_h + (j % 2 ? hex_h / 2 : 0) + hex_h / 2 + decalageY;
+                                    
+                                    // Théorème de Pythagore pour trouver le centre le plus proche
+                                    float dx = e.button.x - cx;
+                                    float dy = e.button.y - cy;
+                                    float dist_carree = dx * dx + dy * dy;
+
+                                    if (dist_carree < dist_min_carree) {
+                                        dist_min_carree = dist_carree;
+                                        carte_x = j;
+                                        carte_y = i;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Logique de sélection une fois la case trouvée
+                        if (carte_x >= 0 && carte_y >= 0) {
+                            if (carte_x == perso->x && carte_y == perso->y) {
+                                perso_selectionne = !perso_selectionne;
+                                case_selection_x = -1; case_selection_y = -1;
+                            } else if (perso_selectionne) {
+                                perso->x = carte_x; perso->y = carte_y;
+                                perso_selectionne = 0;
+                                case_selection_x = -1; case_selection_y = -1;
+                            } else {
+                                case_selection_x = carte_x; case_selection_y = carte_y;
+                                perso_selectionne = 0;
+                            }
+                        } else {
+                            // Clic en dehors de la carte
+                            case_selection_x = -1; case_selection_y = -1;
+                            perso_selectionne = 0;
+                        }
+                        majAffichage = 1;
+                    }
+                    break;
+                    
+                case SDL_MOUSEWHEEL:
+                    // Zoom molette
+                    tailleCase += e.wheel.y * 5; 
+                    if (tailleCase > TAILLE_CASE_MAXI) tailleCase = TAILLE_CASE_MAXI;
+                    if (tailleCase < TAILLE_CASE_MINI) tailleCase = TAILLE_CASE_MINI;
+                    majAffichage = 1;
+                    break;
+
+                case SDL_WINDOWEVENT:
+                    // Si on redimensionne la fenêtre, on force le réaffichage
+                    if (e.window.event == SDL_WINDOWEVENT_RESIZED || e.window.event == SDL_WINDOWEVENT_EXPOSED) {
+                        majAffichage = 1;
+                    }
+                    break;
+            }
+        }
+
+        // Mise à jour de l'écran uniquement si nécessaire 
+        if (majAffichage) {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Fond noir
+            SDL_RenderClear(renderer);
+
+            // Dessine la carte et les contours dorés
+            afficher_carte_sdl(renderer, carte, textures_cases, tailleCase,
+                perso->x, perso->y, case_selection_x, case_selection_y, perso_selectionne);
+                
+            if (texture_perso) {
+                afficher_personnage(renderer, texture_perso, perso, tailleCase, perso_selectionne);
+            }
+
+            SDL_RenderPresent(renderer);
+            majAffichage = 0;
+        }
     }
 
-    Mix_FreeMusic(musique);
+    // Libération propre de la mémoire à la fermeture du jeu
+    if (musique) Mix_FreeMusic(musique);
+    for (int i = 0; i < NB_BIOMES; i++) {
+        if (textures_cases[i]) SDL_DestroyTexture(textures_cases[i]);
+    }
+    if (texture_perso) SDL_DestroyTexture(texture_perso);
+    
+    // FAIRE une fonction detruire_perso(perso) dans perso.h pour libérer le malloc !(Léo)
+    
     Mix_CloseAudio();
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(pFenetre);
-
     SDL_Quit();
 
     return 0;
 }
-
