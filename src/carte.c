@@ -66,10 +66,10 @@ void dessiner_contour_double_dore(SDL_Renderer* r, float cx, float cy, float ray
 
     for (int k = 0; k < 6; k++) {
         float cos_a1 = HEX_COS[k];
-        float cos_a2 = HEX_COS[k + 1];
+        float cos_a2 = HEX_COS[(k + 1) % 6]; // en gros il fallait remmetre à 0 l'indice(sinon il allait dessiner là ou il ne voit pas)
 
         float sin_a1 = HEX_SIN[k];
-        float sin_a2 = HEX_SIN[k + 1];
+        float sin_a2 = HEX_SIN[(k + 1) % 6];
 
         // Filet extérieur (Or clair)
         thickLineRGBA(r, 
@@ -147,10 +147,11 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     on affiche que la partie de la carte qui est visible
     sur l'écran, pour gagner du temps de calcul.
     */
-    int j_min = fmax(0, (abs(decalageX) / espacement_colonnes) - 1);
-    int j_max = fmin(TAILLE_CARTE, j_min + (lFenetre / espacement_colonnes) + 2);
-    int i_min = fmax(0, (abs(decalageY) / hex_h) - 1);
-    int i_max = fmin(TAILLE_CARTE, i_min + (hFenetre / hex_h) + 2);
+    // CORRECTION : J'ai réglé le zoom et dezoom, j'ai prit les coordonnées de l'écran en le soustraynt au décalage
+    int j_min = fmax(0, (-decalageX) / espacement_colonnes - 1);
+    int j_max = fmin(TAILLE_CARTE, (lFenetre - decalageX) / espacement_colonnes + 2);
+    int i_min = fmax(0, (-decalageY) / hex_h - 1);
+    int i_max = fmin(TAILLE_CARTE, (hFenetre - decalageY) / hex_h + 2);
 
     for (int j = j_min; j < j_max; j++) {
         for (int i = i_min; i < i_max; i++) {
