@@ -74,7 +74,7 @@ void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, p
     float cx = perso -> x * espacement_colonnes + hex_w / 2.0f;
     float cy = perso -> y * hex_h + (perso -> x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f;
 
-    /* Caméra centrée sur le joueur (déduit du code main) */
+    /* Caméra centrée sur le joueur */
     float camX = cx - hex_w / 2.0f;
     float camY = cy - hex_h / 2.0f;
     int decalageX = (int)(fenetre_taille_x / 2 - camX - hex_w / 2.0f);
