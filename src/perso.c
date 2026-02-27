@@ -52,6 +52,15 @@ perso_t * init_perso(perso_type_t persoType)
     return perso;
 }
 
+void detruire_perso(perso_t ** perso) {
+
+    if (perso != NULL && *perso != NULL) {
+        free(*perso);
+        *perso = NULL;
+    }
+
+}
+
 void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, perso_t * perso, int tailleCase, int estSelectionne) {
     
     int fenetre_taille_x, fenetre_taille_y;
