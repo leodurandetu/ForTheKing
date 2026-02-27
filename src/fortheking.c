@@ -132,10 +132,41 @@ int main() {
                 case SDL_KEYDOWN:
                     // Déplacements au clavier
                     switch(e.key.keysym.scancode) {
-                        case SDL_SCANCODE_W: majAffichage = 1; perso->y--; break;
-                        case SDL_SCANCODE_A: majAffichage = 1; perso->x--; break;
-                        case SDL_SCANCODE_S: majAffichage = 1; perso->y++; break;
-                        case SDL_SCANCODE_D: majAffichage = 1; perso->x++; break;
+                        case SDL_SCANCODE_W: 
+                            
+                            if (perso->y - 1 >= 0) {
+                                majAffichage = 1;
+                                perso->y--;
+                            }
+
+                            break;
+                        case SDL_SCANCODE_A:
+                            
+                            if (perso->x - 1 >= 0) {
+                                majAffichage = 1;
+                                perso->x--;
+                            }
+
+                            break;
+
+                        case SDL_SCANCODE_S: 
+                            
+                            if (perso->y + 1 < TAILLE_CARTE) {
+                                majAffichage = 1;
+                                perso->y++;
+                            }
+
+                            break;
+
+                        case SDL_SCANCODE_D:
+
+                            if (perso->x + 1 < TAILLE_CARTE) {
+                                majAffichage = 1;
+                                perso->x++;
+                            }
+
+                            break;
+
                         default: break;
                     }
                     break;

@@ -316,15 +316,14 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 /* Massoud */
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
-    // On passe de 10 à 20 zones pour équilibrer(trop de terre)
-    int nb_zones = 16 + rand() % 7;
+    int nb_zones = 250 + rand() % 101;
 
     for (int z = 0; z < nb_zones; z++) {
         coordonnee_t dep = { rand() % TAILLE_CARTE, rand() % TAILLE_CARTE };
         
-        // Entre 5 et 15 cases de large/haut
-        int largeur = 5 + rand() % 10;
-        int hauteur = 5 + rand() % 10;
+        // Entre 7 et 16 cases de large/haut
+        int largeur = 7 + rand() % 10;
+        int hauteur = 7 + rand() % 10;
 
         coordonnee_t arr = { dep.x + largeur, dep.y + hauteur };
         remplir_zone(carte, EAU, dep, arr);
@@ -351,14 +350,14 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     
     for (int i = 0; i < 3; i++) {
         // 5 à 8 zones par biome suffisent pour une carte de 50(J'ai cherche des infos sur la carte de for the king)
-        int nb_zones = 5 + rand() % 4; 
+        int nb_zones = 600 + rand() % 360; 
         
         for (int z = 0; z < nb_zones; z++) {
             coordonnee_t dep = { rand() % TAILLE_CARTE, rand() % TAILLE_CARTE };
             
-            // Tailles de zones réduites (3 à 10 cases) pour un aspect "plateau"
-            int largeur = 3 + rand() % 8;
-            int hauteur = 3 + rand() % 8;
+            // 6 à 14 cases, car maintenant la carte est de taille 500
+            int largeur = 6 + rand() % 9;
+            int hauteur = 6 + rand() % 9;
             
             coordonnee_t arr = { dep.x + largeur, dep.y + hauteur };
             remplir_zone(carte, liste[i], dep, arr);
