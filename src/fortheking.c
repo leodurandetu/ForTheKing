@@ -13,6 +13,7 @@ case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
 #define TAILLE_CASE_MAXI 150
 #define TAILLE_CASE_MINI 32
+#define RAYON_DECOUVERTE_BROUILLARD 8
 
 int main() {
     printf("For The King!\n");
@@ -87,6 +88,15 @@ int main() {
         SDL_FreeSurface(img_perso);
     }
 
+    // Chargement de la texture du brouillard
+    SDL_Texture *texture_brouillard = NULL;
+    SDL_Surface *img_brouillard = IMG_Load("img/brouillard.png");
+    if (img_brouillard) {
+        texture_brouillard = SDL_CreateTextureFromSurface(renderer, img_brouillard);
+        SDL_SetTextureBlendMode(texture_brouillard, SDL_BLENDMODE_BLEND);
+        SDL_FreeSurface(img_brouillard);
+    }
+
     // Génération du monde
     srand((unsigned int)time(NULL));
     init_carte(carte);
@@ -95,7 +105,9 @@ int main() {
     
     if (musique) Mix_FadeInMusic(musique, 1, 3000);
 
-    perso_t *perso = init_perso(MAGE); 
+    perso_t *perso = init_perso(MAGE, TAILLE_CARTE / 2, TAILLE_CARTE / 2); 
+
+    devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
 
     int tailleCase = 50;
     int case_selection_x = -1;
@@ -104,6 +116,12 @@ int main() {
 
     int running = 1;
     int majAffichage = 1; // Forcé à 1 pour afficher l'écran dès le lancement
+
+    /*
+     * Si majBrouillard = 1, alors on dévoile
+     * le brouillard à proximité du joueur
+     */
+    int majBrouillard = 0;
 
     while (running) {
         SDL_Event e;
@@ -132,10 +150,12 @@ int main() {
                 case SDL_KEYDOWN:
                     // Déplacements au clavier
                     switch(e.key.keysym.scancode) {
+
                         case SDL_SCANCODE_W: 
                             
                             if (perso->y - 1 >= 0) {
                                 majAffichage = 1;
+                                majBrouillard = 1;
                                 perso->y--;
                             }
 
@@ -144,6 +164,7 @@ int main() {
                             
                             if (perso->x - 1 >= 0) {
                                 majAffichage = 1;
+                                majBrouillard = 1;
                                 perso->x--;
                             }
 
@@ -153,6 +174,7 @@ int main() {
                             
                             if (perso->y + 1 < TAILLE_CARTE) {
                                 majAffichage = 1;
+                                majBrouillard = 1;
                                 perso->y++;
                             }
 
@@ -162,6 +184,7 @@ int main() {
 
                             if (perso->x + 1 < TAILLE_CARTE) {
                                 majAffichage = 1;
+                                majBrouillard = 1;
                                 perso->x++;
                             }
 
@@ -224,9 +247,16 @@ int main() {
                                 perso_selectionne = !perso_selectionne;
                                 case_selection_x = -1; case_selection_y = -1;
                             } else if (perso_selectionne) {
-                                perso->x = carte_x; perso->y = carte_y;
-                                perso_selectionne = 0;
-                                case_selection_x = -1; case_selection_y = -1;
+
+                                if (carte[carte_x][carte_y].estVisible) {
+                                    perso->x = carte_x; perso->y = carte_y;
+                                    perso_selectionne = 0;
+                                    case_selection_x = -1; case_selection_y = -1;
+                                } else {
+                                    case_selection_x = carte_x; case_selection_y = carte_y;
+                                    perso_selectionne = 0;
+                                }
+
                             } else {
                                 case_selection_x = carte_x; case_selection_y = carte_y;
                                 perso_selectionne = 0;
@@ -237,6 +267,7 @@ int main() {
                             perso_selectionne = 0;
                         }
                         majAffichage = 1;
+                        majBrouillard = 1;
                     }
                     break;
                     
@@ -257,13 +288,18 @@ int main() {
             }
         }
 
+        if (majBrouillard) {
+            devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
+            majBrouillard = 0;
+        }
+
         // Mise à jour de l'écran uniquement si nécessaire 
         if (majAffichage) {
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Fond noir
             SDL_RenderClear(renderer);
 
             // Dessine la carte et les contours dorés
-            afficher_carte_sdl(renderer, carte, textures_cases, tailleCase,
+            afficher_carte_sdl(renderer, carte, textures_cases, texture_brouillard, tailleCase,
                 perso->x, perso->y, case_selection_x, case_selection_y, perso_selectionne);
                 
             if (texture_perso) {
@@ -273,6 +309,7 @@ int main() {
             SDL_RenderPresent(renderer);
             majAffichage = 0;
         }
+
     }
 
     // Libération propre de la mémoire à la fermeture du jeu

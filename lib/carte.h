@@ -45,6 +45,7 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void remplir_zone(case_t carte[TAILLE_CARTE][TAILLE_CARTE], biome_t biome, coordonnee_t dep, coordonnee_t arr);
 int test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
 void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]); // Console
+void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int rayon);
 
 /* Prototypes des fonctions de rendu SDL2 */
 void afficher_hex_texture(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Texture* texture, SDL_Color couleur);
@@ -54,6 +55,7 @@ void afficher_hex_couleur(SDL_Renderer* renderer, float cx, float cy, float rayo
 void afficher_carte_sdl(SDL_Renderer * renderer,
     case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     SDL_Texture * textures_cases[NB_BIOMES], 
+    SDL_Texture * texture_brouillard,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,

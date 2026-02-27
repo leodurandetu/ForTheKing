@@ -120,6 +120,7 @@ void afficher_hex_couleur(SDL_Renderer* renderer, float cx, float cy, float rayo
 void afficher_carte_sdl(SDL_Renderer * renderer,
     case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     SDL_Texture * textures_cases[NB_BIOMES], 
+    SDL_Texture * texture_brouillard,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
@@ -156,13 +157,19 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     for (int j = j_min; j < j_max; j++) {
         for (int i = i_min; i < i_max; i++) {
             case_t maCase = carte[i][j];
-            if (!maCase.estVisible) continue;
 
             float cx = j * espacement_colonnes + hex_w / 2.0f + decalageX;
             float cy = i * hex_h + (j % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
 
             /* Texture du Biome */
-            SDL_Texture *tex_actuelle = textures_cases[maCase.biome];
+            SDL_Texture *tex_actuelle;
+            
+            if (maCase.estVisible) {
+                tex_actuelle = textures_cases[maCase.biome];
+            } else {
+                tex_actuelle = texture_brouillard;
+            }
+
             if (tex_actuelle) {
                 SDL_Vertex sommets[7];
                 int indices[18] = { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
@@ -178,12 +185,15 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                 SDL_RenderGeometry(renderer, tex_actuelle, sommets, 7, indices, 18);
             }
 
-            /* Double Contour Doré style FTK avec transparence */
-            SDL_Color ombre_interne = {0, 0, 0, 90};
-            dessiner_contour_ftk(renderer, cx, cy, rayon, 5, ombre_interne);
-            
-            // Double filet doré avec un alpha de 170/255
-            dessiner_contour_double_dore(renderer, cx, cy, rayon, 170);
+            if (maCase.estVisible) {
+                /* Double Contour Doré style FTK avec transparence */
+                SDL_Color ombre_interne = {0, 0, 0, 90};
+                dessiner_contour_ftk(renderer, cx, cy, rayon, 5, ombre_interne);
+                
+                // Double filet doré avec un alpha de 170/255
+                dessiner_contour_double_dore(renderer, cx, cy, rayon, 170);
+            }
+
         }
     }
 
@@ -279,6 +289,52 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 }
 
+/*
+ * Cette fonction permet de dévoiler le brouillard sur la carte,
+ * à partir d'un point donné d'abscisse x et d'ordonnée y,
+ * et avec un rayon donné.
+ */
+void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int rayon) {
+    printf("%d %d\n", x, y);
+
+    int xDepart = x - rayon;
+
+    if (xDepart < 0) {
+        xDepart = 0;
+    }
+
+    int xArrivee = x + rayon;
+
+    if (xArrivee > (TAILLE_CARTE - 1)) {
+        xArrivee = (TAILLE_CARTE - 1);
+    }
+
+    int yDepart = y - rayon;
+
+    if (yDepart < 0) {
+        yDepart = 0;
+    }
+
+    int yArrivee = y + rayon;
+
+    if (yArrivee > (TAILLE_CARTE - 1)) {
+        yArrivee = (TAILLE_CARTE - 1);
+    }
+
+    printf("%d %d %d %d\n\n", xDepart, xArrivee, yDepart, yArrivee);
+
+    int i, j;
+
+    for (i = xDepart; i <= xArrivee; i++) {
+
+        for (j = yDepart; j <= yArrivee; j++) {
+            carte[j][i].estVisible = 1;
+        }
+
+    }
+
+}
+
 /* Leo */
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     int x, y;
@@ -294,7 +350,8 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
             maCase.biome = TERRE;
             maCase.batiment = monBatiment;
 
-            maCase.estVisible = 1;
+            /* Par défaut, toutes les cases sont cachées par le brouillard */
+            maCase.estVisible = 0;
 
             carte[x][y] = maCase;
         }

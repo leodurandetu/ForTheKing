@@ -3,12 +3,12 @@
 #include "../lib/perso.h"
 #include "../lib/carte.h"
 
-perso_t * init_perso(perso_type_t persoType)
+perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 {
     perso_t * perso = malloc(sizeof(perso_t));
 
-    perso->x = 25;
-    perso->y = 25;
+    perso->x = xDepart;
+    perso->y = yDepart;
 
     perso->type = persoType;
 
