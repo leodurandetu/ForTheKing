@@ -82,7 +82,7 @@ void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, p
     }
 
     /* Taill du personnage */
-    float echelle = 0.65f;
+    float echelle = 0.65f; // On ajustera encore !
 
     SDL_Rect dstRect;
     dstRect.w = (int) (hex_w * echelle);
