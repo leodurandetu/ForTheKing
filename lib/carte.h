@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <math.h>
+#include "../lib/monstre.h"
 
 /* Définitions */
 #define TAILLE_CARTE 500
@@ -31,6 +32,7 @@ typedef struct {
 typedef struct case_s {
     biome_t biome;
     batiment_t batiment;
+    monstre_t *monstre;
     int estVisible;
 } case_t;
 
@@ -46,6 +48,8 @@ void remplir_zone(case_t carte[TAILLE_CARTE][TAILLE_CARTE], biome_t biome, coord
 int test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
 void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]); // Console
 void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int rayon);
+void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 
 /* Prototypes des fonctions de rendu SDL2 */
 void afficher_hex_texture(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Texture* texture, SDL_Color couleur);
@@ -56,6 +60,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     SDL_Texture * textures_cases[NB_BIOMES], 
     SDL_Texture * texture_brouillard,
+    SDL_Texture * texture_monstre,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,

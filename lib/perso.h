@@ -1,3 +1,6 @@
+#ifndef PERSO_H
+#define PERSO_H
+
 /* Structures */
 
 typedef enum {
@@ -32,3 +35,5 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart);
 
 /* Leo */
 void detruire_perso(perso_t ** perso);
+
+#endif

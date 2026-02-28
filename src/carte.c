@@ -4,6 +4,7 @@
 #include "../lib/carte.h"
 #include "../lib/couleur.h"
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include "../lib/monstre.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -121,6 +122,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     SDL_Texture * textures_cases[NB_BIOMES], 
     SDL_Texture * texture_brouillard,
+    SDL_Texture * texture_monstre,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
@@ -186,6 +188,25 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
             }
 
             if (maCase.estVisible) {
+
+                /* Affichage du monstre si il existe */
+                if (maCase.monstre != NULL) {
+
+                    if (texture_monstre) {
+                        float echelle = 0.65f;
+
+                        SDL_Rect dstRect;
+                        dstRect.w = (int) (hex_w * echelle);
+                        dstRect.h = (int) (hex_w * echelle); // Carré
+                        /* Centrage automatique */
+                        dstRect.x = (int)(cx - dstRect.w / 2);
+                        dstRect.y = (int)(cy - dstRect.h / 2);
+
+                        SDL_RenderCopy(renderer, texture_monstre, NULL, &dstRect);
+                    }
+
+                }
+
                 /* Double Contour Doré style FTK avec transparence */
                 SDL_Color ombre_interne = {0, 0, 0, 90};
                 dessiner_contour_ftk(renderer, cx, cy, rayon, 5, ombre_interne);
@@ -295,8 +316,6 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  * et avec un rayon donné.
  */
 void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int rayon) {
-    printf("%d %d\n", x, y);
-
     int xDepart = x - rayon;
 
     if (xDepart < 0) {
@@ -320,8 +339,6 @@ void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
     if (yArrivee > (TAILLE_CARTE - 1)) {
         yArrivee = (TAILLE_CARTE - 1);
     }
-
-    printf("%d %d %d %d\n\n", xDepart, xArrivee, yDepart, yArrivee);
 
     int i, j;
 
@@ -352,6 +369,8 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
             /* Par défaut, toutes les cases sont cachées par le brouillard */
             maCase.estVisible = 0;
+
+            maCase.monstre = NULL;
 
             carte[x][y] = maCase;
         }
@@ -420,4 +439,55 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
             remplir_zone(carte, liste[i], dep, arr);
         }
     }
+}
+
+/*
+ * Cette fonction permet de placer un certain nombre
+ * de monstres sur la carte de manière aléatoire
+ */
+void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+    int i;
+    int nb = 240 + rand() % 121;
+
+    for (i = 0; i < nb; i++) {
+        int x = rand() % TAILLE_CARTE;
+        int y = rand() % TAILLE_CARTE;
+
+        /* On recommence jusqu'à trouver un endroit convenable,
+         * C'est à dire sans monstre, et pas dans l'eau.
+         */
+        while (carte[x][y].monstre != NULL || carte[x][y].biome == EAU) {
+            x = rand() % TAILLE_CARTE;
+            y = rand() % TAILLE_CARTE;
+        }
+
+        monstre_t *monstre = creer_monstre_aleatoire(x, y);
+
+        carte[x][y].monstre = monstre;
+    }
+
+}
+
+/*
+ * Cette fonction permet de libérer la mémoire à la fin
+ * du programme, tout ce qui est relié à la carte.
+ * Notamment les pointeurs vers les monstres qui sont 
+ * stockés (ou pas) sur chaque case de la carte.
+ */
+void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+    int i, j;
+    
+    for (i = 0; i < TAILLE_CARTE; i++) {
+
+        for (j = 0; j < TAILLE_CARTE; j++) {
+            monstre_t *monstre = carte[i][j].monstre;
+
+            if (monstre != NULL) {
+                free(monstre);
+            }
+
+        }
+
+    }
+
 }

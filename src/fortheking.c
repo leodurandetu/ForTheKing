@@ -31,6 +31,7 @@ int main() {
     }
 
     Mix_Music *musique = Mix_LoadMUS("audio/Main_theme.mp3");
+
     if (!musique) {
         fprintf(stderr, "Attention: Musique introuvable (%s)\n", Mix_GetError());
     }
@@ -88,6 +89,15 @@ int main() {
         SDL_FreeSurface(img_perso);
     }
 
+    // Chargement du sprite du monstre (unique pour l'instant)
+    SDL_Texture *texture_monstre = NULL;
+    SDL_Surface *img_monstre = IMG_Load("img/squelette.png");
+    if (img_monstre) {
+        texture_monstre = SDL_CreateTextureFromSurface(renderer, img_monstre);
+        SDL_SetTextureBlendMode(texture_monstre, SDL_BLENDMODE_BLEND);
+        SDL_FreeSurface(img_monstre);
+    }
+
     // Chargement de la texture du brouillard
     SDL_Texture *texture_brouillard = NULL;
     SDL_Surface *img_brouillard = IMG_Load("img/brouillard.png");
@@ -102,7 +112,8 @@ int main() {
     init_carte(carte);
     generer_eau(carte);
     generer_biomes(carte);
-    
+    placer_monstres(carte);
+
     if (musique) Mix_FadeInMusic(musique, 1, 3000);
 
     perso_t *perso = init_perso(MAGE, TAILLE_CARTE / 2, TAILLE_CARTE / 2); 
@@ -248,7 +259,7 @@ int main() {
                                 case_selection_x = -1; case_selection_y = -1;
                             } else if (perso_selectionne) {
 
-                                if (carte[carte_x][carte_y].estVisible) {
+                                if (carte[carte_y][carte_x].estVisible) {
                                     perso->x = carte_x; perso->y = carte_y;
                                     perso_selectionne = 0;
                                     case_selection_x = -1; case_selection_y = -1;
@@ -299,7 +310,7 @@ int main() {
             SDL_RenderClear(renderer);
 
             // Dessine la carte et les contours dorés
-            afficher_carte_sdl(renderer, carte, textures_cases, texture_brouillard, tailleCase,
+            afficher_carte_sdl(renderer, carte, textures_cases, texture_brouillard, texture_monstre, tailleCase,
                 perso->x, perso->y, case_selection_x, case_selection_y, perso_selectionne);
                 
             if (texture_perso) {
@@ -319,7 +330,10 @@ int main() {
     }
     if (texture_perso) SDL_DestroyTexture(texture_perso);
     
-    // Déstruction du personnage
+    // Destruction en mémoire des monstres notamment sur la carte
+    liberer_memoire_carte(carte);
+
+    // Destruction du personnage
     detruire_perso(&perso);
     
     Mix_CloseAudio();
