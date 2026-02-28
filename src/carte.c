@@ -13,7 +13,7 @@
 /* =====================================================
 // ==================== AFFICHAGE HEX ==================
 // =====================================================*/
-
+/* Massoud */
 
 /*
 On stocke les cos et sin une fois dans un tableau, au lieu de le faire à chaque boucle 
@@ -116,8 +116,14 @@ void afficher_hex_couleur(SDL_Renderer* renderer, float cx, float cy, float rayo
     SDL_RenderGeometry(renderer, NULL, sommets, 7, indices, 18);
 }
 
-
-/* Affichage de la carte via SDL2 */
+/* Leo et Massoud */
+/*
+ * Cette fonction permet d'afficher la carte avec SDL2.
+ * Elle affiche les cases, le brouillard, les monstres
+ * qui sont sur les cases, ainsi que les indicateurs
+ * qui permettent de voir la case ou le personnage
+ * sélectionné
+ */
 void afficher_carte_sdl(SDL_Renderer * renderer,
     case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     SDL_Texture * textures_cases[NB_BIOMES], 
@@ -229,6 +235,12 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 /* ========================================================================*/
 
 /* Leo */
+/*
+ * Cette fonction permet d'afficher la carte en mode textuel,
+ * sur le terminal, mais elle ne dispose pas de toutes les
+ * fonctionnalités possibles. Pour l'instant, elle n'est
+ * pas utilisée.
+ */
 void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     int x, y;
 
@@ -310,6 +322,7 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 }
 
+/* Leo */
 /*
  * Cette fonction permet de dévoiler le brouillard sur la carte,
  * à partir d'un point donné d'abscisse x et d'ordonnée y,
@@ -353,6 +366,12 @@ void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
 }
 
 /* Leo */
+/*
+ * Cette fonction permet d'initialiser la carte,
+ * c'est à dire d'initialiser toutes les cases
+ * à une case de terre, vide, cachée par le brouillard,
+ * sans monstre ni batiment.
+ */
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     int x, y;
 
@@ -378,9 +397,10 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     }
 
     /*
-    On calcule les cos et sin une fois, au lieu de le faire à chaque boucle 
-    Car les angles sont les mêmes pour chaque hexagone
-    */
+     * On calcule les cos et sin une fois, au lieu de le faire à chaque boucle 
+     * Car les angles sont les mêmes pour chaque hexagone.
+     * Cela est utilisé pour la fonction d'affichage en hexagones.
+     */
     for (int i = 0; i < 6; i++) {
         float angle = (60.0f * i) * (M_PI / 180.0f);
         HEX_COS[i] = cosf(angle);
@@ -391,6 +411,11 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 
 /* Massoud */
+/*
+ * Cette fonction permet de placer des cases d'eau
+ * sur la carte, de manière aléatoire, et de façon
+ * à ce que ça paraisse naturel.
+ */
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     int nb_zones = 250 + rand() % 101;
 
@@ -441,6 +466,7 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     }
 }
 
+/* Leo */
 /*
  * Cette fonction permet de placer un certain nombre
  * de monstres sur la carte de manière aléatoire
@@ -468,6 +494,7 @@ void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 }
 
+/* Leo */
 /*
  * Cette fonction permet de libérer la mémoire à la fin
  * du programme, tout ce qui est relié à la carte.

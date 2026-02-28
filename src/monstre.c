@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "../lib/monstre.h"
 
+/* Leo */
 /*
  * Cette fonction crée un monstre avec des coordonnées
  * x et y données. Ce monstre aura des attributs

@@ -3,6 +3,13 @@
 #include "../lib/perso.h"
 #include "../lib/carte.h"
 
+/* Leo */
+/*
+ * Cette fonction crée un personnage avec des coordonnées de départ,
+ * et avec un type donné. Les attributs sont sélectionnés en fonction
+ * du type du personnage.
+ * Elle renvoie un pointeur sur le personnage créé.
+ */
 perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 {
     perso_t * perso = malloc(sizeof(perso_t));
@@ -52,6 +59,10 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
     return perso;
 }
 
+/* Leo */
+/*
+ * Cette fonction détruit et libère la place mémoire d'un personnage
+ */
 void detruire_perso(perso_t ** perso) {
 
     if (perso != NULL && *perso != NULL) {
@@ -61,6 +72,11 @@ void detruire_perso(perso_t ** perso) {
 
 }
 
+/* Massoud */
+/*
+ * Cette fonction permet d'afficher le personnage
+ * sur la carte avec SDL2 
+ */
 void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, perso_t * perso, int tailleCase, int estSelectionne) {
     
     int fenetre_taille_x, fenetre_taille_y;
