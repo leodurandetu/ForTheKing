@@ -29,7 +29,7 @@ typedef struct {
 /* Prototypes des fonctions*/
 
 /* Massoud */
-void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, perso_t * perso, int tailleCase, int estSelectionne);
+void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, perso_t * perso, int tailleCase);
 /* Leo */
 perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart);
 /* Leo */

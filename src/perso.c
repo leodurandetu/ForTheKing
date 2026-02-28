@@ -77,7 +77,7 @@ void detruire_perso(perso_t ** perso) {
  * Cette fonction permet d'afficher le personnage
  * sur la carte avec SDL2 
  */
-void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, perso_t * perso, int tailleCase, int estSelectionne) {
+void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, perso_t * perso, int tailleCase) {
     
     int fenetre_taille_x, fenetre_taille_y;
     SDL_GetRendererOutputSize(renderer, & fenetre_taille_x, & fenetre_taille_y);
@@ -99,14 +99,7 @@ void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, p
     float cx_finale = cx + decalageX;
     float cy_finale = cy + decalageY;
 
-    /* Ajout du halo du selection */
-    if (estSelectionne) {
-        /* Couleur Cyan très claire, avec un alpha de 128 (moitié transparent) */
-        SDL_Color couleurHalo = { 100, 255, 255, 128 };
-        afficher_hex_couleur(renderer, cx_finale, cy_finale, rayon + 3.0f, couleurHalo);
-    }
-
-    /* Taill du personnage */
+    /* Taille du personnage */
     float echelle = 0.65f; // On ajustera encore !
 
     SDL_Rect dstRect;

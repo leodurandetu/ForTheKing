@@ -252,6 +252,8 @@ int main() {
                             }
                         }
 
+                        printf("%d %d\n", carte_x, carte_y);
+
                         // Logique de sélection une fois la case trouvée
                         if (carte_x >= 0 && carte_y >= 0) {
                             if (carte_x == perso->x && carte_y == perso->y) {
@@ -259,7 +261,12 @@ int main() {
                                 case_selection_x = -1; case_selection_y = -1;
                             } else if (perso_selectionne) {
 
-                                if (carte[carte_y][carte_x].estVisible) {
+                                /*
+                                 * On ne peut déplacer le personnage avec
+                                 * la souris que sur une case voisine.
+                                 */
+                                if (carte_x >= perso->x - 1 && carte_x <= perso->x + 1
+                                    && carte_y >= perso-> y - 1 && carte_y <= perso->y + 1) {
                                     perso->x = carte_x; perso->y = carte_y;
                                     perso_selectionne = 0;
                                     case_selection_x = -1; case_selection_y = -1;
@@ -314,7 +321,7 @@ int main() {
                 perso->x, perso->y, case_selection_x, case_selection_y, perso_selectionne);
                 
             if (texture_perso) {
-                afficher_personnage(renderer, texture_perso, perso, tailleCase, perso_selectionne);
+                afficher_personnage(renderer, texture_perso, perso, tailleCase);
             }
 
             SDL_RenderPresent(renderer);

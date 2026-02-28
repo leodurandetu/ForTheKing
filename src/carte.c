@@ -231,6 +231,54 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
         SDL_Color sel = {255, 255, 255, 60};
         dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, sel); 
     }
+
+    /*
+     * Si le personnage est sélectionné,
+     * on affiche un halo bleu sur la case
+     * du personnage et les cases voisines
+     */
+    if (perso_selectionne) {
+        int xDepart = persX - 1;
+
+        if (xDepart < 0) {
+            xDepart = 0;
+        }
+
+        int xArrivee = persX + 1;
+
+        if (xArrivee > TAILLE_CARTE - 1) {
+            xArrivee = TAILLE_CARTE - 1;
+        }
+
+        int yDepart = persY - 1;
+
+        if (yDepart < 0) {
+            yDepart = 0;
+        }
+
+        int yArrivee = persY + 1;
+
+        if (yArrivee > TAILLE_CARTE - 1) {
+            yArrivee = TAILLE_CARTE - 1;
+        }
+
+
+        int x, y;
+
+        for (x = xDepart; x <= xArrivee; x++) {
+
+            for (y = yDepart; y <= yArrivee; y++) {
+                float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
+                float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
+
+                SDL_Color couleurHalo = { 100, 255, 255, 128 };
+                dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
+            }
+
+        }
+
+    }
+    
 }
 /* ========================================================================*/
 
@@ -249,11 +297,6 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     for (x = 0; x < TAILLE_CARTE; x++) {
 
         for (y = 0; y < TAILLE_CARTE; y++) {
-            /*
-            Utiliser ça lorsque Massoud aura terminé
-            case_t maCase = test_etat_case(carte, x, y);
-            */
-
             case_t maCase = carte[x][y];
 
             if (!maCase.estVisible) {
