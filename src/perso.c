@@ -28,6 +28,7 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
             perso->intelligence = 4;
             perso->rapidite = 8;
             perso->evasion = 3;
+            perso->pts_deplacements = 2 + rand() % 2; 
             break;
 
         case CHASSEUR:
@@ -36,6 +37,7 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
             perso->intelligence = 13;
             perso->rapidite = 19;
             perso->evasion = 15;
+            perso->pts_deplacements = 4 + rand() % 4; 
             break;
 
         case ASSASSIN:
@@ -44,6 +46,7 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
             perso->intelligence = 13;
             perso->rapidite = 24;
             perso->evasion = 24;
+            perso->pts_deplacements = 4 + rand() % 3; 
             break;
 
         case MAGE:
@@ -52,6 +55,7 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
             perso->intelligence = 26;
             perso->rapidite = 17;
             perso->evasion = 8;
+            perso->pts_deplacements = 3 + rand() % 3; 
             break;
 
     }
@@ -111,3 +115,16 @@ void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, p
 
     SDL_RenderCopy(renderer, texture_perso, NULL, & dstRect);
 }
+
+// Massoud
+/* Fonction qui retourne les points de mouvement d'un personnage*/
+int get_pers_movements_points(perso_t *perso){
+
+    if (perso == NULL) {
+        return 0; 
+    }
+
+    return perso->pts_deplacements;
+}
+
+/* Fonction qui met à jour les points de mouvements d'un personnage*/
