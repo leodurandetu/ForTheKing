@@ -5,6 +5,7 @@
 #include "../lib/couleur.h"
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "../lib/monstre.h"
+#include "../lib/perso.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -132,7 +133,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
-    int perso_selectionne)
+    int perso_selectionne,perso_t *perso)
 {
     int lFenetre, hFenetre;
     SDL_GetRendererOutputSize(renderer, &lFenetre, &hFenetre);
@@ -238,45 +239,58 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
      * du personnage et les cases voisines
      */
     if (perso_selectionne) {
-        int xDepart = persX - 1;
+
+        int portee = get_pers_movements_points(perso);
+        int xDepart = persX - portee;
 
         if (xDepart < 0) {
             xDepart = 0;
         }
 
-        int xArrivee = persX + 1;
+        int xArrivee = persX + portee;
 
         if (xArrivee > TAILLE_CARTE - 1) {
             xArrivee = TAILLE_CARTE - 1;
         }
 
-        int yDepart = persY - 1;
+        int yDepart = persY - portee;
 
         if (yDepart < 0) {
             yDepart = 0;
         }
 
-        int yArrivee = persY + 1;
+        int yArrivee = persY + portee;
 
         if (yArrivee > TAILLE_CARTE - 1) {
             yArrivee = TAILLE_CARTE - 1;
         }
 
+        int q1 = persX;
+        int r1 = persY - (persX - (persX & 1)) / 2;
+        int s1 = -q1 - r1;
 
         int x, y;
 
         for (x = xDepart; x <= xArrivee; x++) {
-
             for (y = yDepart; y <= yArrivee; y++) {
-                float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
-                float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
+                
+                int q2 = x;
+                int r2 = y - (x - (x & 1)) / 2;
+                int s2 = -q2 - r2;
 
-                SDL_Color couleurHalo = { 100, 255, 255, 128 };
-                dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
+                int dist = abs(q1 - q2);
+                if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
+                if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
+
+                if (dist <= portee) {
+                    float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
+                    float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
+
+                    SDL_Color couleurHalo = { 100, 255, 255, 128 };
+                    dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
+                }
             }
-
         }
-
     }
     
 }
