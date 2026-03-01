@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <math.h>
 #include "../lib/monstre.h"
+#include "../lib/perso.h"
 
 /* Définitions */
 #define TAILLE_CARTE 500
@@ -64,6 +65,6 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
-    int perso_selectionne);
+    int perso_selectionne,perso_t *perso);
 
 #endif 
