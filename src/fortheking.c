@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <math.h> // Indispensable pour sqrtf() (maths hexagonales)
+#include <math.h> 
 #include <time.h>
 
 #include <SDL2/SDL.h>
@@ -261,17 +261,30 @@ int main() {
                                 case_selection_x = -1; case_selection_y = -1;
                             } else if (perso_selectionne) {
 
-                                /*
-                                 * On ne peut déplacer le personnage avec
-                                 * la souris que sur une case voisine.
-                                 */
-                                if (carte_x >= perso->x - 1 && carte_x <= perso->x + 1
-                                    && carte_y >= perso-> y - 1 && carte_y <= perso->y + 1) {
-                                    perso->x = carte_x; perso->y = carte_y;
+                                int portee = get_pers_movements_points(perso);
+
+                                // Coordonnées cubiques du personnage
+                                int q1 = perso->x;
+                                int r1 = perso->y - (perso->x - (perso->x & 1)) / 2;
+                                int s1 = -q1 - r1;
+
+                                int q2 = carte_x;
+                                int r2 = carte_y - (carte_x - (carte_x & 1)) / 2;
+                                int s2 = -q2 - r2;
+
+                                int dist = abs(q1 - q2);
+                                if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
+                                if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
+
+                                if (dist <= portee) {
+                                    perso->x = carte_x; 
+                                    perso->y = carte_y;
                                     perso_selectionne = 0;
-                                    case_selection_x = -1; case_selection_y = -1;
+                                    case_selection_x = -1; 
+                                    case_selection_y = -1;
                                 } else {
-                                    case_selection_x = carte_x; case_selection_y = carte_y;
+                                    case_selection_x = carte_x; 
+                                    case_selection_y = carte_y;
                                     perso_selectionne = 0;
                                 }
 
@@ -318,7 +331,7 @@ int main() {
 
             // Dessine la carte et les contours dorés
             afficher_carte_sdl(renderer, carte, textures_cases, texture_brouillard, texture_monstre, tailleCase,
-                perso->x, perso->y, case_selection_x, case_selection_y, perso_selectionne);
+                perso->x, perso->y, case_selection_x, case_selection_y, perso_selectionne,perso);
                 
             if (texture_perso) {
                 afficher_personnage(renderer, texture_perso, perso, tailleCase);
