@@ -5,9 +5,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "../lib/carte.h"
 #include "../lib/perso.h"
+#include "../lib/affichage_infos.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
@@ -24,6 +26,23 @@ int main() {
         fprintf(stderr, "Echec de l'initialisation de la SDL : %s\n", SDL_GetError());
         return -1;
     }
+
+    if(TTF_Init() == -1) 
+    {
+        fprintf(stderr, "Erreur TTF_Init: %s\n", TTF_GetError());
+        return -1;
+    }
+
+    TTF_Font* police;
+
+    if (( police = TTF_OpenFont("Fonts/Enchanted Land.otf", 32)) == NULL) {
+        fprintf( stderr , " erreur chargement font \n");
+        exit( EXIT_FAILURE );
+    }
+
+    SDL_Surface * texte = NULL;
+    SDL_Texture * texte_tex = NULL;
+    SDL_Rect txtDestRect;
 
     // Préparation du son
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
@@ -384,6 +403,12 @@ int main() {
             if (texture_perso) {
                 afficher_personnage(renderer, texture_perso, perso, tailleCase);
             }
+
+            mise_a_jour_texte("Points de déplacement : A FINIR", renderer, police, &texte, &texte_tex, &txtDestRect);
+
+            /* Ajout du texte en noir */
+            SDL_SetRenderDrawColor ( renderer , 0, 0, 0, 255);
+            SDL_RenderCopy ( renderer , texte_tex , NULL , &txtDestRect );
 
             SDL_RenderPresent(renderer);
             majAffichage = 0;
