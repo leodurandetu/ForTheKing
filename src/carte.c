@@ -282,12 +282,18 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                 if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
                 if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
 
-                if (dist <= portee && deplacement_possible(carte, perso, x, y)) {
+                if (dist <= portee) {
                     float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
                     float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
 
-                    SDL_Color couleurHalo = { 100, 255, 255, 128 };
-                    dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
+                    if (carte[y][x].monstre != NULL) {
+                        SDL_Color couleurHalo = { 255, 100, 100, 128 };
+                        dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
+                    } else if (deplacement_possible(carte, perso, x, y)) {
+                        SDL_Color couleurHalo = { 100, 255, 255, 128 };
+                        dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
+                    }
+
                 }
             }
         }

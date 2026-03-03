@@ -31,7 +31,6 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
             perso->intelligence = 4;
             perso->rapidite = 8;
             perso->evasion = 3;
-            perso->pts_deplacements = 2 + rand() % 2; 
             break;
 
         case CHASSEUR:
@@ -40,7 +39,6 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
             perso->intelligence = 13;
             perso->rapidite = 19;
             perso->evasion = 15;
-            perso->pts_deplacements = 4 + rand() % 4; 
             break;
 
         case ASSASSIN:
@@ -49,7 +47,6 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
             perso->intelligence = 13;
             perso->rapidite = 24;
             perso->evasion = 24;
-            perso->pts_deplacements = 4 + rand() % 3; 
             break;
 
         case MAGE:
@@ -58,12 +55,44 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
             perso->intelligence = 26;
             perso->rapidite = 17;
             perso->evasion = 8;
-            perso->pts_deplacements = 3 + rand() % 3; 
             break;
 
     }
 
+    restaurer_points_deplacements(perso);
+
     return perso;
+}
+
+/* Leo */
+/*
+ * Cette fonction restaure les points de
+ * déplacement d'un personnage.
+ */
+void restaurer_points_deplacements(perso_t * perso) {
+
+    if (perso != NULL) {
+
+        switch (perso->type) {
+            case BRUTE:
+                perso->pts_deplacements = 2 + rand() % 2; 
+                break;
+
+            case CHASSEUR:
+                perso->pts_deplacements = 4 + rand() % 4; 
+                break;
+
+            case ASSASSIN:
+                perso->pts_deplacements = 4 + rand() % 3; 
+                break;
+
+            case MAGE:
+                perso->pts_deplacements = 3 + rand() % 3; 
+                break;
+        }
+
+    }
+
 }
 
 /* Leo */

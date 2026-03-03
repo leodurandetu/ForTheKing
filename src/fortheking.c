@@ -165,40 +165,62 @@ int main() {
 
                         case SDL_SCANCODE_W: 
                             
-                            if (perso->y - 1 >= 0 && deplacement_possible(carte, perso, perso->x, perso->y - 1)) {
+                            if (perso->y - 1 >= 0 
+                                && deplacement_possible(carte, perso, perso->x, perso->y - 1)
+                                && perso->pts_deplacements > 0
+                            ) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
                                 perso->y--;
+                                perso->pts_deplacements--;
                             }
 
                             break;
                         case SDL_SCANCODE_A:
                             
-                            if (perso->x - 1 >= 0 && deplacement_possible(carte, perso, perso->x - 1, perso->y)) {
+                            if (perso->x - 1 >= 0 
+                                && deplacement_possible(carte, perso, perso->x - 1, perso->y)
+                                && perso->pts_deplacements > 0
+                            ) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
                                 perso->x--;
+                                perso->pts_deplacements--;
                             }
 
                             break;
 
                         case SDL_SCANCODE_S: 
                             
-                            if (perso->y + 1 < TAILLE_CARTE && deplacement_possible(carte, perso, perso->x, perso->y + 1)) {
+                            if (perso->y + 1 < TAILLE_CARTE 
+                                && deplacement_possible(carte, perso, perso->x, perso->y + 1)
+                                && perso->pts_deplacements > 0
+                            ) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
                                 perso->y++;
+                                perso->pts_deplacements--;
                             }
 
                             break;
 
                         case SDL_SCANCODE_D:
 
-                            if (perso->x + 1 < TAILLE_CARTE && deplacement_possible(carte, perso, perso->x + 1, perso->y)) {
+                            if (perso->x + 1 < TAILLE_CARTE 
+                                && deplacement_possible(carte, perso, perso->x + 1, perso->y)
+                                && perso->pts_deplacements > 0
+                            ) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
                                 perso->x++;
+                                perso->pts_deplacements--;
                             }
+
+                            break;
+
+                        case SDL_SCANCODE_KP_ENTER:
+                            restaurer_points_deplacements(perso);
+                            majAffichage = 1;
 
                             break;
 
@@ -253,40 +275,49 @@ int main() {
                             }
                         }
 
-                        printf("%d %d\n", carte_x, carte_y);
-
                         // Logique de sélection une fois la case trouvée
                         if (carte_x >= 0 && carte_y >= 0) {
                             if (carte_x == perso->x && carte_y == perso->y) {
                                 perso_selectionne = !perso_selectionne;
                                 case_selection_x = -1; case_selection_y = -1;
                             } else if (perso_selectionne) {
-
                                 int portee = get_pers_movements_points(perso);
 
-                                // Coordonnées cubiques du personnage
-                                int q1 = perso->x;
-                                int r1 = perso->y - (perso->x - (perso->x & 1)) / 2;
-                                int s1 = -q1 - r1;
+                                if (portee > 0) {
+                                    // Coordonnées cubiques du personnage
+                                    int q1 = perso->x;
+                                    int r1 = perso->y - (perso->x - (perso->x & 1)) / 2;
+                                    int s1 = -q1 - r1;
 
-                                int q2 = carte_x;
-                                int r2 = carte_y - (carte_x - (carte_x & 1)) / 2;
-                                int s2 = -q2 - r2;
+                                    int q2 = carte_x;
+                                    int r2 = carte_y - (carte_x - (carte_x & 1)) / 2;
+                                    int s2 = -q2 - r2;
 
-                                int dist = abs(q1 - q2);
-                                if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
-                                if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
+                                    int dist = abs(q1 - q2);
+                                    if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
+                                    if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
 
-                                if (dist <= portee && deplacement_possible(carte, perso, carte_x, carte_y)) {
-                                    perso->x = carte_x; 
-                                    perso->y = carte_y;
-                                    perso_selectionne = 0;
-                                    case_selection_x = -1; 
-                                    case_selection_y = -1;
-                                } else {
-                                    case_selection_x = carte_x; 
-                                    case_selection_y = carte_y;
-                                    perso_selectionne = 0;
+                                    if (dist <= portee) {
+
+                                        if (carte[carte_y][carte_x].monstre != NULL) {
+                                            perso_selectionne = 0;
+                                            case_selection_x = -1; 
+                                            case_selection_y = -1;
+                                        } else if (deplacement_possible(carte, perso, carte_x, carte_y)) {
+                                            perso->x = carte_x; 
+                                            perso->y = carte_y;
+                                            perso_selectionne = 0;
+                                            case_selection_x = -1; 
+                                            case_selection_y = -1;
+                                            perso->pts_deplacements -= dist;
+                                        }
+
+                                    } else {
+                                        case_selection_x = carte_x; 
+                                        case_selection_y = carte_y;
+                                        perso_selectionne = 0;
+                                    }
+
                                 }
 
                             } else {

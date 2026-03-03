@@ -40,5 +40,6 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart);
 void detruire_perso(perso_t ** perso);
 /* Massoud */
 int get_pers_movements_points(perso_t *perso);
-// faire une fonction qui met à jour les pts de deplacement
+/* Leo */
+void restaurer_points_deplacements(perso_t * perso);
 #endif
