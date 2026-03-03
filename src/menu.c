@@ -4,8 +4,11 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+
 /* MASSOUD */
 // Pour compiler gcc menu.c -o menu $(sdl2-config --cflags --libs) -lSDL2_ttf -lSDL2_image
+// APPUYER F POUR PASSER EN PLEIN ECRAN
+
 int main() {
 
     // Initialisation de SDL
