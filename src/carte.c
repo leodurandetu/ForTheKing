@@ -130,6 +130,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     SDL_Texture * textures_cases[NB_BIOMES], 
     SDL_Texture * texture_brouillard,
     SDL_Texture * texture_monstre,
+    SDL_Texture * texture_campement,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
@@ -214,6 +215,23 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
                 }
 
+                if (maCase.batiment.type != PAS_DE_BATIMENT) {
+                    
+                    if (texture_campement) {
+                        float echelle = 0.85f;
+
+                        SDL_Rect dstRect;
+                        dstRect.w = (int) (hex_w * echelle);
+                        dstRect.h = (int) (hex_w * echelle); // Carré
+                        /* Centrage automatique */
+                        dstRect.x = (int)(cx - dstRect.w / 2);
+                        dstRect.y = (int)(cy - dstRect.h / 2);
+
+                        SDL_RenderCopy(renderer, texture_campement, NULL, &dstRect);
+                    }
+
+                }
+
                 /* Double Contour Doré style FTK avec transparence */
                 SDL_Color ombre_interne = {0, 0, 0, 90};
                 dessiner_contour_ftk(renderer, cx, cy, rayon, 5, ombre_interne);
@@ -238,9 +256,9 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
      * on affiche un halo bleu sur la case
      * du personnage et les cases voisines
      */
-    if (perso_selectionne) {
+    int portee = get_pers_movements_points(perso);
 
-        int portee = get_pers_movements_points(perso);
+    if (portee >= 0) {
         int xDepart = persX - portee;
 
         if (xDepart < 0) {
@@ -288,6 +306,9 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
                     if (carte[y][x].monstre != NULL) {
                         SDL_Color couleurHalo = { 255, 100, 100, 128 };
+                        dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
+                    } else if (y == persY && x == persX && perso_selectionne) {
+                        SDL_Color couleurHalo = { 255, 255, 0, 128 };
                         dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
                     } else if (deplacement_possible(carte, perso, x, y)) {
                         SDL_Color couleurHalo = { 100, 255, 255, 128 };
@@ -387,13 +408,30 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 /* Leo */
 /*
+ * Cette fonction renvoie les coordonnées
+ * d'une case libre sur la carte choisie aléatoirement
+ * (sans monstres, batiments et pas dans l'eau) 
+*/
+void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y) {
+    *x = rand() % TAILLE_CARTE;
+    *y = rand() % TAILLE_CARTE;
+
+    while (!deplacement_possible(carte, NULL, *x, *y)) {
+        *x = rand() % TAILLE_CARTE;
+        *y = rand() % TAILLE_CARTE;
+    }
+
+}
+
+/* Leo */
+/*
  * Cette fonction retourne VRAI si le personnage
  * peut se déplacer sur cette case, FAUX sinon.
  */
 int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y) {
     case_t maCase = carte[y][x];
 
-    if (maCase.biome == EAU || maCase.monstre != NULL) {
+    if (maCase.biome == EAU || maCase.monstre != NULL || maCase.batiment.type != PAS_DE_BATIMENT) {
         return FAUX;
     } else {
         return VRAI;
@@ -594,6 +632,32 @@ void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
         }
 
+    }
+
+}
+
+/* Leo */
+/*
+ * Cette fonction place des batiments aléatoirement
+ * sur la carte : campements et magasins.
+ */
+void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+    int i;
+    int nb = 240 + rand() % 121;
+
+    for (i = 0; i < nb; i++) {
+        int x = rand() % TAILLE_CARTE;
+        int y = rand() % TAILLE_CARTE;
+
+        /* On recommence jusqu'à trouver un endroit convenable,
+         * C'est à dire sans monstre, et pas dans l'eau.
+         */
+        while (carte[x][y].monstre != NULL || carte[x][y].biome == EAU) {
+            x = rand() % TAILLE_CARTE;
+            y = rand() % TAILLE_CARTE;
+        }
+
+        carte[x][y].batiment.type = CAMPEMENT;
     }
 
 }

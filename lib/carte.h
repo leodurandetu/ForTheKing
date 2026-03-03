@@ -47,6 +47,7 @@ typedef struct {
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void remplir_zone(case_t carte[TAILLE_CARTE][TAILLE_CARTE], biome_t biome, coordonnee_t dep, coordonnee_t arr);
 int test_etat_case(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
 void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]); // Console
@@ -54,6 +55,7 @@ void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
 void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y);
+void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y);
 
 /* Prototypes des fonctions de rendu SDL2 */
 void afficher_hex_texture(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Texture* texture, SDL_Color couleur);
@@ -65,6 +67,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     SDL_Texture * textures_cases[NB_BIOMES], 
     SDL_Texture * texture_brouillard,
     SDL_Texture * texture_monstre,
+    SDL_Texture * texture_campement,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,

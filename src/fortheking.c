@@ -108,16 +108,31 @@ int main() {
         SDL_FreeSurface(img_brouillard);
     }
 
+    // Chargement de la texture du campement
+    SDL_Texture *texture_campement = NULL;
+    SDL_Surface *img_campement = IMG_Load("img/campement.png");
+    if (img_campement) {
+        texture_campement = SDL_CreateTextureFromSurface(renderer, img_campement);
+        SDL_SetTextureBlendMode(texture_campement, SDL_BLENDMODE_BLEND);
+        SDL_FreeSurface(img_campement);
+    }
+
     // Génération du monde
     srand((unsigned int)time(NULL));
     init_carte(carte);
     generer_eau(carte);
     generer_biomes(carte);
     placer_monstres(carte);
+    placer_batiments(carte);
 
     if (musique) Mix_FadeInMusic(musique, 1, 3000);
 
-    perso_t *perso = init_perso(MAGE, TAILLE_CARTE / 2, TAILLE_CARTE / 2); 
+    int xApparition;
+    int yApparition;
+
+    coords_case_libre(carte, &xApparition, &yApparition);
+
+    perso_t *perso = init_perso(MAGE, xApparition, yApparition); 
 
     devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
 
@@ -362,8 +377,9 @@ int main() {
             SDL_RenderClear(renderer);
 
             // Dessine la carte et les contours dorés
-            afficher_carte_sdl(renderer, carte, textures_cases, texture_brouillard, texture_monstre, tailleCase,
-                perso->x, perso->y, case_selection_x, case_selection_y, perso_selectionne,perso);
+            afficher_carte_sdl(renderer, carte, textures_cases, texture_brouillard, texture_monstre,
+                texture_campement, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
+                perso_selectionne,perso);
                 
             if (texture_perso) {
                 afficher_personnage(renderer, texture_perso, perso, tailleCase);
