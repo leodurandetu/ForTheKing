@@ -11,8 +11,9 @@
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
-#define TAILLE_CASE_MAXI 150
-#define TAILLE_CASE_MINI 32
+#define TAILLE_CASE_MAXI 250
+#define TAILLE_CASE_DEPART 150
+#define TAILLE_CASE_MINI 100
 #define RAYON_DECOUVERTE_BROUILLARD 8
 
 int main() {
@@ -120,7 +121,7 @@ int main() {
 
     devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
 
-    int tailleCase = 50;
+    int tailleCase = TAILLE_CASE_DEPART;
     int case_selection_x = -1;
     int case_selection_y = -1;
     int perso_selectionne = 0;

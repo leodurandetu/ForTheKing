@@ -21,6 +21,9 @@ typedef struct {
     int rapidite;
     int evasion;
     int pts_deplacements;
+
+    int niveau;
+    int exp;
     
     perso_type_t type;
 

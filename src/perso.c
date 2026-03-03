@@ -19,6 +19,9 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 
     perso->type = persoType;
 
+    perso->niveau = 1;
+    perso->exp = 0;
+
     switch (persoType)
     {
 
@@ -104,7 +107,7 @@ void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, p
     float cy_finale = cy + decalageY;
 
     /* Taille du personnage */
-    float echelle = 0.65f; // On ajustera encore !
+    float echelle = 0.4f; // On ajustera encore !
 
     SDL_Rect dstRect;
     dstRect.w = (int) (hex_w * echelle);
