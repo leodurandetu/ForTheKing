@@ -446,7 +446,7 @@ int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *pers
  * et avec un rayon donné.
  */
 void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int rayon) {
-    int xDepart = x - rayon;
+    /*int xDepart = x - rayon;
 
     if (xDepart < 0) {
         xDepart = 0;
@@ -478,6 +478,23 @@ void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
             carte[j][i].estVisible = 1;
         }
 
+    }*/
+
+     int i, j;
+
+    for (i = 0; i < TAILLE_CARTE; i++) {
+        for (j = 0; j < TAILLE_CARTE; j++) {
+
+            // Calcul de la distance entre la case (i, j) et le centre (x, y)
+            int dx = i - x;
+            int dy = j - y;
+            int distanceCarree = dx * dx + dy * dy;
+
+            // Si la case est dans le cercle, on la dévoile
+            if (distanceCarree <= rayon * rayon) {
+                carte[j][i].estVisible = 1;
+            }
+        }
     }
 
 }
