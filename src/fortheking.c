@@ -165,7 +165,7 @@ int main() {
 
                         case SDL_SCANCODE_W: 
                             
-                            if (perso->y - 1 >= 0) {
+                            if (perso->y - 1 >= 0 && deplacement_possible(carte, perso, perso->x, perso->y - 1)) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
                                 perso->y--;
@@ -174,7 +174,7 @@ int main() {
                             break;
                         case SDL_SCANCODE_A:
                             
-                            if (perso->x - 1 >= 0) {
+                            if (perso->x - 1 >= 0 && deplacement_possible(carte, perso, perso->x - 1, perso->y)) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
                                 perso->x--;
@@ -184,7 +184,7 @@ int main() {
 
                         case SDL_SCANCODE_S: 
                             
-                            if (perso->y + 1 < TAILLE_CARTE) {
+                            if (perso->y + 1 < TAILLE_CARTE && deplacement_possible(carte, perso, perso->x, perso->y + 1)) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
                                 perso->y++;
@@ -194,7 +194,7 @@ int main() {
 
                         case SDL_SCANCODE_D:
 
-                            if (perso->x + 1 < TAILLE_CARTE) {
+                            if (perso->x + 1 < TAILLE_CARTE && deplacement_possible(carte, perso, perso->x + 1, perso->y)) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
                                 perso->x++;
@@ -277,7 +277,7 @@ int main() {
                                 if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
                                 if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
 
-                                if (dist <= portee) {
+                                if (dist <= portee && deplacement_possible(carte, perso, carte_x, carte_y)) {
                                     perso->x = carte_x; 
                                     perso->y = carte_y;
                                     perso_selectionne = 0;

@@ -9,6 +9,8 @@
 /* Définitions */
 #define TAILLE_CARTE 500
 #define NB_COORD 4
+#define VRAI 1
+#define FAUX 0
 
 /* Structures */
 typedef enum {
@@ -51,6 +53,7 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]); // Console
 void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int rayon);
 void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y);
 
 /* Prototypes des fonctions de rendu SDL2 */
 void afficher_hex_texture(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Texture* texture, SDL_Color couleur);

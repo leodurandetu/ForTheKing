@@ -282,7 +282,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                 if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
                 if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
 
-                if (dist <= portee) {
+                if (dist <= portee && deplacement_possible(carte, perso, x, y)) {
                     float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
                     float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
 
@@ -378,6 +378,22 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     printf("\n");
 
 }
+
+/* Leo */
+/*
+ * Cette fonction retourne VRAI si le personnage
+ * peut se déplacer sur cette case, FAUX sinon.
+ */
+int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y) {
+    case_t maCase = carte[y][x];
+
+    if (maCase.biome == EAU || maCase.monstre != NULL) {
+        return FAUX;
+    } else {
+        return VRAI;
+    }
+
+ }
 
 /* Leo */
 /*
