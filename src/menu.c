@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 
+/* Massoud */
 int main() {
 
     int lancer_jeu = 0;
