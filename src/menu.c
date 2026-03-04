@@ -5,11 +5,9 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 
-/* MASSOUD */
-// Pour compiler gcc menu.c -o menu $(sdl2-config --cflags --libs) -lSDL2_ttf -lSDL2_image
-// APPUYER F POUR PASSER EN PLEIN ECRAN
-
 int main() {
+
+    int lancer_jeu = 0;
 
     // Initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -39,8 +37,8 @@ int main() {
     }
 
     Mix_Music *musique[2];
-    musique[0] = Mix_LoadMUS("../audio/Soundtrack1_menu.mp3");
-    musique[1] = Mix_LoadMUS("../audio/Soundtrack2_menu.mp3");
+    musique[0] = Mix_LoadMUS("audio/Soundtrack1_menu.mp3");
+    musique[1] = Mix_LoadMUS("audio/Soundtrack2_menu.mp3");
 
     if (!musique[0] || !musique[1]) {
         fprintf(stderr, "Erreur chargement musique : %s\n", Mix_GetError());
@@ -87,7 +85,7 @@ int main() {
     }
 
     SDL_Texture *backgroundTexture = NULL;
-    SDL_Surface *backgroundSurface = IMG_Load("../img/fond_menu.png");
+    SDL_Surface *backgroundSurface = IMG_Load("img/fond_menu.png");
 
     if (!backgroundSurface) {
         fprintf(stderr, "Erreur chargement image: %s\n", IMG_GetError());
@@ -97,7 +95,7 @@ int main() {
     }
 
     // Chargement de la police d'écriture
-    TTF_Font *police = TTF_OpenFont("../Fonts/Enchanted Land.otf", 24); 
+    TTF_Font *police = TTF_OpenFont("Fonts/Enchanted Land.otf", 24); 
     if (!police) {
         fprintf(stderr, "Erreur chargement police : %s\n", TTF_GetError());
     }
@@ -236,6 +234,8 @@ int main() {
                 if (mouseX >= boutonJouer.x && mouseX <= (boutonJouer.x + boutonJouer.w) &&
                     mouseY >= boutonJouer.y && mouseY <= (boutonJouer.y + boutonJouer.h)) {
                     printf("Bouton JOUER cliqué !\n");
+                    lancer_jeu = 1; // On enregistre qu'on veut lancer le jeu
+                    menuActif = 0; // on sort du menu
                 }
 
                 // Clic SOLO
@@ -300,6 +300,9 @@ int main() {
     TTF_Quit();
     IMG_Quit(); 
     SDL_Quit();
+
+    // Lance le jeu si on clique sur Jouer (à revoir car c'est une version simple)
+    if (lancer_jeu == 1) system("./bin/fortheking");
     
     return EXIT_SUCCESS;
 }
