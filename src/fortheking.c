@@ -158,7 +158,6 @@ int main() {
     int tailleCase = TAILLE_CASE_DEPART;
     int case_selection_x = -1;
     int case_selection_y = -1;
-    int perso_selectionne = 0;
 
     int running = 1;
     int majAffichage = 1; // Forcé à 1 pour afficher l'écran dès le lancement
@@ -252,7 +251,7 @@ int main() {
 
                             break;
 
-                        case SDL_SCANCODE_KP_ENTER:
+                        case SDL_SCANCODE_N:
                             restaurer_points_deplacements(perso);
                             majAffichage = 1;
 
@@ -311,10 +310,6 @@ int main() {
 
                         // Logique de sélection une fois la case trouvée
                         if (carte_x >= 0 && carte_y >= 0) {
-                            if (carte_x == perso->x && carte_y == perso->y) {
-                                perso_selectionne = !perso_selectionne;
-                                case_selection_x = -1; case_selection_y = -1;
-                            } else if (perso_selectionne) {
                                 int portee = get_pers_movements_points(perso);
 
                                 if (portee > 0) {
@@ -334,13 +329,11 @@ int main() {
                                     if (dist <= portee) {
 
                                         if (carte[carte_y][carte_x].monstre != NULL) {
-                                            perso_selectionne = 0;
                                             case_selection_x = -1; 
                                             case_selection_y = -1;
                                         } else if (deplacement_possible(carte, perso, carte_x, carte_y)) {
                                             perso->x = carte_x; 
                                             perso->y = carte_y;
-                                            perso_selectionne = 0;
                                             case_selection_x = -1; 
                                             case_selection_y = -1;
                                             perso->pts_deplacements -= dist;
@@ -349,19 +342,16 @@ int main() {
                                     } else {
                                         case_selection_x = carte_x; 
                                         case_selection_y = carte_y;
-                                        perso_selectionne = 0;
                                     }
 
+                                } else {
+                                    case_selection_x = carte_x; 
+                                    case_selection_y = carte_y;
                                 }
 
-                            } else {
-                                case_selection_x = carte_x; case_selection_y = carte_y;
-                                perso_selectionne = 0;
-                            }
                         } else {
                             // Clic en dehors de la carte
                             case_selection_x = -1; case_selection_y = -1;
-                            perso_selectionne = 0;
                         }
                         majAffichage = 1;
                         majBrouillard = 1;
@@ -398,7 +388,7 @@ int main() {
             // Dessine la carte et les contours dorés
             afficher_carte_sdl(renderer, carte, textures_cases, texture_brouillard, texture_monstre,
                 texture_campement, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
-                perso_selectionne,perso);
+                perso);
                 
             if (texture_perso) {
                 afficher_personnage(renderer, texture_perso, perso, tailleCase);

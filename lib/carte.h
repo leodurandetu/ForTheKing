@@ -7,7 +7,7 @@
 #include "../lib/perso.h"
 
 /* Définitions */
-#define TAILLE_CARTE 500
+#define TAILLE_CARTE 100
 #define NB_COORD 4
 #define VRAI 1
 #define FAUX 0
@@ -71,6 +71,6 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
-    int perso_selectionne,perso_t *perso);
+    perso_t *perso);
 
 #endif 

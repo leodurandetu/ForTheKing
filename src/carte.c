@@ -134,7 +134,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
-    int perso_selectionne,perso_t *perso)
+    perso_t *perso)
 {
     int lFenetre, hFenetre;
     SDL_GetRendererOutputSize(renderer, &lFenetre, &hFenetre);
@@ -305,13 +305,10 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                     float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
 
                     if (carte[y][x].monstre != NULL) {
-                        SDL_Color couleurHalo = { 255, 100, 100, 128 };
-                        dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
-                    } else if (y == persY && x == persX && perso_selectionne) {
-                        SDL_Color couleurHalo = { 255, 255, 0, 128 };
+                        SDL_Color couleurHalo = { 255, 0, 0, 120 };
                         dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
                     } else if (deplacement_possible(carte, perso, x, y)) {
-                        SDL_Color couleurHalo = { 100, 255, 255, 128 };
+                        SDL_Color couleurHalo = { 0, 0, 0, 120 };
                         dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
                     }
 
@@ -551,14 +548,15 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  * à ce que ça paraisse naturel.
  */
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
-    int nb_zones = 250 + rand() % 101;
+    // 70 à 111 zones
+    int nb_zones = 70 + rand() % 41;
 
     for (int z = 0; z < nb_zones; z++) {
         coordonnee_t dep = { rand() % TAILLE_CARTE, rand() % TAILLE_CARTE };
         
-        // Entre 7 et 16 cases de large/haut
-        int largeur = 7 + rand() % 10;
-        int hauteur = 7 + rand() % 10;
+        // Entre 7 et 15 cases de large/haut
+        int largeur = 7 + rand() % 9;
+        int hauteur = 7 + rand() % 9;
 
         coordonnee_t arr = { dep.x + largeur, dep.y + hauteur };
         remplir_zone(carte, EAU, dep, arr);
@@ -580,19 +578,19 @@ void remplir_zone(case_t carte[TAILLE_CARTE][TAILLE_CARTE], biome_t biome, coord
 }
 /* Saandi */
 void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
-    // La TERRE est déjà initialisée partout par init_carte (J'ai fait des modifs)
+    // La TERRE est déjà initialisée partout par init_carte
     biome_t liste[] = {DESERT, NEIGE, FORET};
     
     for (int i = 0; i < 3; i++) {
-        // 5 à 8 zones par biome suffisent pour une carte de 50(J'ai cherche des infos sur la carte de for the king)
-        int nb_zones = 600 + rand() % 360; 
+        // 28 à 42 zones
+        int nb_zones = 28 + rand() % 15; 
         
         for (int z = 0; z < nb_zones; z++) {
             coordonnee_t dep = { rand() % TAILLE_CARTE, rand() % TAILLE_CARTE };
             
-            // 6 à 14 cases, car maintenant la carte est de taille 500
-            int largeur = 6 + rand() % 9;
-            int hauteur = 6 + rand() % 9;
+            // 5 à 11 cases
+            int largeur = 5 + rand() % 7;
+            int hauteur = 5 + rand() % 7;
             
             coordonnee_t arr = { dep.x + largeur, dep.y + hauteur };
             remplir_zone(carte, liste[i], dep, arr);
@@ -607,7 +605,7 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  */
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     int i;
-    int nb = 240 + rand() % 121;
+    int nb = 70 + rand() % 46;
 
     for (i = 0; i < nb; i++) {
         int x = rand() % TAILLE_CARTE;
@@ -660,7 +658,7 @@ void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  */
 void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     int i;
-    int nb = 240 + rand() % 121;
+    int nb = 70 + rand() % 46;
 
     for (i = 0; i < nb; i++) {
         int x = rand() % TAILLE_CARTE;
