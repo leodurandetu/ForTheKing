@@ -412,13 +412,19 @@ int main() {
         if (textures_cases[i]) SDL_DestroyTexture(textures_cases[i]);
     }
     if (texture_perso) SDL_DestroyTexture(texture_perso);
-    
+    if (texture_brouillard) SDL_DestroyTexture(texture_brouillard);
+    if (texture_monstre) SDL_DestroyTexture(texture_monstre);
+    if (texture_campement) SDL_DestroyTexture(texture_campement);
+    if (texte_tex) SDL_DestroyTexture(texte_tex);
+
+    TTF_CloseFont(police);
+
     // Destruction en mémoire des monstres notamment sur la carte
     liberer_memoire_carte(carte);
 
     // Destruction du personnage
     detruire_perso(&perso);
-    
+
     Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(pFenetre);
