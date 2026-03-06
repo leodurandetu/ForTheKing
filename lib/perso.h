@@ -42,4 +42,5 @@ void detruire_perso(perso_t ** perso);
 int get_pers_movements_points(perso_t *perso);
 /* Leo */
 void restaurer_points_deplacements(perso_t * perso);
+
 #endif
