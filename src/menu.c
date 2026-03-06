@@ -87,6 +87,15 @@ int main() {
 
     SDL_Texture *backgroundTexture = NULL;
     SDL_Surface *backgroundSurface = IMG_Load("img/fond_menu.png");
+    SDL_Texture *texLogoMusique = NULL;
+    SDL_Surface *surfLogo = IMG_Load("img/logomusique.png");
+
+    if (surfLogo) {
+        texLogoMusique = SDL_CreateTextureFromSurface(renderer, surfLogo);
+        SDL_FreeSurface(surfLogo);
+    } else {
+        fprintf(stderr, "Erreur chargement image: %s\n", IMG_GetError());
+    }
 
     if (!backgroundSurface) {
         fprintf(stderr, "Erreur chargement image: %s\n", IMG_GetError());
@@ -142,6 +151,7 @@ int main() {
     SDL_Rect boutonSolo    = { 220, 160, 200, 50 };
     SDL_Rect boutonCoop    = { 220, 240, 200, 50 };
     SDL_Rect boutonQuitter = { 220, 320, 200, 50 };
+    SDL_Rect boutonMusique = { windowW - 100, windowH - 100, 80, 80 };
 
     // Calcul pour centrer le texte dans les boutons
     SDL_Rect rectTexteJouer   = { boutonJouer.x + (boutonJouer.w - jouerW) / 2, boutonJouer.y + (boutonJouer.h - jouerH) / 2, jouerW, jouerH };
@@ -173,6 +183,11 @@ int main() {
         boutonQuitter.y = windowH * 4 / 6;
         boutonQuitter.w = windowW / 3;
         boutonQuitter.h = windowH / 10;
+
+        boutonMusique.w = 80;
+        boutonMusique.h = 80;
+        boutonMusique.x = windowW - (boutonMusique.w + 20); 
+        boutonMusique.y = windowH - (boutonMusique.h + 20);
 
         rectTexteJouer.x = boutonJouer.x + (boutonJouer.w - jouerW) / 2;
         rectTexteJouer.y = boutonJouer.y + (boutonJouer.h - jouerH) / 2;
@@ -230,6 +245,7 @@ int main() {
             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
                 int mouseX = event.button.x;
                 int mouseY = event.button.y;
+                SDL_Point p = {mouseX, mouseY};
 
                 // Clic JOUER
                 if (mouseX >= boutonJouer.x && mouseX <= (boutonJouer.x + boutonJouer.w) &&
@@ -257,6 +273,17 @@ int main() {
                     printf("Bouton QUITTER cliqué !\n");
                     menuActif = 0;
                 }
+
+                // Clic musique
+                if (SDL_PointInRect(&p, &boutonMusique)) {
+                    if (Mix_PausedMusic()) {
+                        Mix_ResumeMusic();
+                        printf("Musique relancée\n");
+                    } else {
+                        Mix_PauseMusic();
+                        printf("Musique en pause\n");
+                    }
+                }
             }
         }
 
@@ -280,6 +307,16 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 200, 100, 0, 255);
         SDL_RenderFillRect(renderer, &boutonQuitter);
 
+        if (texLogoMusique) {
+            // Dessin d'une bordure marron médiévale
+            SDL_SetRenderDrawColor(renderer, 101, 67, 33, 255); 
+            for(int i = 0; i < 5; i++) { 
+                SDL_Rect border = {boutonMusique.x - i, boutonMusique.y - i, boutonMusique.w + (i*2), boutonMusique.h + (i*2)};
+                SDL_RenderDrawRect(renderer, &border);
+            }
+            SDL_RenderCopy(renderer, texLogoMusique, NULL, &boutonMusique);
+        }
+
         if (textureTexteJouer) SDL_RenderCopy(renderer, textureTexteJouer, NULL, &rectTexteJouer);
         if (textureTexteSolo) SDL_RenderCopy(renderer, textureTexteSolo, NULL, &rectTexteSolo);
         if (textureTexteCoop) SDL_RenderCopy(renderer, textureTexteCoop, NULL, &rectTexteCoop);
@@ -295,6 +332,7 @@ int main() {
     if (textureTexteQuitter) SDL_DestroyTexture(textureTexteQuitter);
     if (police) TTF_CloseFont(police);
     if (backgroundTexture) SDL_DestroyTexture(backgroundTexture);
+    if (texLogoMusique) SDL_DestroyTexture(texLogoMusique);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
