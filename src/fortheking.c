@@ -21,6 +21,7 @@ case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 int main() {
     printf("For The King!\n");
 
+
     // Initialisation globale de la SDL (Vidéo + Audio)
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         fprintf(stderr, "Echec de l'initialisation de la SDL : %s\n", SDL_GetError());
@@ -394,8 +395,11 @@ int main() {
                 afficher_personnage(renderer, texture_perso, perso, tailleCase);
             }
 
-            mise_a_jour_texte("Points de déplacement : A FINIR", renderer, police, &texte, &texte_tex, &txtDestRect);
+            char info_a_afficher[50];
 
+            get_info_personnage(perso, "Pts_deplacements", info_a_afficher);
+            
+            mise_a_jour_texte(info_a_afficher, renderer, police, &texte, &texte_tex, &txtDestRect);
             /* Ajout du texte en noir */
             SDL_SetRenderDrawColor ( renderer , 0, 0, 0, 255);
             SDL_RenderCopy ( renderer , texte_tex , NULL , &txtDestRect );
