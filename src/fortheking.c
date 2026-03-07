@@ -262,87 +262,52 @@ int main() {
                     }
                     break;
 
+                case SDL_MOUSEMOTION:
+
+                    souris_vers_case(e.motion.x, e.motion.y,
+                        &case_selection_x, &case_selection_y,
+                        tailleCase, perso, renderer);
+
+                    majAffichage = 1;
+
+                    break;
+
                 case SDL_MOUSEBUTTONDOWN:
                     if (e.button.button == SDL_BUTTON_LEFT) {
-                        int fenetre_taille_x, fenetre_taille_y;
-                        SDL_GetRendererOutputSize(renderer, &fenetre_taille_x, &fenetre_taille_y);
+                        int carte_x = -1;
+                        int carte_y = -1;
 
-                        // Mathématiques de la grille "flat-top"
-                        float rayon = tailleCase / 2.0f;                    
-                        float hex_w = 2.0f * rayon;                        
-                        float hex_h = sqrtf(3) * rayon;                    
-                        float espacement_colonnes = hex_w * 0.75f; 
-
-                        // Décalage de la caméra centrée sur le joueur
-                        float camX = perso->x * espacement_colonnes;
-                        float camY = perso->y * hex_h + (perso->x % 2 ? hex_h / 2 : 0);
-                        int decalageX = (int)(fenetre_taille_x / 2 - camX - hex_w / 2);
-                        int decalageY = (int)(fenetre_taille_y / 2 - camY - hex_h / 2);
-
-                        // Détection du clic hexagonal par calcul de distance
-                        int carte_x = -1, carte_y = -1;
-                        float dist_min_carree = rayon * rayon; 
-
-                        // Approximation de la zone pour ne pas vérifier les milliers de cases
-                        int approx_x = (int)((e.button.x - decalageX) / espacement_colonnes);
-                        int approx_y = (int)((e.button.y - decalageY) / hex_h);
-
-                        // On teste un carré de 5x5 autour de la souris
-                        for (int i = approx_y - 2; i <= approx_y + 2; i++) {
-                            for (int j = approx_x - 2; j <= approx_x + 2; j++) {
-                                if (i >= 0 && i < TAILLE_CARTE && j >= 0 && j < TAILLE_CARTE) {
-                                    
-                                    float cx = j * espacement_colonnes + hex_w / 2 + decalageX;
-                                    float cy = i * hex_h + (j % 2 ? hex_h / 2 : 0) + hex_h / 2 + decalageY;
-                                    
-                                    // Théorème de Pythagore pour trouver le centre le plus proche
-                                    float dx = e.button.x - cx;
-                                    float dy = e.button.y - cy;
-                                    float dist_carree = dx * dx + dy * dy;
-
-                                    if (dist_carree < dist_min_carree) {
-                                        dist_min_carree = dist_carree;
-                                        carte_x = j;
-                                        carte_y = i;
-                                    }
-                                }
-                            }
-                        }
+                        souris_vers_case(e.button.x, e.button.y, &carte_x, &carte_y, tailleCase, perso, renderer);
 
                         // Logique de sélection une fois la case trouvée
                         if (carte_x >= 0 && carte_y >= 0) {
-                                int portee = get_pers_movements_points(perso);
+                            int portee = get_pers_movements_points(perso);
 
-                                if (portee > 0) {
-                                    // Coordonnées cubiques du personnage
-                                    int q1 = perso->x;
-                                    int r1 = perso->y - (perso->x - (perso->x & 1)) / 2;
-                                    int s1 = -q1 - r1;
+                            if (portee > 0) {
+                                // Coordonnées cubiques du personnage
+                                int q1 = perso->x;
+                                int r1 = perso->y - (perso->x - (perso->x & 1)) / 2;
+                                int s1 = -q1 - r1;
 
-                                    int q2 = carte_x;
-                                    int r2 = carte_y - (carte_x - (carte_x & 1)) / 2;
-                                    int s2 = -q2 - r2;
+                                int q2 = carte_x;
+                                int r2 = carte_y - (carte_x - (carte_x & 1)) / 2;
+                                int s2 = -q2 - r2;
 
-                                    int dist = abs(q1 - q2);
-                                    if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
-                                    if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
+                                int dist = abs(q1 - q2);
+                                if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
+                                if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
 
-                                    if (dist <= portee) {
+                                if (dist <= portee) {
 
-                                        if (carte[carte_y][carte_x].monstre != NULL) {
-                                            case_selection_x = -1; 
-                                            case_selection_y = -1;
-                                        } else if (deplacement_possible(carte, perso, carte_x, carte_y)) {
-                                            perso->x = carte_x; 
-                                            perso->y = carte_y;
-                                            case_selection_x = -1; 
-                                            case_selection_y = -1;
-                                            perso->pts_deplacements -= dist;
-                                        }
-
-                                    } else {
-                                        case_selection_x = carte_x; 
-                                        case_selection_y = carte_y;
+                                    if (carte[carte_y][carte_x].monstre != NULL) {
+                                        case_selection_x = -1; 
+                                        case_selection_y = -1;
+                                    } else if (deplacement_possible(carte, perso, carte_x, carte_y)) {
+                                        perso->x = carte_x; 
+                                        perso->y = carte_y;
+                                        case_selection_x = -1; 
+                                        case_selection_y = -1;
+                                        perso->pts_deplacements -= dist;
                                     }
 
                                 } else {
@@ -350,10 +315,13 @@ int main() {
                                     case_selection_y = carte_y;
                                 }
 
-                        } else {
-                            // Clic en dehors de la carte
-                            case_selection_x = -1; case_selection_y = -1;
+                            } else {
+                                case_selection_x = carte_x; 
+                                case_selection_y = carte_y;
+                            }
+
                         }
+
                         majAffichage = 1;
                         majBrouillard = 1;
                     }

@@ -56,6 +56,7 @@ void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y);
 void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y);
+void souris_vers_case(int mouseX, int mouseY, int *carte_x, int *carte_y, int tailleCase, perso_t *perso, SDL_Renderer *renderer);
 
 /* Prototypes des fonctions de rendu SDL2 */
 void afficher_hex_texture(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Texture* texture, SDL_Color couleur);

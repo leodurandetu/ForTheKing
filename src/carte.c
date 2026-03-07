@@ -243,20 +243,49 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
         }
     }
 
+    int portee = get_pers_movements_points(perso);
+
     /* Overlays */
     if (case_selection_x >= 0 && case_selection_y >= 0) {
+        int q1 = persX;
+        int r1 = persY - (persX - (persX & 1)) / 2;
+        int s1 = -q1 - r1;
+
+        int q2 = case_selection_x;
+        int r2 = case_selection_y - (case_selection_x - (case_selection_x & 1)) / 2;
+        int s2 = -q2 - r2;
+
+        int dist = abs(q1 - q2);
+        if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
+        if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
+
         float cx = case_selection_x * espacement_colonnes + hex_w / 2.0f + decalageX;
         float cy = case_selection_y * hex_h + (case_selection_x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
-        SDL_Color sel = {255, 255, 255, 60};
-        dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, sel); 
+
+        if (dist <= portee) {
+
+            if (carte[case_selection_y][case_selection_x].monstre != NULL) {
+                SDL_Color couleur = { 0, 255, 0, 120 };
+                dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
+            } else if (deplacement_possible(carte, perso, case_selection_x, case_selection_y)) {
+                SDL_Color couleur = { 0, 0, 0, 120 };
+                dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
+            } else {
+                SDL_Color couleur = { 255, 0, 0, 120 };
+                dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
+            }
+
+        } else {
+            SDL_Color couleur = { 255, 0, 0, 120 };
+            dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
+        }
+
     }
 
     /*
-     * Si le personnage est sélectionné,
-     * on affiche un halo bleu sur la case
-     * du personnage et les cases voisines
+     * On affiche des indicateurs sur les cases
+     * où le personnage peut se déplacer
      */
-    int portee = get_pers_movements_points(perso);
 
     if (portee >= 0) {
         int xDepart = persX - portee;
@@ -304,17 +333,29 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                     float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
                     float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
 
+                    int tailleCarre = rayon * 0.25f;
+
+                    SDL_Rect rect;
+                    rect.w = tailleCarre;
+                    rect.h = tailleCarre;
+                    rect.x = cx - tailleCarre / 2;
+                    rect.y = cy - tailleCarre / 2;
+
+                    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
                     if (carte[y][x].monstre != NULL) {
-                        SDL_Color couleurHalo = { 255, 0, 0, 120 };
-                        dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
+                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 200);
                     } else if (deplacement_possible(carte, perso, x, y)) {
-                        SDL_Color couleurHalo = { 0, 0, 0, 120 };
-                        dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleurHalo);
+                        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
                     }
 
+                    SDL_RenderFillRect(renderer, &rect);
                 }
+
             }
+
         }
+
     }
     
 }
@@ -675,4 +716,63 @@ void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
         carte[x][y].batiment.type = CAMPEMENT;
     }
 
+}
+
+/* Crée par Massoud, transformée en fonction par Léo */
+/*
+ * Cette fonction permet de détecter la case
+ * qui est à la position de la souris à l'écran
+ */
+void souris_vers_case(int mouseX, int mouseY,
+    int *carte_x, int *carte_y, int tailleCase,
+    perso_t *perso, SDL_Renderer *renderer) {
+   
+    int fenetre_taille_x, fenetre_taille_y;
+    SDL_GetRendererOutputSize(renderer, &fenetre_taille_x, &fenetre_taille_y);
+
+    // Mathématiques de la grille "flat-top"
+    float rayon = tailleCase / 2.0f;                    
+    float hex_w = 2.0f * rayon;                        
+    float hex_h = sqrtf(3) * rayon;                    
+    float espacement_colonnes = hex_w * 0.75f; 
+
+    // Décalage de la caméra centrée sur le joueur
+    float camX = perso->x * espacement_colonnes;
+    float camY = perso->y * hex_h + (perso->x % 2 ? hex_h / 2 : 0);
+    int decalageX = (int)(fenetre_taille_x / 2 - camX - hex_w / 2);
+    int decalageY = (int)(fenetre_taille_y / 2 - camY - hex_h / 2);
+
+    int result_x = -1;
+    int result_y = -1;
+
+    // Détection du clic hexagonal par calcul de distance
+    float dist_min_carree = rayon * rayon; 
+
+    // Approximation de la zone pour ne pas vérifier les milliers de cases
+    int approx_x = (int)((mouseX - decalageX) / espacement_colonnes);
+    int approx_y = (int)((mouseY - decalageY) / hex_h);
+
+    // On teste un carré de 3x3 autour de la souris
+    for (int i = approx_y - 1; i <= approx_y + 1; i++) {
+        for (int j = approx_x - 1; j <= approx_x + 1; j++) {
+            if (i >= 0 && i < TAILLE_CARTE && j >= 0 && j < TAILLE_CARTE) {
+                float cx = j * espacement_colonnes + hex_w / 2 + decalageX;
+                float cy = i * hex_h + (j % 2 ? hex_h / 2 : 0) + hex_h / 2 + decalageY;
+
+                // Théorème de Pythagore pour trouver le centre le plus proche
+                float dx = mouseX - cx;
+                float dy = mouseY - cy;
+                float dist_carree = dx * dx + dy * dy;
+
+                if (dist_carree < dist_min_carree) {
+                    dist_min_carree = dist_carree;
+                    result_x = j;
+                    result_y = i;
+                }
+            }
+        }
+    }
+
+    *carte_x = result_x;
+    *carte_y = result_y;
 }
