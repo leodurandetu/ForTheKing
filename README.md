@@ -52,3 +52,37 @@ Nous utilisons la librairie SDL2 pour gérer l'interface graphique.
 Gcc nous sert à compiler les programmes en C.  
 Le makefile est utilisé pour compiler un projet en plusieurs parties, et de recompiler seulement les fichiers modifiés.  
 Nous utilisons également Git pour pouvoir travailler en équipe sur un projet informatique.
+
+## Comment Installer le Jeu
+Remarque : ce guide est valable pour les machines Unix ou Linux.
+
+**Initialisation du dépôt git**  
+cd chemin/ou/stocker/le/projet  
+git clone https://github.com/leodurandetu/ForTheKing.git ForTheKing  
+cd ForTheKing  
+
+**Installation des librairies nécessaires**  
+Ce projet utilise SDL2.  
+Voici un court guide pour l'installer sur Unix ou Linux :  
+sudo apt update  
+sudo apt install -y \ libsdl2-dev \ libsdl2-gfx-dev \ libsdl2-image-dev \ libsdl2-mixer-dev \ libsdl2-ttf-dev  
+ 
+**Compilation du projet**  
+Important : il faut être à la racine du projet (ForTheKing/)  
+Important : pour compiler le projet, vous devez avoir le compilateur C gcc.  
+make clean all  
+
+**Test du projet**  
+Important : il faut être à la racine du projet (ForTheKing/)  
+./bin/menu  
+Ou, alternativement,  
+./bin/fortheking  
+
+## Comment jouer au Jeu
+Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.  
+Une fois dans le jeu :  
+- Utilisez la molette de la souris pour zoomer ou dézoomer la carte  
+- Déplacez le personnage sur la carte avec ZQSD  
+- Déplacez le personnage sur la carte en cliquant sur une case voisine avec un carré au milieu (indicateur de déplacement possible)  
+- Appuyez sur la touche [N] quand vous n'avez plus de points de déplacement. Cela va les remplir et passer au prochain tour.  
+
