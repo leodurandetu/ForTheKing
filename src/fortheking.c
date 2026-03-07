@@ -201,6 +201,7 @@ int main() {
                             
                             if (perso->y - 1 >= 0 
                                 && deplacement_possible(carte, perso, perso->x, perso->y - 1)
+                                && case_occupee(carte, perso->x, perso->y - 1) == FAUX
                                 && perso->pts_deplacements > 0
                             ) {
                                 majAffichage = 1;
@@ -214,6 +215,7 @@ int main() {
                             
                             if (perso->x - 1 >= 0 
                                 && deplacement_possible(carte, perso, perso->x - 1, perso->y)
+                                && case_occupee(carte, perso->x - 1, perso->y) == FAUX
                                 && perso->pts_deplacements > 0
                             ) {
                                 majAffichage = 1;
@@ -228,6 +230,7 @@ int main() {
                             
                             if (perso->y + 1 < TAILLE_CARTE 
                                 && deplacement_possible(carte, perso, perso->x, perso->y + 1)
+                                && case_occupee(carte, perso->x, perso->y + 1) == FAUX
                                 && perso->pts_deplacements > 0
                             ) {
                                 majAffichage = 1;
@@ -242,6 +245,7 @@ int main() {
 
                             if (perso->x + 1 < TAILLE_CARTE 
                                 && deplacement_possible(carte, perso, perso->x + 1, perso->y)
+                                && case_occupee(carte, perso->x + 1, perso->y) == FAUX
                                 && perso->pts_deplacements > 0
                             ) {
                                 majAffichage = 1;
@@ -276,50 +280,31 @@ int main() {
                     if (e.button.button == SDL_BUTTON_LEFT) {
                         int carte_x = -1;
                         int carte_y = -1;
-
                         souris_vers_case(e.button.x, e.button.y, &carte_x, &carte_y, tailleCase, perso, renderer);
 
-                        // Logique de sélection une fois la case trouvée
                         if (carte_x >= 0 && carte_y >= 0) {
                             int portee = get_pers_movements_points(perso);
+                            int distReelle = -1;
+                            int cheminTrouve = chemin_valide(carte, perso->x, perso->y, carte_x, carte_y, portee, perso, &distReelle);
 
-                            if (portee > 0) {
-                                // Coordonnées cubiques du personnage
-                                int q1 = perso->x;
-                                int r1 = perso->y - (perso->x - (perso->x & 1)) / 2;
-                                int s1 = -q1 - r1;
+                            if (cheminTrouve && distReelle != -1 && distReelle <= portee) {
 
-                                int q2 = carte_x;
-                                int r2 = carte_y - (carte_x - (carte_x & 1)) / 2;
-                                int s2 = -q2 - r2;
-
-                                int dist = abs(q1 - q2);
-                                if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
-                                if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
-
-                                if (dist <= portee) {
-
-                                    if (carte[carte_y][carte_x].monstre != NULL) {
-                                        case_selection_x = -1; 
-                                        case_selection_y = -1;
-                                    } else if (deplacement_possible(carte, perso, carte_x, carte_y)) {
-                                        perso->x = carte_x; 
-                                        perso->y = carte_y;
-                                        case_selection_x = -1; 
-                                        case_selection_y = -1;
-                                        perso->pts_deplacements -= dist;
-                                    }
-
-                                } else {
-                                    case_selection_x = carte_x; 
+                                if (case_occupee(carte, carte_x, carte_y) == VRAI) {
+                                    case_selection_x = carte_x;
                                     case_selection_y = carte_y;
+                                } else {
+                                    perso->x = carte_x; 
+                                    perso->y = carte_y;
+                                    perso->pts_deplacements -= distReelle; 
+                                    case_selection_x = -1; 
+                                    case_selection_y = -1;
                                 }
 
                             } else {
                                 case_selection_x = carte_x; 
                                 case_selection_y = carte_y;
                             }
-
+                        
                         }
 
                         majAffichage = 1;

@@ -11,6 +11,15 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+/* Maths */
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+
 /* =====================================================
 // ==================== AFFICHAGE HEX ==================
 // =====================================================*/
@@ -117,7 +126,7 @@ void afficher_hex_couleur(SDL_Renderer* renderer, float cx, float cy, float rayo
     SDL_RenderGeometry(renderer, NULL, sommets, 7, indices, 18);
 }
 
-/* Leo et Massoud */
+/* Massoud principalement, Léo secondairement */
 /*
  * Cette fonction permet d'afficher la carte avec SDL2.
  * Elle affiche les cases, le brouillard, les monstres
@@ -158,7 +167,6 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     on affiche que la partie de la carte qui est visible
     sur l'écran, pour gagner du temps de calcul.
     */
-    // CORRECTION : J'ai réglé le zoom et dezoom, j'ai prit les coordonnées de l'écran en le soustraynt au décalage
     int j_min = fmax(0, (-decalageX) / espacement_colonnes - 1);
     int j_max = fmin(TAILLE_CARTE, (lFenetre - decalageX) / espacement_colonnes + 2);
     int i_min = fmax(0, (-decalageY) / hex_h - 1);
@@ -247,36 +255,26 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
     /* Overlays */
     if (case_selection_x >= 0 && case_selection_y >= 0) {
-        int q1 = persX;
-        int r1 = persY - (persX - (persX & 1)) / 2;
-        int s1 = -q1 - r1;
-
-        int q2 = case_selection_x;
-        int r2 = case_selection_y - (case_selection_x - (case_selection_x & 1)) / 2;
-        int s2 = -q2 - r2;
-
-        int dist = abs(q1 - q2);
-        if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
-        if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
-
         float cx = case_selection_x * espacement_colonnes + hex_w / 2.0f + decalageX;
         float cy = case_selection_y * hex_h + (case_selection_x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
+        int distanceChemin = -1;
 
-        if (dist <= portee) {
-
+        if (chemin_valide(carte, persX, persY, case_selection_x, case_selection_y, portee, perso, &distanceChemin)) {
+            
             if (carte[case_selection_y][case_selection_x].monstre != NULL) {
-                SDL_Color couleur = { 0, 255, 0, 120 };
+                SDL_Color couleur = { 0, 255, 0, 120 }; // Vert : monstre atteignable
                 dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
-            } else if (deplacement_possible(carte, perso, case_selection_x, case_selection_y)) {
-                SDL_Color couleur = { 0, 0, 0, 120 };
+            } else if (carte[case_selection_y][case_selection_x].batiment.type != PAS_DE_BATIMENT) {
+                SDL_Color couleur = { 255, 0, 0, 120 }; // Rouge : impossible (pour le moment)
                 dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
             } else {
-                SDL_Color couleur = { 255, 0, 0, 120 };
+                SDL_Color couleur = { 0, 0, 0, 120 };   // Noir : case vide atteignable
                 dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
             }
 
         } else {
-            SDL_Color couleur = { 255, 0, 0, 120 };
+            // Trop loin ou chemin bloqué
+            SDL_Color couleur = { 255, 0, 0, 120 };     // Rouge : impossible
             dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
         }
 
@@ -288,68 +286,34 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
      */
 
     if (portee >= 0) {
-        int xDepart = persX - portee;
+        int xDepart = max(0, persX - portee);
+        int xArrivee = min(TAILLE_CARTE - 1, persX + portee);
+        int yDepart = max(0, persY - portee);
+        int yArrivee = min(TAILLE_CARTE - 1, persY + portee);
 
-        if (xDepart < 0) {
-            xDepart = 0;
-        }
+        for (int x = xDepart; x <= xArrivee; x++) {
 
-        int xArrivee = persX + portee;
-
-        if (xArrivee > TAILLE_CARTE - 1) {
-            xArrivee = TAILLE_CARTE - 1;
-        }
-
-        int yDepart = persY - portee;
-
-        if (yDepart < 0) {
-            yDepart = 0;
-        }
-
-        int yArrivee = persY + portee;
-
-        if (yArrivee > TAILLE_CARTE - 1) {
-            yArrivee = TAILLE_CARTE - 1;
-        }
-
-        int q1 = persX;
-        int r1 = persY - (persX - (persX & 1)) / 2;
-        int s1 = -q1 - r1;
-
-        int x, y;
-
-        for (x = xDepart; x <= xArrivee; x++) {
-            for (y = yDepart; y <= yArrivee; y++) {
+            for (int y = yDepart; y <= yArrivee; y++) {
+                int distanceChemin = -1;
                 
-                int q2 = x;
-                int r2 = y - (x - (x & 1)) / 2;
-                int s2 = -q2 - r2;
-
-                int dist = abs(q1 - q2);
-                if (abs(r1 - r2) > dist) dist = abs(r1 - r2);
-                if (abs(s1 - s2) > dist) dist = abs(s1 - s2);
-
-                if (dist <= portee) {
+                if (chemin_valide(carte, persX, persY, x, y, portee, perso, &distanceChemin)) {
                     float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
                     float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
-
                     int tailleCarre = rayon * 0.25f;
 
-                    SDL_Rect rect;
-                    rect.w = tailleCarre;
-                    rect.h = tailleCarre;
-                    rect.x = cx - tailleCarre / 2;
-                    rect.y = cy - tailleCarre / 2;
-
+                    SDL_Rect rect = { (int)cx - tailleCarre / 2, (int)cy - tailleCarre / 2, tailleCarre, tailleCarre };
                     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
                     if (carte[y][x].monstre != NULL) {
-                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 200);
-                    } else if (deplacement_possible(carte, perso, x, y)) {
-                        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
+                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 200); // Point rouge sur monstre
+                    } else {
+                        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);   // Point noir sur case libre
                     }
 
-                    SDL_RenderFillRect(renderer, &rect);
+                    if (carte[y][x].batiment.type == PAS_DE_BATIMENT) {
+                        SDL_RenderFillRect(renderer, &rect);
+                    }
+
                 }
 
             }
@@ -357,92 +321,9 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
         }
 
     }
-    
+
 }
 /* ========================================================================*/
-
-/* Leo */
-/*
- * Cette fonction permet d'afficher la carte en mode textuel,
- * sur le terminal, mais elle ne dispose pas de toutes les
- * fonctionnalités possibles. Pour l'instant, elle n'est
- * pas utilisée.
- */
-void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
-    int x, y;
-
-    couleur_reset();
-
-    for (x = 0; x < TAILLE_CARTE; x++) {
-
-        for (y = 0; y < TAILLE_CARTE; y++) {
-            case_t maCase = carte[x][y];
-
-            if (!maCase.estVisible) {
-                printf("   ");
-            } else {
-
-                switch (maCase.biome) {
-
-                    case TERRE:
-                        couleur_fond(YELLOW_BG);
-                        break;
-
-                    case EAU:
-                        couleur_fond(CYAN_BG);
-                        break;
-
-                    case DESERT:
-                        couleur_fond(ORANGE_BG);
-                        break;
-
-                    case NEIGE:
-                        couleur_fond(WHITE_BG);
-                        break;
-
-                    case FORET:
-                        couleur_fond(GREEN_BG);
-                        break;
-
-                    default:
-                        couleur_fond(DEFAULT_BG);
-                        break;
-
-                }
-
-                batiment_t monBatiment = maCase.batiment;
-
-                couleur_texte(BLACK_TEXT);
-
-                switch (monBatiment.type) {
-
-                    case CAMPEMENT:
-                        printf(" X ");
-                        break;
-
-                    case MAGASIN:
-                        printf(" M ");
-                        break;
-
-                    default:
-                        printf("   ");
-                        break;
-
-                }
-
-            }
-
-        }
-
-        couleur_reset();
-        printf("\n");
-    }
-
-    couleur_reset();
-
-    printf("\n");
-
-}
 
 /* Leo */
 /*
@@ -469,55 +350,39 @@ void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y)
 int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y) {
     case_t maCase = carte[y][x];
 
-    if (maCase.biome == EAU || maCase.monstre != NULL || maCase.batiment.type != PAS_DE_BATIMENT) {
+    if (maCase.biome == EAU) {
         return FAUX;
     } else {
         return VRAI;
     }
 
- }
+}
 
 /* Leo */
+/*
+ * Cette fonction retourne VRAI si la case
+ * est occupée soit par un batiment,
+ * soit par un monstre.
+ */
+int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
+    case_t maCase = carte[y][x];
+
+    if (maCase.monstre != NULL || maCase.batiment.type != PAS_DE_BATIMENT) {
+        return VRAI;
+    } else {
+        return FAUX;
+    }
+
+}
+
+
+/* Leo et Saandi */
 /*
  * Cette fonction permet de dévoiler le brouillard sur la carte,
  * à partir d'un point donné d'abscisse x et d'ordonnée y,
  * et avec un rayon donné.
  */
 void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int rayon) {
-    /*int xDepart = x - rayon;
-
-    if (xDepart < 0) {
-        xDepart = 0;
-    }
-
-    int xArrivee = x + rayon;
-
-    if (xArrivee > (TAILLE_CARTE - 1)) {
-        xArrivee = (TAILLE_CARTE - 1);
-    }
-
-    int yDepart = y - rayon;
-
-    if (yDepart < 0) {
-        yDepart = 0;
-    }
-
-    int yArrivee = y + rayon;
-
-    if (yArrivee > (TAILLE_CARTE - 1)) {
-        yArrivee = (TAILLE_CARTE - 1);
-    }
-
-    int i, j;
-
-    for (i = xDepart; i <= xArrivee; i++) {
-
-        for (j = yDepart; j <= yArrivee; j++) {
-            carte[j][i].estVisible = 1;
-        }
-
-    }*/
-
      int i, j;
 
     for (i = 0; i < TAILLE_CARTE; i++) {
@@ -718,7 +583,7 @@ void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 }
 
-/* Crée par Massoud, transformée en fonction par Léo */
+/* Crée par Massoud, transformée en fonction sans modifier le contenu par Léo */
 /*
  * Cette fonction permet de détecter la case
  * qui est à la position de la souris à l'écran
@@ -775,4 +640,128 @@ void souris_vers_case(int mouseX, int mouseY,
 
     *carte_x = result_x;
     *carte_y = result_y;
+}
+
+/* Leo */
+/*
+ * Attention : ne pas appeler cette fonction directement,
+ * mais plutôt chemin_valide
+ *
+ * Cette fonction retourne la distance d'un chemin, si il y a un
+ * chemin constitué de cases valides (pas d'eau, pas de monstre, 
+ * pas de batiment par-dessus) pour arriver à une case 
+ * destination, ou INFINI sinon.
+ * 
+ * Elle est récursive pour l'instant.
+ */
+static int peut_atteindre_rec(case_t carte[TAILLE_CARTE][TAILLE_CARTE], 
+    int xDepart, int yDepart, int xCible, int yCible, 
+    int pts_deplacement_restants, int dejaVisite[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso)
+{
+
+    /* Cas d'arrêt : on est arrivé à destination */
+    if (xDepart == xCible && yDepart == yCible) {
+        return 0;
+    }
+
+    /* Si l'un des chemins va en dehors de la carte */
+    if (xCible < 0 || xDepart < 0 || xCible >= TAILLE_CARTE || xDepart >= TAILLE_CARTE
+        || yCible < 0 || yDepart < 0 || yCible >= TAILLE_CARTE || yDepart >= TAILLE_CARTE) {
+        return INFINI;
+    }
+
+    if (pts_deplacement_restants <= 0) {
+        /* on renvoie INFINI quand on ne peut pas atteindre la case finale */
+        return INFINI;
+    }
+
+    /* On évite les boucles en regardant
+       si on a déjà visité le chemin */
+    if (dejaVisite[yDepart][xDepart]) {
+        return INFINI;
+    }
+
+    dejaVisite[yDepart][xDepart] = VRAI;
+    int meilleure_dist = INFINI;
+
+    int dx[] = {  1,  1,  0, -1, -1,  0};
+    int dy[] = {  0, -1, -1,  0,  1,  1};
+
+    int direction;
+
+    for (direction = 0; direction < 6; direction++) {
+        int nx = xDepart + dx[direction];
+        int ny = yDepart + dy[direction];
+
+        if (nx >= 0 && nx < TAILLE_CARTE && ny >= 0 && ny < TAILLE_CARTE) {
+
+            if (deplacement_possible(carte, perso, nx, ny)) {
+                /* Appel récursif */
+                int distance = peut_atteindre_rec(carte, nx, ny, xCible, yCible, pts_deplacement_restants - 1, dejaVisite, perso);
+
+                if (distance != INFINI) {
+
+                    if (distance + 1 < meilleure_dist) {
+                        meilleure_dist = distance + 1;
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    dejaVisite[yDepart][xDepart] = FAUX;
+
+    return meilleure_dist;
+}
+
+/* Leo */
+/*
+ * Cette fonction permet de savoir si il y a un chemin
+ * constitué de cases valides (pas d'eau, pas de monstre, 
+ * pas de batiment par-dessus) pour arriver à une case 
+ * destination.
+ * Elle retourne également la distance du chemin, à travers
+ * le paramètre pointeur sur entier *distance, ou -1 si il
+ * n'y a pas de chemin valide.
+ */
+int chemin_valide(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
+    int xDepart, int yDepart, int xCible, int yCible, 
+    int pts_deplacement_max, perso_t *perso, int *distance)
+{
+
+    if (pts_deplacement_max < 0) {
+        return FAUX;
+    }
+
+    /* on prépare un tableau de int qui regarde
+       si une case a déjà été visitée pour éviter
+       des appels récursifs inutiles */
+    int dejaVisite[TAILLE_CARTE][TAILLE_CARTE];
+
+    int i, j;
+
+    for (i = 0; i < TAILLE_CARTE; i++) {
+
+        for (j = 0; j < TAILLE_CARTE; j++) {
+            dejaVisite[i][j] = FAUX;
+        }
+    }
+
+    int resultat = peut_atteindre_rec(
+        carte, xDepart, yDepart, xCible, 
+        yCible, pts_deplacement_max, dejaVisite, perso
+    );
+
+    if (resultat != INFINI) {
+        *distance = resultat;
+        return VRAI;
+    } else {
+        *distance = -1;
+        return FAUX;
+    }
+
 }

@@ -11,6 +11,7 @@
 #define NB_COORD 4
 #define VRAI 1
 #define FAUX 0
+#define INFINI 5000
 
 /* Structures */
 typedef enum {
@@ -55,8 +56,10 @@ void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
 void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y);
+int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
 void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y);
 void souris_vers_case(int mouseX, int mouseY, int *carte_x, int *carte_y, int tailleCase, perso_t *perso, SDL_Renderer *renderer);
+int chemin_valide(case_t[TAILLE_CARTE][TAILLE_CARTE], int xDepart, int yDepart, int xCible, int yCible, int pts_deplacement_max, perso_t *perso, int *distance);
 
 /* Prototypes des fonctions de rendu SDL2 */
 void afficher_hex_texture(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Texture* texture, SDL_Color couleur);
