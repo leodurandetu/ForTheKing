@@ -144,7 +144,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     SDL_Texture * textures_obstacles[4],
     SDL_Texture * texture_brouillard,
     SDL_Texture * texture_monstre,
-    SDL_Texture * texture_campement,
+    SDL_Texture * textures_batiments[2],
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
@@ -179,18 +179,45 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
             /* Texture du Biome */
             SDL_Texture *tex_actuelle;
+
+            int estVisible = 1;
             
             if (maCase.estVisible) {
-                tex_actuelle = textures_cases[maCase.biome];
+
+                /*
+                 * à proximité des tours du boss,
+                 * on garde les cases en brouillard,
+                 * pour un effet visuel.
+                 * 
+                 * NOTE : peut-être on peut éviter de faire 4 ifs,
+                 * mais je n'ai pas encore trouvé comment.
+                 */
+                if (x >= 0 && x <= 4 && y >= 0 && y <= 4) {
+                    tex_actuelle = texture_brouillard;
+                    estVisible = 0;
+                } else if (x >= TAILLE_CARTE - 5 && x <= TAILLE_CARTE - 1 && y >= 0 && y <= 4) {
+                    tex_actuelle = texture_brouillard;
+                    estVisible = 0;
+                } else if (x >= TAILLE_CARTE - 5 && x <= TAILLE_CARTE - 1 && y >= TAILLE_CARTE - 5 && y <= TAILLE_CARTE - 1) {
+                    tex_actuelle = texture_brouillard;
+                    estVisible = 0;
+                } else if (x >= 0 && x <= 4 && y >= TAILLE_CARTE - 5 && y <= TAILLE_CARTE - 1) {
+                    tex_actuelle = texture_brouillard;
+                    estVisible = 0;
+                } else {
+                    tex_actuelle = textures_cases[maCase.biome];
+                }
+
             } else {
                 tex_actuelle = texture_brouillard;
+                estVisible = 0;
             }
 
             if (tex_actuelle) {
                 dessiner_hex_texture(renderer, tex_actuelle, cx, cy, rayon);
             }
 
-            if (maCase.estVisible) {
+            if (estVisible) {
 
                 SDL_Texture *tex_obstacle = NULL;
 
@@ -232,27 +259,35 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
                 }
 
-                if (maCase.batiment.type != PAS_DE_BATIMENT) {
+                dessiner_contour_dore(renderer, cx, cy, rayon);
+            }
+
+            if (maCase.batiment.type != PAS_DE_BATIMENT) {
+                SDL_Texture * texture = NULL;
                     
-                    if (texture_campement) {
-                        float echelle = 0.85f;
-
-                        SDL_Rect dstRect;
-                        dstRect.w = (int) (hex_w * echelle);
-                        dstRect.h = (int) (hex_w * echelle); // Carré
-                        /* Centrage automatique */
-                        dstRect.x = (int)(cx - dstRect.w / 2);
-                        dstRect.y = (int)(cy - dstRect.h / 2);
-
-                        SDL_RenderCopy(renderer, texture_campement, NULL, &dstRect);
-                    }
-
+                if (maCase.batiment.type == TOUR_DU_BOSS) {
+                    texture = textures_batiments[1];
+                } else if (estVisible) {
+                    texture = textures_batiments[0];
                 }
 
-                dessiner_contour_dore(renderer, cx, cy, rayon);    
+                if (texture) {
+                    float echelle = 0.85f;
+
+                    SDL_Rect dstRect;
+                    dstRect.w = (int) (hex_w * echelle);
+                    dstRect.h = (int) (hex_w * echelle); // Carré
+                    /* Centrage automatique */
+                    dstRect.x = (int)(cx - dstRect.w / 2);
+                    dstRect.y = (int)(cy - dstRect.h / 2);
+
+                    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+                }
+
             }
 
         }
+
     }
 
     int portee = get_pers_movements_points(perso);
@@ -368,12 +403,13 @@ int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *pers
 /*
  * Cette fonction retourne VRAI si la case
  * est occupée soit par un batiment,
- * soit par un monstre.
+ * soit par un monstre,
+ * soit par un obstacle
  */
 int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
     case_t maCase = carte[y][x];
 
-    if (maCase.monstre != NULL || maCase.batiment.type != PAS_DE_BATIMENT) {
+    if (maCase.monstre != NULL || maCase.batiment.type != PAS_DE_BATIMENT || maCase.terrain != PAS_DE_TERRAIN) {
         return VRAI;
     } else {
         return FAUX;
@@ -433,6 +469,7 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
             maCase.estVisible = 0;
 
             maCase.monstre = NULL;
+            maCase.terrain = PAS_DE_TERRAIN;
 
             carte[x][y] = maCase;
         }
@@ -567,6 +604,8 @@ void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 /*
  * Cette fonction place des batiments aléatoirement
  * sur la carte : campements et magasins.
+ * Cette fonction place également les 4 tours du boss
+ * aux coins de la carte
  */
 void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     int i;
@@ -587,6 +626,11 @@ void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
         carte[x][y].batiment.type = CAMPEMENT;
     }
 
+    carte[2][2].batiment.type = TOUR_DU_BOSS;
+    carte[2][TAILLE_CARTE - 3].batiment.type = TOUR_DU_BOSS;
+
+    carte[TAILLE_CARTE - 3][2].batiment.type = TOUR_DU_BOSS;
+    carte[TAILLE_CARTE - 3][TAILLE_CARTE - 3].batiment.type = TOUR_DU_BOSS;
 }
 
 /* Crée par Massoud, transformée en fonction sans modifier le contenu par Léo */

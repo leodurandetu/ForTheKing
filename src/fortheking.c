@@ -128,13 +128,22 @@ int main() {
         SDL_FreeSurface(img_brouillard);
     }
 
-    // Chargement de la texture du campement
-    SDL_Texture *texture_campement = NULL;
-    SDL_Surface *img_campement = IMG_Load("img/campement.png");
-    if (img_campement) {
-        texture_campement = SDL_CreateTextureFromSurface(renderer, img_campement);
-        SDL_SetTextureBlendMode(texture_campement, SDL_BLENDMODE_BLEND);
-        SDL_FreeSurface(img_campement);
+    // Chargement de la texture des batiments
+
+    char *nom_images_batiments[2] = {
+        "img/campement.png", "img/tour_boss.png"
+    };
+
+    SDL_Texture *textures_batiments[2] = {NULL};
+
+    for (int i = 0; i < 4; i++) {
+        SDL_Surface *img_batiment = IMG_Load(nom_images_batiments[i]);
+
+        if (img_batiment) {
+            textures_batiments[i] = SDL_CreateTextureFromSurface(renderer, img_batiment);
+            SDL_SetTextureBlendMode(textures_batiments[i], SDL_BLENDMODE_BLEND);
+            SDL_FreeSurface(img_batiment);
+        }
     }
 
     // Chargement des obstacles
@@ -361,7 +370,7 @@ int main() {
 
             // Dessine la carte et les contours dorés
             afficher_carte_sdl(renderer, carte, textures_cases, textures_obstacles, texture_brouillard, texture_monstre,
-                texture_campement, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
+                textures_batiments, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
                 perso);
                 
             if (texture_perso) {
@@ -391,7 +400,9 @@ int main() {
     if (texture_perso) SDL_DestroyTexture(texture_perso);
     if (texture_brouillard) SDL_DestroyTexture(texture_brouillard);
     if (texture_monstre) SDL_DestroyTexture(texture_monstre);
-    if (texture_campement) SDL_DestroyTexture(texture_campement);
+    for (int i = 0; i < 2; i++) {
+        if (textures_batiments[i]) SDL_DestroyTexture(textures_batiments[i]);
+    }
     for (int i = 0; i < 4; i++) {
         if (textures_obstacles[i]) SDL_DestroyTexture(textures_obstacles[i]);
     }

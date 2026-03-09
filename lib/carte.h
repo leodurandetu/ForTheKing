@@ -30,12 +30,13 @@ typedef enum {
     CACTUS,
     PAS_DE_TERRAIN,
     NB_TERRAINS,
-} Terrain_t;
+} terrain_t;
 
 typedef enum {
     PAS_DE_BATIMENT,
     CAMPEMENT,
-    MAGASIN
+    MAGASIN,
+    TOUR_DU_BOSS
 } type_bat_t;
 
 typedef struct {
@@ -44,7 +45,7 @@ typedef struct {
 
 typedef struct case_s {
     biome_t biome;
-    Terrain_t terrain;
+    terrain_t terrain;
     batiment_t batiment;
     monstre_t *monstre;
     int estVisible;
@@ -83,7 +84,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     SDL_Texture * textures_obstacles[4], 
     SDL_Texture * texture_brouillard,
     SDL_Texture * texture_monstre,
-    SDL_Texture * texture_campement,
+    SDL_Texture * textures_batiments[2],
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
