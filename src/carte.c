@@ -141,6 +141,7 @@ void dessiner_hex_texture(SDL_Renderer * renderer, SDL_Texture * texture, float 
 void afficher_carte_sdl(SDL_Renderer * renderer,
     case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     SDL_Texture * textures_cases[NB_BIOMES], 
+    SDL_Texture * textures_obstacles[4],
     SDL_Texture * texture_brouillard,
     SDL_Texture * texture_monstre,
     SDL_Texture * texture_campement,
@@ -190,6 +191,28 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
             }
 
             if (maCase.estVisible) {
+
+                SDL_Texture *tex_obstacle = NULL;
+
+                /* Affichage des obstacles */
+                switch(maCase.terrain) {
+                    case ARBRES:    tex_obstacle = textures_obstacles[0]; break;
+                    case MONTAGNES: tex_obstacle = textures_obstacles[1]; break;
+                    case CACTUS:    tex_obstacle = textures_obstacles[2]; break;
+                    case BASSIN_EAU:tex_obstacle = textures_obstacles[3]; break;
+                    default: break;
+                }
+
+                if (tex_obstacle != NULL) {
+                    float echelle_obs = 0.65f; // ajuster
+                    SDL_Rect dstRectObs;
+                    dstRectObs.w = (int) (hex_w * echelle_obs);
+                    dstRectObs.h = (int) (hex_w * echelle_obs);
+                    dstRectObs.x = (int)(cx - dstRectObs.w / 2);
+                    dstRectObs.y = (int)(cy - dstRectObs.h / 2);
+
+                    SDL_RenderCopy(renderer, tex_obstacle, NULL, &dstRectObs);
+                }
 
                 /* Affichage du monstre si il existe */
                 if (maCase.monstre != NULL) {
@@ -333,6 +356,8 @@ int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *pers
 
     if (maCase.biome == EAU) {
         return FAUX;
+    } else if (maCase.terrain != PAS_DE_TERRAIN) {
+        return FAUX;
     } else {
         return VRAI;
     }
@@ -436,7 +461,7 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  */
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     // 70 à 111 zones
-    int nb_zones = 70 + rand() % 41;
+    int nb_zones = 15 + rand() % 25;
 
     for (int z = 0; z < nb_zones; z++) {
         coordonnee_t dep = { rand() % TAILLE_CARTE, rand() % TAILLE_CARTE };
@@ -501,7 +526,7 @@ void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
         /* On recommence jusqu'à trouver un endroit convenable,
          * C'est à dire sans monstre, et pas dans l'eau.
          */
-        while (carte[x][y].monstre != NULL || carte[x][y].biome == EAU) {
+        while (carte[x][y].monstre != NULL || carte[x][y].biome == EAU || carte[x][y].terrain != PAS_DE_TERRAIN) {
             x = rand() % TAILLE_CARTE;
             y = rand() % TAILLE_CARTE;
         }
@@ -554,7 +579,7 @@ void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
         /* On recommence jusqu'à trouver un endroit convenable,
          * C'est à dire sans monstre, et pas dans l'eau.
          */
-        while (carte[x][y].monstre != NULL || carte[x][y].biome == EAU) {
+        while (carte[x][y].monstre != NULL || carte[x][y].biome == EAU || carte[x][y].terrain != PAS_DE_TERRAIN) {
             x = rand() % TAILLE_CARTE;
             y = rand() % TAILLE_CARTE;
         }
@@ -745,4 +770,54 @@ int chemin_valide(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
         return FAUX;
     }
 
+}
+
+
+/* Massoud */
+/*
+ * Cette fonction ajoute des obstacles
+ * pour chaque type de biome, tels que les arbres,
+ * montagnes, cactus et la boue, aléatoirement.
+ */
+void ajout_obstacles(case_t carte[TAILLE_CARTE][TAILLE_CARTE]){
+    int i, j;
+
+    for(i = 0; i < TAILLE_CARTE; i++){
+        for(j = 0; j < TAILLE_CARTE; j++){
+
+            carte[i][j].terrain = PAS_DE_TERRAIN;
+
+            int r = rand() % 100;
+
+            switch(carte[i][j].biome){
+
+                case FORET:
+                    if(r < 5){
+                        carte[i][j].terrain = ARBRES;
+                    }
+                    break;
+
+                case NEIGE:
+                    if(r < 5){
+                        carte[i][j].terrain = MONTAGNES;
+                    }
+                    break;
+
+                case DESERT:
+                    if(r < 5){
+                        carte[i][j].terrain = CACTUS;
+                    }
+                    break;
+
+                case TERRE:
+                    if(r < 5){
+                        carte[i][j].terrain = BASSIN_EAU;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
 }
