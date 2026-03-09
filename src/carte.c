@@ -177,75 +177,108 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
             float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
             float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
 
-            /* Texture du Biome */
-            SDL_Texture *tex_actuelle;
+            /*
+             * pour gagner en performance, on vérifie si
+             * l'hexagone est sur l'écran avant de l'afficher
+            */
+            if ((cx + hex_w/2) >= 0 && (cx - hex_w/2) <= lFenetre 
+             && (cy + hex_h/2) >= 0 && (cy - hex_h/2) <= hFenetre) {
+                /* Texture du Biome */
+                SDL_Texture *tex_actuelle;
 
-            int estVisible = 1;
-            
-            if (maCase.estVisible) {
+                int estVisible = 1;
+                
+                if (maCase.estVisible) {
 
-                /*
-                 * à proximité des tours du boss,
-                 * on garde les cases en brouillard,
-                 * pour un effet visuel.
-                 * 
-                 * NOTE : peut-être on peut éviter de faire 4 ifs,
-                 * mais je n'ai pas encore trouvé comment.
-                 */
-                if (x >= 0 && x <= 4 && y >= 0 && y <= 4) {
-                    tex_actuelle = texture_brouillard;
-                    estVisible = 0;
-                } else if (x >= TAILLE_CARTE - 5 && x <= TAILLE_CARTE - 1 && y >= 0 && y <= 4) {
-                    tex_actuelle = texture_brouillard;
-                    estVisible = 0;
-                } else if (x >= TAILLE_CARTE - 5 && x <= TAILLE_CARTE - 1 && y >= TAILLE_CARTE - 5 && y <= TAILLE_CARTE - 1) {
-                    tex_actuelle = texture_brouillard;
-                    estVisible = 0;
-                } else if (x >= 0 && x <= 4 && y >= TAILLE_CARTE - 5 && y <= TAILLE_CARTE - 1) {
-                    tex_actuelle = texture_brouillard;
-                    estVisible = 0;
+                    /*
+                    * à proximité des tours du boss,
+                    * on garde les cases en brouillard,
+                    * pour un effet visuel.
+                    * 
+                    * NOTE : peut-être on peut éviter de faire 4 ifs,
+                    * mais je n'ai pas encore trouvé comment.
+                    */
+                    if (x >= 0 && x <= 4 && y >= 0 && y <= 4) {
+                        tex_actuelle = texture_brouillard;
+                        estVisible = 0;
+                    } else if (x >= TAILLE_CARTE - 5 && x <= TAILLE_CARTE - 1 && y >= 0 && y <= 4) {
+                        tex_actuelle = texture_brouillard;
+                        estVisible = 0;
+                    } else if (x >= TAILLE_CARTE - 5 && x <= TAILLE_CARTE - 1 && y >= TAILLE_CARTE - 5 && y <= TAILLE_CARTE - 1) {
+                        tex_actuelle = texture_brouillard;
+                        estVisible = 0;
+                    } else if (x >= 0 && x <= 4 && y >= TAILLE_CARTE - 5 && y <= TAILLE_CARTE - 1) {
+                        tex_actuelle = texture_brouillard;
+                        estVisible = 0;
+                    } else {
+                        tex_actuelle = textures_cases[maCase.biome];
+                    }
+
                 } else {
-                    tex_actuelle = textures_cases[maCase.biome];
+                    tex_actuelle = texture_brouillard;
+                    estVisible = 0;
                 }
 
-            } else {
-                tex_actuelle = texture_brouillard;
-                estVisible = 0;
-            }
-
-            if (tex_actuelle) {
-                dessiner_hex_texture(renderer, tex_actuelle, cx, cy, rayon);
-            }
-
-            if (estVisible) {
-
-                SDL_Texture *tex_obstacle = NULL;
-
-                /* Affichage des obstacles */
-                switch(maCase.terrain) {
-                    case ARBRES:    tex_obstacle = textures_obstacles[0]; break;
-                    case MONTAGNES: tex_obstacle = textures_obstacles[1]; break;
-                    case CACTUS:    tex_obstacle = textures_obstacles[2]; break;
-                    case BASSIN_EAU:tex_obstacle = textures_obstacles[3]; break;
-                    default: break;
+                if (tex_actuelle) {
+                    dessiner_hex_texture(renderer, tex_actuelle, cx, cy, rayon);
                 }
 
-                if (tex_obstacle != NULL) {
-                    float echelle_obs = 0.65f; // ajuster
-                    SDL_Rect dstRectObs;
-                    dstRectObs.w = (int) (hex_w * echelle_obs);
-                    dstRectObs.h = (int) (hex_w * echelle_obs);
-                    dstRectObs.x = (int)(cx - dstRectObs.w / 2);
-                    dstRectObs.y = (int)(cy - dstRectObs.h / 2);
+                if (estVisible) {
 
-                    SDL_RenderCopy(renderer, tex_obstacle, NULL, &dstRectObs);
+                    SDL_Texture *tex_obstacle = NULL;
+
+                    /* Affichage des obstacles */
+                    switch(maCase.terrain) {
+                        case ARBRES:    tex_obstacle = textures_obstacles[0]; break;
+                        case MONTAGNES: tex_obstacle = textures_obstacles[1]; break;
+                        case CACTUS:    tex_obstacle = textures_obstacles[2]; break;
+                        case BASSIN_EAU:tex_obstacle = textures_obstacles[3]; break;
+                        default: break;
+                    }
+
+                    if (tex_obstacle != NULL) {
+                        float echelle_obs = 0.65f; // ajuster
+                        SDL_Rect dstRectObs;
+                        dstRectObs.w = (int) (hex_w * echelle_obs);
+                        dstRectObs.h = (int) (hex_w * echelle_obs);
+                        dstRectObs.x = (int)(cx - dstRectObs.w / 2);
+                        dstRectObs.y = (int)(cy - dstRectObs.h / 2);
+
+                        SDL_RenderCopy(renderer, tex_obstacle, NULL, &dstRectObs);
+                    }
+
+                    /* Affichage du monstre si il existe */
+                    if (maCase.monstre != NULL) {
+
+                        if (texture_monstre) {
+                            float echelle = 0.65f;
+
+                            SDL_Rect dstRect;
+                            dstRect.w = (int) (hex_w * echelle);
+                            dstRect.h = (int) (hex_w * echelle); // Carré
+                            /* Centrage automatique */
+                            dstRect.x = (int)(cx - dstRect.w / 2);
+                            dstRect.y = (int)(cy - dstRect.h / 2);
+
+                            SDL_RenderCopy(renderer, texture_monstre, NULL, &dstRect);
+                        }
+
+                    }
+
+                    dessiner_contour_dore(renderer, cx, cy, rayon);
                 }
 
-                /* Affichage du monstre si il existe */
-                if (maCase.monstre != NULL) {
+                if (maCase.batiment.type != PAS_DE_BATIMENT) {
+                    SDL_Texture * texture = NULL;
+                        
+                    if (maCase.batiment.type == TOUR_DU_BOSS) {
+                        texture = textures_batiments[1];
+                    } else if (estVisible) {
+                        texture = textures_batiments[0];
+                    }
 
-                    if (texture_monstre) {
-                        float echelle = 0.65f;
+                    if (texture) {
+                        float echelle = 0.85f;
 
                         SDL_Rect dstRect;
                         dstRect.w = (int) (hex_w * echelle);
@@ -254,34 +287,9 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                         dstRect.x = (int)(cx - dstRect.w / 2);
                         dstRect.y = (int)(cy - dstRect.h / 2);
 
-                        SDL_RenderCopy(renderer, texture_monstre, NULL, &dstRect);
+                        SDL_RenderCopy(renderer, texture, NULL, &dstRect);
                     }
 
-                }
-
-                dessiner_contour_dore(renderer, cx, cy, rayon);
-            }
-
-            if (maCase.batiment.type != PAS_DE_BATIMENT) {
-                SDL_Texture * texture = NULL;
-                    
-                if (maCase.batiment.type == TOUR_DU_BOSS) {
-                    texture = textures_batiments[1];
-                } else if (estVisible) {
-                    texture = textures_batiments[0];
-                }
-
-                if (texture) {
-                    float echelle = 0.85f;
-
-                    SDL_Rect dstRect;
-                    dstRect.w = (int) (hex_w * echelle);
-                    dstRect.h = (int) (hex_w * echelle); // Carré
-                    /* Centrage automatique */
-                    dstRect.x = (int)(cx - dstRect.w / 2);
-                    dstRect.y = (int)(cy - dstRect.h / 2);
-
-                    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
                 }
 
             }
