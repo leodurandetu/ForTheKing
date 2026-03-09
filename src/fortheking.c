@@ -137,11 +137,31 @@ int main() {
         SDL_FreeSurface(img_campement);
     }
 
+    // Chargement des obstacles
+    char *nom_images_obstacles[4] = {
+        "img/arbres.png", "img/montagnes.png",
+        "img/cactus.png", "img/boue.png" 
+    };
+
+    SDL_Texture *textures_obstacles[4] = {NULL};
+
+    for (int i = 0; i < 4; i++) {
+        SDL_Surface *image_obs = IMG_Load(nom_images_obstacles[i]);
+        if (!image_obs) {
+            fprintf(stderr, "Attention : Image obstacle %s manquante !\n", nom_images_obstacles[i]);
+        } else {
+            textures_obstacles[i] = SDL_CreateTextureFromSurface(renderer, image_obs);
+            SDL_SetTextureBlendMode(textures_obstacles[i], SDL_BLENDMODE_BLEND); // Active la transparence
+            SDL_FreeSurface(image_obs);
+        }
+    }
+
     // Génération du monde
     srand((unsigned int)time(NULL));
     init_carte(carte);
     generer_eau(carte);
     generer_biomes(carte);
+    ajout_obstacles(carte);
     placer_monstres(carte);
     placer_batiments(carte);
 
@@ -340,7 +360,7 @@ int main() {
             SDL_RenderClear(renderer);
 
             // Dessine la carte et les contours dorés
-            afficher_carte_sdl(renderer, carte, textures_cases, texture_brouillard, texture_monstre,
+            afficher_carte_sdl(renderer, carte, textures_cases, textures_obstacles, texture_brouillard, texture_monstre,
                 texture_campement, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
                 perso);
                 
@@ -372,6 +392,9 @@ int main() {
     if (texture_brouillard) SDL_DestroyTexture(texture_brouillard);
     if (texture_monstre) SDL_DestroyTexture(texture_monstre);
     if (texture_campement) SDL_DestroyTexture(texture_campement);
+    for (int i = 0; i < 4; i++) {
+        if (textures_obstacles[i]) SDL_DestroyTexture(textures_obstacles[i]);
+    }
     if (texte_tex) SDL_DestroyTexture(texte_tex);
 
     TTF_CloseFont(police);
