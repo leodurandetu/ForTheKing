@@ -24,6 +24,15 @@ typedef enum {
 } biome_t;
 
 typedef enum {
+    ARBRES,
+    MONTAGNES,
+    BASSIN_EAU,
+    CACTUS,
+    PAS_DE_TERRAIN,
+    NB_TERRAINS,
+} Terrain_t;
+
+typedef enum {
     PAS_DE_BATIMENT,
     CAMPEMENT,
     MAGASIN
@@ -35,6 +44,7 @@ typedef struct {
 
 typedef struct case_s {
     biome_t biome;
+    Terrain_t terrain;
     batiment_t batiment;
     monstre_t *monstre;
     int estVisible;
@@ -55,6 +65,7 @@ void afficher_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]); // Console
 void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int rayon);
 void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+void ajout_obstacles(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y);
 int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
 void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y);
@@ -68,7 +79,8 @@ void dessiner_contour_ftk(SDL_Renderer* r, float cx, float cy, float rayon, int 
 void afficher_hex_couleur(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Color couleur);
 void afficher_carte_sdl(SDL_Renderer * renderer,
     case_t carte[TAILLE_CARTE][TAILLE_CARTE],
-    SDL_Texture * textures_cases[NB_BIOMES], 
+    SDL_Texture * textures_cases[NB_BIOMES],
+    SDL_Texture * textures_obstacles[4], 
     SDL_Texture * texture_brouillard,
     SDL_Texture * texture_monstre,
     SDL_Texture * texture_campement,
