@@ -20,10 +20,7 @@ int min(int a, int b) {
     return (a < b) ? a : b;
 }
 
-/* =====================================================
-// ==================== AFFICHAGE HEX ==================
-// =====================================================*/
-/* Massoud */
+/* Fonctions d'affichage */
 
 /*
 On stocke les cos et sin une fois dans un tableau, au lieu de le faire à chaque boucle 
@@ -33,98 +30,105 @@ Cela permet de gagner en temps de calcul.
 float HEX_COS[6];
 float HEX_SIN[6];
 
-/*
- Dessine un anneau hexagonal (hexagone creux) vers l'intérieur.
- Utilisé ici pour créer une ombre portée interne sous le doré.
-*/
-void dessiner_contour_ftk(SDL_Renderer* r, float cx, float cy, float rayon, int epaisseur, SDL_Color couleur) {
-    SDL_Vertex vertices[12]; 
-    int indices[36]; 
-    
-    float r_ext = rayon;
-    float r_int = rayon - epaisseur;
-
-    for (int i = 0; i < 6; i++) {
-        float cos_a = HEX_COS[i];
-        float sin_a = HEX_SIN[i];
-
-        vertices[i].position = (SDL_FPoint){ cx + r_ext * cos_a, cy + r_ext * sin_a };
-        vertices[i].color = couleur;
-
-        vertices[i + 6].position = (SDL_FPoint){ cx + r_int * cos_a, cy + r_int * sin_a };
-        // On réduit l'alpha vers l'intérieur pour un effet de fondu doux
-        vertices[i + 6].color = (SDL_Color){ couleur.r, couleur.g, couleur.b, (Uint8)(couleur.a / 2) };
-    }
-
-    for (int i = 0; i < 6; i++) {
-        int next = (i + 1) % 6;
-        int base = i * 6;
-        indices[base + 0] = i;
-        indices[base + 1] = next;
-        indices[base + 2] = i + 6;
-        indices[base + 3] = next;
-        indices[base + 4] = next + 6;
-        indices[base + 5] = i + 6;
-    }
-    SDL_RenderGeometry(r, NULL, vertices, 12, indices, 36);
-}
-
-
-/* Dessine le double filet doré avec transparence */
-void dessiner_contour_double_dore(SDL_Renderer* r, float cx, float cy, float rayon, int alpha) {
-    SDL_Color or_clair = {218, 165, 32, (Uint8)alpha}; 
-    SDL_Color or_sombre = {139, 101, 8, (Uint8)alpha};
-
-    for (int k = 0; k < 6; k++) {
-        float cos_a1 = HEX_COS[k];
-        float cos_a2 = HEX_COS[(k + 1) % 6]; // en gros il fallait remmetre à 0 l'indice(sinon il allait dessiner là ou il ne voit pas)
-
-        float sin_a1 = HEX_SIN[k];
-        float sin_a2 = HEX_SIN[(k + 1) % 6];
-
-        // Filet extérieur (Or clair)
-        thickLineRGBA(r, 
-            cx + rayon * cos_a1, cy + rayon * sin_a1,
-            cx + rayon * cos_a2, cy + rayon * sin_a2,
-            1, or_clair.r, or_clair.g, or_clair.b, or_clair.a);
-
-        // Filet intérieur (Or sombre, décalage de 2.2 pixels pour la finesse)
-        float r_int = rayon - 2.2f; 
-        thickLineRGBA(r, 
-            cx + r_int * cos_a1, cy + r_int * sin_a1,
-            cx + r_int * cos_a2, cy + r_int * sin_a2,
-            1, or_sombre.r, or_sombre.g, or_sombre.b, or_sombre.a);
-    }
-}
-
-/* Affichage des couleurs des hex */
-void afficher_hex_couleur(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Color couleur)
+void dessiner_hexagone(SDL_Renderer * renderer, float cx, float cy, float rayon, SDL_Color couleur)
 {
-    /* On utilise la géométrie SDL pour dessiner un hexagone plein à partir de triangles */
-    SDL_Vertex sommets[7];
-    /* Les indices définissent 6 triangles partant du centre (sommet 0) vers les bords */
-    int indices[18] = {
-        0, 1, 2,  0, 2, 3,  0, 3, 4,
-        0, 4, 5,  0, 5, 6,  0, 6, 1
-    };
+    SDL_SetRenderDrawColor(renderer, couleur.r, couleur.g, couleur.b, couleur.a);
 
-    /* Centre de l'hexagone */
-    sommets[0].position.x = cx;
-    sommets[0].position.y = cy;
+    int i;
+
+    for (i = 0; i < 6; i++)
+    {
+        int prochain = (i + 1) % 6;
+
+        float x1 = cx + rayon * HEX_COS[i];
+        float y1 = cy + rayon * HEX_SIN[i];
+
+        float x2 = cx + rayon * HEX_COS[prochain];
+        float y2 = cy + rayon * HEX_SIN[prochain];
+
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+    }
+
+}
+
+void remplir_hexagone(SDL_Renderer *renderer, float cx, float cy, float rayon, SDL_Color couleur)
+{
+    SDL_Vertex sommets[7];
+    int indices[18] = {0,1,2, 0,2,3, 0,3,4, 0,4,5, 0,5,6, 0,6,1};
+
+    sommets[0].position = (SDL_FPoint){cx, cy};
     sommets[0].color = couleur;
 
-    /* Les 6 coins de l'hexagone (identique au dessin des contours) */
-    for (int i = 0; i < 6; i++) {
+    for(int i = 0; i < 6; i++)
+    {
         sommets[i+1].position.x = cx + rayon * HEX_COS[i];
         sommets[i+1].position.y = cy + rayon * HEX_SIN[i];
         sommets[i+1].color = couleur;
     }
 
-    /* Activation du BLEND pour la transparence */
-    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    /* Rendu des triangles */
     SDL_RenderGeometry(renderer, NULL, sommets, 7, indices, 18);
 }
+
+void dessiner_contour_hex(SDL_Renderer *renderer, float cx, float cy, float rayon, SDL_Color couleur)
+{
+    SDL_SetRenderDrawColor(renderer, couleur.r, couleur.g, couleur.b, couleur.a);
+    int i;
+
+    for (i = 0; i < 6; i++) {
+        int next = (i + 1) % 6;
+
+        float x1 = cx + rayon * HEX_COS[i];
+        float y1 = cy + rayon * HEX_SIN[i];
+
+        float x2 = cx + rayon * HEX_COS[next];
+        float y2 = cy + rayon * HEX_SIN[next];
+
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+    }
+
+}
+
+void dessiner_contour_dore(SDL_Renderer * renderer, float cx, float cy, float rayon)
+{
+    SDL_Color or_clair = {218,165,32,200};
+    SDL_Color or_sombre = {139,101,8,200};
+
+    dessiner_contour_hex(renderer, cx, cy, rayon, or_clair);
+    dessiner_contour_hex(renderer, cx, cy, rayon - 2, or_sombre);
+}
+
+void dessiner_hex(SDL_Renderer * renderer, float cx, float cy, float rayon, SDL_Color couleur, int rempli, int contour)
+{
+
+    if (rempli)
+    {
+        remplir_hexagone(renderer, cx, cy, rayon, couleur);
+    }
+
+    if (contour)
+    {
+        dessiner_hexagone(renderer, cx, cy, rayon, couleur);
+    }
+
+}
+
+void dessiner_hex_texture(SDL_Renderer * renderer, SDL_Texture * texture, float cx, float cy, float rayon)
+{
+    SDL_Vertex sommets[7];
+    int indices[18] = { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
+    sommets[0].position = (SDL_FPoint){ cx, cy };
+    sommets[0].tex_coord = (SDL_FPoint){ 0.5f, 0.5f };
+    sommets[0].color = (SDL_Color){ 255, 255, 255, 255 };
+
+    for (int k = 0; k < 6; k++) {
+        sommets[k+1].position = (SDL_FPoint){ cx + rayon * HEX_COS[k], cy + rayon * HEX_SIN[k] };
+        sommets[k+1].tex_coord = (SDL_FPoint){ 0.5f + 0.5f * HEX_COS[k], 0.5f + 0.5f * HEX_SIN[k] };
+        sommets[k+1].color = (SDL_Color){ 255, 255, 255, 255 };
+    }
+
+    SDL_RenderGeometry(renderer, texture, sommets, 7, indices, 18);
+}
+
 
 /* Massoud principalement, Léo secondairement */
 /*
@@ -162,22 +166,15 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     int decalageX = (int)(lFenetre / 2 - camX - hex_w / 2);
     int decalageY = (int)(hFenetre / 2 - camY - hex_h / 2);
 
-    /*
-    Au lieu d'afficher toute la carte tout le temps,
-    on affiche que la partie de la carte qui est visible
-    sur l'écran, pour gagner du temps de calcul.
-    */
-    int j_min = fmax(0, (-decalageX) / espacement_colonnes - 1);
-    int j_max = fmin(TAILLE_CARTE, (lFenetre - decalageX) / espacement_colonnes + 2);
-    int i_min = fmax(0, (-decalageY) / hex_h - 1);
-    int i_max = fmin(TAILLE_CARTE, (hFenetre - decalageY) / hex_h + 2);
+    int x;
+    int y;
 
-    for (int j = j_min; j < j_max; j++) {
-        for (int i = i_min; i < i_max; i++) {
-            case_t maCase = carte[i][j];
+    for (x = 0; x < TAILLE_CARTE; x++) {
+        for (y = 0; y < TAILLE_CARTE; y++) {
+            case_t maCase = carte[y][x];
 
-            float cx = j * espacement_colonnes + hex_w / 2.0f + decalageX;
-            float cy = i * hex_h + (j % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
+            float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
+            float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
 
             /* Texture du Biome */
             SDL_Texture *tex_actuelle;
@@ -189,18 +186,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
             }
 
             if (tex_actuelle) {
-                SDL_Vertex sommets[7];
-                int indices[18] = { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
-                sommets[0].position = (SDL_FPoint){ cx, cy };
-                sommets[0].tex_coord = (SDL_FPoint){ 0.5f, 0.5f };
-                sommets[0].color = (SDL_Color){ 255, 255, 255, 255 };
-
-                for (int k = 0; k < 6; k++) {
-                    sommets[k+1].position = (SDL_FPoint){ cx + rayon * HEX_COS[k], cy + rayon * HEX_SIN[k] };
-                    sommets[k+1].tex_coord = (SDL_FPoint){ 0.5f + 0.5f * HEX_COS[k], 0.5f + 0.5f * HEX_SIN[k] };
-                    sommets[k+1].color = (SDL_Color){ 255, 255, 255, 255 };
-                }
-                SDL_RenderGeometry(renderer, tex_actuelle, sommets, 7, indices, 18);
+                dessiner_hex_texture(renderer, tex_actuelle, cx, cy, rayon);
             }
 
             if (maCase.estVisible) {
@@ -240,12 +226,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
                 }
 
-                /* Double Contour Doré style FTK avec transparence */
-                SDL_Color ombre_interne = {0, 0, 0, 90};
-                dessiner_contour_ftk(renderer, cx, cy, rayon, 5, ombre_interne);
-                
-                // Double filet doré avec un alpha de 170/255
-                dessiner_contour_double_dore(renderer, cx, cy, rayon, 170);
+                dessiner_contour_dore(renderer, cx, cy, rayon);    
             }
 
         }
@@ -263,19 +244,19 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
             
             if (carte[case_selection_y][case_selection_x].monstre != NULL) {
                 SDL_Color couleur = { 0, 255, 0, 120 }; // Vert : monstre atteignable
-                dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
+                remplir_hexagone(renderer, cx, cy, rayon, couleur);
             } else if (carte[case_selection_y][case_selection_x].batiment.type != PAS_DE_BATIMENT) {
                 SDL_Color couleur = { 255, 0, 0, 120 }; // Rouge : impossible (pour le moment)
-                dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
+                remplir_hexagone(renderer, cx, cy, rayon, couleur);
             } else {
                 SDL_Color couleur = { 0, 0, 0, 120 };   // Noir : case vide atteignable
-                dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
+                remplir_hexagone(renderer, cx, cy, rayon, couleur);
             }
 
         } else {
             // Trop loin ou chemin bloqué
             SDL_Color couleur = { 255, 0, 0, 120 };     // Rouge : impossible
-            dessiner_contour_ftk(renderer, cx, cy, rayon, (int)rayon, couleur);
+            remplir_hexagone(renderer, cx, cy, rayon, couleur);
         }
 
     }
