@@ -17,7 +17,7 @@ case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 #define TAILLE_CASE_MAXI 250
 #define TAILLE_CASE_DEPART 150
 #define TAILLE_CASE_MINI 100
-#define RAYON_DECOUVERTE_BROUILLARD 8
+#define RAYON_DECOUVERTE_BROUILLARD 5
 
 int main() {
     printf("For The King!\n");
@@ -82,7 +82,7 @@ int main() {
 
     char *nom_images[NB_BIOMES] = {
         "img/terrev1.png", "img/eauv1.png",
-        "img/desertv1.png", "img/neigev1.png",
+        "img/desertv1.png", "img/neigev2.png",
         "img/foretv1.png"
     };
 

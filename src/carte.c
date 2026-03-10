@@ -189,31 +189,8 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                 int estVisible = 1;
                 
                 if (maCase.estVisible) {
-
-                    /*
-                    * à proximité des tours du boss,
-                    * on garde les cases en brouillard,
-                    * pour un effet visuel.
-                    * 
-                    * NOTE : peut-être on peut éviter de faire 4 ifs,
-                    * mais je n'ai pas encore trouvé comment.
-                    */
-                    if (x >= 0 && x <= 4 && y >= 0 && y <= 4) {
-                        tex_actuelle = texture_brouillard;
-                        estVisible = 0;
-                    } else if (x >= TAILLE_CARTE - 5 && x <= TAILLE_CARTE - 1 && y >= 0 && y <= 4) {
-                        tex_actuelle = texture_brouillard;
-                        estVisible = 0;
-                    } else if (x >= TAILLE_CARTE - 5 && x <= TAILLE_CARTE - 1 && y >= TAILLE_CARTE - 5 && y <= TAILLE_CARTE - 1) {
-                        tex_actuelle = texture_brouillard;
-                        estVisible = 0;
-                    } else if (x >= 0 && x <= 4 && y >= TAILLE_CARTE - 5 && y <= TAILLE_CARTE - 1) {
-                        tex_actuelle = texture_brouillard;
-                        estVisible = 0;
-                    } else {
-                        tex_actuelle = textures_cases[maCase.biome];
-                    }
-
+                    tex_actuelle = textures_cases[maCase.biome];
+                    estVisible = 1;
                 } else {
                     tex_actuelle = texture_brouillard;
                     estVisible = 0;
@@ -473,8 +450,21 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
             maCase.biome = TERRE;
             maCase.batiment = monBatiment;
 
-            /* Par défaut, toutes les cases sont cachées par le brouillard */
-            maCase.estVisible = 0;
+            /* Par défaut, toutes les cases sont cachées par le brouillard,
+             * sauf celles à un rayon de 1 des tours du boss
+             */
+
+            if (x >= 1 && x <= 3 && y >= 1 && y <= 3) {
+                maCase.estVisible = 1;
+            } else if (x >= TAILLE_CARTE - 4 && x <= TAILLE_CARTE - 2 && y >= 1 && y <= 3) {
+                maCase.estVisible = 1;
+            } else if (x >= TAILLE_CARTE - 4 && x <= TAILLE_CARTE - 2 && y >= TAILLE_CARTE - 4 && y <= TAILLE_CARTE - 2) {
+                maCase.estVisible = 1;
+            } else if (x >= 1 && x <= 3 && y >= TAILLE_CARTE - 4 && y <= TAILLE_CARTE - 2) {
+                maCase.estVisible = 1;
+            } else {
+                maCase.estVisible = 0;
+            }
 
             maCase.monstre = NULL;
             maCase.terrain = PAS_DE_TERRAIN;
@@ -562,7 +552,7 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  */
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     int i;
-    int nb = 70 + rand() % 46;
+    int nb = 80 + rand() % 68;
 
     for (i = 0; i < nb; i++) {
         int x = rand() % TAILLE_CARTE;
@@ -617,7 +607,7 @@ void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  */
 void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     int i;
-    int nb = 70 + rand() % 46;
+    int nb = 60 + rand() % 38;
 
     for (i = 0; i < nb; i++) {
         int x = rand() % TAILLE_CARTE;
