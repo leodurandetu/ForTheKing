@@ -5,9 +5,40 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 
-/* Massoud */
-int main() {
+// Fonction pour dessiner les boutons 
+void dessinerBouton(SDL_Renderer *renderer, SDL_Texture *texture, SDL_Rect rectBtn, SDL_Rect rectTxt, SDL_Point mouse) {
+    int survoler = SDL_PointInRect(&mouse, &rectBtn);
 
+    //  Fond du bouton (sombre, légèrement bleuté/violet)
+    if (survoler) {
+        SDL_SetRenderDrawColor(renderer, 80, 75, 95, 230); // Plus clair au survol
+    } else {
+        SDL_SetRenderDrawColor(renderer, 50, 45, 65, 200); // revient au normal
+    }
+    SDL_RenderFillRect(renderer, &rectBtn);
+
+    //  Bordure extérieure claire (Gris/Beige)
+    SDL_SetRenderDrawColor(renderer, 150, 145, 130, 255);
+    SDL_RenderDrawRect(renderer, &rectBtn);
+    
+    // Bordure intérieure sombre 
+    SDL_Rect bordureInt = {rectBtn.x + 2, rectBtn.y + 2, rectBtn.w - 4, rectBtn.h - 4};
+    SDL_SetRenderDrawColor(renderer, 30, 25, 35, 255);
+    SDL_RenderDrawRect(renderer, &bordureInt);
+
+    // Dessiner le texte par-dessus
+    if (survoler) {
+        SDL_SetTextureColorMod(texture, 255, 215, 0); // Or si survolé
+    } else {
+        SDL_SetTextureColorMod(texture, 180, 180, 255); // Bleuté clair 
+    }
+    SDL_RenderCopy(renderer, texture, NULL, &rectTxt);
+    
+    // Réinitialiser la texture
+    SDL_SetTextureColorMod(texture, 255, 255, 255);
+}
+
+int main() {
     int lancer_jeu = 0;
 
     // Initialisation de SDL
@@ -43,294 +74,273 @@ int main() {
 
     if (!musique[0] || !musique[1]) {
         fprintf(stderr, "Erreur chargement musique : %s\n", Mix_GetError());
-        // On continue sans la musique
     }
     
-    // Variables pour gérer la boucle et alternance
     int indexMusique = 0;
     Uint32 debutMusique = SDL_GetTicks();
     int fadeDeclenche = 0;
     Uint32 dureeBoucle = 30000;  
-    Uint32 fadeOutTime = 5000;   // 3 secondes de fondu
+    Uint32 fadeOutTime = 5000;
 
-    int fullscreen = 0; // 0 = fenêtre, 1 = plein écran
-    int windowW = 640;
-    int windowH = 480;
+    int fullscreen = 0;
+    int windowW = 1024; // Un peu plus grand pour bien voir le panneau
+    int windowH = 768;
 
-    // Création de la fenêtre
     SDL_Window *window = SDL_CreateWindow(
         "Menu Principal",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         windowW,
         windowH,
-        SDL_WINDOW_SHOWN
+        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
     );
 
     if (!window) {
         fprintf(stderr, "Erreur création fenêtre : %s\n", SDL_GetError());
-        TTF_Quit();
-        IMG_Quit();
-        SDL_Quit();
         return EXIT_FAILURE;
     }
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (!renderer) {
-        fprintf(stderr, "Erreur création renderer : %s\n", SDL_GetError());
-        SDL_DestroyWindow(window);
-        TTF_Quit();
-        IMG_Quit();
-        SDL_Quit();
-        return EXIT_FAILURE;
-    }
-
+    
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    
+    // --- TEXTURES IMAGES ---
     SDL_Texture *backgroundTexture = NULL;
-    SDL_Surface *backgroundSurface = IMG_Load("img/fond_menu.png");
-    SDL_Texture *texLogoMusique = NULL;
-    SDL_Surface *surfLogo = IMG_Load("img/logomusique.png");
-
-    if (surfLogo) {
-        texLogoMusique = SDL_CreateTextureFromSurface(renderer, surfLogo);
-        SDL_FreeSurface(surfLogo);
-    } else {
-        fprintf(stderr, "Erreur chargement image: %s\n", IMG_GetError());
-    }
-
-    if (!backgroundSurface) {
-        fprintf(stderr, "Erreur chargement image: %s\n", IMG_GetError());
-    } else {
+    SDL_Surface *backgroundSurface = IMG_Load("img/menu.jpg");
+    if (backgroundSurface) {
         backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
         SDL_FreeSurface(backgroundSurface);
     }
 
-    // Chargement de la police d'écriture
-    TTF_Font *police = TTF_OpenFont("Fonts/Enchanted Land.otf", 24); 
-    if (!police) {
-        fprintf(stderr, "Erreur chargement police : %s\n", TTF_GetError());
+    SDL_Texture *texLogoMusique = NULL;
+    SDL_Surface *surfLogo = IMG_Load("img/logomusique.png");
+    if (surfLogo) {
+        texLogoMusique = SDL_CreateTextureFromSurface(renderer, surfLogo);
+        SDL_FreeSurface(surfLogo);
     }
 
-    // Création des textures de texte
-    SDL_Color couleurTexte = {255,255,255,255}; // Blanc
+    // --- POLICES ET TEXTES ---
+    TTF_Font *policeMenu = TTF_OpenFont("Fonts/Enchanted Land.otf", 36); 
+    TTF_Font *policeTitre = TTF_OpenFont("Fonts/Enchanted Land.otf", 90);
+
+    SDL_Color couleurTexte = {255, 255, 255, 255};
     
-    SDL_Texture *textureTexteJouer = NULL;
-    SDL_Texture *textureTexteCoop = NULL;
-    SDL_Texture *textureTexteSolo = NULL;
-    SDL_Texture *textureTexteQuitter = NULL;
+    SDL_Texture *texJouer = NULL, *texParam = NULL, *texQuitter = NULL;
+    SDL_Texture *texSolo = NULL, *texCoop = NULL, *texTitre = NULL;
     
-    int jouerW = 0, jouerH = 0, quitterW = 0, quitterH = 0, soloH = 0, soloW = 0, coopH = 0, coopW = 0;
+    int wJouer=0, hJouer=0, wParam=0, hParam=0, wQuitter=0, hQuitter=0;
+    int wSolo=0, hSolo=0, wCoop=0, hCoop=0, wTitre=0, hTitre=0;
 
-    if (police) {
-        // Texte pour JOUER
-        SDL_Surface *surfaceJouer = TTF_RenderText_Blended(police, "JOUER", couleurTexte);
-        textureTexteJouer = SDL_CreateTextureFromSurface(renderer, surfaceJouer);
-        SDL_QueryTexture(textureTexteJouer, NULL, NULL, &jouerW, &jouerH);
-        SDL_FreeSurface(surfaceJouer); 
-        // Texte pour QUITTER
+    if (policeMenu && policeTitre) {
+        SDL_Surface *surf = TTF_RenderText_Blended(policeMenu, "Nouvelle partie", couleurTexte); // "Jouer"
+        texJouer = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texJouer, NULL, NULL, &wJouer, &hJouer); SDL_FreeSurface(surf);
 
-        SDL_Surface *surfaceQuitter = TTF_RenderText_Blended(police, "QUITTER", couleurTexte);
-        textureTexteQuitter = SDL_CreateTextureFromSurface(renderer, surfaceQuitter);
-        SDL_QueryTexture(textureTexteQuitter, NULL, NULL, &quitterW, &quitterH);
-        SDL_FreeSurface(surfaceQuitter);
-        // Texte pour COOP
+        surf = TTF_RenderText_Blended(policeMenu, "Options", couleurTexte); // "Paramètres"
+        texParam = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texParam, NULL, NULL, &wParam, &hParam); SDL_FreeSurface(surf);
 
-        SDL_Surface *surfaceCoop = TTF_RenderText_Blended(police, "COOP", couleurTexte);
-        textureTexteCoop = SDL_CreateTextureFromSurface(renderer, surfaceCoop);
-        SDL_QueryTexture(textureTexteCoop, NULL, NULL, &coopW, &coopH);
-        SDL_FreeSurface(surfaceCoop);
-        // Texte pour SOLO
+        surf = TTF_RenderText_Blended(policeMenu, "Quitter", couleurTexte);
+        texQuitter = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texQuitter, NULL, NULL, &wQuitter, &hQuitter); SDL_FreeSurface(surf);
 
-        SDL_Surface *surfaceSolo = TTF_RenderText_Blended(police, "SOLO", couleurTexte);
-        textureTexteSolo = SDL_CreateTextureFromSurface(renderer, surfaceSolo);
-        SDL_QueryTexture(textureTexteSolo, NULL, NULL, &soloW, &soloH);
-        SDL_FreeSurface(surfaceSolo);
+        surf = TTF_RenderText_Blended(policeMenu, "Aventure Solo", couleurTexte);
+        texSolo = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texSolo, NULL, NULL, &wSolo, &hSolo); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeMenu, "Coop en ligne", couleurTexte);
+        texCoop = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texCoop, NULL, NULL, &wCoop, &hCoop); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeTitre, "FOR THE KING", couleurTexte);
+        texTitre = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texTitre, NULL, NULL, &wTitre, &hTitre); SDL_FreeSurface(surf);
     }
 
-    // Définition des boutons 
-    SDL_Rect boutonJouer   = { 220, 80, 200, 50 };
-    SDL_Rect boutonSolo    = { 220, 160, 200, 50 };
-    SDL_Rect boutonCoop    = { 220, 240, 200, 50 };
-    SDL_Rect boutonQuitter = { 220, 320, 200, 50 };
-    SDL_Rect boutonMusique = { windowW - 100, windowH - 100, 80, 80 };
-
-    // Calcul pour centrer le texte dans les boutons
-    SDL_Rect rectTexteJouer   = { boutonJouer.x + (boutonJouer.w - jouerW) / 2, boutonJouer.y + (boutonJouer.h - jouerH) / 2, jouerW, jouerH };
-    SDL_Rect rectTexteSolo    = { boutonSolo.x + (boutonSolo.w - soloW) / 2, boutonSolo.y + (boutonSolo.h - soloH) / 2, soloW, soloH };
-    SDL_Rect rectTexteCoop    = { boutonCoop.x + (boutonCoop.w - coopW) / 2, boutonCoop.y + (boutonCoop.h - coopH) / 2, coopW, coopH };
-    SDL_Rect rectTexteQuitter = { boutonQuitter.x + (boutonQuitter.w - quitterW) / 2, boutonQuitter.y + (boutonQuitter.h - quitterH) / 2, quitterW, quitterH };
+    SDL_Rect btnJouer, btnParam, btnQuitter, btnSolo, btnCoop, btnMusique;
+    SDL_Rect rectTxtJouer, rectTxtParam, rectTxtQuitter, rectTxtSolo, rectTxtCoop, rectTxtTitre;
+    SDL_Rect panneauPrincipal, panneauSecondaire;
 
     int menuActif = 1;
+    int afficher_sous_menu_jouer = 0; 
     SDL_Event event;
 
-    void resizeUI() {
-        SDL_GetWindowSize(window, &windowW, &windowH);
-        boutonJouer.x = windowW / 3;
-        boutonJouer.y = windowH / 6;
-        boutonJouer.w = windowW / 3;
-        boutonJouer.h = windowH / 10;
-
-        boutonSolo.x = windowW / 3;
-        boutonSolo.y = windowH * 2 / 6;
-        boutonSolo.w = windowW / 3;
-        boutonSolo.h = windowH / 10;
-
-        boutonCoop.x = windowW / 3;
-        boutonCoop.y = windowH * 3 / 6;
-        boutonCoop.w = windowW / 3;
-        boutonCoop.h = windowH / 10;
-
-        boutonQuitter.x = windowW / 3;
-        boutonQuitter.y = windowH * 4 / 6;
-        boutonQuitter.w = windowW / 3;
-        boutonQuitter.h = windowH / 10;
-
-        boutonMusique.w = 80;
-        boutonMusique.h = 80;
-        boutonMusique.x = windowW - (boutonMusique.w + 20); 
-        boutonMusique.y = windowH - (boutonMusique.h + 20);
-
-        rectTexteJouer.x = boutonJouer.x + (boutonJouer.w - jouerW) / 2;
-        rectTexteJouer.y = boutonJouer.y + (boutonJouer.h - jouerH) / 2;
-
-        rectTexteSolo.x = boutonSolo.x + (boutonSolo.w - soloW) / 2;
-        rectTexteSolo.y = boutonSolo.y + (boutonSolo.h - soloH) / 2;
-
-        rectTexteCoop.x = boutonCoop.x + (boutonCoop.w - coopW) / 2;
-        rectTexteCoop.y = boutonCoop.y + (boutonCoop.h - coopH) / 2;
-
-        rectTexteQuitter.x = boutonQuitter.x + (boutonQuitter.w - quitterW) / 2;
-        rectTexteQuitter.y = boutonQuitter.y + (boutonQuitter.h - quitterH) / 2;
-    }
-
-    resizeUI();
-
-    /* --- BOUCLE PRINCIPALE ---*/
+    // Boucle principale
     while (menuActif) {
 
-        // Gestion de l'audio
+        // --- MISE A JOUR DES DIMENSIONS ---
+        SDL_GetWindowSize(window, &windowW, &windowH);
+        
+        int btnWidth = windowW / 4; 
+        int btnHeight = 45; 
+        
+        // Placement à gauche de l'écran
+        int titleX = windowW / 8;
+        int startX = titleX + (wTitre / 2) - (btnWidth / 2); 
+        int startY = windowH / 2.5;
+        int espacement = btnHeight + 8; // peu d'espace entre les boutons
+
+        // Boutons principaux 
+        btnJouer = (SDL_Rect){startX, startY, btnWidth, btnHeight};
+        btnParam = (SDL_Rect){startX, startY + espacement, btnWidth, btnHeight};
+        btnQuitter = (SDL_Rect){startX, startY + espacement * 2, btnWidth, btnHeight};
+
+        // Sous-boutons (placés à DROITE du panneau principal)
+        btnSolo = (SDL_Rect){btnJouer.x + btnJouer.w + 50, btnJouer.y, btnWidth, btnHeight};
+        btnCoop = (SDL_Rect){btnSolo.x, btnSolo.y + espacement, btnWidth, btnHeight};
+
+        // Bouton Musique 
+        btnMusique = (SDL_Rect){windowW - 80, windowH - 80, 60, 60};
+
+        int padding = 20;
+        
+        // On couvre l'espace de "Jouer" jusqu'à "Quitter"
+        panneauPrincipal = (SDL_Rect){
+            startX - padding, 
+            startY - padding, 
+            btnWidth + (padding * 2), 
+            (espacement * 2) + btnHeight + (padding * 2)
+        };
+        
+        // On couvre l'espace de "Solo" jusqu'à "Coop"
+        panneauSecondaire = (SDL_Rect){
+            btnSolo.x - padding, 
+            btnSolo.y - padding, 
+            btnWidth + (padding * 2), 
+            espacement + btnHeight + (padding * 2) 
+        };
+
+        // Centrage des textes dans les boutons
+        rectTxtJouer = (SDL_Rect){btnJouer.x + (btnJouer.w - wJouer)/2, btnJouer.y + (btnJouer.h - hJouer)/2, wJouer, hJouer};
+        rectTxtParam = (SDL_Rect){btnParam.x + (btnParam.w - wParam)/2, btnParam.y + (btnParam.h - hParam)/2, wParam, hParam};
+        rectTxtQuitter = (SDL_Rect){btnQuitter.x + (btnQuitter.w - wQuitter)/2, btnQuitter.y + (btnQuitter.h - hQuitter)/2, wQuitter, hQuitter};
+        rectTxtSolo = (SDL_Rect){btnSolo.x + (btnSolo.w - wSolo)/2, btnSolo.y + (btnSolo.h - hSolo)/2, wSolo, hSolo};
+        rectTxtCoop = (SDL_Rect){btnCoop.x + (btnCoop.w - wCoop)/2, btnCoop.y + (btnCoop.h - hCoop)/2, wCoop, hCoop};
+        
+        // Titre aligné au-dessus du menu
+        rectTxtTitre = (SDL_Rect){titleX, startY - 120, wTitre, hTitre};
+
+        int mouseX, mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+        SDL_Point mousePos = {mouseX, mouseY};
+
+        // --- GESTION AUDIO ---
         if (musique[indexMusique]) {
             Uint32 elapsed = SDL_GetTicks() - debutMusique;
-
-            // Déclencher fade out avant la fin
             if (!fadeDeclenche && elapsed >= dureeBoucle - fadeOutTime) {
                 Mix_FadeOutMusic(fadeOutTime);
                 fadeDeclenche = 1;
             }
-
-            // Si musique terminée ou arrêtée -> passer à la suivante
             if (!Mix_PlayingMusic()) {
-                indexMusique = (indexMusique + 1) % 2; // alterne 0 <-> 1
+                indexMusique = (indexMusique + 1) % 2;
                 Mix_FadeInMusic(musique[indexMusique], 1, 10000);
                 debutMusique = SDL_GetTicks();
                 fadeDeclenche = 0;
             }
         }
 
+        // --- GESTION EVENEMENTS ---
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                menuActif = 0;
-            }
-            if (event.type == SDL_KEYDOWN) {
-                if (event.key.keysym.sym == SDLK_f) {
-                    fullscreen = !fullscreen;
-                    if (fullscreen) {
-                        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-                    } else {
-                        SDL_SetWindowFullscreen(window, 0);
-                    }
-                    resizeUI();
-                }
+            if (event.type == SDL_QUIT) menuActif = 0;
+            
+            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_f) {
+                fullscreen = !fullscreen;
+                SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
             }
 
             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
-                int mouseX = event.button.x;
-                int mouseY = event.button.y;
-                SDL_Point p = {mouseX, mouseY};
+                SDL_Point p = {event.button.x, event.button.y};
 
-                // Clic JOUER
-                if (mouseX >= boutonJouer.x && mouseX <= (boutonJouer.x + boutonJouer.w) &&
-                    mouseY >= boutonJouer.y && mouseY <= (boutonJouer.y + boutonJouer.h)) {
-                    printf("Bouton JOUER cliqué !\n");
-                    lancer_jeu = 1; // On enregistre qu'on veut lancer le jeu
-                    menuActif = 0; // on sort du menu
+                if (SDL_PointInRect(&p, &btnJouer)) {
+                    afficher_sous_menu_jouer = !afficher_sous_menu_jouer;
                 }
 
-                // Clic SOLO
-                if (mouseX >= boutonSolo.x && mouseX <= (boutonSolo.x + boutonSolo.w) &&
-                    mouseY >= boutonSolo.y && mouseY <= (boutonSolo.y + boutonSolo.h)) {
-                    printf("Bouton SOLO cliqué !\n");
+                if (SDL_PointInRect(&p, &btnParam)) {
+                    printf("Bouton PARAMETRES cliqué !\n");
                 }
 
-                // Clic COOP
-                if (mouseX >= boutonCoop.x && mouseX <= (boutonCoop.x + boutonCoop.w) &&
-                    mouseY >= boutonCoop.y && mouseY <= (boutonCoop.y + boutonCoop.h)) {
-                    printf("Bouton COOP cliqué !\n");
-                }
-
-                // Clic QUITTER
-                if (mouseX >= boutonQuitter.x && mouseX <= (boutonQuitter.x + boutonQuitter.w) &&
-                    mouseY >= boutonQuitter.y && mouseY <= (boutonQuitter.y + boutonQuitter.h)) {
-                    printf("Bouton QUITTER cliqué !\n");
+                if (SDL_PointInRect(&p, &btnQuitter)) {
                     menuActif = 0;
                 }
 
-                // Clic musique
-                if (SDL_PointInRect(&p, &boutonMusique)) {
-                    if (Mix_PausedMusic()) {
-                        Mix_ResumeMusic();
-                        printf("Musique relancée\n");
-                    } else {
-                        Mix_PauseMusic();
-                        printf("Musique en pause\n");
+                if (afficher_sous_menu_jouer) {
+                    if (SDL_PointInRect(&p, &btnSolo) || SDL_PointInRect(&p, &btnCoop)) {
+                        lancer_jeu = 1;
+                        menuActif = 0;
                     }
+                }
+
+                if (SDL_PointInRect(&p, &btnMusique)) {
+                    if (Mix_PausedMusic()) Mix_ResumeMusic();
+                    else Mix_PauseMusic();
                 }
             }
         }
 
-        /* --- AFFICHAGE --- */
+        // --- AFFICHAGE ---
         SDL_RenderClear(renderer);
 
+        // Fond global
         if (backgroundTexture) {
-            SDL_Rect dest = {0,0,windowW,windowH};
+            SDL_Rect dest = {0, 0, windowW, windowH};
             SDL_RenderCopy(renderer, backgroundTexture, NULL, &dest);
         }
 
-        SDL_SetRenderDrawColor(renderer, 200, 100, 0, 255);
-        SDL_RenderFillRect(renderer, &boutonJouer);
-
-        SDL_SetRenderDrawColor(renderer, 200, 100, 0, 255);
-        SDL_RenderFillRect(renderer, &boutonSolo);
-
-        SDL_SetRenderDrawColor(renderer, 200, 100, 0, 255);
-        SDL_RenderFillRect(renderer, &boutonCoop);
-
-        SDL_SetRenderDrawColor(renderer, 200, 100, 0, 255);
-        SDL_RenderFillRect(renderer, &boutonQuitter);
-
-        if (texLogoMusique) {
-            // Dessin d'une bordure marron médiévale
-            SDL_SetRenderDrawColor(renderer, 101, 67, 33, 255); 
-            for(int i = 0; i < 5; i++) { 
-                SDL_Rect border = {boutonMusique.x - i, boutonMusique.y - i, boutonMusique.w + (i*2), boutonMusique.h + (i*2)};
-                SDL_RenderDrawRect(renderer, &border);
-            }
-            SDL_RenderCopy(renderer, texLogoMusique, NULL, &boutonMusique);
+        // --- DESSIN PANNEAU PRINCIPAL ---
+        // Fond sombre du panneau
+        SDL_SetRenderDrawColor(renderer, 20, 25, 20, 220); // Noir transparent
+        SDL_RenderFillRect(renderer, &panneauPrincipal);
+        // Bordure du panneau (fine et grisâtre)
+        SDL_SetRenderDrawColor(renderer, 130, 140, 120, 255);
+        for(int i = 0; i < 2; i++) { // Double épaisseur
+            SDL_Rect b = {panneauPrincipal.x - i, panneauPrincipal.y - i, panneauPrincipal.w + (i*2), panneauPrincipal.h + (i*2)};
+            SDL_RenderDrawRect(renderer, &b);
         }
 
-        if (textureTexteJouer) SDL_RenderCopy(renderer, textureTexteJouer, NULL, &rectTexteJouer);
-        if (textureTexteSolo) SDL_RenderCopy(renderer, textureTexteSolo, NULL, &rectTexteSolo);
-        if (textureTexteCoop) SDL_RenderCopy(renderer, textureTexteCoop, NULL, &rectTexteCoop);
-        if (textureTexteQuitter) SDL_RenderCopy(renderer, textureTexteQuitter, NULL, &rectTexteQuitter);
+        // Dessin des boutons dans le panneau
+        if (texJouer) dessinerBouton(renderer, texJouer, btnJouer, rectTxtJouer, mousePos);
+        if (texParam) dessinerBouton(renderer, texParam, btnParam, rectTxtParam, mousePos);
+        if (texQuitter) dessinerBouton(renderer, texQuitter, btnQuitter, rectTxtQuitter, mousePos);
+
+        // --- DESSIN SOUS-MENU ---
+        if (afficher_sous_menu_jouer) {
+            // Panneau secondaire
+            SDL_SetRenderDrawColor(renderer, 20, 25, 20, 220);
+            SDL_RenderFillRect(renderer, &panneauSecondaire);
+            SDL_SetRenderDrawColor(renderer, 130, 140, 120, 255);
+            for(int i = 0; i < 2; i++) {
+                SDL_Rect b = {panneauSecondaire.x - i, panneauSecondaire.y - i, panneauSecondaire.w + (i*2), panneauSecondaire.h + (i*2)};
+                SDL_RenderDrawRect(renderer, &b);
+            }
+
+            // Boutons Solo / Coop
+            if (texSolo) dessinerBouton(renderer, texSolo, btnSolo, rectTxtSolo, mousePos);
+            if (texCoop) dessinerBouton(renderer, texCoop, btnCoop, rectTxtCoop, mousePos);
+        }
+
+        // --- Musique logo ---
+        if (texLogoMusique) {
+            SDL_RenderCopy(renderer, texLogoMusique, NULL, &btnMusique);
+        }
+
+        // Titre avec une légère ombre
+        if (texTitre) {
+            SDL_Rect ombre = {rectTxtTitre.x + 3, rectTxtTitre.y + 3, rectTxtTitre.w, rectTxtTitre.h};
+            SDL_SetTextureColorMod(texTitre, 0, 0, 0);
+            SDL_SetTextureAlphaMod(texTitre, 180);
+            SDL_RenderCopy(renderer, texTitre, NULL, &ombre);
+            
+            SDL_SetTextureColorMod(texTitre, 255, 255, 255);
+            SDL_SetTextureAlphaMod(texTitre, 255);
+            SDL_RenderCopy(renderer, texTitre, NULL, &rectTxtTitre);
+        }
 
         SDL_RenderPresent(renderer);
     }
 
-    /* --- NETTOYAGE ---*/
-    if (textureTexteJouer) SDL_DestroyTexture(textureTexteJouer);
-    if (textureTexteSolo) SDL_DestroyTexture(textureTexteSolo);
-    if (textureTexteCoop) SDL_DestroyTexture(textureTexteCoop);
-    if (textureTexteQuitter) SDL_DestroyTexture(textureTexteQuitter);
-    if (police) TTF_CloseFont(police);
+    // --- NETTOYAGE ---
+    if (texJouer) SDL_DestroyTexture(texJouer);
+    if (texParam) SDL_DestroyTexture(texParam);
+    if (texQuitter) SDL_DestroyTexture(texQuitter);
+    if (texSolo) SDL_DestroyTexture(texSolo);
+    if (texCoop) SDL_DestroyTexture(texCoop);
+    if (texTitre) SDL_DestroyTexture(texTitre);
+    if (policeMenu) TTF_CloseFont(policeMenu);
+    if (policeTitre) TTF_CloseFont(policeTitre);
     if (backgroundTexture) SDL_DestroyTexture(backgroundTexture);
     if (texLogoMusique) SDL_DestroyTexture(texLogoMusique);
 
@@ -340,7 +350,6 @@ int main() {
     IMG_Quit(); 
     SDL_Quit();
 
-    // Lance le jeu si on clique sur Jouer (à revoir car c'est une version simple)
     if (lancer_jeu == 1) system("./bin/fortheking");
     
     return EXIT_SUCCESS;
