@@ -10,6 +10,7 @@
 #include "../lib/carte.h"
 #include "../lib/perso.h"
 #include "../lib/affichage_infos.h"
+#include "../lib/combat.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
@@ -165,6 +166,8 @@ int main() {
         }
     }
 
+    combat_t * combat_actuel = NULL;
+
     // Génération du monde
     srand((unsigned int)time(NULL));
     init_carte(carte);
@@ -319,8 +322,27 @@ int main() {
                             if (cheminTrouve && distReelle != -1 && distReelle <= portee) {
 
                                 if (case_occupee(carte, carte_x, carte_y) == VRAI) {
-                                    case_selection_x = carte_x;
-                                    case_selection_y = carte_y;
+                                    monstre_t * monstre = carte[carte_y][carte_x].monstre;
+
+                                    if (monstre != NULL && combat_actuel == NULL) {
+                                        combat_actuel = malloc(sizeof(combat_t));
+                                        
+                                        combat_actuel->perso = perso;
+                                        combat_actuel->monstre = monstre;
+                                        combat_actuel->pFenetre = NULL;
+                                        combat_actuel->renderer = NULL;
+                                        combat_actuel->texture_monstre = NULL;
+                                        combat_actuel->texture_perso = NULL;
+                                        combat_actuel->texture_fond_ecran = NULL;
+
+                                        ouvrir_fenetre_combat(&combat_actuel);
+                                        case_selection_x = carte_x;
+                                        case_selection_y = carte_y;
+                                    } else {
+                                        case_selection_x = carte_x;
+                                        case_selection_y = carte_y;
+                                    }
+
                                 } else {
                                     perso->x = carte_x; 
                                     perso->y = carte_y;
@@ -387,7 +409,9 @@ int main() {
             SDL_RenderCopy ( renderer , texte_tex , NULL , &txtDestRect );
 
             SDL_RenderPresent(renderer);
+            
             majAffichage = 0;
+
         }
 
     }
@@ -413,8 +437,12 @@ int main() {
     // Destruction en mémoire des monstres notamment sur la carte
     liberer_memoire_carte(carte);
 
-    // Destruction du personnage
+    // Destruction du personnagec
     detruire_perso(&perso);
+
+    if (combat_actuel != NULL) {
+        detruire_fenetre_combat(&combat_actuel);
+    }
 
     Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
