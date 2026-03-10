@@ -80,9 +80,9 @@ int main() {
     }
 
     char *nom_images[NB_BIOMES] = {
-        "img/terre.png", "img/eau.png",
-        "img/desert.png", "img/neige.png",
-        "img/foret.png"
+        "img/terrev1.png", "img/eauv1.png",
+        "img/desertv1.png", "img/neigev1.png",
+        "img/foretv1.png"
     };
 
     SDL_Texture *textures_cases[NB_BIOMES];
