@@ -81,8 +81,8 @@ int main() {
     }
 
     char *nom_images[NB_BIOMES] = {
-        "img/terrev1.png", "img/eauv1.png",
-        "img/desertv1.png", "img/neigev2.png",
+        "img/terrev1.png", "img/eauv2.png",
+        "img/desertv1.png", "img/neigev3.png",
         "img/foretv1.png"
     };
 
