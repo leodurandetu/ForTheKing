@@ -92,6 +92,24 @@ void dessiner_hex_texture(SDL_Renderer * renderer, SDL_Texture * texture, float 
     SDL_RenderGeometry(renderer, texture, sommets, 7, indices, 18);
 }
 
+/* Léo */
+/*
+ * Fonction utile pour afficher une texture centrée sur une case
+ */
+ static void dessiner_texture(SDL_Renderer* renderer, SDL_Texture* texture, float cx, float cy, float taille, float echelle) {
+    
+    if (texture != NULL) {
+        SDL_Rect dst = {
+            (int)(cx - taille * echelle / 2),
+            (int)(cy - taille * echelle / 2),
+            (int)(taille * echelle),
+            (int)(taille * echelle)
+        };
+
+        SDL_RenderCopy(renderer, texture, NULL, &dst);
+    }
+
+}
 
 /* Massoud principalement, Léo secondairement */
 /*
@@ -119,117 +137,94 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     // Activation du mode BLEND pour que l'alpha fonctionne
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-    float rayon = tailleCase / 2.0f;                    
-    float hex_w = 2.0f * rayon;                        
-    float hex_h = sqrtf(3) * rayon;                    
-    float espacement_colonnes = hex_w * 0.75f;       
+    float rayonHex = tailleCase / 2.0f; 
 
-    float camX = persX * espacement_colonnes;
-    float camY = persY * hex_h + (persX % 2 ? hex_h / 2.0f : 0);
+    float largeurHex = 2.0f * rayonHex;
+    float hauteurHex = sqrtf(3) * rayonHex;
+                   
+    float espacementX = largeurHex * 0.75f;       
+    float espacementY = hauteurHex;
 
-    int decalageX = (int)(lFenetre / 2 - camX - hex_w / 2);
-    int decalageY = (int)(hFenetre / 2 - camY - hex_h / 2);
+    /* Position du personnage au centre de la carte */
+    float positionPersX = persX * espacementX;
+    float decalagePersColonne = (persX % 2) ? hauteurHex / 2.0f : 0.0f;
+    float positionPersY = persY * hauteurHex + decalagePersColonne;
+
+    /* Calcul du décalage pour centrer l'affichage sur le personnage */
+    int decalageX = (int) (lFenetre / 2 - positionPersX - largeurHex / 2);
+    int decalageY = (int) (hFenetre / 2 - positionPersY - hauteurHex / 2);
+
+    /*
+     * Au lieu de traiter toute la carte, on calcule les bornes de
+     * la carte à traiter, afin d'éviter de faire des tours de
+     * boucles sur toute la carte, mais seulement la petite partie
+     * visible à l'écran.
+     */
+    int xMin = max(0, (int) ((-largeurHex / 2 - decalageX) / espacementX));
+    int xMax = min(TAILLE_CARTE - 1, (int) ((lFenetre + largeurHex / 2 - decalageX) / espacementX));
+
+    int yMin = max(0, (int)((-hauteurHex / 2 - decalageY) / espacementY));
+    int yMax = min(TAILLE_CARTE - 1, (int)((hFenetre + hauteurHex / 2 - decalageY) / espacementY));
 
     int x;
     int y;
 
-    for (x = 0; x < TAILLE_CARTE; x++) {
-        for (y = 0; y < TAILLE_CARTE; y++) {
+    for (x = xMin; x <= xMax; x++) {
+        for (y = yMin; y <= yMax; y++) {
             case_t maCase = carte[y][x];
 
-            float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
-            float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
+            float cx = x * espacementX + largeurHex / 2.0f + decalageX;
+            float decalageColonne = (x % 2) ? (hauteurHex / 2.0f) : 0.0f;
+            float cy = y * espacementY + decalageColonne + hauteurHex / 2.0f + decalageY;
 
-            /*
-             * pour gagner en performance, on vérifie si
-             * l'hexagone est sur l'écran avant de l'afficher
-            */
-            if ((cx + hex_w/2) >= 0 && (cx - hex_w/2) <= lFenetre 
-             && (cy + hex_h/2) >= 0 && (cy - hex_h/2) <= hFenetre) {
-                /* Texture du Biome */
-                SDL_Texture *tex_actuelle;
+            /* Texture du Biome */
+            SDL_Texture *tex_actuelle;
 
-                int estVisible = 1;
+            int estVisible = 1;
                 
-                if (maCase.estVisible) {
-                    tex_actuelle = textures_cases[maCase.biome];
-                    estVisible = 1;
-                } else {
-                    tex_actuelle = texture_brouillard;
-                    estVisible = 0;
+            if (maCase.estVisible) {
+                tex_actuelle = textures_cases[maCase.biome];
+                estVisible = 1;
+            } else {
+                tex_actuelle = texture_brouillard;
+                estVisible = 0;
+            }
+
+            if (tex_actuelle) {
+                dessiner_hex_texture(renderer, tex_actuelle, cx, cy, rayonHex);
+            }
+
+            if (estVisible) {
+                SDL_Texture *tex_obstacle = NULL;
+
+                /* Affichage des obstacles */
+                switch(maCase.terrain) {
+                    case ARBRES:    tex_obstacle = textures_obstacles[0]; break;
+                    case MONTAGNES: tex_obstacle = textures_obstacles[1]; break;
+                    case CACTUS:    tex_obstacle = textures_obstacles[2]; break;
+                    case BASSIN_EAU:tex_obstacle = textures_obstacles[3]; break;
+                    default: break;
                 }
 
-                if (tex_actuelle) {
-                    dessiner_hex_texture(renderer, tex_actuelle, cx, cy, rayon);
+                dessiner_texture(renderer, tex_obstacle, cx, cy, largeurHex, 0.65f);
+
+                /* Affichage du monstre si il existe */
+                if (maCase.monstre != NULL) {
+                    dessiner_texture(renderer, texture_monstre, cx, cy, largeurHex, 0.65f);
                 }
 
-                if (estVisible) {
-
-                    SDL_Texture *tex_obstacle = NULL;
-
-                    /* Affichage des obstacles */
-                    switch(maCase.terrain) {
-                        case ARBRES:    tex_obstacle = textures_obstacles[0]; break;
-                        case MONTAGNES: tex_obstacle = textures_obstacles[1]; break;
-                        case CACTUS:    tex_obstacle = textures_obstacles[2]; break;
-                        case BASSIN_EAU:tex_obstacle = textures_obstacles[3]; break;
-                        default: break;
-                    }
-
-                    if (tex_obstacle != NULL) {
-                        float echelle_obs = 0.65f; // ajuster
-                        SDL_Rect dstRectObs;
-                        dstRectObs.w = (int) (hex_w * echelle_obs);
-                        dstRectObs.h = (int) (hex_w * echelle_obs);
-                        dstRectObs.x = (int)(cx - dstRectObs.w / 2);
-                        dstRectObs.y = (int)(cy - dstRectObs.h / 2);
-
-                        SDL_RenderCopy(renderer, tex_obstacle, NULL, &dstRectObs);
-                    }
-
-                    /* Affichage du monstre si il existe */
-                    if (maCase.monstre != NULL) {
-
-                        if (texture_monstre) {
-                            float echelle = 0.65f;
-
-                            SDL_Rect dstRect;
-                            dstRect.w = (int) (hex_w * echelle);
-                            dstRect.h = (int) (hex_w * echelle); // Carré
-                            /* Centrage automatique */
-                            dstRect.x = (int)(cx - dstRect.w / 2);
-                            dstRect.y = (int)(cy - dstRect.h / 2);
-
-                            SDL_RenderCopy(renderer, texture_monstre, NULL, &dstRect);
-                        }
-
-                    }
-
-                    dessiner_contour_dore(renderer, cx, cy, rayon);
-                }
+                dessiner_contour_dore(renderer, cx, cy, rayonHex);
 
                 if (maCase.batiment.type != PAS_DE_BATIMENT) {
-                    SDL_Texture * texture = NULL;
-                        
+                    SDL_Texture * texture_batiment = NULL;
+                            
                     if (maCase.batiment.type == TOUR_DU_BOSS) {
-                        texture = textures_batiments[1];
+                        texture_batiment = textures_batiments[1];
                     } else if (estVisible) {
-                        texture = textures_batiments[0];
+                        texture_batiment = textures_batiments[0];
                     }
 
-                    if (texture) {
-                        float echelle = 0.85f;
-
-                        SDL_Rect dstRect;
-                        dstRect.w = (int) (hex_w * echelle);
-                        dstRect.h = (int) (hex_w * echelle); // Carré
-                        /* Centrage automatique */
-                        dstRect.x = (int)(cx - dstRect.w / 2);
-                        dstRect.y = (int)(cy - dstRect.h / 2);
-
-                        SDL_RenderCopy(renderer, texture, NULL, &dstRect);
-                    }
-
+                    dessiner_texture(renderer, texture_batiment, cx, cy, largeurHex, 0.85f);
                 }
 
             }
@@ -242,27 +237,28 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
     /* Overlays */
     if (case_selection_x >= 0 && case_selection_y >= 0) {
-        float cx = case_selection_x * espacement_colonnes + hex_w / 2.0f + decalageX;
-        float cy = case_selection_y * hex_h + (case_selection_x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
+        float cx = case_selection_x * espacementX + largeurHex / 2.0f + decalageX;
+        float decalageColonne = (case_selection_x % 2) ? (hauteurHex / 2.0f) : 0.0f;
+        float cy = case_selection_y * espacementY + decalageColonne + hauteurHex / 2.0f + decalageY;
         int distanceChemin = -1;
 
         if (chemin_valide(carte, persX, persY, case_selection_x, case_selection_y, portee, perso, &distanceChemin)) {
             
             if (carte[case_selection_y][case_selection_x].monstre != NULL) {
                 SDL_Color couleur = { 0, 255, 0, 120 }; // Vert : monstre atteignable
-                remplir_hexagone(renderer, cx, cy, rayon, couleur);
+                remplir_hexagone(renderer, cx, cy, rayonHex, couleur);
             } else if (carte[case_selection_y][case_selection_x].batiment.type != PAS_DE_BATIMENT) {
                 SDL_Color couleur = { 255, 0, 0, 120 }; // Rouge : impossible (pour le moment)
-                remplir_hexagone(renderer, cx, cy, rayon, couleur);
+                remplir_hexagone(renderer, cx, cy, rayonHex, couleur);
             } else {
                 SDL_Color couleur = { 0, 0, 0, 120 };   // Noir : case vide atteignable
-                remplir_hexagone(renderer, cx, cy, rayon, couleur);
+                remplir_hexagone(renderer, cx, cy, rayonHex, couleur);
             }
 
         } else {
             // Trop loin ou chemin bloqué
             SDL_Color couleur = { 255, 0, 0, 120 };     // Rouge : impossible
-            remplir_hexagone(renderer, cx, cy, rayon, couleur);
+            remplir_hexagone(renderer, cx, cy, rayonHex, couleur);
         }
 
     }
@@ -284,9 +280,10 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                 int distanceChemin = -1;
                 
                 if (chemin_valide(carte, persX, persY, x, y, portee, perso, &distanceChemin)) {
-                    float cx = x * espacement_colonnes + hex_w / 2.0f + decalageX;
-                    float cy = y * hex_h + (x % 2 ? hex_h / 2.0f : 0) + hex_h / 2.0f + decalageY;
-                    int tailleCarre = rayon * 0.25f;
+                    float cx = x * espacementX + largeurHex / 2.0f + decalageX;
+                    float decalageColonne = (x % 2) ? (hauteurHex / 2.0f) : 0.0f;
+                    float cy = y * espacementY + decalageColonne + hauteurHex / 2.0f + decalageY;
+                    int tailleCarre = rayonHex * 0.25f;
 
                     SDL_Rect rect = { (int)cx - tailleCarre / 2, (int)cy - tailleCarre / 2, tailleCarre, tailleCarre };
                     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -310,6 +307,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     }
 
 }
+
 /* ========================================================================*/
 
 /* Leo */
@@ -695,25 +693,38 @@ static int peut_atteindre_rec(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     dejaVisite[yDepart][xDepart] = VRAI;
     int meilleure_dist = INFINI;
 
-    int dx[] = {  1,  1,  0, -1, -1,  0};
-    int dy[] = {  0, -1, -1,  0,  1,  1};
+    int dx[2][6] = {
+        { 1,  0, -1, -1, -1,  0 },  // pair
+        { 1,  1,  0, -1,  0,  1 }   // impair
+    };
+
+    int dy[2][6] = {
+        { 0,  1,  1,  0, -1, -1 },  // pair
+        { 0,  1,  1,  0, -1, -1 }   // impair
+    };
+
+    int cout_deplacement[2][6] = {
+        { 1,  1,  2,  1,  2,  1 },  // pair
+        { 1,  2,  1,  1,  1,  2}    // impair
+    };
 
     int direction;
 
     for (direction = 0; direction < 6; direction++) {
-        int nx = xDepart + dx[direction];
-        int ny = yDepart + dy[direction];
+        int nx = xDepart + dx[xDepart % 2][direction];
+        int ny = yDepart + dy[xDepart % 2][direction];
+        int cout = cout_deplacement[xDepart % 2][direction];
 
         if (nx >= 0 && nx < TAILLE_CARTE && ny >= 0 && ny < TAILLE_CARTE) {
 
             if (deplacement_possible(carte, perso, nx, ny)) {
                 /* Appel récursif */
-                int distance = peut_atteindre_rec(carte, nx, ny, xCible, yCible, pts_deplacement_restants - 1, dejaVisite, perso);
+                int distance = peut_atteindre_rec(carte, nx, ny, xCible, yCible, pts_deplacement_restants - cout, dejaVisite, perso);
 
                 if (distance != INFINI) {
 
-                    if (distance + 1 < meilleure_dist) {
-                        meilleure_dist = distance + 1;
+                    if (distance + cout < meilleure_dist) {
+                        meilleure_dist = distance + cout;
                     }
 
                 }

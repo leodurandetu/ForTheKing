@@ -319,7 +319,7 @@ int main() {
                             int distReelle = -1;
                             int cheminTrouve = chemin_valide(carte, perso->x, perso->y, carte_x, carte_y, portee, perso, &distReelle);
 
-                            if (cheminTrouve && distReelle != -1 && distReelle <= portee) {
+                            if (cheminTrouve && distReelle != -1) {
 
                                 if (case_occupee(carte, carte_x, carte_y) == VRAI) {
                                     monstre_t * monstre = carte[carte_y][carte_x].monstre;
