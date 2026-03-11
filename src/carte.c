@@ -3,7 +3,6 @@
 #include <math.h>
 #include "../lib/carte.h"
 #include "../lib/couleur.h"
-#include <SDL2/SDL2_gfxPrimitives.h>
 #include "../lib/monstre.h"
 #include "../lib/perso.h"
 
@@ -29,27 +28,6 @@ Cela permet de gagner en temps de calcul.
 */
 float HEX_COS[6];
 float HEX_SIN[6];
-
-void dessiner_hexagone(SDL_Renderer * renderer, float cx, float cy, float rayon, SDL_Color couleur)
-{
-    SDL_SetRenderDrawColor(renderer, couleur.r, couleur.g, couleur.b, couleur.a);
-
-    int i;
-
-    for (i = 0; i < 6; i++)
-    {
-        int prochain = (i + 1) % 6;
-
-        float x1 = cx + rayon * HEX_COS[i];
-        float y1 = cy + rayon * HEX_SIN[i];
-
-        float x2 = cx + rayon * HEX_COS[prochain];
-        float y2 = cy + rayon * HEX_SIN[prochain];
-
-        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-    }
-
-}
 
 void remplir_hexagone(SDL_Renderer *renderer, float cx, float cy, float rayon, SDL_Color couleur)
 {
@@ -95,21 +73,6 @@ void dessiner_contour_dore(SDL_Renderer * renderer, float cx, float cy, float ra
 
     dessiner_contour_hex(renderer, cx, cy, rayon, or_clair);
     dessiner_contour_hex(renderer, cx, cy, rayon - 2, or_sombre);
-}
-
-void dessiner_hex(SDL_Renderer * renderer, float cx, float cy, float rayon, SDL_Color couleur, int rempli, int contour)
-{
-
-    if (rempli)
-    {
-        remplir_hexagone(renderer, cx, cy, rayon, couleur);
-    }
-
-    if (contour)
-    {
-        dessiner_hexagone(renderer, cx, cy, rayon, couleur);
-    }
-
 }
 
 void dessiner_hex_texture(SDL_Renderer * renderer, SDL_Texture * texture, float cx, float cy, float rayon)
