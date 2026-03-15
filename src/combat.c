@@ -1,11 +1,11 @@
 #include "../lib/combat.h"
 
-extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int hover, const char *texte, SDL_Texture *texture_arme)
+extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int survole, const char *texte, SDL_Texture *texture_arme)
 {
     // transparence
     SDL_SetRenderDrawBlendMode(combat->renderer, SDL_BLENDMODE_BLEND);
 
-    if (hover) {
+    if (survole) {
         // Survolé -> fond un peu plus clair et bordure Jaune/Or
         SDL_SetRenderDrawColor(combat->renderer, 255, 255, 255, 60); 
         SDL_RenderFillRect(combat->renderer, r_icone);
@@ -25,7 +25,7 @@ extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int hover, const
 
     if (combat->font) {
         SDL_Color jaune_clair = {255, 235, 120, 255}; 
-        if (!hover) {
+        if (!survole) {
             jaune_clair.a = 150; // Un peu transparent si pas survolé
         }
         SDL_Surface *surf = TTF_RenderUTF8_Blended(combat->font, texte, jaune_clair);
@@ -151,8 +151,8 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
                     point.x = e.motion.x;
                     point.y = e.motion.y;
 
-                    (*combat)->hover_bouton_leger = SDL_PointInRect(&point, &((*combat)->bouton_leger));
-                    (*combat)->hover_bouton_lourd = SDL_PointInRect(&point, &((*combat)->bouton_lourd));
+                    (*combat)->survole_bouton_leger = SDL_PointInRect(&point, &((*combat)->bouton_leger));
+                    (*combat)->survole_bouton_lourd = SDL_PointInRect(&point, &((*combat)->bouton_lourd));
 
                     majAffichage = 1;
                     break;
@@ -279,8 +279,8 @@ void maj_affichage_fenetre_combat(combat_t *combat)
         taille_icone
     };
 
-    dessiner_icone(combat, &combat->bouton_leger, combat->hover_bouton_leger, "Attaque Légère", combat->texture_attaque_legere);
-    dessiner_icone(combat, &combat->bouton_lourd, combat->hover_bouton_lourd, "Attaque Lourde", combat->texture_attaque_lourde);
+    dessiner_icone(combat, &combat->bouton_leger, combat->survole_bouton_leger, "Attaque Légère", combat->texture_attaque_legere);
+    dessiner_icone(combat, &combat->bouton_lourd, combat->survole_bouton_lourd, "Attaque Lourde", combat->texture_attaque_lourde);
 
     SDL_RenderPresent(renderer);
 }
