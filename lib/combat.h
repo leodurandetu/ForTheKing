@@ -20,6 +20,9 @@ typedef struct {
     SDL_Texture * texture_perso;
     SDL_Texture * texture_fond_ecran;
 
+    SDL_Texture * texture_attaque_legere;
+    SDL_Texture * texture_attaque_lourde; // MAssoud : j'ai ajouté pour les img des attaques
+
     SDL_Rect bouton_leger;
     SDL_Rect bouton_lourd;
 
@@ -33,8 +36,11 @@ typedef struct {
 /* Prototypes des fonctions */
 
 /* Leo */
-void ouvrir_fenetre_combat(combat_t ** combat);
-void maj_affichage_fenetre_combat(combat_t * combat);
-void detruire_fenetre_combat(combat_t ** combat);
+extern void ouvrir_fenetre_combat(combat_t ** combat);
+extern void maj_affichage_fenetre_combat(combat_t * combat);
+extern void detruire_fenetre_combat(combat_t ** combat);
+extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, 
+                        int hover, const char *texte, 
+                        SDL_Texture *texture_arme);
 
 #endif
