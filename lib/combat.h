@@ -26,8 +26,8 @@ typedef struct {
     SDL_Rect bouton_leger;
     SDL_Rect bouton_lourd;
 
-    int hover_bouton_leger;
-    int hover_bouton_lourd;
+    int survole_bouton_leger;
+    int survole_bouton_lourd;
 
     TTF_Font * font;
 
@@ -40,7 +40,7 @@ extern void ouvrir_fenetre_combat(combat_t ** combat);
 extern void maj_affichage_fenetre_combat(combat_t * combat);
 extern void detruire_fenetre_combat(combat_t ** combat);
 extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, 
-                        int hover, const char *texte, 
+                        int survole, const char *texte, 
                         SDL_Texture *texture_arme);
 
 #endif
