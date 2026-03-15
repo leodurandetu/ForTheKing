@@ -1,6 +1,6 @@
 #include "../lib/combat.h"
 
-extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int survole, const char *texte, SDL_Texture *texture_arme)
+extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int survole, SDL_Texture *texture_arme, SDL_Texture *texture_texte, SDL_Rect *rect_texte)
 {
     // transparence
     SDL_SetRenderDrawBlendMode(combat->renderer, SDL_BLENDMODE_BLEND);
@@ -23,27 +23,16 @@ extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int survole, con
         SDL_RenderCopy(combat->renderer, texture_arme, NULL, r_icone);
     }
 
-    if (combat->font) {
-        SDL_Color jaune_clair = {255, 235, 120, 255}; 
-        if (!survole) {
-            jaune_clair.a = 150; // Un peu transparent si pas survolé
-        }
-        SDL_Surface *surf = TTF_RenderUTF8_Blended(combat->font, texte, jaune_clair);
-        if (surf) {
-            SDL_Texture *tex = SDL_CreateTextureFromSurface(combat->renderer, surf);
-            SDL_Rect txt;
-            txt.w = surf->w;
-            txt.h = surf->h;
-            // Centrage horizontal sous l'icône
-            txt.x = r_icone->x + (r_icone->w - txt.w) / 2;
-            // Placement juste en dessous des img
-            txt.y = r_icone->y + r_icone->h + 10; 
-        
-            SDL_RenderCopy(combat->renderer, tex, NULL, &txt);
-            SDL_DestroyTexture(tex);
-            SDL_FreeSurface(surf);
-        }
+    if (texture_texte && rect_texte) {
+        SDL_Rect rect = *rect_texte;
+
+        // Centrer le texte horizontalement par rapport à l'icône
+        rect.x = r_icone->x + (r_icone->w - rect.w) / 2;
+        rect.y = r_icone->y + r_icone->h + 5; // un peu en dessous de l'icône
+
+        SDL_RenderCopy(combat->renderer, texture_texte, NULL, &rect);
     }
+
 }
 
 static void dessiner_fond_ecran(combat_t *combat, int largeur, int hauteur)
@@ -132,6 +121,27 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
     TTF_Init();
     (*combat)->font = TTF_OpenFont("Fonts/Enchanted Land.otf", 24);
 
+    SDL_Color blanc = {255, 255, 255, 255}; // blanc
+
+    // Texte bouton léger
+    SDL_Surface *surf_leger = TTF_RenderUTF8_Blended((*combat)->font, "Attaque Légère", blanc);
+
+    if (surf_leger) {
+        (*combat)->texture_texte_leger = SDL_CreateTextureFromSurface((*combat)->renderer, surf_leger);
+        (*combat)->rect_texte_leger.w = surf_leger->w;
+        (*combat)->rect_texte_leger.h = surf_leger->h;
+        SDL_FreeSurface(surf_leger);
+    }
+
+    // Texte bouton lourd
+    SDL_Surface *surf_lourd = TTF_RenderUTF8_Blended((*combat)->font, "Attaque Lourde", blanc);
+    if (surf_lourd) {
+        (*combat)->texture_texte_lourd = SDL_CreateTextureFromSurface((*combat)->renderer, surf_lourd);
+        (*combat)->rect_texte_lourd.w = surf_lourd->w;
+        (*combat)->rect_texte_lourd.h = surf_lourd->h;
+        SDL_FreeSurface(surf_lourd);
+    }
+
     int running = 1;
     int majAffichage = 1;
 
@@ -219,7 +229,7 @@ void maj_affichage_fenetre_combat(combat_t *combat)
     if (combat->texture_fond_ecran) {
         SDL_QueryTexture(combat->texture_fond_ecran, NULL, NULL, &w_fond, &h_fond);
     } else {
-        w_fond = largeur; h_fond = hauteur; 
+        w_fond = largeur; h_fond = hauteur;
     }
 
     float echelle = fmax( (float) largeur / w_fond, (float) hauteur / h_fond);
@@ -258,29 +268,29 @@ void maj_affichage_fenetre_combat(combat_t *combat)
 
     // On fait des icônes carrées, plus petites
     int taille_icone = largeur * 0.08f; 
-    int espace_entre_icones = largeur * 0.02f;
-    int largeur_totale = (taille_icone * 2) + espace_entre_icones;
-    int x_depart = (largeur - largeur_totale) / 2;
 
     // Placement en hauteur : un peu au-dessus du sol, entre les personnages
     int y_icones = y_personnage + (taille * 0.2f);
 
+    /* 35% de la largeur à gauche / à droite */
+    int marge_bord = largeur * 0.35f;
+
     combat->bouton_leger = (SDL_Rect){
-        x_depart,
+        marge_bord,
         y_icones,
         taille_icone, 
         taille_icone
     };
 
     combat->bouton_lourd = (SDL_Rect){
-        x_depart + taille_icone + espace_entre_icones, 
+        largeur - marge_bord - taille_icone, 
         y_icones,
         taille_icone, 
         taille_icone
     };
 
-    dessiner_icone(combat, &combat->bouton_leger, combat->survole_bouton_leger, "Attaque Légère", combat->texture_attaque_legere);
-    dessiner_icone(combat, &combat->bouton_lourd, combat->survole_bouton_lourd, "Attaque Lourde", combat->texture_attaque_lourde);
+    dessiner_icone(combat, &combat->bouton_leger, combat->survole_bouton_leger, combat->texture_attaque_legere, combat->texture_texte_leger, &combat->rect_texte_leger);
+    dessiner_icone(combat, &combat->bouton_lourd, combat->survole_bouton_lourd, combat->texture_attaque_lourde, combat->texture_texte_lourd, &combat->rect_texte_lourd);
 
     SDL_RenderPresent(renderer);
 }
@@ -322,6 +332,15 @@ void detruire_fenetre_combat(combat_t ** combat) {
         if (((*combat)->pFenetre) != NULL) {
             SDL_DestroyWindow((*combat)->pFenetre);
             ((*combat)->pFenetre) = NULL;
+        }
+
+        if (((*combat)->texture_texte_leger) != NULL) {
+            SDL_DestroyTexture((*combat)->texture_texte_leger);
+            (*combat)->texture_texte_leger = NULL;
+        }
+        if (((*combat)->texture_texte_lourd) != NULL) {
+            SDL_DestroyTexture((*combat)->texture_texte_lourd);
+            (*combat)->texture_texte_lourd = NULL;
         }
 
         free(*combat);

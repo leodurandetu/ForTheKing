@@ -21,7 +21,7 @@ typedef struct {
     SDL_Texture * texture_fond_ecran;
 
     SDL_Texture * texture_attaque_legere;
-    SDL_Texture * texture_attaque_lourde; // MAssoud : j'ai ajouté pour les img des attaques
+    SDL_Texture * texture_attaque_lourde;
 
     SDL_Rect bouton_leger;
     SDL_Rect bouton_lourd;
@@ -31,6 +31,12 @@ typedef struct {
 
     TTF_Font * font;
 
+    SDL_Texture * texture_texte_leger;
+    SDL_Texture * texture_texte_lourd;
+
+    SDL_Rect rect_texte_leger;
+    SDL_Rect rect_texte_lourd;
+
 } combat_t;
 
 /* Prototypes des fonctions */
@@ -39,8 +45,6 @@ typedef struct {
 extern void ouvrir_fenetre_combat(combat_t ** combat);
 extern void maj_affichage_fenetre_combat(combat_t * combat);
 extern void detruire_fenetre_combat(combat_t ** combat);
-extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, 
-                        int survole, const char *texte, 
-                        SDL_Texture *texture_arme);
+extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int survole, SDL_Texture *texture_arme, SDL_Texture *tex_texte, SDL_Rect *rect_texte);
 
 #endif
