@@ -144,7 +144,7 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
 
     int running = 1;
     int majAffichage = 1;
-
+    (*combat)->tour = TOUR_JOUEUR;
     SDL_Point point;
 
     while (running) {
@@ -167,17 +167,38 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
                     majAffichage = 1;
                     break;
 
+                // COMBAT
                 case SDL_MOUSEBUTTONDOWN:
                     point.x = e.button.x;
                     point.y = e.button.y;
 
-                    // Test
-                    if (SDL_PointInRect(&point, &((*combat)->bouton_leger))) {
-                        printf("Attaque légère\n");
-                    } else if (SDL_PointInRect(&point, &((*combat)->bouton_lourd))) {
-                        printf("Attaque lourde\n");
+                    if((*combat)->tour == TOUR_JOUEUR){
+                        if (SDL_PointInRect(&point, &((*combat)->bouton_leger))) {
+                            printf("Attaque légère\n");
+                            // attaque legère fonction appel
+                            (*combat)->tour = changer_tour(*combat);
+                            printf("Le joueur a joué\n");
+                            
+
+                        } else if (SDL_PointInRect(&point, &((*combat)->bouton_lourd))) {
+                            printf("Attaque lourde\n");
+                            // attaque lourde fonction appel
+                            (*combat)->tour = changer_tour(*combat);
+                            printf("Le joueur a joué\n");
+                        }
+
                     }
 
+                    if ((*combat)->tour == TOUR_MONSTRE) {
+                        printf("Tour du monstre\n");
+                        //attaque monstre appel
+                        (*combat)->tour = changer_tour(*combat);
+                        printf("Le monstre a joué\n");
+
+                        majAffichage = 1;
+                    }
+
+                    
                     break;
 
                 case SDL_WINDOWEVENT:
@@ -347,4 +368,13 @@ void detruire_fenetre_combat(combat_t ** combat) {
         *combat = NULL;
     }
 
+}
+
+
+
+/* Massoud 
+ * Cette fonction est faite pour changer le tour.
+*/
+tour_t changer_tour(combat_t *combat){
+    return (combat->tour == TOUR_JOUEUR) ? TOUR_MONSTRE : TOUR_JOUEUR;
 }
