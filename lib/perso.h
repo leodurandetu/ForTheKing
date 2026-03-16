@@ -15,8 +15,10 @@ typedef enum {
 typedef struct {
 
     int x, y;
+    int degats;
     int force;
     int sante;
+    int sante_max;
     int intelligence;
     int rapidite;
     int evasion;
