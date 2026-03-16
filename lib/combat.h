@@ -9,10 +9,18 @@
 #include "../lib/combat.h"
 #include "math.h"
 
+
+typedef enum{
+    TOUR_JOUEUR,
+    TOUR_MONSTRE
+}tour_t;
+
+
 typedef struct {
 
     perso_t * perso;
     monstre_t * monstre;
+    tour_t tour;
     SDL_Window * pFenetre;
     SDL_Renderer * renderer;
 
@@ -46,5 +54,5 @@ extern void ouvrir_fenetre_combat(combat_t ** combat);
 extern void maj_affichage_fenetre_combat(combat_t * combat);
 extern void detruire_fenetre_combat(combat_t ** combat);
 extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int survole, SDL_Texture *texture_arme, SDL_Texture *tex_texte, SDL_Rect *rect_texte);
-
+extern tour_t changer_tour(combat_t *combat);
 #endif
