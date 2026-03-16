@@ -8,7 +8,7 @@
  * x et y données. Ce monstre aura des attributs
  * générés aléatoirement.
  */
-monstre_t * creer_monstre_aleatoire(int x, int y) {
+monstre_t * creer_monstre_aleatoire(type_monstre_t type,int x, int y) {
     monstre_t *monstre = malloc(sizeof(monstre_t));
 
     if (!monstre) {
@@ -16,17 +16,27 @@ monstre_t * creer_monstre_aleatoire(int x, int y) {
         return NULL;
     }
 
+    monstre->type = type;
     monstre->x = x;
     monstre->y = y;
 
+     /* Niveau selon le type */
+    if (monstre->type == SQUELETTE) {
+        monstre->niveau = 1;
+    } else {
+        monstre->niveau = 2;
+    }
+
+
     /* on changera les valeurs plus tard, elles sont provisoires */
     monstre->force = 6 + rand() % 11;
-    monstre->sante = 9 + rand() % 16;
+    monstre->sante = 9 + rand() % 10;
     monstre->sante_max = monstre->sante;
     monstre->degats = 3 + rand() % 7;
     monstre->intelligence = 6 + rand() % 11;
     monstre->rapidite = 6 + rand() % 11;
     monstre->evasion = 4 + rand() % 8;
+
 
     return monstre;
 }
