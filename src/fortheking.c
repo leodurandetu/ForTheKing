@@ -112,13 +112,25 @@ int main() {
     }
 
     // Chargement du sprite du monstre (unique pour l'instant)
-    SDL_Texture *texture_monstre = NULL;
-    SDL_Surface *img_monstre = IMG_Load("img/squelette.png");
-    if (img_monstre) {
-        texture_monstre = SDL_CreateTextureFromSurface(renderer, img_monstre);
-        SDL_SetTextureBlendMode(texture_monstre, SDL_BLENDMODE_BLEND);
-        SDL_FreeSurface(img_monstre);
+    SDL_Texture *texture_squelette = NULL;
+    SDL_Surface *img_squelette = IMG_Load("img/squelette.png");
+    if (img_squelette) {
+        texture_squelette = SDL_CreateTextureFromSurface(renderer, img_squelette);
+        SDL_SetTextureBlendMode(texture_squelette, SDL_BLENDMODE_BLEND);
+        SDL_FreeSurface(img_squelette);
     }
+
+    // Chargement du troll
+    SDL_Texture *texture_troll = NULL;
+    SDL_Surface *img_troll = IMG_Load("img/troll.png");
+    if (img_troll) {
+        texture_troll = SDL_CreateTextureFromSurface(renderer, img_troll);
+        SDL_SetTextureBlendMode(texture_troll, SDL_BLENDMODE_BLEND);
+        SDL_FreeSurface(img_troll);
+    }
+
+    SDL_Texture *textures_monstres[2] = {texture_squelette, texture_troll};
+
 
     // Chargement de la texture du brouillard
     SDL_Texture *texture_brouillard = NULL;
@@ -391,7 +403,7 @@ int main() {
             SDL_RenderClear(renderer);
 
             // Dessine la carte et les contours dorés
-            afficher_carte_sdl(renderer, carte, textures_cases, textures_obstacles, texture_brouillard, texture_monstre,
+            afficher_carte_sdl(renderer, carte, textures_cases, textures_obstacles, texture_brouillard, textures_monstres,
                 textures_batiments, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
                 perso);
                 
@@ -423,7 +435,8 @@ int main() {
     }
     if (texture_perso) SDL_DestroyTexture(texture_perso);
     if (texture_brouillard) SDL_DestroyTexture(texture_brouillard);
-    if (texture_monstre) SDL_DestroyTexture(texture_monstre);
+    if (texture_squelette) SDL_DestroyTexture(texture_squelette);
+    if (texture_troll) SDL_DestroyTexture(texture_troll);
     for (int i = 0; i < 2; i++) {
         if (textures_batiments[i]) SDL_DestroyTexture(textures_batiments[i]);
     }
