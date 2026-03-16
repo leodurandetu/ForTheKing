@@ -175,31 +175,41 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
                     if((*combat)->tour == TOUR_JOUEUR){
                         if (SDL_PointInRect(&point, &((*combat)->bouton_leger))) {
                             printf("Attaque légère\n");
-                            // attaque legère fonction appel
+                            attaque_legere(*combat);
                             (*combat)->tour = changer_tour(*combat);
                             printf("Le joueur a joué\n");
+                            printf("santé monstre : %d",(*combat)->monstre->sante);
                             
 
                         } else if (SDL_PointInRect(&point, &((*combat)->bouton_lourd))) {
                             printf("Attaque lourde\n");
-                            // attaque lourde fonction appel
+                            attaque_lourde(*combat);
                             (*combat)->tour = changer_tour(*combat);
                             printf("Le joueur a joué\n");
+                            printf("santé monstre : %d",(*combat)->monstre->sante);
                         }
 
                     }
 
                     if ((*combat)->tour == TOUR_MONSTRE) {
-                        printf("Tour du monstre\n");
-                        //attaque monstre appel
+                        printf("\nTour du monstre\n");
+                        choix_attaque_monstre(*combat);
                         (*combat)->tour = changer_tour(*combat);
                         printf("Le monstre a joué\n");
+                        printf("Santé joueur : %d\n",(*combat)->perso->sante);
 
                         majAffichage = 1;
                     }
-
+                    if((*combat)->perso->sante == 0){
+                        printf("Vous avez perdu.\n");
+                        exit(EXIT_SUCCESS);
+                    }
+                    if((*combat)->monstre->sante == 0){
+                        printf("Vous avez gagné.\n");
+                        exit(EXIT_SUCCESS);
+                    }
                     
-                    break;
+                    //break;
 
                 case SDL_WINDOWEVENT:
 
@@ -373,8 +383,123 @@ void detruire_fenetre_combat(combat_t ** combat) {
 
 
 /* Massoud 
- * Cette fonction est faite pour changer le tour.
+ * Cette fonction est faite pour alterner le tour.
 */
 tour_t changer_tour(combat_t *combat){
     return (combat->tour == TOUR_JOUEUR) ? TOUR_MONSTRE : TOUR_JOUEUR;
+}
+
+
+/* Massoud
+ * Fonctions d'attaque du combat.
+ * Chaque attaque génère un pourcentage aléatoire, puis applique
+ * ce pourcentage aux dégâts de base de l'attaquant pour calculer
+ * les dégâts réels infligés à la cible.
+ * La santé de la cible est ensuite diminuée, sans jamais descendre sous 0.
+ *
+ * Attaque légère : entre 0 % et 70 % des dégâts.
+ * Attaque lourde  : entre 10 % et 100 % des dégâts.
+ */
+
+void attaque_legere(combat_t *combat){
+    int pourcentage = rand() % 71;
+    int vrai_degats = (pourcentage * combat->perso->degats)/100;
+    combat->monstre->sante = combat->monstre->sante - vrai_degats;
+
+    if (combat->monstre->sante < 0) {
+        combat->monstre->sante = 0;
+    }
+
+}
+
+void attaque_lourde(combat_t *combat){
+    int pourcentage =  10 + rand() % 91;
+    int vrai_degats = (pourcentage * combat->perso->degats)/100;
+    combat->monstre->sante = combat->monstre->sante - vrai_degats;
+
+    if (combat->monstre->sante < 0) {
+        combat->monstre->sante = 0;
+    }
+}
+
+void attaque_legere_monstre(combat_t *combat){
+    int pourcentage = rand() % 71;
+    int vrai_degats = (pourcentage * combat->monstre->degats)/100;
+    combat->perso->sante = combat->perso->sante - vrai_degats;
+
+    if(combat->perso->sante < 0){
+        combat->perso->sante = 0;
+    }
+
+}
+
+void attaque_lourde_monstre(combat_t *combat){
+    int pourcentage = 10 + rand() % 91;
+    int vrai_degats = (pourcentage * combat->monstre->degats)/100;
+    combat->perso->sante = combat->perso->sante - vrai_degats;
+
+    if(combat->perso->sante < 0){
+        combat->perso->sante = 0;
+    }
+    
+}
+
+/* Massoud
+ * Cette fonction choisit l'attaque du monstre en fonction de la situation
+ * du combat, en gardant une part de hasard pour rendre le comportement
+ * moins prévisible.
+ *
+ * - Si le monstre a peu de vie (≤ 30 % de sa santé maximale), il devient
+ *   plus agressif et privilégie l'attaque lourde.
+ * - Si le joueur a beaucoup de vie (> 60 % de sa santé maximale), le
+ *   monstre attaque fort (préférence pour l'attaque lourde).
+ * - Si le joueur a peu de vie (≤ 30 % de sa santé maximale), le monstre
+ *   agit plus prudemment (préférence pour l'attaque légère).
+ * - Dans tous les autres cas, le monstre choisit de façon équilibrée
+ *   entre attaque légère et lourde, avec 50 % de chance pour chacune.
+ */
+void choix_attaque_monstre(combat_t *combat){
+    int hasard = rand() % 100;
+
+    int sante_joueur = combat->perso->sante;
+    int sante_max_joueur = combat->perso->sante_max;
+
+    int sante_monstre = combat->monstre->sante;
+    int sante_max_monstre = combat->monstre->sante_max;
+
+    /* Si le monstre a peu de vie -> il devient agressif */
+    if(sante_monstre <= (sante_max_monstre * 30) / 100){
+        if(hasard < 80){
+            attaque_lourde_monstre(combat);
+        } else {
+            attaque_legere_monstre(combat);
+        }
+    }
+
+    /* Si le joueur a beaucoup de vie -> le monstre attaque fort */
+    else if(sante_joueur > (sante_max_joueur * 60) / 100){
+        if(hasard < 70){
+            attaque_lourde_monstre(combat);
+        } else {
+            attaque_legere_monstre(combat);
+        }
+    }
+
+    /* Si le joueur a peu de vie -> le monstre joue plus prudemment */
+    else if(sante_joueur <= (sante_max_joueur * 30) / 100){
+        if(hasard < 70){
+            attaque_legere_monstre(combat);
+        } else {
+            attaque_lourde_monstre(combat);
+        }
+    }
+
+    /* Comportement équilibré */
+    else {
+        if(hasard < 50){
+            attaque_legere_monstre(combat);
+        } else {
+            attaque_lourde_monstre(combat);
+        }
+    }
 }
