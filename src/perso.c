@@ -27,7 +27,9 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 
         case BRUTE:
             perso->force = 32;
-            perso->sante = 50;
+            perso->degats = 12;
+            perso->sante = 25;
+            perso->sante_max = perso->sante;
             perso->intelligence = 4;
             perso->rapidite = 8;
             perso->evasion = 3;
@@ -35,7 +37,9 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 
         case CHASSEUR:
             perso->force = 20;
-            perso->sante = 40;
+            perso->degats = 9;
+            perso->sante = 23;
+            perso->sante_max = perso->sante;
             perso->intelligence = 13;
             perso->rapidite = 19;
             perso->evasion = 15;
@@ -43,7 +47,9 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 
         case ASSASSIN:
             perso->force = 16;
-            perso->sante = 32;
+            perso->degats = 11;
+            perso->sante = 18;
+            perso->sante_max = perso->sante;
             perso->intelligence = 13;
             perso->rapidite = 24;
             perso->evasion = 24;
@@ -51,7 +57,9 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 
         case MAGE:
             perso->force = 12;
-            perso->sante = 36;
+            perso->degats = 8;
+            perso->sante = 20;
+            perso->sante_max = perso->sante;
             perso->intelligence = 26;
             perso->rapidite = 17;
             perso->evasion = 8;
