@@ -343,14 +343,14 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
                     }
                     if((*combat)->perso->sante == 0){
                         printf("Vous avez perdu.\n");
-                        exit(EXIT_SUCCESS);
+                        running = 0;
                     }
                     if((*combat)->monstre->sante == 0){
                         printf("Vous avez gagné.\n");
-                        exit(EXIT_SUCCESS);
+                        running = 0;
                     }
                     
-                    //break;
+                    break;
 
                 case SDL_WINDOWEVENT:
 
