@@ -223,9 +223,16 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
         SDL_FreeSurface(img_perso);
     }
 
-    // Chargement du sprite du monstre (unique pour l'instant)
+    // Chargement du sprite du monstre
     (*combat)->texture_monstre = NULL;
-    SDL_Surface *img_monstre = IMG_Load("img/squelette.png");
+    SDL_Surface *img_monstre;
+    
+    if ((*combat)->monstre->type == SQUELETTE) {
+        img_monstre = IMG_Load("img/squelette.png");
+    } else if ((*combat)->monstre->type == TROLL) {
+        img_monstre = IMG_Load("img/troll.png");
+    }
+
     if (img_monstre) {
         (*combat)->texture_monstre = (SDL_CreateTextureFromSurface((*combat)->renderer, img_monstre));
         SDL_SetTextureBlendMode((*combat)->texture_monstre, SDL_BLENDMODE_BLEND);
@@ -472,8 +479,18 @@ void maj_affichage_fenetre_combat(combat_t *combat)
     perso_t * perso = combat->perso;
     monstre_t * monstre = combat->monstre;
 
+    char * nom_monstre;
+
+    if (monstre->type == SQUELETTE) {
+        nom_monstre = "SQUELETTE";
+    } else if (monstre->type == TROLL) {
+        nom_monstre = "TROLL";
+    } else {
+        nom_monstre = "ERREUR";
+    }
+
     dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion);
-    dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion);
+    dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, nom_monstre, monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion);
 
     SDL_RenderPresent(renderer);
 }
