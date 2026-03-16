@@ -124,7 +124,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     SDL_Texture * textures_cases[NB_BIOMES], 
     SDL_Texture * textures_obstacles[4],
     SDL_Texture * texture_brouillard,
-    SDL_Texture * texture_monstre,
+    SDL_Texture * textures_monstres[2],
     SDL_Texture * textures_batiments[2],
     int tailleCase,
     int persX, int persY,
@@ -210,7 +210,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
                 /* Affichage du monstre si il existe */
                 if (maCase.monstre != NULL) {
-                    dessiner_texture(renderer, texture_monstre, cx, cy, largeurHex, 0.65f);
+                    dessiner_texture(renderer, textures_monstres[maCase.monstre->type], cx, cy, largeurHex, 0.65f);
                 }
 
                 dessiner_contour_dore(renderer, cx, cy, rayonHex);
@@ -456,7 +456,7 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  * à ce que ça paraisse naturel.
  */
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
-    // 70 à 111 zones
+    
     int nb_zones = 15 + rand() % 25;
 
     for (int z = 0; z < nb_zones; z++) {
@@ -511,27 +511,95 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  * Cette fonction permet de placer un certain nombre
  * de monstres sur la carte de manière aléatoire
  */
-void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
-    int i;
-    int nb = 80 + rand() % 68;
 
-    for (i = 0; i < nb; i++) {
-        int x = rand() % TAILLE_CARTE;
-        int y = rand() % TAILLE_CARTE;
-
-        /* On recommence jusqu'à trouver un endroit convenable,
-         * C'est à dire sans monstre, et pas dans l'eau.
-         */
-        while (carte[x][y].monstre != NULL || carte[x][y].biome == EAU || carte[x][y].terrain != PAS_DE_TERRAIN) {
-            x = rand() % TAILLE_CARTE;
-            y = rand() % TAILLE_CARTE;
+// Vérifie à un rayon de 2 cases (grille hexagonale) pour éviter que les monstres s'agglutinent
+int a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy) {
+    // On scanne un petit carré de 5x5 autour de la case cible (rayon d'environ 2 hexagones)
+    for (int y = cy - 2; y <= cy + 2; y++) {
+        for (int x = cx - 2; x <= cx + 2; x++) {
+            
+            // On vérifie qu'on ne sort pas de la carte
+            if (x >= 0 && x < TAILLE_CARTE && y >= 0 && y < TAILLE_CARTE) {
+                
+                // Si ce n'est pas la case centrale ET qu'il y a un monstre
+                if ((x != cx || y != cy) && carte[y][x].monstre != NULL) {
+                    
+                    // Calcul simplifié de la distance sur grille hexagonale
+                    int diff_x = abs(x - cx);
+                    int diff_y = abs(y - cy);
+                    
+                    // Approximation : si c'est dans un rayon de  environ 2 cases -> on refuse
+                    if (diff_x + diff_y <= 3) { 
+                        return VRAI; 
+                    }
+                }
+            }
         }
-
-        monstre_t *monstre = creer_monstre_aleatoire(x, y);
-
-        carte[x][y].monstre = monstre;
     }
+    return FAUX;
+}
 
+void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos) {
+    // Minimum 15 cases de biome (évite les monstres isolés sur les bords)
+    if (nb_cases_dispos < 15) return; 
+
+    // 1 monstre pour 12 cases libres + un léger aléatoire)
+    int nb_a_placer = (nb_cases_dispos / 20) + (rand() % 2);
+    if (nb_a_placer > nb_cases_dispos) nb_a_placer = nb_cases_dispos; 
+    
+    int monstres_places = 0;
+
+    while (monstres_places < nb_a_placer && nb_cases_dispos > 0) {
+        int index = rand() % nb_cases_dispos;
+        int cx = cases_dispos[index].x;
+        int cy = cases_dispos[index].y;
+        
+        if (!a_un_voisin_monstre(carte, cx, cy)) {
+            carte[cy][cx].monstre = creer_monstre_aleatoire(type, cx, cy);
+            monstres_places++;
+        }
+        
+        // On retire la case testée de la liste pour ne pas boucler dessus à l'infini
+        cases_dispos[index] = cases_dispos[nb_cases_dispos - 1];
+        nb_cases_dispos--;
+    }
+}
+
+void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+    // Taille du secteur scanné (12x12 cases)
+    int taille_secteur = 12; 
+
+    for (int i = 0; i < TAILLE_CARTE; i += taille_secteur) {
+        for (int j = 0; j < TAILLE_CARTE; j += taille_secteur) {
+            
+            coordonnee_t cases_foret[144]; 
+            coordonnee_t cases_desert[144];
+            int nb_foret = 0, nb_desert = 0;
+            
+            // Scan du secteur pour lister les cases libres par biome
+            for (int y = i; y < i + taille_secteur && y < TAILLE_CARTE; y++) {
+                for (int x = j; x < j + taille_secteur && x < TAILLE_CARTE; x++) {
+                    
+                    if (carte[y][x].monstre == NULL && carte[y][x].terrain == PAS_DE_TERRAIN && 
+                        carte[y][x].biome != EAU && carte[y][x].batiment.type == PAS_DE_BATIMENT) {
+                        
+                        if (carte[y][x].biome == FORET) {
+                            cases_foret[nb_foret].x = x;
+                            cases_foret[nb_foret].y = y;
+                            nb_foret++;
+                        } else if (carte[y][x].biome == DESERT) {
+                            cases_desert[nb_desert].x = x;
+                            cases_desert[nb_desert].y = y;
+                            nb_desert++;
+                        }
+                    }
+                }
+            }
+            
+            faire_apparaitre_groupe(carte, TROLL, cases_foret, nb_foret);
+            faire_apparaitre_groupe(carte, SQUELETTE, cases_desert, nb_desert);
+        }
+    }
 }
 
 /* Leo */
