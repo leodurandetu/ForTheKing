@@ -22,6 +22,8 @@ monstre_t * creer_monstre_aleatoire(int x, int y) {
     /* on changera les valeurs plus tard, elles sont provisoires */
     monstre->force = 6 + rand() % 11;
     monstre->sante = 9 + rand() % 16;
+    monstre->sante_max = monstre->sante;
+    monstre->degats = 3 + rand() % 7;
     monstre->intelligence = 6 + rand() % 11;
     monstre->rapidite = 6 + rand() % 11;
     monstre->evasion = 4 + rand() % 8;
