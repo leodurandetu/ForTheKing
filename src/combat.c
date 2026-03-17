@@ -360,7 +360,7 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
                         running = 0;
                     }
                     
-                    //break;
+                    break;
 
                 case SDL_WINDOWEVENT:
 
