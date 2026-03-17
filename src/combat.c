@@ -222,11 +222,11 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
         SDL_SetTextureBlendMode((*combat)->texture_perso, SDL_BLENDMODE_BLEND);
         SDL_FreeSurface(img_perso);
     }
-
-    // Chargement du sprite du monstre
+ 
+    // Chargement du sprite du monstre en fonction de son type(troll et squelette pour le moment)
     (*combat)->texture_monstre = NULL;
-    SDL_Surface *img_monstre;
-    
+    SDL_Surface *img_monstre = NULL;
+
     if ((*combat)->monstre->type == SQUELETTE) {
         img_monstre = IMG_Load("img/squelette.png");
     } else if ((*combat)->monstre->type == TROLL) {
@@ -234,9 +234,12 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
     }
 
     if (img_monstre) {
-        (*combat)->texture_monstre = (SDL_CreateTextureFromSurface((*combat)->renderer, img_monstre));
+        // SDL_SetColorKey(img_monstre, SDL_TRUE, SDL_MapRGB(img_monstre->format, 255, 255, 255));
+        (*combat)->texture_monstre = SDL_CreateTextureFromSurface((*combat)->renderer, img_monstre);
         SDL_SetTextureBlendMode((*combat)->texture_monstre, SDL_BLENDMODE_BLEND);
         SDL_FreeSurface(img_monstre);
+    } else {
+        fprintf(stderr, "Erreur chargement image monstre : %s\n", IMG_GetError());
     }
     
     // Chargement du sprite du fond d'écran
@@ -357,7 +360,7 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
                         running = 0;
                     }
                     
-                    break;
+                    //break;
 
                 case SDL_WINDOWEVENT:
 
@@ -479,19 +482,12 @@ void maj_affichage_fenetre_combat(combat_t *combat)
     perso_t * perso = combat->perso;
     monstre_t * monstre = combat->monstre;
 
-    char * nom_monstre;
-
-    if (monstre->type == SQUELETTE) {
-        nom_monstre = "SQUELETTE";
-    } else if (monstre->type == TROLL) {
-        nom_monstre = "TROLL";
-    } else {
-        nom_monstre = "ERREUR";
-    }
-
     dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion);
-    dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, nom_monstre, monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion);
-
+    if(combat->monstre->type == SQUELETTE){
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion);
+    } else if (combat->monstre->type == TROLL){
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion);
+    }
     SDL_RenderPresent(renderer);
 }
 
