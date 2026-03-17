@@ -11,6 +11,7 @@
 #include "../lib/perso.h"
 #include "../lib/affichage_infos.h"
 #include "../lib/combat.h"
+#include "../lib/pause_menu.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
@@ -20,6 +21,7 @@ case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 #define RAYON_DECOUVERTE_BROUILLARD 5
 
 int main() {
+    int relancer_menu = 0;
     printf("For The King!\n");
 
 
@@ -237,24 +239,37 @@ int main() {
                     running = 0;
                     break;
 
+
                 case SDL_KEYDOWN:
+                    // Menu de pause sur Echap
+                    if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+                        int windowW, windowH;
+                        SDL_GetWindowSize(pFenetre, &windowW, &windowH);
+                        
+                        int choix = afficher_menu_pause(renderer, police, windowW, windowH);
+                        
+                        if (choix == 1) { // L'utilisateur a cliqué sur Quitter
+                            running = 0;  
+                            relancer_menu = 1;
+                        }
+                        
+                        majAffichage = 1; // On force le rafraîchissement de la carte au retour
+                    }
+
                     // Déplacements au clavier
                     switch(e.key.keysym.scancode) {
-
                         case SDL_SCANCODE_W: 
-                            
                             if (perso->y - 1 >= 0 
                                 && deplacement_possible(carte, perso, perso->x, perso->y - 1)
                                 && case_occupee(carte, perso->x, perso->y - 1) == FAUX
-                                && perso->pts_deplacements > 0
-                            ) {
+                                && perso->pts_deplacements > 0) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
                                 perso->y--;
                                 perso->pts_deplacements--;
                             }
-
                             break;
+                            
                         case SDL_SCANCODE_A:
                             
                             if (perso->x - 1 >= 0 
@@ -389,6 +404,8 @@ int main() {
                         majAffichage = 1;
                     }
                     break;
+
+
             }
         }
 
@@ -461,6 +478,10 @@ int main() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(pFenetre);
     SDL_Quit();
+
+    if (relancer_menu == 1) {
+        system("./bin/menu");
+    }
 
     return 0;
 }
