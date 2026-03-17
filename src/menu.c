@@ -125,17 +125,22 @@ int main() {
 
     SDL_Color couleurTexte = {255, 255, 255, 255};
     
-    SDL_Texture *texJouer = NULL, *texParam = NULL, *texQuitter = NULL;
-    SDL_Texture *texSolo = NULL, *texCoop = NULL, *texTitre = NULL;
+    SDL_Texture *texJouer = NULL, *texContinuer = NULL, *texParam = NULL, *texQuitter = NULL;
+    SDL_Texture *texSolo = NULL, *texCoop = NULL, *texTitre = NULL, *texVolume = NULL;
+    SDL_Texture *texFsOff = NULL, *texFsOn = NULL, *texCroix = NULL;
     
-    int wJouer=0, hJouer=0, wParam=0, hParam=0, wQuitter=0, hQuitter=0;
-    int wSolo=0, hSolo=0, wCoop=0, hCoop=0, wTitre=0, hTitre=0;
+    int wJouer=0, hJouer=0, wContinuer=0, hContinuer=0, wParam=0, hParam=0, wQuitter=0, hQuitter=0;
+    int wSolo=0, hSolo=0, wCoop=0, hCoop=0, wTitre=0, hTitre=0, wVolume=0, hVolume=0;
+    int wFsOff=0, hFsOff=0, wFsOn=0, hFsOn=0, wCroix=0, hCroix=0;
 
     if (policeMenu && policeTitre) {
-        SDL_Surface *surf = TTF_RenderText_Blended(policeMenu, "Nouvelle partie", couleurTexte); // "Jouer"
+        SDL_Surface *surf = TTF_RenderText_Blended(policeMenu, "Nouvelle partie", couleurTexte);
         texJouer = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texJouer, NULL, NULL, &wJouer, &hJouer); SDL_FreeSurface(surf);
 
-        surf = TTF_RenderText_Blended(policeMenu, "Options", couleurTexte); // "Paramètres"
+        surf = TTF_RenderText_Blended(policeMenu, "Continuer", couleurTexte); 
+        texContinuer = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texContinuer, NULL, NULL, &wContinuer, &hContinuer); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeMenu, "Options", couleurTexte); 
         texParam = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texParam, NULL, NULL, &wParam, &hParam); SDL_FreeSurface(surf);
 
         surf = TTF_RenderText_Blended(policeMenu, "Quitter", couleurTexte);
@@ -149,14 +154,28 @@ int main() {
 
         surf = TTF_RenderText_Blended(policeTitre, "FOR THE KING", couleurTexte);
         texTitre = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texTitre, NULL, NULL, &wTitre, &hTitre); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeMenu, "Volume Musique", couleurTexte);
+        texVolume = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texVolume, NULL, NULL, &wVolume, &hVolume); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeMenu, "Plein ecran : OFF", couleurTexte);
+        texFsOff = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texFsOff, NULL, NULL, &wFsOff, &hFsOff); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeMenu, "Plein ecran : ON", couleurTexte);
+        texFsOn = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texFsOn, NULL, NULL, &wFsOn, &hFsOn); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeMenu, "X", couleurTexte);
+        texCroix = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texCroix, NULL, NULL, &wCroix, &hCroix); SDL_FreeSurface(surf);
     }
 
-    SDL_Rect btnJouer, btnParam, btnQuitter, btnSolo, btnCoop, btnMusique;
-    SDL_Rect rectTxtJouer, rectTxtParam, rectTxtQuitter, rectTxtSolo, rectTxtCoop, rectTxtTitre;
-    SDL_Rect panneauPrincipal, panneauSecondaire;
+    SDL_Rect btnJouer, btnContinuer, btnParam, btnQuitter, btnSolo, btnCoop, btnMusique, barreVolumeFond, btnFullscreen, btnFermerOptions;
+    SDL_Rect rectTxtJouer, rectTxtContinuer, rectTxtParam, rectTxtQuitter, rectTxtSolo, rectTxtCoop, rectTxtTitre, rectTxtVolume, rectTxtFullscreen, rectTxtCroix;
+    SDL_Rect panneauPrincipal, panneauSecondaire, panneauOptions;
 
     int menuActif = 1;
     int afficher_sous_menu_jouer = 0; 
+    int afficher_sous_menu_options = 0; 
+    int drag_volume = 0; 
     SDL_Event event;
 
     // Boucle principale
@@ -174,29 +193,35 @@ int main() {
         int startY = windowH / 2.5;
         int espacement = btnHeight + 8; // peu d'espace entre les boutons
 
-        // Boutons principaux 
-        btnJouer = (SDL_Rect){startX, startY, btnWidth, btnHeight};
-        btnParam = (SDL_Rect){startX, startY + espacement, btnWidth, btnHeight};
-        btnQuitter = (SDL_Rect){startX, startY + espacement * 2, btnWidth, btnHeight};
+        // Boutons principaux
+        btnJouer     = (SDL_Rect){startX, startY, btnWidth, btnHeight};
+        btnContinuer = (SDL_Rect){startX, startY + espacement, btnWidth, btnHeight};
+        btnParam     = (SDL_Rect){startX, startY + espacement * 2, btnWidth, btnHeight};
+        btnQuitter   = (SDL_Rect){startX, startY + espacement * 3, btnWidth, btnHeight};
 
-        // Sous-boutons (placés à DROITE du panneau principal)
+        // Sous-boutons "Jouer"
         btnSolo = (SDL_Rect){btnJouer.x + btnJouer.w + 50, btnJouer.y, btnWidth, btnHeight};
         btnCoop = (SDL_Rect){btnSolo.x, btnSolo.y + espacement, btnWidth, btnHeight};
 
-        // Bouton Musique 
+        // Sous-menu "Options"
+        rectTxtVolume = (SDL_Rect){btnParam.x + btnParam.w + 50 + (btnWidth - wVolume)/2, btnParam.y, wVolume, hVolume};
+        barreVolumeFond = (SDL_Rect){btnParam.x + btnParam.w + 50, btnParam.y + espacement, btnWidth, 20};
+        btnFullscreen = (SDL_Rect){btnParam.x + btnParam.w + 50, btnParam.y + espacement + 40, btnWidth, btnHeight}; 
+
+        // Bouton Musique (Mute global en bas à droite)
         btnMusique = (SDL_Rect){windowW - 80, windowH - 80, 60, 60};
 
         int padding = 20;
         
-        // On couvre l'espace de "Jouer" jusqu'à "Quitter"
+        // Panneau Principal
         panneauPrincipal = (SDL_Rect){
             startX - padding, 
             startY - padding, 
             btnWidth + (padding * 2), 
-            (espacement * 2) + btnHeight + (padding * 2)
+            (espacement * 3) + btnHeight + (padding * 2)
         };
         
-        // On couvre l'espace de "Solo" jusqu'à "Coop"
+        // Panneau Secondaire (Jouer)
         panneauSecondaire = (SDL_Rect){
             btnSolo.x - padding, 
             btnSolo.y - padding, 
@@ -204,10 +229,25 @@ int main() {
             espacement + btnHeight + (padding * 2) 
         };
 
-        // Centrage des textes dans les boutons
+        // Panneau Options (Volume + Plein Ecran)
+        panneauOptions = (SDL_Rect){
+            barreVolumeFond.x - padding, 
+            rectTxtVolume.y - padding, 
+            btnWidth + (padding * 2), 
+            espacement + 40 + btnHeight + (padding * 2) 
+        };
+
+        // La petite croix pour fermer le menu options (en haut à droite du panneau)
+        btnFermerOptions = (SDL_Rect){panneauOptions.x + panneauOptions.w - 35, panneauOptions.y + 5, 30, 30};
+        rectTxtCroix = (SDL_Rect){btnFermerOptions.x + (btnFermerOptions.w - wCroix)/2, btnFermerOptions.y + (btnFermerOptions.h - hCroix)/2, wCroix, hCroix};
+
+        // Centrage des textes dans les boutons principaux
         rectTxtJouer = (SDL_Rect){btnJouer.x + (btnJouer.w - wJouer)/2, btnJouer.y + (btnJouer.h - hJouer)/2, wJouer, hJouer};
+        rectTxtContinuer = (SDL_Rect){btnContinuer.x + (btnContinuer.w - wContinuer)/2, btnContinuer.y + (btnContinuer.h - hContinuer)/2, wContinuer, hContinuer};
         rectTxtParam = (SDL_Rect){btnParam.x + (btnParam.w - wParam)/2, btnParam.y + (btnParam.h - hParam)/2, wParam, hParam};
         rectTxtQuitter = (SDL_Rect){btnQuitter.x + (btnQuitter.w - wQuitter)/2, btnQuitter.y + (btnQuitter.h - hQuitter)/2, wQuitter, hQuitter};
+        
+        // Textes sous-menu jouer
         rectTxtSolo = (SDL_Rect){btnSolo.x + (btnSolo.w - wSolo)/2, btnSolo.y + (btnSolo.h - hSolo)/2, wSolo, hSolo};
         rectTxtCoop = (SDL_Rect){btnCoop.x + (btnCoop.w - wCoop)/2, btnCoop.y + (btnCoop.h - hCoop)/2, wCoop, hCoop};
         
@@ -247,10 +287,17 @@ int main() {
 
                 if (SDL_PointInRect(&p, &btnJouer)) {
                     afficher_sous_menu_jouer = !afficher_sous_menu_jouer;
+                    afficher_sous_menu_options = 0; 
+                }
+
+                if (SDL_PointInRect(&p, &btnContinuer)) {
+                    lancer_jeu = 1;
+                    menuActif = 0;
                 }
 
                 if (SDL_PointInRect(&p, &btnParam)) {
-                    printf("Bouton PARAMETRES cliqué !\n");
+                    afficher_sous_menu_options = !afficher_sous_menu_options;
+                    afficher_sous_menu_jouer = 0; 
                 }
 
                 if (SDL_PointInRect(&p, &btnQuitter)) {
@@ -264,10 +311,36 @@ int main() {
                     }
                 }
 
+                if (afficher_sous_menu_options) {
+                    if (SDL_PointInRect(&p, &btnFermerOptions)) {
+                        afficher_sous_menu_options = 0; // Ferme le sous-menu quand on clique sur X
+                    }
+                    if (SDL_PointInRect(&p, &barreVolumeFond)) {
+                        drag_volume = 1; 
+                    }
+                    if (SDL_PointInRect(&p, &btnFullscreen)) {
+                        fullscreen = !fullscreen;
+                        SDL_SetWindowFullscreen(window, fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+                    }
+                }
+
                 if (SDL_PointInRect(&p, &btnMusique)) {
                     if (Mix_PausedMusic()) Mix_ResumeMusic();
                     else Mix_PauseMusic();
                 }
+            }
+
+            if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
+                drag_volume = 0; 
+            }
+
+            // Gestion du drag de la barre de volume
+            if (drag_volume && (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN)) {
+                float pourcentage = (float)(mouseX - barreVolumeFond.x) / (float)barreVolumeFond.w;
+                if (pourcentage < 0.0f) pourcentage = 0.0f;
+                if (pourcentage > 1.0f) pourcentage = 1.0f;
+                
+                Mix_VolumeMusic((int)(pourcentage * MIX_MAX_VOLUME)); 
             }
         }
 
@@ -281,24 +354,22 @@ int main() {
         }
 
         // --- DESSIN PANNEAU PRINCIPAL ---
-        // Fond sombre du panneau
-        SDL_SetRenderDrawColor(renderer, 20, 25, 20, 220); // Noir transparent
+        SDL_SetRenderDrawColor(renderer, 20, 25, 20, 220);
         SDL_RenderFillRect(renderer, &panneauPrincipal);
-        // Bordure du panneau (fine et grisâtre)
         SDL_SetRenderDrawColor(renderer, 130, 140, 120, 255);
-        for(int i = 0; i < 2; i++) { // Double épaisseur
+        for(int i = 0; i < 2; i++) { 
             SDL_Rect b = {panneauPrincipal.x - i, panneauPrincipal.y - i, panneauPrincipal.w + (i*2), panneauPrincipal.h + (i*2)};
             SDL_RenderDrawRect(renderer, &b);
         }
 
         // Dessin des boutons dans le panneau
         if (texJouer) dessinerBouton(renderer, texJouer, btnJouer, rectTxtJouer, mousePos);
+        if (texContinuer) dessinerBouton(renderer, texContinuer, btnContinuer, rectTxtContinuer, mousePos);
         if (texParam) dessinerBouton(renderer, texParam, btnParam, rectTxtParam, mousePos);
         if (texQuitter) dessinerBouton(renderer, texQuitter, btnQuitter, rectTxtQuitter, mousePos);
 
-        // --- DESSIN SOUS-MENU ---
+        // --- DESSIN SOUS-MENU JOUER ---
         if (afficher_sous_menu_jouer) {
-            // Panneau secondaire
             SDL_SetRenderDrawColor(renderer, 20, 25, 20, 220);
             SDL_RenderFillRect(renderer, &panneauSecondaire);
             SDL_SetRenderDrawColor(renderer, 130, 140, 120, 255);
@@ -307,9 +378,47 @@ int main() {
                 SDL_RenderDrawRect(renderer, &b);
             }
 
-            // Boutons Solo / Coop
             if (texSolo) dessinerBouton(renderer, texSolo, btnSolo, rectTxtSolo, mousePos);
             if (texCoop) dessinerBouton(renderer, texCoop, btnCoop, rectTxtCoop, mousePos);
+        }
+
+        // --- DESSIN SOUS-MENU OPTIONS ---
+        if (afficher_sous_menu_options) {
+            SDL_SetRenderDrawColor(renderer, 20, 25, 20, 220);
+            SDL_RenderFillRect(renderer, &panneauOptions);
+            SDL_SetRenderDrawColor(renderer, 130, 140, 120, 255);
+            for(int i = 0; i < 2; i++) {
+                SDL_Rect b = {panneauOptions.x - i, panneauOptions.y - i, panneauOptions.w + (i*2), panneauOptions.h + (i*2)};
+                SDL_RenderDrawRect(renderer, &b);
+            }
+
+            // Dessin du bouton Croix "X"
+            dessinerBouton(renderer, texCroix, btnFermerOptions, rectTxtCroix, mousePos);
+
+            // Affichage du texte "Volume Musique"
+            SDL_RenderCopy(renderer, texVolume, NULL, &rectTxtVolume);
+
+            // Affichage fond de la barre
+            SDL_SetRenderDrawColor(renderer, 50, 45, 65, 255);
+            SDL_RenderFillRect(renderer, &barreVolumeFond);
+            SDL_SetRenderDrawColor(renderer, 150, 145, 130, 255);
+            SDL_RenderDrawRect(renderer, &barreVolumeFond);
+
+            // Affichage remplissage de la barre
+            int volumeActuel = Mix_VolumeMusic(-1);
+            float ratioVolume = (float)volumeActuel / (float)MIX_MAX_VOLUME;
+            SDL_Rect barreVolumeRemplie = {barreVolumeFond.x, barreVolumeFond.y, (int)(barreVolumeFond.w * ratioVolume), barreVolumeFond.h};
+            SDL_SetRenderDrawColor(renderer, 180, 180, 255, 255); // Bleuté clair
+            SDL_RenderFillRect(renderer, &barreVolumeRemplie);
+
+            // Affichage du bouton Plein écran
+            if (fullscreen) {
+                rectTxtFullscreen = (SDL_Rect){btnFullscreen.x + (btnFullscreen.w - wFsOn)/2, btnFullscreen.y + (btnFullscreen.h - hFsOn)/2, wFsOn, hFsOn};
+                dessinerBouton(renderer, texFsOn, btnFullscreen, rectTxtFullscreen, mousePos);
+            } else {
+                rectTxtFullscreen = (SDL_Rect){btnFullscreen.x + (btnFullscreen.w - wFsOff)/2, btnFullscreen.y + (btnFullscreen.h - hFsOff)/2, wFsOff, hFsOff};
+                dessinerBouton(renderer, texFsOff, btnFullscreen, rectTxtFullscreen, mousePos);
+            }
         }
 
         // --- Musique logo ---
@@ -334,11 +443,16 @@ int main() {
 
     // --- NETTOYAGE ---
     if (texJouer) SDL_DestroyTexture(texJouer);
+    if (texContinuer) SDL_DestroyTexture(texContinuer);
     if (texParam) SDL_DestroyTexture(texParam);
     if (texQuitter) SDL_DestroyTexture(texQuitter);
     if (texSolo) SDL_DestroyTexture(texSolo);
     if (texCoop) SDL_DestroyTexture(texCoop);
     if (texTitre) SDL_DestroyTexture(texTitre);
+    if (texVolume) SDL_DestroyTexture(texVolume);
+    if (texFsOff) SDL_DestroyTexture(texFsOff);
+    if (texFsOn) SDL_DestroyTexture(texFsOn);
+    if (texCroix) SDL_DestroyTexture(texCroix);
     if (policeMenu) TTF_CloseFont(policeMenu);
     if (policeTitre) TTF_CloseFont(policeTitre);
     if (backgroundTexture) SDL_DestroyTexture(backgroundTexture);
