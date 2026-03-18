@@ -59,6 +59,14 @@ typedef struct {
     int x, y;
 } coordonnee_t;
 
+typedef enum {
+    HAUT,
+    BAS,
+    GAUCHE,
+    DROITE,
+    NB_DIRECTIONS
+} direction_t;
+
 /* Prototypes des fonctions de logique */
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
@@ -71,12 +79,13 @@ void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
 void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void ajout_obstacles(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
-int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y);
-int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
+int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
+int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int persX, int persY);
 void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y);
 void souris_vers_case(int mouseX, int mouseY, int *carte_x, int *carte_y, int tailleCase, perso_t *perso, SDL_Renderer *renderer);
 int chemin_valide(case_t[TAILLE_CARTE][TAILLE_CARTE], int xDepart, int yDepart, int xCible, int yCible, int pts_deplacement_max, perso_t *perso, int *distance);
 int a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy);
 void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos);
+void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int persX, int persY);
 
 #endif 

@@ -12,7 +12,7 @@ void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y)
     *x = rand() % TAILLE_CARTE;
     *y = rand() % TAILLE_CARTE;
 
-    while (!deplacement_possible(carte, NULL, *x, *y)) {
+    while (!deplacement_possible(carte, *x, *y)) {
         *x = rand() % TAILLE_CARTE;
         *y = rand() % TAILLE_CARTE;
     }
@@ -24,7 +24,7 @@ void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y)
  * Cette fonction retourne VRAI si le personnage
  * peut se déplacer sur cette case, FAUX sinon.
  */
-int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso, int x, int y) {
+int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
     case_t maCase = carte[y][x];
 
     if (maCase.biome == EAU) {
@@ -44,13 +44,21 @@ int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t *pers
  * soit par un monstre,
  * soit par un obstacle
  */
-int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
-    case_t maCase = carte[y][x];
+int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
+    int x, int y, int persX, int persY) {
 
-    if (maCase.monstre != NULL || maCase.batiment.type != PAS_DE_BATIMENT || maCase.terrain != PAS_DE_TERRAIN) {
+    if (y == persY && x == persX) {
         return VRAI;
     } else {
-        return FAUX;
+        case_t maCase = carte[y][x];
+
+        if (maCase.monstre != NULL || maCase.batiment.type != PAS_DE_BATIMENT
+            || maCase.terrain != PAS_DE_TERRAIN) {
+            return VRAI;
+        } else {
+            return FAUX;
+        }
+
     }
 
 }
@@ -187,12 +195,7 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     }
 }
 
-/* Leo */
-/*
- * Cette fonction permet de placer un certain nombre
- * de monstres sur la carte de manière aléatoire
- */
-
+// Massoud
 // Vérifie à un rayon de 2 cases (grille hexagonale) pour éviter que les monstres s'agglutinent
 int a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy) {
     // On scanne un petit carré de 5x5 autour de la case cible (rayon d'environ 2 hexagones)
@@ -220,6 +223,7 @@ int a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy
     return FAUX;
 }
 
+// Massoud
 void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos) {
     // Minimum 15 cases de biome (évite les monstres isolés sur les bords)
     if (nb_cases_dispos < 15) return; 
@@ -246,13 +250,17 @@ void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_mons
     }
 }
 
+/* Leo, améliorée par Massoud */
+/*
+ * Cette fonction permet de placer un certain nombre
+ * de monstres sur la carte de manière aléatoire
+ */
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     // Taille du secteur scanné (12x12 cases)
     int taille_secteur = 12; 
 
     for (int i = 0; i < TAILLE_CARTE; i += taille_secteur) {
         for (int j = 0; j < TAILLE_CARTE; j += taille_secteur) {
-            
             coordonnee_t cases_foret[144]; 
             coordonnee_t cases_desert[144];
             int nb_foret = 0, nb_desert = 0;
@@ -281,6 +289,7 @@ void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
             faire_apparaitre_groupe(carte, SQUELETTE, cases_desert, nb_desert);
         }
     }
+
 }
 
 /* Leo */
@@ -466,7 +475,7 @@ static int peut_atteindre_rec(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
 
         if (nx >= 0 && nx < TAILLE_CARTE && ny >= 0 && ny < TAILLE_CARTE) {
 
-            if (deplacement_possible(carte, perso, nx, ny)) {
+            if (deplacement_possible(carte, nx, ny)) {
                 /* Appel récursif */
                 int distance = peut_atteindre_rec(carte, nx, ny, xCible, yCible, pts_deplacement_restants - cout, dejaVisite, perso);
 
@@ -585,4 +594,64 @@ void ajout_obstacles(case_t carte[TAILLE_CARTE][TAILLE_CARTE]){
             }
         }
     }
+}
+
+/* Leo
+ * Cette fonction déplace tous les monstres d'une case
+ * sur la carte dans une direction aléatoire
+ */
+void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int persX, int persY) {
+    /* on suppose qu'on a déjà fait srand(time(NULL)) dans le main */
+    int x, y;
+
+    int dejaDeplace[TAILLE_CARTE][TAILLE_CARTE] = {0};
+
+    for (y = 0; y < TAILLE_CARTE; y++) {
+
+        for (x = 0; x < TAILLE_CARTE; x++) {
+            monstre_t * monstre = carte[y][x].monstre;
+
+            if (monstre != NULL && !dejaDeplace[y][x]) {
+                int direction = rand() % NB_DIRECTIONS;
+                int nx = x, ny = y;
+
+                switch (direction) {
+
+                    case HAUT:
+                        ny = y - 1;
+                        break;
+
+                    case BAS:
+                        ny = y + 1;
+                        break;
+
+                    case GAUCHE:
+                        nx = x - 1;
+                        break;
+
+                    case DROITE:
+                        nx = x + 1;
+                        break;
+
+                }
+
+                dejaDeplace[y][x] = 1;
+
+                if (deplacement_possible(carte, nx, ny)
+                    && !case_occupee(carte, nx, ny, persX, persY)) {
+                    carte[ny][nx].monstre = monstre;
+                    carte[y][x].monstre = NULL;
+
+                    monstre->x = nx;
+                    monstre->y = ny;
+
+                    dejaDeplace[ny][nx] = 1;
+                }
+
+            }
+
+        }
+
+    }
+
 }

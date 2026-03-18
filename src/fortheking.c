@@ -264,8 +264,8 @@ int main() {
                     switch(e.key.keysym.scancode) {
                         case SDL_SCANCODE_W: 
                             if (perso->y - 1 >= 0 
-                                && deplacement_possible(carte, perso, perso->x, perso->y - 1)
-                                && case_occupee(carte, perso->x, perso->y - 1) == FAUX
+                                && deplacement_possible(carte, perso->x, perso->y - 1)
+                                && case_occupee(carte, perso->x, perso->y - 1, perso->x, perso->y) == FAUX
                                 && perso->pts_deplacements > 0) {
                                 majAffichage = 1;
                                 majBrouillard = 1;
@@ -277,8 +277,8 @@ int main() {
                         case SDL_SCANCODE_A:
                             
                             if (perso->x - 1 >= 0 
-                                && deplacement_possible(carte, perso, perso->x - 1, perso->y)
-                                && case_occupee(carte, perso->x - 1, perso->y) == FAUX
+                                && deplacement_possible(carte, perso->x - 1, perso->y)
+                                && case_occupee(carte, perso->x - 1, perso->y, perso->x, perso->y) == FAUX
                                 && perso->pts_deplacements > 0
                             ) {
                                 majAffichage = 1;
@@ -292,8 +292,8 @@ int main() {
                         case SDL_SCANCODE_S: 
                             
                             if (perso->y + 1 < TAILLE_CARTE 
-                                && deplacement_possible(carte, perso, perso->x, perso->y + 1)
-                                && case_occupee(carte, perso->x, perso->y + 1) == FAUX
+                                && deplacement_possible(carte, perso->x, perso->y + 1)
+                                && case_occupee(carte, perso->x, perso->y + 1, perso->x, perso->y) == FAUX
                                 && perso->pts_deplacements > 0
                             ) {
                                 majAffichage = 1;
@@ -307,8 +307,8 @@ int main() {
                         case SDL_SCANCODE_D:
 
                             if (perso->x + 1 < TAILLE_CARTE 
-                                && deplacement_possible(carte, perso, perso->x + 1, perso->y)
-                                && case_occupee(carte, perso->x + 1, perso->y) == FAUX
+                                && deplacement_possible(carte, perso->x + 1, perso->y)
+                                && case_occupee(carte, perso->x + 1, perso->y, perso->x, perso->y) == FAUX
                                 && perso->pts_deplacements > 0
                             ) {
                                 majAffichage = 1;
@@ -321,6 +321,7 @@ int main() {
 
                         case SDL_SCANCODE_N:
                             restaurer_points_deplacements(perso);
+                            deplacer_monstres(carte, perso->x, perso->y);
                             majAffichage = 1;
 
                             break;
@@ -352,7 +353,7 @@ int main() {
 
                             if (cheminTrouve && distReelle != -1) {
 
-                                if (case_occupee(carte, carte_x, carte_y) == VRAI) {
+                                if (case_occupee(carte, carte_x, carte_y, perso->x, perso->y) == VRAI) {
                                     monstre_t * monstre = carte[carte_y][carte_x].monstre;
 
                                     if (monstre != NULL && combat_actuel == NULL) {

@@ -2,10 +2,10 @@
 #define MONSTRE_H
 
 /* Structures */
-typedef enum{
+typedef enum {
     SQUELETTE,
     TROLL
-}type_monstre_t;
+} type_monstre_t;
 
 typedef struct {
 
