@@ -169,6 +169,27 @@ int main() {
         "img/cactus.png", "img/boue.png" 
     };
 
+    // Chargement des sanctuaires
+    char *nom_images_sanctuaires[4] = {
+        "img/sanc_puissance.png", // Correspond à PUISSANCE (index 0)
+        "img/sanc_rapidité.png",  // Correspond à RAPIDITE (index 1)
+        "img/sanc_intelligence.png", // Correspond à INTELLIGENCE (index 2)
+        "img/sanc_experience.png" // Correspond à EXPERIANCE (index 3)
+    };
+
+    SDL_Texture *textures_sanctuaires[4] = {NULL};
+
+    for (int i = 0; i < 4; i++) {
+        SDL_Surface *image_sanc = IMG_Load(nom_images_sanctuaires[i]);
+        if (!image_sanc) {
+            fprintf(stderr, "Attention : Image sanctuaire %s manquante !\n", nom_images_sanctuaires[i]);
+        } else {
+            textures_sanctuaires[i] = SDL_CreateTextureFromSurface(renderer, image_sanc);
+            SDL_SetTextureBlendMode(textures_sanctuaires[i], SDL_BLENDMODE_BLEND);
+            SDL_FreeSurface(image_sanc);
+        }
+    }
+
     SDL_Texture *textures_obstacles[4] = {NULL};
 
     for (int i = 0; i < 4; i++) {
@@ -190,6 +211,7 @@ int main() {
     generer_eau(carte);
     generer_biomes(carte);
     ajout_obstacles(carte);
+    placer_sanctuaires(carte);
     placer_monstres(carte);
     placer_batiments(carte);
 
@@ -426,7 +448,7 @@ int main() {
 
             // Dessine la carte et les contours dorés
             afficher_carte_sdl(renderer, carte, textures_cases, textures_obstacles, texture_brouillard, textures_monstres,
-                textures_batiments, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
+                textures_batiments, textures_sanctuaires, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
                 perso);
                 
             if (texture_perso) {
@@ -459,7 +481,10 @@ int main() {
     if (texture_brouillard) SDL_DestroyTexture(texture_brouillard);
     if (texture_squelette) SDL_DestroyTexture(texture_squelette);
     if (texture_troll) SDL_DestroyTexture(texture_troll);
-    for (int i = 0; i < 2; i++) {
+    for(int i = 0; i < 4; i++){
+        if(textures_sanctuaires[i]) SDL_DestroyTexture(textures_sanctuaires[i]);
+    }
+    for (int i = 0; i < 3; i++) {
         if (textures_batiments[i]) SDL_DestroyTexture(textures_batiments[i]);
     }
     for (int i = 0; i < 4; i++) {
