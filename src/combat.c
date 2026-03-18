@@ -599,8 +599,8 @@ tour_t changer_tour(combat_t *combat){
  * La santé de la cible est ensuite diminuée, sans jamais descendre sous 0.
  *
  * Attaque légère :
- *   - Joueur  : entre 10 % et 40 % des dégâts.
- *   - Monstre : entre 5 % et 30 % des dégâts.
+ *   - Joueur  : entre 20 % et 40 % des dégâts.
+ *   - Monstre : entre 10 % et 40 % des dégâts.
  *
  * Attaque lourde :
  *   - Joueur  : entre 30 % et 60 % des dégâts.
@@ -608,9 +608,10 @@ tour_t changer_tour(combat_t *combat){
  */
 
 void attaque_legere(combat_t *combat){
-    int pourcentage = 10 + rand() % 31; // 10% à 40%
+    int pourcentage = 20 + rand() % 21; // 10% à 40%
     int vrai_degats = (pourcentage * combat->perso->degats)/100;
 
+    SDL_Delay(500); // 0;5 secondes
     combat->monstre->sante -= vrai_degats;
 
     if (combat->monstre->sante < 0){
@@ -622,6 +623,7 @@ void attaque_lourde(combat_t *combat){
     int pourcentage = 30 + rand() % 31; // 30% à 60%
     int vrai_degats = (pourcentage * combat->perso->degats)/100;
 
+    SDL_Delay(500); // 0;5 secondes
     combat->monstre->sante -= vrai_degats;
 
     if (combat->monstre->sante < 0){
@@ -630,9 +632,10 @@ void attaque_lourde(combat_t *combat){
 }
 
 void attaque_legere_monstre(combat_t *combat){
-    int pourcentage = 5 + rand() % 26; // 5% à 30%
+    int pourcentage = 5 + rand() % 26; // 10% à 40%
     int vrai_degats = (pourcentage * combat->monstre->degats)/100;
 
+    SDL_Delay(500); // 0;5 secondes
     combat->perso->sante -= vrai_degats;
 
     if(combat->perso->sante < 0){
@@ -644,6 +647,7 @@ void attaque_lourde_monstre(combat_t *combat){
     int pourcentage = 20 + rand() % 31; // 20% à 50%
     int vrai_degats = (pourcentage * combat->monstre->degats)/100;
 
+    SDL_Delay(500); // 0;5 secondes
     combat->perso->sante -= vrai_degats;
 
     if(combat->perso->sante < 0){
