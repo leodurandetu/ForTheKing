@@ -195,7 +195,7 @@ static void dessiner_interface_combat(SDL_Renderer* r, TTF_Font* f, SDL_Texture*
  * également de commencer un combat
  * en parallèle.
  */
-void ouvrir_fenetre_combat(combat_t ** combat) {
+void ouvrir_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     (*combat)->pFenetre = (SDL_CreateWindow("For The King - Combat", 
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE));
@@ -293,6 +293,7 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
         SDL_FreeSurface(surf_lourd);
     }
 
+    vainqueur_t vainqueur = PAS_DE_VAINQUEUR;
     int running = 1;
     int majAffichage = 1;
     (*combat)->tour = TOUR_JOUEUR;
@@ -351,12 +352,16 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
 
                         majAffichage = 1;
                     }
+
                     if((*combat)->perso->sante == 0){
                         printf("Vous avez perdu.\n");
+                        vainqueur = MONSTRE_VAINQUEUR;
                         running = 0;
                     }
+
                     if((*combat)->monstre->sante == 0){
                         printf("Vous avez gagné.\n");
+                        vainqueur = JOUEUR_VAINQUEUR;
                         running = 0;
                     }
                     
@@ -386,7 +391,7 @@ void ouvrir_fenetre_combat(combat_t ** combat) {
 
     }
 
-    detruire_fenetre_combat(combat);
+    detruire_fenetre_combat(combat, carte, vainqueur);
 }
 
 /* Leo
@@ -488,6 +493,7 @@ void maj_affichage_fenetre_combat(combat_t *combat)
     } else if (combat->monstre->type == TROLL){
         dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion);
     }
+
     SDL_RenderPresent(renderer);
 }
 
@@ -495,9 +501,29 @@ void maj_affichage_fenetre_combat(combat_t *combat)
  * Cette fonction libère la mémoire d'un combat,
  * et de sa fenêtre et des éléments graphiques.
  */
-void detruire_fenetre_combat(combat_t ** combat) {
-    
+void detruire_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur) {
+
     if (combat != NULL && *combat != NULL) {
+
+        /* si le joueur est le vainqueur,
+           on supprime le monstre de la carte */
+        if (vainqueur == JOUEUR_VAINQUEUR) {
+            monstre_t * combat_monstre = (*combat)->monstre;
+            int y = combat_monstre->y;
+            int x = combat_monstre->x;
+
+            if (combat_monstre != NULL) {
+                monstre_t * monstre = carte[y][x].monstre;
+
+                if (monstre != NULL) {
+                    carte[y][x].batiment.type = TOMBE;
+                    carte[y][x].monstre = NULL;
+                    free(monstre);
+                }
+
+            }
+
+        }
 
         if ((*combat)->texture_attaque_legere != NULL) {
             SDL_DestroyTexture((*combat)->texture_attaque_legere);
@@ -538,9 +564,15 @@ void detruire_fenetre_combat(combat_t ** combat) {
             SDL_DestroyTexture((*combat)->texture_texte_leger);
             (*combat)->texture_texte_leger = NULL;
         }
+
         if (((*combat)->texture_texte_lourd) != NULL) {
             SDL_DestroyTexture((*combat)->texture_texte_lourd);
             (*combat)->texture_texte_lourd = NULL;
+        }
+
+        if ((*combat)->font != NULL) {
+            TTF_CloseFont((*combat)->font);
+            (*combat)->font = NULL;
         }
 
         free(*combat);

@@ -6,15 +6,19 @@
 #include <SDL2/SDL_ttf.h>
 #include "../lib/perso.h"
 #include "../lib/monstre.h"
-#include "../lib/combat.h"
+#include "../lib/carte.h"
 #include "math.h"
 
-
-typedef enum{
+typedef enum {
     TOUR_JOUEUR,
     TOUR_MONSTRE
 }tour_t;
 
+typedef enum {
+    PAS_DE_VAINQUEUR,
+    JOUEUR_VAINQUEUR,
+    MONSTRE_VAINQUEUR
+} vainqueur_t;
 
 typedef struct {
 
@@ -50,9 +54,9 @@ typedef struct {
 /* Prototypes des fonctions */
 
 /* Leo */
-extern void ouvrir_fenetre_combat(combat_t ** combat);
+extern void ouvrir_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 extern void maj_affichage_fenetre_combat(combat_t * combat);
-extern void detruire_fenetre_combat(combat_t ** combat);
+extern void detruire_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur);
 /* Massoud */
 extern void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int survole, SDL_Texture *texture_arme, SDL_Texture *tex_texte, SDL_Rect *rect_texte);
 extern tour_t changer_tour(combat_t *combat);

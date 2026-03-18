@@ -221,7 +221,23 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                     if (maCase.batiment.type == TOUR_DU_BOSS) {
                         texture_batiment = textures_batiments[1];
                     } else if (estVisible) {
-                        texture_batiment = textures_batiments[0];
+
+                        switch (maCase.batiment.type) {
+
+                            case CAMPEMENT:
+                                texture_batiment = textures_batiments[0];
+                                break;
+
+                            case TOMBE:
+                                texture_batiment = textures_batiments[2];
+                                break;
+
+                            default:
+                                texture_batiment = textures_batiments[0];
+                                break;
+
+                        }
+
                     }
 
                     dessiner_texture(renderer, texture_batiment, cx, cy, largeurHex, 0.85f);

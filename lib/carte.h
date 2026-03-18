@@ -36,7 +36,8 @@ typedef enum {
     PAS_DE_BATIMENT,
     CAMPEMENT,
     MAGASIN,
-    TOUR_DU_BOSS
+    TOUR_DU_BOSS,
+    TOMBE
 } type_bat_t;
 
 typedef struct {
@@ -47,7 +48,7 @@ typedef struct case_s {
     biome_t biome;
     terrain_t terrain;
     batiment_t batiment;
-    monstre_t *monstre;
+    monstre_t * monstre;
     int estVisible;
 } case_t;
 

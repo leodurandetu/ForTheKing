@@ -145,13 +145,13 @@ int main() {
 
     // Chargement de la texture des batiments
 
-    char *nom_images_batiments[2] = {
-        "img/campement.png", "img/tour_boss.png"
+    char *nom_images_batiments[3] = {
+        "img/campement.png", "img/tour_boss.png", "img/tombe.png"
     };
 
-    SDL_Texture *textures_batiments[2] = {NULL};
+    SDL_Texture *textures_batiments[3] = {NULL};
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 3; i++) {
         SDL_Surface *img_batiment = IMG_Load(nom_images_batiments[i]);
 
         if (img_batiment) {
@@ -159,6 +159,7 @@ int main() {
             SDL_SetTextureBlendMode(textures_batiments[i], SDL_BLENDMODE_BLEND);
             SDL_FreeSurface(img_batiment);
         }
+
     }
 
     // Chargement des obstacles
@@ -362,7 +363,7 @@ int main() {
                                         combat_actuel->texture_perso = NULL;
                                         combat_actuel->texture_fond_ecran = NULL;
 
-                                        ouvrir_fenetre_combat(&combat_actuel);
+                                        ouvrir_fenetre_combat(&combat_actuel, carte);
                                         case_selection_x = carte_x;
                                         case_selection_y = carte_y;
                                     } else {
@@ -464,15 +465,15 @@ int main() {
 
     TTF_CloseFont(police);
 
+    if (combat_actuel != NULL) {
+        detruire_fenetre_combat(&combat_actuel, carte, PAS_DE_VAINQUEUR);
+    }
+
     // Destruction en mémoire des monstres notamment sur la carte
     liberer_memoire_carte(carte);
 
     // Destruction du personnagec
     detruire_perso(&perso);
-
-    if (combat_actuel != NULL) {
-        detruire_fenetre_combat(&combat_actuel);
-    }
 
     Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
