@@ -106,7 +106,8 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     SDL_Texture * textures_obstacles[4],
     SDL_Texture * texture_brouillard,
     SDL_Texture * textures_monstres[2],
-    SDL_Texture * textures_batiments[2],
+    SDL_Texture * textures_batiments[3],
+    SDL_Texture * textures_sanctuaires[4],
     int tailleCase,
     int persX, int persY,
     int case_selection_x, int case_selection_y,
@@ -188,6 +189,14 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                 }
 
                 dessiner_texture(renderer, tex_obstacle, cx, cy, largeurHex, 0.65f);
+
+                /* Affichage du sanctuaire si il existe */
+                if (maCase.sanctuaires != PAS_DE_SANCTUAIRE) {
+                    // Les enums commencent à 1 pour les sanctuaires (PUISSANCE=1),
+                    // donc l'index dans le tableau est maCase.sanctuaires - 1
+                    SDL_Texture * texture_sanc = textures_sanctuaires[maCase.sanctuaires - 1];
+                    dessiner_texture(renderer, texture_sanc, cx, cy, largeurHex, 0.75f); 
+                }
 
                 /* Affichage du monstre si il existe */
                 if (maCase.monstre != NULL) {
