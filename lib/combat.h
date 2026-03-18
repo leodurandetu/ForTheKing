@@ -23,5 +23,6 @@ extern void attaque_legere(combat_t *combat);
 extern void attaque_legere_monstre(combat_t *combat);
 extern void attaque_legere_monstre(combat_t *combat);
 extern void choix_attaque_monstre(combat_t *combat);
-
+/* Saandi*/
+combat_t* creer_combat(perso_t *perso, monstre_t *monstre);
 #endif
