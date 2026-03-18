@@ -682,7 +682,7 @@ void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int persX, int 
 }
 
 /* Massoud
- * Cette fonction place 20 sanctuaires aléatoirement
+ * Cette fonction place 100(pour le moment) sanctuaires aléatoirement
  * sur des cases libres de la carte.
  */
 void placer_sanctuaires(case_t carte[TAILLE_CARTE][TAILLE_CARTE]){
