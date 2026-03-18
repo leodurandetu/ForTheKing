@@ -1,14 +1,16 @@
-#ifndef AFFICHAGE_H
-#define AFFICHAGE_H
+#ifndef AFFICHAGE_CARTE_H
+#define AFFICHAGE_CARTE_H
 
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <math.h>
-#include "../lib/couleur.h"
-#include "../lib/monstre.h"
-#include "../lib/perso.h"
-#include "../lib/carte.h"
-#include "../lib/maths.h"
+#include "couleur.h"
+#include "monstre.h"
+#include "perso.h"
+#include "carte.h"
+#include "maths.h"
+#include "affichage_commun.h"
 
 /* Prototypes des fonctions de rendu SDL2 */
 void afficher_hex_texture(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Texture* texture, SDL_Color couleur);
@@ -29,5 +31,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
     perso_t *perso);
 
 void preparer_avant_affichage();
+
+void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* ffont, SDL_Texture* portrait, perso_t * perso);
 
 #endif 

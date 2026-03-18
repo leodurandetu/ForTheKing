@@ -4,10 +4,10 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <math.h>
-#include "../lib/couleur.h"
-#include "../lib/monstre.h"
-#include "../lib/perso.h"
-#include "../lib/maths.h"
+#include "couleur.h"
+#include "monstre.h"
+#include "perso.h"
+#include "maths.h"
 
 /* Définitions */
 #define TAILLE_CARTE 100

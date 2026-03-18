@@ -1,4 +1,4 @@
-#include "../lib/affichage.h"
+#include "../lib/affichage_carte.h"
 
 /* Fonctions d'affichage */
 
@@ -332,4 +332,90 @@ void preparer_avant_affichage() {
         HEX_SIN[i] = sinf(angle);
     }
 
+}
+
+/* Leo 
+ * Dessine l'interface du personnage
+ * lorsqu'on est sur la carte du jeu
+ * 
+ * Cette fonction ne doit pas être
+ * appelée depuis le main.
+ */
+static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, const char* nom, int pv, int pv_max, int force, int intel, int rapidite, int evasion, int x, int y, int largeur_totale, int hauteur_totale)
+{
+    /* Dessin du fond horizontal */
+    SDL_Rect fond = { x, y, largeur_totale, hauteur_totale };
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, 20, 20, 25, 230);
+    SDL_RenderFillRect(renderer, &fond);
+    SDL_SetRenderDrawColor(renderer, 100, 100, 110, 255);
+    SDL_RenderDrawRect(renderer, &fond);
+
+    int marge = 10;
+
+    /* Portrait à gauche */
+    int taille_p = hauteur_totale - 2 * marge;
+    SDL_Rect r_portrait = { fond.x + marge, fond.y + marge, taille_p, taille_p };
+    SDL_SetRenderDrawColor(renderer, 60, 60, 65, 255);
+    SDL_RenderFillRect(renderer, &r_portrait);
+    if(portrait) {
+        SDL_RenderCopy(renderer, portrait, NULL, &r_portrait);
+    }
+
+    /* Nom du personnage au-dessus des stats */
+    SDL_Rect r_nom;
+    SDL_Texture* t_nom = creer_texte(renderer, font, nom, (SDL_Color){255, 215, 0, 255}, &r_nom);
+    if(t_nom) {
+        SDL_Rect pos_nom = { r_portrait.x + r_portrait.w + marge, fond.y + marge, r_nom.w, r_nom.h };
+        SDL_RenderCopy(renderer, t_nom, NULL, &pos_nom);
+        SDL_DestroyTexture(t_nom);
+    }
+
+    /* Stats alignées horizontalement à droite du portrait */
+    int espace_x = r_portrait.x + r_portrait.w + 2 * marge;
+    int largeur_barre = largeur_totale - (espace_x - fond.x) - marge;
+
+    int h_barre = 20;
+    SDL_Rect barre_pv = { espace_x, fond.y + marge + r_nom.h + 5, largeur_barre, h_barre };
+    dessiner_barre(renderer, font, "PV", pv, pv_max, barre_pv, (SDL_Color){200, 40, 40, 255});
+}
+
+/* Leo 
+ * Dessine l'interface du personnage
+ * lorsqu'on est sur la carte du jeu
+ */
+void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Texture* portrait, perso_t * perso) {
+    int fenetre_largeur, fenetre_hauteur;
+
+    SDL_GetRendererOutputSize(renderer, &fenetre_largeur, &fenetre_hauteur);
+
+    int largeur_max = 500;
+    int largeur_min = fenetre_largeur * 0.8;
+
+    int hauteur_max = 100;
+    int hauteur_min = fenetre_hauteur * 0.2;
+
+    int largeur_menu;
+
+    if (fenetre_largeur < largeur_max) {
+        largeur_menu = largeur_min;
+    } else {
+        largeur_menu = largeur_max;
+    }
+
+    int hauteur_menu;
+
+    if (fenetre_hauteur < hauteur_max) {
+        hauteur_menu = hauteur_min;
+    } else {
+        hauteur_menu = hauteur_max;
+    }
+
+    /* on centre le menu horizontalement */
+    int x_menu = (fenetre_largeur - largeur_menu) / 2;
+
+    /* on affiche le menu 10 pixels au dessus le bas de l'écran */
+    int y_menu = (fenetre_hauteur - hauteur_menu - 10);
+
+    dessiner_interface_carte_bis(renderer, font, portrait, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion, x_menu, y_menu, largeur_menu, hauteur_menu);
 }

@@ -12,7 +12,7 @@
 #include "../lib/affichage_infos.h"
 #include "../lib/combat.h"
 #include "../lib/pause_menu.h"
-#include "../lib/affichage.h"
+#include "../lib/affichage_carte.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
@@ -41,6 +41,13 @@ int main() {
     TTF_Font* police;
 
     if (( police = TTF_OpenFont("Fonts/Enchanted Land.otf", 32)) == NULL) {
+        fprintf( stderr , " erreur chargement font \n");
+        exit( EXIT_FAILURE );
+    }
+
+    TTF_Font* police2;
+
+    if (( police2 = TTF_OpenFont("Fonts/Enchanted Land.otf", 24)) == NULL) {
         fprintf( stderr , " erreur chargement font \n");
         exit( EXIT_FAILURE );
     }
@@ -455,6 +462,8 @@ int main() {
                 afficher_personnage(renderer, texture_perso, perso, tailleCase);
             }
 
+            dessiner_interface_carte(renderer, police2, texture_perso, perso);
+
             char info_a_afficher[50];
 
             get_info_personnage(perso, "Pts_deplacements", info_a_afficher);
@@ -493,6 +502,7 @@ int main() {
     if (texte_tex) SDL_DestroyTexture(texte_tex);
 
     TTF_CloseFont(police);
+    TTF_CloseFont(police2);
 
     if (combat_actuel != NULL) {
         detruire_fenetre_combat(&combat_actuel, carte, PAS_DE_VAINQUEUR);
