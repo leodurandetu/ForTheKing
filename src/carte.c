@@ -25,18 +25,20 @@ void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y)
  * peut se déplacer sur cette case, FAUX sinon.
  */
 int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
-    case_t maCase = carte[y][x];
-
+    //  On vérifie les bords D'ABORD -> sinon seg fault
     if (x < 0 || x >= TAILLE_CARTE || y < 0 || y >= TAILLE_CARTE) {
         return FAUX;
-    } else if (maCase.biome == EAU) {
+    } 
+    
+    case_t maCase = carte[y][x];
+
+    if (maCase.biome == EAU) {
         return FAUX;
     } else if (maCase.terrain != PAS_DE_TERRAIN) {
         return FAUX;
     } else {
         return VRAI;
     }
-
 }
 
 /* Leo */
@@ -135,6 +137,7 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
             maCase.monstre = NULL;
             maCase.terrain = PAS_DE_TERRAIN;
+            maCase.sanctuaires = PAS_DE_SANCTUAIRE;
 
             carte[x][y] = maCase;
         }
@@ -572,25 +575,25 @@ void ajout_obstacles(case_t carte[TAILLE_CARTE][TAILLE_CARTE]){
             switch(carte[i][j].biome){
 
                 case FORET:
-                    if(r < 5){
+                    if(r < 8){
                         carte[i][j].terrain = ARBRES;
                     }
                     break;
 
                 case NEIGE:
-                    if(r < 5){
+                    if(r < 8){
                         carte[i][j].terrain = MONTAGNES;
                     }
                     break;
 
                 case DESERT:
-                    if(r < 5){
+                    if(r < 8){
                         carte[i][j].terrain = CACTUS;
                     }
                     break;
 
                 case TERRE:
-                    if(r < 5){
+                    if(r < 8){
                         carte[i][j].terrain = BASSIN_EAU;
                     }
                     break;
@@ -644,14 +647,30 @@ void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int persX, int 
                 dejaDeplace[y][x] = 1;
 
                 if (deplacement_possible(carte, nx, ny)
-                    && !case_occupee(carte, nx, ny, persX, persY)) {
-                    carte[ny][nx].monstre = monstre;
-                    carte[y][x].monstre = NULL;
+                    && !case_occupee(carte, nx, ny, persX, persY) &&
+                    carte[ny][nx].sanctuaires == PAS_DE_SANCTUAIRE) {
 
-                    monstre->x = nx;
-                    monstre->y = ny;
+                    // On vérifie le type du monstre actuel et le biome de destination
+                    int peut_bouger = 0;
 
-                    dejaDeplace[ny][nx] = 1;
+                    if (monstre->type == SQUELETTE && carte[ny][nx].biome == DESERT) {
+                        peut_bouger = 1;
+                    } else if (monstre->type == TROLL && carte[ny][nx].biome == FORET) {
+                        peut_bouger = 1;
+                    } else if (monstre->type != SQUELETTE && monstre->type != TROLL) {
+                        // Pour les monstres sans restriction de biome
+                        peut_bouger = 1;
+                    }
+
+                    if (peut_bouger) {
+                        carte[ny][nx].monstre = monstre;
+                        carte[y][x].monstre = NULL;
+
+                        monstre->x = nx;
+                        monstre->y = ny;
+
+                        dejaDeplace[ny][nx] = 1;
+                    }
                 }
 
             }
@@ -660,4 +679,33 @@ void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int persX, int 
 
     }
 
+}
+
+/* Massoud
+ * Cette fonction place 20 sanctuaires aléatoirement
+ * sur des cases libres de la carte.
+ */
+void placer_sanctuaires(case_t carte[TAILLE_CARTE][TAILLE_CARTE]){
+    int nb_sanc_places = 0;
+
+    while (nb_sanc_places < 100) {
+        int x = rand() % TAILLE_CARTE;
+        int y = rand() % TAILLE_CARTE;
+
+        /* On vérifie que la case est libre : pas d'eau, pas d'obstacle, 
+         * qu'il n'y a pas de bâtiment, ni de monstre, 
+         * et qu'elle n'a pas déjà un sanctuaire.
+         */
+        if (deplacement_possible(carte, x, y) && 
+            carte[y][x].monstre == NULL && 
+            carte[y][x].batiment.type == PAS_DE_BATIMENT &&
+            carte[y][x].sanctuaires == PAS_DE_SANCTUAIRE) {
+            
+            /* Choisir un type de sanctuaire au hasard entre 1 et 4,
+             * 1=PUISSANCE, 2=RAPIDITE, 3=INTELLIGENCE, 4=EXPERIENCE 
+             */
+            carte[y][x].sanctuaires = (rand() % 4) + 1;
+            nb_sanc_places++;
+        }
+    }
 }
