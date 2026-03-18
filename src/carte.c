@@ -27,7 +27,9 @@ void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y)
 int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
     case_t maCase = carte[y][x];
 
-    if (maCase.biome == EAU) {
+    if (x < 0 || x >= TAILLE_CARTE || y < 0 || y >= TAILLE_CARTE) {
+        return FAUX;
+    } else if (maCase.biome == EAU) {
         return FAUX;
     } else if (maCase.terrain != PAS_DE_TERRAIN) {
         return FAUX;
@@ -42,12 +44,16 @@ int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y)
  * Cette fonction retourne VRAI si la case
  * est occupée soit par un batiment,
  * soit par un monstre,
- * soit par un obstacle
+ * soit par un obstacle,
+ * soit par le joueur,
+ * soit si la case est en dehors de la carte
  */
 int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     int x, int y, int persX, int persY) {
 
-    if (y == persY && x == persX) {
+    if (x < 0 || x >= TAILLE_CARTE || y < 0 || y >= TAILLE_CARTE) {
+        return VRAI;
+    } else if (y == persY && x == persX) {
         return VRAI;
     } else {
         case_t maCase = carte[y][x];
