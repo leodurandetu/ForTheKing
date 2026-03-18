@@ -43,11 +43,22 @@ typedef enum {
     TOMBE
 } type_bat_t;
 
+
+// Type des sanctuaires
+typedef enum {
+    PAS_DE_SANCTUAIRE, 
+    PUISSANCE,
+    RAPIDITE,
+    INTELLIGENCE,
+    EXPERIENCE
+} type_sanc_t;
+
 typedef struct {
     type_bat_t type;
 } batiment_t;
 
 typedef struct case_s {
+    type_sanc_t sanctuaires;
     biome_t biome;
     terrain_t terrain;
     batiment_t batiment;
@@ -87,5 +98,8 @@ int chemin_valide(case_t[TAILLE_CARTE][TAILLE_CARTE], int xDepart, int yDepart, 
 int a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy);
 void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos);
 void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int persX, int persY);
+
+// placer des sanctuaires
+void placer_sanctuaires(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 
 #endif 
