@@ -13,6 +13,7 @@
 #include "../lib/combat.h"
 #include "../lib/pause_menu.h"
 #include "../lib/affichage_carte.h"
+#include "../lib/option.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
@@ -386,17 +387,13 @@ int main() {
                                     monstre_t * monstre = carte[carte_y][carte_x].monstre;
 
                                     if (monstre != NULL && combat_actuel == NULL) {
-                                        combat_actuel = malloc(sizeof(combat_t));
-                                        
-                                        combat_actuel->perso = perso;
-                                        combat_actuel->monstre = monstre;
-                                        combat_actuel->pFenetre = NULL;
-                                        combat_actuel->renderer = NULL;
-                                        combat_actuel->texture_monstre = NULL;
-                                        combat_actuel->texture_perso = NULL;
-                                        combat_actuel->texture_fond_ecran = NULL;
+                                            combat_actuel = creer_combat(perso, monstre);
+                                            int choix = ouvrir_fenetre_choix(combat_actuel);
 
-                                        ouvrir_fenetre_combat(&combat_actuel, carte);
+                                            if(choix == 1)
+                                            {
+                                                ouvrir_fenetre_combat(&combat_actuel,carte);
+                                            }
                                         case_selection_x = carte_x;
                                         case_selection_y = carte_y;
                                     } else {
