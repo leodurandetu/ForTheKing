@@ -12,6 +12,7 @@
 #include "../lib/affichage_infos.h"
 #include "../lib/combat.h"
 #include "../lib/pause_menu.h"
+#include "../lib/affichage.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
@@ -191,6 +192,8 @@ int main() {
     ajout_obstacles(carte);
     placer_monstres(carte);
     placer_batiments(carte);
+
+    preparer_avant_affichage();
 
     if (musique) Mix_FadeInMusic(musique, 1, 3000);
 

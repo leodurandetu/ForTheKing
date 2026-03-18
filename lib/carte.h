@@ -1,10 +1,13 @@
 #ifndef CARTE_H
 #define CARTE_H
 
+#include <stdio.h>
 #include <SDL2/SDL.h>
 #include <math.h>
+#include "../lib/couleur.h"
 #include "../lib/monstre.h"
 #include "../lib/perso.h"
+#include "../lib/maths.h"
 
 /* Définitions */
 #define TAILLE_CARTE 100
@@ -76,20 +79,4 @@ int chemin_valide(case_t[TAILLE_CARTE][TAILLE_CARTE], int xDepart, int yDepart, 
 int a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy);
 void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos);
 
-/* Prototypes des fonctions de rendu SDL2 */
-void afficher_hex_texture(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Texture* texture, SDL_Color couleur);
-void dessiner_contour_double_dore(SDL_Renderer* r, float cx, float cy, float rayon, int alpha);
-void dessiner_contour_ftk(SDL_Renderer* r, float cx, float cy, float rayon, int epaisseur, SDL_Color couleur);
-void afficher_hex_couleur(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Color couleur);
-void afficher_carte_sdl(SDL_Renderer * renderer,
-    case_t carte[TAILLE_CARTE][TAILLE_CARTE],
-    SDL_Texture * textures_cases[NB_BIOMES],
-    SDL_Texture * textures_obstacles[4], 
-    SDL_Texture * texture_brouillard,
-    SDL_Texture * textures_monstres[2],
-    SDL_Texture * textures_batiments[2],
-    int tailleCase,
-    int persX, int persY,
-    int case_selection_x, int case_selection_y,
-    perso_t *perso);
 #endif 
