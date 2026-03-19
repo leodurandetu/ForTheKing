@@ -354,9 +354,13 @@ int main() {
                             break;
 
                         case SDL_SCANCODE_N:
-                            restaurer_points_deplacements(perso);
-                            deplacer_monstres(carte, perso->x, perso->y);
-                            majAffichage = 1;
+
+                            if (perso->pts_deplacements <= 0) {
+                                restaurer_points_deplacements(perso);
+                                deplacer_monstres(carte, perso, &combat_actuel);
+                                redonner_un_pv(perso);
+                                majAffichage = 1;
+                            }
 
                             break;
 

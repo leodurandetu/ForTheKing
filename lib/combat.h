@@ -6,13 +6,13 @@
 #include <SDL2/SDL_ttf.h>
 #include "perso.h"
 #include "monstre.h"
-#include "carte.h"
+#include "carte_types.h"
 #include "math.h"
 #include "affichage_combat.h"
-#include "combat_types.h"
 #include "niveau.h"
 
 /* Prototypes des fonctions */
+#include "combat_types.h"
 
 /* Leo */
 extern void ouvrir_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]);

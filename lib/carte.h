@@ -9,73 +9,9 @@
 #include "perso.h"
 #include "maths.h"
 #include "commun.h"
-
-/* Définitions */
-#define TAILLE_CARTE 75
-#define NB_COORD 4
-#define INFINI 5000
-
-/* Structures */
-typedef enum {
-    TERRE,
-    EAU,
-    DESERT,
-    NEIGE,
-    FORET,
-    NB_BIOMES
-} biome_t;
-
-typedef enum {
-    ARBRES,
-    MONTAGNES,
-    BASSIN_EAU,
-    CACTUS,
-    PAS_DE_TERRAIN,
-    NB_TERRAINS,
-} terrain_t;
-
-typedef enum {
-    PAS_DE_BATIMENT,
-    CAMPEMENT,
-    MAGASIN,
-    TOUR_DU_BOSS,
-    TOMBE
-} type_bat_t;
-
-
-// Type des sanctuaires
-typedef enum {
-    PAS_DE_SANCTUAIRE, 
-    PUISSANCE,
-    RAPIDITE,
-    INTELLIGENCE,
-    EXPERIENCE
-} type_sanc_t;
-
-typedef struct {
-    type_bat_t type;
-} batiment_t;
-
-typedef struct case_s {
-    type_sanc_t sanctuaires;
-    biome_t biome;
-    terrain_t terrain;
-    batiment_t batiment;
-    monstre_t * monstre;
-    int estVisible;
-} case_t;
-
-typedef struct {
-    int x, y;
-} coordonnee_t;
-
-typedef enum {
-    HAUT,
-    BAS,
-    GAUCHE,
-    DROITE,
-    NB_DIRECTIONS
-} direction_t;
+#include "combat.h"
+#include "carte_types.h"
+#include "option.h"
 
 /* Prototypes des fonctions de logique */
 void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
@@ -96,7 +32,7 @@ void souris_vers_case(int mouseX, int mouseY, int *carte_x, int *carte_y, int ta
 int chemin_valide(case_t[TAILLE_CARTE][TAILLE_CARTE], int xDepart, int yDepart, int xCible, int yCible, int pts_deplacement_max, perso_t *perso, int *distance);
 booleen_t a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy);
 void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos);
-void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int persX, int persY);
+void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t * perso, combat_t ** combat_actuel);
 
 // placer des sanctuaires
 void placer_sanctuaires(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);

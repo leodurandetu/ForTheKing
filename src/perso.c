@@ -76,6 +76,7 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 /*
  * Cette fonction restaure les points de
  * déplacement d'un personnage.
+ * Elle doit être appelée à la fin d'un tour.
  */
 void restaurer_points_deplacements(perso_t * perso) {
 
@@ -167,4 +168,21 @@ int get_pers_movements_points(perso_t *perso){
     return perso->pts_deplacements;
 }
 
-/* Fonction qui met à jour les points de mouvements d'un personnage*/
+/* Leo
+ * Cette fonction redonne un point de vie
+ * au personnage. Elle doit être appelée
+ * lors de la fin d'un tour.
+ */
+void redonner_un_pv(perso_t * perso) {
+    
+    if (perso != NULL) {
+        int nouvSante = perso->sante + 1;
+
+        if(nouvSante > perso->sante_max) {
+            nouvSante = perso->sante_max;
+        }
+
+        perso->sante = nouvSante;
+    }
+
+}

@@ -3,7 +3,6 @@
 
 #include "perso.h"
 #include "monstre.h"
-#include "carte.h"
 #include "math.h"
 
 /* Structures et Enums */
