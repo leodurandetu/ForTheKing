@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h> 
 #include <time.h>
+#include <string.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -23,7 +24,15 @@ case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 #define TAILLE_CASE_MINI 100
 #define RAYON_DECOUVERTE_BROUILLARD 5
 
-int main() {
+int main(int argc,char *argv[]) {
+
+    int plein_ecran_depart = 0;
+
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--plein-ecran") == 0)
+            plein_ecran_depart = 1;
+    }
+
     int relancer_menu = 0;
     printf("For The King!\n");
 
@@ -79,6 +88,9 @@ int main() {
     SDL_Window* pFenetre = SDL_CreateWindow("For The King!", 
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+
+    if (plein_ecran_depart)
+        SDL_SetWindowFullscreen(pFenetre, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
     if (!pFenetre) {
         fprintf(stderr, "Erreur fenêtre : %s\n", SDL_GetError());
@@ -357,12 +369,12 @@ int main() {
 
                         case SDL_SCANCODE_N:
 
-                            if (perso->pts_deplacements <= 0) {
+                            //if (perso->pts_deplacements <= 0) {
                                 restaurer_points_deplacements(perso);
                                 deplacer_monstres(carte, perso, &combat_actuel);
                                 redonner_un_pv(perso);
                                 majAffichage = 1;
-                            }
+                            //}
 
                             break;
 
@@ -473,7 +485,6 @@ int main() {
             }
 
             dessiner_interface_carte(renderer, police2, texture_perso, perso);
-
             char info_a_afficher[50];
 
             get_info_personnage(perso, "Pts_deplacements", info_a_afficher);
