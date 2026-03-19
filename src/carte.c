@@ -24,7 +24,7 @@ void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y)
  * Cette fonction retourne VRAI si le personnage
  * peut se déplacer sur cette case, FAUX sinon.
  */
-int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
+booleen_t deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
     //  On vérifie les bords D'ABORD -> sinon seg fault
     if (x < 0 || x >= TAILLE_CARTE || y < 0 || y >= TAILLE_CARTE) {
         return FAUX;
@@ -50,7 +50,7 @@ int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y)
  * soit par le joueur,
  * soit si la case est en dehors de la carte
  */
-int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
+booleen_t case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     int x, int y, int persX, int persY) {
 
     if (x < 0 || x >= TAILLE_CARTE || y < 0 || y >= TAILLE_CARTE) {
@@ -188,8 +188,8 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     biome_t liste[] = {DESERT, NEIGE, FORET};
     
     for (int i = 0; i < 3; i++) {
-        // 28 à 42 zones
-        int nb_zones = 28 + rand() % 15; 
+        // 36 à 50 zones
+        int nb_zones = 36 + rand() % 15; 
         
         for (int z = 0; z < nb_zones; z++) {
             coordonnee_t dep = { rand() % TAILLE_CARTE, rand() % TAILLE_CARTE };
@@ -206,7 +206,7 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 // Massoud
 // Vérifie à un rayon de 2 cases (grille hexagonale) pour éviter que les monstres s'agglutinent
-int a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy) {
+booleen_t a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy) {
     // On scanne un petit carré de 5x5 autour de la case cible (rayon d'environ 2 hexagones)
     for (int y = cy - 2; y <= cy + 2; y++) {
         for (int x = cx - 2; x <= cx + 2; x++) {
@@ -432,7 +432,7 @@ void souris_vers_case(int mouseX, int mouseY,
  */
 static int peut_atteindre_rec(case_t carte[TAILLE_CARTE][TAILLE_CARTE], 
     int xDepart, int yDepart, int xCible, int yCible, 
-    int pts_deplacement_restants, int dejaVisite[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso)
+    int pts_deplacement_restants, booleen_t dejaVisite[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso)
 {
 
     /* Cas d'arrêt : on est arrivé à destination */
@@ -526,10 +526,10 @@ int chemin_valide(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
         return FAUX;
     }
 
-    /* on prépare un tableau de int qui regarde
+    /* on prépare un tableau de booleen_t qui regarde
        si une case a déjà été visitée pour éviter
        des appels récursifs inutiles */
-    int dejaVisite[TAILLE_CARTE][TAILLE_CARTE];
+    booleen_t dejaVisite[TAILLE_CARTE][TAILLE_CARTE];
 
     int i, j;
 

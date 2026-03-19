@@ -8,12 +8,11 @@
 #include "monstre.h"
 #include "perso.h"
 #include "maths.h"
+#include "commun.h"
 
 /* Définitions */
 #define TAILLE_CARTE 100
 #define NB_COORD 4
-#define VRAI 1
-#define FAUX 0
 #define INFINI 5000
 
 /* Structures */
@@ -90,12 +89,12 @@ void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
 void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
 void ajout_obstacles(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
-int deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
-int case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int persX, int persY);
+booleen_t deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y);
+booleen_t case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int persX, int persY);
 void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y);
 void souris_vers_case(int mouseX, int mouseY, int *carte_x, int *carte_y, int tailleCase, perso_t *perso, SDL_Renderer *renderer);
 int chemin_valide(case_t[TAILLE_CARTE][TAILLE_CARTE], int xDepart, int yDepart, int xCible, int yCible, int pts_deplacement_max, perso_t *perso, int *distance);
-int a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy);
+booleen_t a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy);
 void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos);
 void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int persX, int persY);
 

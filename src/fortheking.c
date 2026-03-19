@@ -14,6 +14,7 @@
 #include "../lib/pause_menu.h"
 #include "../lib/affichage_carte.h"
 #include "../lib/option.h"
+#include "../lib/inventaire.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
@@ -213,6 +214,8 @@ int main() {
 
     combat_t * combat_actuel = NULL;
 
+    inventaire_t inventaire_perso;
+
     // Génération du monde
     srand((unsigned int)time(NULL));
     init_carte(carte);
@@ -224,6 +227,7 @@ int main() {
     placer_batiments(carte);
 
     preparer_avant_affichage();
+    initialiser_inventaire(&inventaire_perso);
 
     if (musique) Mix_FadeInMusic(musique, 1, 3000);
 

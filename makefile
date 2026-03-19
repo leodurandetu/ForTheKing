@@ -11,7 +11,7 @@ MENU=bin/menu
 all: mon_prog mon_menu
 
 mon_prog: src/fortheking.c
-	${CC} -o ${PROG} src/fortheking.c src/combat.c src/affichage_carte.c src/affichage_combat.c src/affichage_commun.c src/maths.c src/pause_menu.c src/carte.c src/couleur.c src/perso.c src/monstre.c src/affichage_infos.c src/option.c ${LIBS} ${INCS} ${FLAGS}
+	${CC} -o ${PROG} src/fortheking.c src/inventaire.c src/objet.c src/combat.c src/affichage_carte.c src/affichage_combat.c src/affichage_commun.c src/maths.c src/pause_menu.c src/carte.c src/couleur.c src/perso.c src/monstre.c src/affichage_infos.c src/option.c ${LIBS} ${INCS} ${FLAGS}
 
 mon_menu: src/menu.c
 	${CC} -o ${MENU} src/menu.c ${LIBS} ${INCS} ${FLAGS}
