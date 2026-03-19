@@ -9,7 +9,6 @@
 #include "../lib/perso.h"
 
 // Layout = mise en page 
-
 const char *NOM_SLOT[] = { "", "Mage", "Assassin", "Brute", "Chasseur"};
 const char *CHEMIN_IMG[] = { NULL, "img/mage.png","img/assassin.png","img/brute.png","img/chasseur.png" };
 
@@ -229,6 +228,10 @@ int main() {
         SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
     );
 
+    // Mettre plein écran dès le début
+    fullscreen = 1;
+    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
     if (!window) {
         fprintf(stderr, "Erreur création fenêtre : %s\n", SDL_GetError());
         return EXIT_FAILURE;
@@ -239,7 +242,7 @@ int main() {
 
     /* Chargement des images de fond et logo */
     SDL_Texture *backgroundTexture = NULL;
-    SDL_Surface *backgroundSurface = IMG_Load("img/menu.jpg");
+    SDL_Surface *backgroundSurface = IMG_Load("img/fond_menu.jpg");
     if (backgroundSurface) {
         backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
         SDL_FreeSurface(backgroundSurface);
@@ -279,6 +282,12 @@ int main() {
     SDL_Texture *texLancer = NULL, *texRetour = NULL, *texChoixTitre = NULL;
     int wLancer = 0, hLancer = 0, wRetour = 0, hRetour = 0 , wChoixTitre = 0, hChoixTitre = 0;
 
+    /* Textures textes : boite de confirmation quitter */
+    SDL_Texture *texConfirmMsg = NULL, *texConfirmOui = NULL, *texConfirmNon = NULL;
+    int wConfirmMsg = 0, hConfirmMsg = 0;
+    int wConfirmOui = 0, hConfirmOui = 0;
+    int wConfirmNon = 0, hConfirmNon = 0;
+
     if (policeMenu && policeTitre) {
         SDL_Surface *surf;
 
@@ -317,6 +326,15 @@ int main() {
 
         surf = TTF_RenderText_Blended(policeTitre, "Choisissez vos heros", couleurTexte);
         texChoixTitre = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texChoixTitre, NULL, NULL, &wChoixTitre, &hChoixTitre); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeMenu, "Etes-vous sur de vouloir quitter ?", couleurTexte);
+        texConfirmMsg = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texConfirmMsg, NULL, NULL, &wConfirmMsg, &hConfirmMsg); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeMenu, "Oui", couleurTexte);
+        texConfirmOui = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texConfirmOui, NULL, NULL, &wConfirmOui, &hConfirmOui); SDL_FreeSurface(surf);
+
+        surf = TTF_RenderText_Blended(policeMenu, "Non", couleurTexte);
+        texConfirmNon = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texConfirmNon, NULL, NULL, &wConfirmNon, &hConfirmNon); SDL_FreeSurface(surf);
     }
 
     /* Declarations des rectangles */
@@ -340,6 +358,7 @@ int main() {
     int afficher_options = 0;
     int drag_volume = 0;
     int menuActif = 1;
+    int confirmer_quitter = 0; /* 1 = la boite de confirmation est affichee */
 
     SDL_Event event;
 
@@ -426,7 +445,7 @@ int main() {
         /* Gestion des evenements */
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT)
-                menuActif = 0;
+                confirmer_quitter = 1;
 
             /* Raccourci plein ecran */
             if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_f) {
@@ -436,8 +455,10 @@ int main() {
 
             /* Echap : retour en arriere selon l'etat */
             if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-                if (etat == ETAT_SELECTION_PERSO) etat = ETAT_PRINCIPAL;
-                else menuActif = 0;
+                if (confirmer_quitter)
+                    confirmer_quitter = 0; /* Echap ferme la boite sans quitter */
+                else if (etat == ETAT_SELECTION_PERSO) etat = ETAT_PRINCIPAL;
+                else confirmer_quitter = 1; /* Ouvre la boite de confirmation */
             }
 
             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
@@ -454,7 +475,7 @@ int main() {
                     if (SDL_PointInRect(&p, &btnParam))
                         afficher_options = !afficher_options;
                     if (SDL_PointInRect(&p, &btnQuitter))
-                        menuActif = 0;
+                        confirmer_quitter = 1;
 
                     if (afficher_options) {
                         if (SDL_PointInRect(&p, &btnFermerOptions)) afficher_options = 0;
@@ -493,6 +514,34 @@ int main() {
 
             if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT)
                 drag_volume = 0;
+
+            /* Clic sur la boite de confirmation quitter */
+            if (confirmer_quitter && event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+                SDL_Point p = {event.button.x, event.button.y};
+
+                /* Calcul des rectangles de la boite (meme logique que dans l'affichage) */
+                int boiteW = wConfirmMsg + 80;
+                int boiteH = 160;
+                SDL_Rect panneauConfirm = {
+                    (windowW - boiteW) / 2,
+                    (windowH - boiteH) / 2,
+                    boiteW, boiteH
+                };
+                int btnConfirmW = 110, btnConfirmH = 40;
+                SDL_Rect btnOui = {
+                    panneauConfirm.x + panneauConfirm.w / 2 - btnConfirmW - 15,
+                    panneauConfirm.y + panneauConfirm.h - btnConfirmH - 20,
+                    btnConfirmW, btnConfirmH
+                };
+                SDL_Rect btnNon = {
+                    panneauConfirm.x + panneauConfirm.w / 2 + 15,
+                    panneauConfirm.y + panneauConfirm.h - btnConfirmH - 20,
+                    btnConfirmW, btnConfirmH
+                };
+
+                if (SDL_PointInRect(&p, &btnOui)) menuActif = 0;
+                if (SDL_PointInRect(&p, &btnNon))  confirmer_quitter = 0;
+            }
 
             /* Drag(glisser) de la barre de volume */
             if (drag_volume && (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN)) {
@@ -616,8 +665,55 @@ int main() {
         if (texLogoMusique)
             SDL_RenderCopy(renderer, texLogoMusique, NULL, &btnMusique);
 
+        /* Boite de confirmation quitter (par-dessus tout le reste) */
+        if (confirmer_quitter && texConfirmMsg && texConfirmOui && texConfirmNon) {
+
+            int boiteW = wConfirmMsg + 80;
+            int boiteH = 160;
+            SDL_Rect panneauConfirm = {
+                (windowW - boiteW) / 2,
+                (windowH - boiteH) / 2,
+                boiteW, boiteH
+            };
+
+            /* Assombrit l'arriere-plan */
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 160);
+            SDL_Rect fond = {0, 0, windowW, windowH};
+            SDL_RenderFillRect(renderer, &fond);
+
+            /* Panneau central */
+            dessinerPanneau(renderer, panneauConfirm);
+
+            /* Message centre en haut du panneau */
+            SDL_Rect rectMsg = {
+                panneauConfirm.x + (panneauConfirm.w - wConfirmMsg) / 2,
+                panneauConfirm.y + 25,
+                wConfirmMsg, hConfirmMsg
+            };
+            SDL_RenderCopy(renderer, texConfirmMsg, NULL, &rectMsg);
+
+            /* Boutons Oui / Non */
+            int btnConfirmW = 110, btnConfirmH = 40;
+            SDL_Rect btnOui = {
+                panneauConfirm.x + panneauConfirm.w / 2 - btnConfirmW - 15,
+                panneauConfirm.y + panneauConfirm.h - btnConfirmH - 20,
+                btnConfirmW, btnConfirmH
+            };
+            SDL_Rect btnNon = {
+                panneauConfirm.x + panneauConfirm.w / 2 + 15,
+                panneauConfirm.y + panneauConfirm.h - btnConfirmH - 20,
+                btnConfirmW, btnConfirmH
+            };
+
+            SDL_Rect rectOui = {btnOui.x + (btnOui.w - wConfirmOui)/2, btnOui.y + (btnOui.h - hConfirmOui)/2, wConfirmOui, hConfirmOui};
+            SDL_Rect rectNon = {btnNon.x + (btnNon.w - wConfirmNon)/2, btnNon.y + (btnNon.h - hConfirmNon)/2, wConfirmNon, hConfirmNon};
+
+            dessinerBouton(renderer, texConfirmOui, btnOui, rectOui, mousePos);
+            dessinerBouton(renderer, texConfirmNon, btnNon, rectNon, mousePos);
+        }
+
         SDL_RenderPresent(renderer);
-        SDL_Delay(16);
+        SDL_Delay(7);
     }
 
     /* Nettoyage des textures */
@@ -635,6 +731,9 @@ int main() {
     if (texChoixTitre)     SDL_DestroyTexture(texChoixTitre);
     if (backgroundTexture) SDL_DestroyTexture(backgroundTexture);
     if (texLogoMusique)    SDL_DestroyTexture(texLogoMusique);
+    if (texConfirmMsg)     SDL_DestroyTexture(texConfirmMsg);
+    if (texConfirmOui)     SDL_DestroyTexture(texConfirmOui);
+    if (texConfirmNon)     SDL_DestroyTexture(texConfirmNon);
 
     for (int i = 1; i < NB_SLOTS; i++)
         if (textures_perso[i]) SDL_DestroyTexture(textures_perso[i]);
@@ -657,7 +756,7 @@ int main() {
     SDL_Quit();
 
     if (lancer_jeu == 1)
-        system("./bin/fortheking");
+        system(fullscreen ? "./bin/fortheking --plein-ecran" : "./bin/fortheking");
 
     return EXIT_SUCCESS;
 }
