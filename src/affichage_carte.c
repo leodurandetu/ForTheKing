@@ -7,8 +7,11 @@ On stocke les cos et sin une fois dans un tableau, au lieu de le faire à chaque
 Car les angles sont les mêmes pour chaque hexagone et ne changent pas.
 Cela permet de gagner en temps de calcul.
 */
+/* Léo: On sépare les valeurs pour les hexagones plats (carte) et pointus (badges/portrait) */
 float HEX_COS[6];
 float HEX_SIN[6];
+float POINTY_HEX_COS[6];
+float POINTY_HEX_SIN[6];
 
 void remplir_hexagone(SDL_Renderer *renderer, float cx, float cy, float rayon, SDL_Color couleur)
 {
@@ -44,7 +47,20 @@ void dessiner_contour_hex(SDL_Renderer *renderer, float cx, float cy, float rayo
 
         SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
     }
+}
 
+/* Léo : Fonction pour dessiner le contour d'un hexagone pointu */
+void dessiner_contour_hex_pointy(SDL_Renderer *renderer, float cx, float cy, float rayon, SDL_Color couleur)
+{
+    SDL_SetRenderDrawColor(renderer, couleur.r, couleur.g, couleur.b, couleur.a);
+    for (int i = 0; i < 6; i++) {
+        int next = (i + 1) % 6;
+        float x1 = cx + rayon * POINTY_HEX_COS[i];
+        float y1 = cy + rayon * POINTY_HEX_SIN[i];
+        float x2 = cx + rayon * POINTY_HEX_COS[next];
+        float y2 = cy + rayon * POINTY_HEX_SIN[next];
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+    }
 }
 
 void dessiner_contour_dore(SDL_Renderer * renderer, float cx, float cy, float rayon)
@@ -73,6 +89,25 @@ void dessiner_hex_texture(SDL_Renderer * renderer, SDL_Texture * texture, float 
     SDL_RenderGeometry(renderer, texture, sommets, 7, indices, 18);
 }
 
+/* Léo : Fonction pour mapper une texture dans un hexagone pointu */
+void dessiner_hex_texture_pointy(SDL_Renderer * renderer, SDL_Texture * texture, float cx, float cy, float rayon)
+{
+    SDL_Vertex sommets[7];
+    int indices[18] = { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 };
+    sommets[0].position = (SDL_FPoint){ cx, cy };
+    sommets[0].tex_coord = (SDL_FPoint){ 0.5f, 0.5f };
+    sommets[0].color = (SDL_Color){ 255, 255, 255, 255 };
+
+    for (int k = 0; k < 6; k++) {
+        sommets[k+1].position = (SDL_FPoint){ cx + rayon * POINTY_HEX_COS[k], cy + rayon * POINTY_HEX_SIN[k] };
+        // Mapping UV de -1..1 vers 0..1
+        sommets[k+1].tex_coord = (SDL_FPoint){ 0.5f + 0.5f * POINTY_HEX_COS[k], 0.5f + 0.5f * POINTY_HEX_SIN[k] };
+        sommets[k+1].color = (SDL_Color){ 255, 255, 255, 255 };
+    }
+
+    SDL_RenderGeometry(renderer, texture, sommets, 7, indices, 18);
+}
+
 /* Léo */
 /*
  * Fonction utile pour afficher une texture centrée sur une case
@@ -89,7 +124,6 @@ void dessiner_hex_texture(SDL_Renderer * renderer, SDL_Texture * texture, float 
 
         SDL_RenderCopy(renderer, texture, NULL, &dst);
     }
-
 }
 
 /* Massoud principalement, Léo secondairement */
@@ -318,76 +352,207 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
  * Cette fonction doit être appelée
  * avant le premier affichage.
  * Elle sert notamment à initialiser les
- * tableaux HEX_SIN et HEX_COS */
+ * tableaux HEX_SIN, HEX_COS, POINTY_HEX_COS, POINTY_HEX_SIN */
 void preparer_avant_affichage() {
     
-    /*
-     * On calcule les cos et sin une fois, au lieu de le faire à chaque boucle 
-     * Car les angles sont les mêmes pour chaque hexagone.
-     * Cela est utilisé pour la fonction d'affichage en hexagones.
-     */
+    /* Calcul des cos/sin pour les hexagones plats (carte) */
     for (int i = 0; i < 6; i++) {
         float angle = (60.0f * i) * (M_PI / 180.0f);
         HEX_COS[i] = cosf(angle);
         HEX_SIN[i] = sinf(angle);
     }
+    
+    /* Calcul des cos/sin pour les hexagones pointus */
+    for (int i = 0; i < 6; i++) {
+        // Décalage de 30 degrés pour obtenir la pointe vers le haut
+        float angle = (60.0f * i + 30.0f) * (M_PI / 180.0f);
+        POINTY_HEX_COS[i] = cosf(angle);
+        POINTY_HEX_SIN[i] = sinf(angle);
+    }
 
+}
+
+/* Léo
+ * Dessine un badge hexagonal Pointy Top sombre
+ * avec un nombre coloré au centre
+ */
+static void dessiner_insigne_stat(SDL_Renderer* renderer, TTF_Font* font, float cx, float cy, float rayon, const char* valeur, SDL_Color couleur_fond, SDL_Color couleur_texte) {
+    SDL_Vertex sommets[7];
+    int indices[18] = {0,1,2, 0,2,3, 0,3,4, 0,4,5, 0,5,6, 0,6,1};
+
+    // Centre de l'hexagone
+    sommets[0].position = (SDL_FPoint){cx, cy};
+    sommets[0].color = couleur_fond;
+
+    // Calcul des 6 sommets pointus
+    for(int i = 0; i < 6; i++) {
+        sommets[i+1].position.x = cx + rayon * POINTY_HEX_COS[i];
+        sommets[i+1].position.y = cy + rayon * POINTY_HEX_SIN[i];
+        sommets[i+1].color = couleur_fond;
+    }
+
+    // Remplissage de la géométrie
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderGeometry(renderer, NULL, sommets, 7, indices, 18);
+
+    // Dessin du contour plus clair pour délimiter l'hexagone
+    SDL_SetRenderDrawColor(renderer, 80, 80, 90, 255);
+    for (int i = 0; i < 6; i++) {
+        int next = (i + 1) % 6;
+        float x1 = cx + rayon * POINTY_HEX_COS[i];
+        float y1 = cy + rayon * POINTY_HEX_SIN[i];
+        float x2 = cx + rayon * POINTY_HEX_COS[next];
+        float y2 = cy + rayon * POINTY_HEX_SIN[next];
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+    }
+
+    // Affichage du texte coloré au centre
+    SDL_Rect r_txt;
+    SDL_Texture* t_txt = creer_texte(renderer, font, valeur, couleur_texte, &r_txt);
+    if(t_txt) {
+        // On centre parfaitement le chiffre
+        SDL_Rect pos_txt = { (int)(cx - r_txt.w/2.0f), (int)(cy - r_txt.h/2.0f), r_txt.w, r_txt.h };
+        SDL_RenderCopy(renderer, t_txt, NULL, &pos_txt);
+        SDL_DestroyTexture(t_txt);
+    }
 }
 
 /* Leo 
  * Dessine l'interface du personnage
  * lorsqu'on est sur la carte du jeu
- * 
  * Cette fonction ne doit pas être
  * appelée depuis le main.
  */
 static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, const char* nom, int pv, int pv_max,
     int xp, int xp_max, int niveau, int force, int intel, int rapidite, int evasion, int x, int y, int largeur_totale, int hauteur_totale)
 {
-    /* Dessin du fond horizontal */
+    /* Dessin du fond principal */
     SDL_Rect fond = { x, y, largeur_totale, hauteur_totale };
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    SDL_SetRenderDrawColor(renderer, 20, 20, 25, 230);
+    
+    /* Fond sombre bleuté/noir */
+    SDL_SetRenderDrawColor(renderer, 25, 25, 30, 240);
     SDL_RenderFillRect(renderer, &fond);
-    SDL_SetRenderDrawColor(renderer, 100, 100, 110, 255);
+    
+    /* Bordure double effet */
+    SDL_SetRenderDrawColor(renderer, 100, 100, 110, 255); // Bordure claire extérieure
     SDL_RenderDrawRect(renderer, &fond);
+    SDL_Rect fond_int = { x + 2, y + 2, largeur_totale - 4, hauteur_totale - 4 };
+    SDL_SetRenderDrawColor(renderer, 45, 45, 55, 255); // Bordure intérieure sombre
+    SDL_RenderDrawRect(renderer, &fond_int);
 
-    int marge = 10;
+    /* Dessin des insgines (hexagones) */
+    float rayon_insigne = 14.0f;
+    float espacement_y = 28.0f; // Espace vertical entre les centres
+    
+    // Le centre X est exactement sur le bord gauche du fond (collé à l'extérieur)
+    float insigne_cx = fond.x;
+    
+    // On centre verticalement les 4 hexagones par rapport au rectangle
+    float insigne_cy_depart = fond.y + 24.0f; 
 
-    /* Portrait à gauche */
-    int taille_p = hauteur_totale - 2 * marge;
-    SDL_Rect r_portrait = { fond.x + marge, fond.y + marge, taille_p, taille_p };
-    SDL_SetRenderDrawColor(renderer, 60, 60, 65, 255);
-    SDL_RenderFillRect(renderer, &r_portrait);
-    if(portrait) {
-        SDL_RenderCopy(renderer, portrait, NULL, &r_portrait);
+    char val_f[16], val_i[16], val_r[16], val_e[16];
+    sprintf(val_f, "%d", force);
+    sprintf(val_i, "%d", intel);
+    sprintf(val_r, "%d", rapidite);
+    sprintf(val_e, "%d", evasion);
+
+    SDL_Color fond_hex_sombre = {30, 30, 35, 255}; // Hexagone très sombre
+
+    // Force (Texte Rouge)
+    dessiner_insigne_stat(renderer, font, insigne_cx, insigne_cy_depart, rayon_insigne, val_f, fond_hex_sombre, (SDL_Color){240, 60, 60, 255});
+    // Intelligence (Texte Bleu)
+    dessiner_insigne_stat(renderer, font, insigne_cx, insigne_cy_depart + espacement_y, rayon_insigne, val_i, fond_hex_sombre, (SDL_Color){60, 150, 255, 255});
+    // Rapidité (Texte Vert)
+    dessiner_insigne_stat(renderer, font, insigne_cx, insigne_cy_depart + espacement_y * 2, rayon_insigne, val_r, fond_hex_sombre, (SDL_Color){60, 220, 80, 255});
+    // Évasion (Texte Jaune/Or)
+    dessiner_insigne_stat(renderer, font, insigne_cx, insigne_cy_depart + espacement_y * 3, rayon_insigne, val_e, fond_hex_sombre, (SDL_Color){240, 200, 50, 255});
+
+    /* Portrait en hexagone pointy top */
+    float portrait_rayon = 50.0f;
+    // On décale le centre X pour ne pas toucher les insignes de gauche
+    float portrait_cx = fond.x + 70.0f; 
+    float portrait_cy = fond.y + (hauteur_totale / 3.0f); // Centré verticalement
+    
+    // Fond de l'hexagone de portrait
+    SDL_Vertex sommets[7];
+    int indices[18] = {0,1,2, 0,2,3, 0,3,4, 0,4,5, 0,5,6, 0,6,1};
+    sommets[0].position = (SDL_FPoint){portrait_cx, portrait_cy};
+    sommets[0].color = (SDL_Color){40, 40, 45, 255};
+    for(int i = 0; i < 6; i++) {
+        sommets[i+1].position.x = portrait_cx + portrait_rayon * POINTY_HEX_COS[i];
+        sommets[i+1].position.y = portrait_cy + portrait_rayon * POINTY_HEX_SIN[i];
+        sommets[i+1].color = (SDL_Color){40, 40, 45, 255};
     }
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderGeometry(renderer, NULL, sommets, 7, indices, 18);
 
-    /* Nom du personnage au-dessus des stats */
+    // Dessin de l'image (texture mappée dans l'hexagone)
+    if(portrait) {
+        dessiner_hex_texture_pointy(renderer, portrait, portrait_cx, portrait_cy, portrait_rayon);
+    }
+    
+    // Dessin du double contour
+    dessiner_contour_hex_pointy(renderer, portrait_cx, portrait_cy, portrait_rayon, (SDL_Color){100, 100, 110, 255});
+    dessiner_contour_hex_pointy(renderer, portrait_cx, portrait_cy, portrait_rayon - 1.0f, (SDL_Color){60, 60, 70, 255});
+
+    /* Nom du personnage */
     SDL_Rect r_nom;
-
     char nomComplet[64];
-
     sprintf(nomComplet, "%s (Niv. %d)", nom, niveau);
-
     SDL_Texture* t_nom = creer_texte(renderer, font, nomComplet, (SDL_Color){255, 215, 0, 255}, &r_nom);
 
+    // Le contenu à droite commence après le rayon de l'hexagone portrait + marge
+    int start_droite_x = (int)(portrait_cx + portrait_rayon + 15);
+
     if(t_nom) {
-        SDL_Rect pos_nom = { r_portrait.x + r_portrait.w + marge, fond.y + marge, r_nom.w, r_nom.h };
+        SDL_Rect pos_nom = { start_droite_x, fond.y + 15, r_nom.w, r_nom.h };
         SDL_RenderCopy(renderer, t_nom, NULL, &pos_nom);
         SDL_DestroyTexture(t_nom);
     }
 
-    /* Stats alignées horizontalement à droite du portrait */
-    int espace_x = r_portrait.x + r_portrait.w + 2 * marge;
-    int largeur_barre = largeur_totale - (espace_x - fond.x) - marge;
+    /* Inventaire (Au-dessus des barres) */
+    int taille_case_inv = 25;
+    int esp_case = 3;
+    
+    int inv_y = fond.y + 15 + r_nom.h + 5; 
 
-    int h_barre = 20;
-    SDL_Rect barre_pv = { espace_x, fond.y + marge + r_nom.h + 5, largeur_barre, h_barre };
-    dessiner_barre(renderer, font, "PV", pv, pv_max, barre_pv, (SDL_Color){200, 40, 40, 255});
+    for(int ligne = 0; ligne < 2; ligne++) {
+        for(int col = 0; col < 4; col++) {
+            SDL_Rect case_inv = {
+                start_droite_x + col * (taille_case_inv + esp_case),
+                inv_y + ligne * (taille_case_inv + esp_case),
+                taille_case_inv,
+                taille_case_inv
+            };
+            
+            SDL_SetRenderDrawColor(renderer, 35, 35, 40, 255);
+            SDL_RenderFillRect(renderer, &case_inv);
+            
+            SDL_SetRenderDrawColor(renderer, 80, 80, 90, 255);
+            SDL_RenderDrawRect(renderer, &case_inv);
+        }
+    }
 
-    SDL_Rect barre_xp = { espace_x, fond.y + marge + r_nom.h + 5 + 5 + h_barre, largeur_barre, h_barre };
-    dessiner_barre(renderer, font, "XP", xp, xp_max, barre_xp, (SDL_Color){40, 40, 200, 255});
+    /* Barres d'xp/pv fixées */
+    int h_barre = 14;
+    int espace_barres = 6;
+    int marge_bords = 12; // Marge entre la barre et le bord du rectangle
+    
+    // Calcul du Y verrouillé sur le bas
+    int y_barres = fond.y + hauteur_totale - marge_bords - (2 * h_barre) - espace_barres;
+    
+    // Position X et largeur pour que ça traverse tout le bas
+    int barre_x = fond.x + marge_bords;
+    int largeur_barre_pleine = largeur_totale - (2 * marge_bords); 
+    
+    // Barre PV (Rouge)
+    SDL_Rect barre_pv = { barre_x, y_barres, largeur_barre_pleine, h_barre };
+    dessiner_barre(renderer, font, "PV", pv, pv_max, barre_pv, (SDL_Color){220, 60, 60, 255});
+
+    // Barre XP (Bleu)
+    SDL_Rect barre_xp = { barre_x, y_barres + h_barre + espace_barres, largeur_barre_pleine, h_barre };
+    dessiner_barre(renderer, font, "XP", xp, xp_max, barre_xp, (SDL_Color){60, 150, 255, 255});
 }
 
 /* Leo 
@@ -399,33 +564,14 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
 
     SDL_GetRendererOutputSize(renderer, &fenetre_largeur, &fenetre_hauteur);
 
-    int largeur_max = 500;
-    int largeur_min = fenetre_largeur * 0.8;
-
-    int hauteur_max = 100;
-    int hauteur_min = fenetre_hauteur * 0.2;
-
-    int largeur_menu;
-
-    if (fenetre_largeur < largeur_max) {
-        largeur_menu = largeur_min;
-    } else {
-        largeur_menu = largeur_max;
-    }
-
-    int hauteur_menu;
-
-    if (fenetre_hauteur < hauteur_max) {
-        hauteur_menu = hauteur_min;
-    } else {
-        hauteur_menu = hauteur_max;
-    }
+    int largeur_menu = 340; 
+    int hauteur_menu = 165; 
 
     /* on centre le menu horizontalement */
     int x_menu = (fenetre_largeur - largeur_menu) / 2;
 
-    /* on affiche le menu 10 pixels au dessus le bas de l'écran */
-    int y_menu = (fenetre_hauteur - hauteur_menu - 10);
+    /* on affiche le menu 15 pixels au dessus le bas de l'écran */
+    int y_menu = (fenetre_hauteur - hauteur_menu - 15);
 
     int expMax = xp_necessaire(perso->niveau);
 
