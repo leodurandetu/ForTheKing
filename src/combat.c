@@ -202,36 +202,48 @@ void ouvrir_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE
 
     }
 
-    detruire_fenetre_combat(combat, carte, vainqueur);
+    combat_termine(combat, carte, vainqueur);
+    detruire_fenetre_combat(combat);
+}
+
+/* Leo
+ * Cette fonction permet de mettre à
+ * jour l'XP du personnage après
+ * un combat ainsi que supprimer le
+ * monstre sur la carte si il a perdu
+ */
+void combat_termine(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur) {
+    /* si le joueur est le vainqueur,
+     * on supprime le monstre de la carte,
+     * et on lui donne de l'XP
+     */
+    if (vainqueur == JOUEUR_VAINQUEUR) {
+        monstre_t * combat_monstre = (*combat)->monstre;
+        int y = combat_monstre->y;
+        int x = combat_monstre->x;
+
+        if (combat_monstre != NULL) {
+            monstre_t * monstre = carte[y][x].monstre;
+
+            if (monstre != NULL) {
+                carte[y][x].batiment.type = TOMBE;
+                carte[y][x].monstre = NULL;
+                free(monstre);
+            }
+
+        }
+
+        monstre_tue((*combat)->perso);
+    }
 }
 
 /* Leo
  * Cette fonction libère la mémoire d'un combat,
  * et de sa fenêtre et des éléments graphiques.
  */
-void detruire_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur) {
+void detruire_fenetre_combat(combat_t ** combat) {
 
     if (combat != NULL && *combat != NULL) {
-
-        /* si le joueur est le vainqueur,
-           on supprime le monstre de la carte */
-        if (vainqueur == JOUEUR_VAINQUEUR) {
-            monstre_t * combat_monstre = (*combat)->monstre;
-            int y = combat_monstre->y;
-            int x = combat_monstre->x;
-
-            if (combat_monstre != NULL) {
-                monstre_t * monstre = carte[y][x].monstre;
-
-                if (monstre != NULL) {
-                    carte[y][x].batiment.type = TOMBE;
-                    carte[y][x].monstre = NULL;
-                    free(monstre);
-                }
-
-            }
-
-        }
 
         if ((*combat)->texture_attaque_legere != NULL) {
             SDL_DestroyTexture((*combat)->texture_attaque_legere);

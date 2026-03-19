@@ -11,6 +11,7 @@
 #include "carte.h"
 #include "maths.h"
 #include "affichage_commun.h"
+#include "niveau.h"
 
 /* Prototypes des fonctions de rendu SDL2 */
 void afficher_hex_texture(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Texture* texture, SDL_Color couleur);

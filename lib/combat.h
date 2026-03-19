@@ -10,12 +10,14 @@
 #include "math.h"
 #include "affichage_combat.h"
 #include "combat_types.h"
+#include "niveau.h"
 
 /* Prototypes des fonctions */
 
 /* Leo */
 extern void ouvrir_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
-extern void detruire_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur);
+extern void combat_termine(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur);
+extern void detruire_fenetre_combat(combat_t ** combat);
 extern void detruire_combat(combat_t ** combat);
 /* Massoud */
 extern tour_t changer_tour(combat_t *combat);

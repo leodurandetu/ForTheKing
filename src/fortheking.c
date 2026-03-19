@@ -509,7 +509,8 @@ int main() {
     TTF_CloseFont(police2);
 
     if (combat_actuel != NULL) {
-        detruire_fenetre_combat(&combat_actuel, carte, PAS_DE_VAINQUEUR);
+        combat_termine(&combat_actuel, carte, PAS_DE_VAINQUEUR);
+        detruire_fenetre_combat(&combat_actuel);
     }
 
     // Destruction en mémoire des monstres notamment sur la carte

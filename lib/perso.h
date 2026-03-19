@@ -1,6 +1,8 @@
 #ifndef PERSO_H
 #define PERSO_H
 
+#include <SDL2/SDL.h>
+
 /* Structures */
 
 typedef enum {

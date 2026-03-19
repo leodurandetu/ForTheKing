@@ -341,7 +341,8 @@ void preparer_avant_affichage() {
  * Cette fonction ne doit pas être
  * appelée depuis le main.
  */
-static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, const char* nom, int pv, int pv_max, int force, int intel, int rapidite, int evasion, int x, int y, int largeur_totale, int hauteur_totale)
+static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, const char* nom, int pv, int pv_max,
+    int xp, int xp_max, int niveau, int force, int intel, int rapidite, int evasion, int x, int y, int largeur_totale, int hauteur_totale)
 {
     /* Dessin du fond horizontal */
     SDL_Rect fond = { x, y, largeur_totale, hauteur_totale };
@@ -364,7 +365,13 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
 
     /* Nom du personnage au-dessus des stats */
     SDL_Rect r_nom;
-    SDL_Texture* t_nom = creer_texte(renderer, font, nom, (SDL_Color){255, 215, 0, 255}, &r_nom);
+
+    char nomComplet[64];
+
+    sprintf(nomComplet, "%s (Niv. %d)", nom, niveau);
+
+    SDL_Texture* t_nom = creer_texte(renderer, font, nomComplet, (SDL_Color){255, 215, 0, 255}, &r_nom);
+
     if(t_nom) {
         SDL_Rect pos_nom = { r_portrait.x + r_portrait.w + marge, fond.y + marge, r_nom.w, r_nom.h };
         SDL_RenderCopy(renderer, t_nom, NULL, &pos_nom);
@@ -378,6 +385,9 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
     int h_barre = 20;
     SDL_Rect barre_pv = { espace_x, fond.y + marge + r_nom.h + 5, largeur_barre, h_barre };
     dessiner_barre(renderer, font, "PV", pv, pv_max, barre_pv, (SDL_Color){200, 40, 40, 255});
+
+    SDL_Rect barre_xp = { espace_x, fond.y + marge + r_nom.h + 5 + 5 + h_barre, largeur_barre, h_barre };
+    dessiner_barre(renderer, font, "XP", xp, xp_max, barre_xp, (SDL_Color){40, 40, 200, 255});
 }
 
 /* Leo 
@@ -417,5 +427,8 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
     /* on affiche le menu 10 pixels au dessus le bas de l'écran */
     int y_menu = (fenetre_hauteur - hauteur_menu - 10);
 
-    dessiner_interface_carte_bis(renderer, font, portrait, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion, x_menu, y_menu, largeur_menu, hauteur_menu);
+    int expMax = xp_necessaire(perso->niveau);
+
+    dessiner_interface_carte_bis(renderer, font, portrait, "Mage Joueur", perso->sante, perso->sante_max, perso->exp, expMax, perso->niveau,
+        perso->force, perso->intelligence, perso->rapidite, perso->evasion, x_menu, y_menu, largeur_menu, hauteur_menu);
 }
