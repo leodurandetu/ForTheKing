@@ -273,29 +273,31 @@ int main() {
         // Traitement des actions du joueur
         while (SDL_PollEvent(&e)) {
             switch(e.type) {
+                
                 case SDL_QUIT:
                     running = 0;
                     break;
 
-
                 case SDL_KEYDOWN:
-                    // Menu de pause sur Echap
-                    if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-                        int windowW, windowH;
-                        SDL_GetWindowSize(pFenetre, &windowW, &windowH);
-                        
-                        int choix = afficher_menu_pause(renderer, police, windowW, windowH);
-                        
-                        if (choix == 1) { // L'utilisateur a cliqué sur Quitter
-                            running = 0;  
-                            relancer_menu = 1;
-                        }
-                        
-                        majAffichage = 1; // On force le rafraîchissement de la carte au retour
-                    }
 
                     // Déplacements au clavier
                     switch(e.key.keysym.scancode) {
+
+                        // Menu de pause sur Echap
+                        case SDL_SCANCODE_ESCAPE:
+                            int windowW, windowH;
+                            SDL_GetWindowSize(pFenetre, &windowW, &windowH);
+                            
+                            int choix = afficher_menu_pause(renderer, police, windowW, windowH);
+                            
+                            if (choix == 1) { // L'utilisateur a cliqué sur Quitter
+                                running = 0;  
+                                relancer_menu = 1;
+                            }
+                            
+                            majAffichage = 1; // On force le rafraîchissement de la carte au retour
+                            break;
+
                         case SDL_SCANCODE_W: 
                             if (perso->y - 1 >= 0 
                                 && deplacement_possible(carte, perso->x, perso->y - 1)
