@@ -5,6 +5,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
+
 /* Etats du menu */
 typedef enum {
     ETAT_PRINCIPAL,
