@@ -387,13 +387,16 @@ int main() {
                                     monstre_t * monstre = carte[carte_y][carte_x].monstre;
 
                                     if (monstre != NULL && combat_actuel == NULL) {
-                                            combat_actuel = creer_combat(perso, monstre);
-                                            int choix = ouvrir_fenetre_choix(combat_actuel);
+                                        combat_actuel = creer_combat(perso, monstre);
+                                        int choix = ouvrir_fenetre_choix(combat_actuel);
 
-                                            if(choix == 1)
-                                            {
-                                                ouvrir_fenetre_combat(&combat_actuel,carte);
-                                            }
+                                        if(choix == 1)
+                                        {
+                                            ouvrir_fenetre_combat(&combat_actuel,carte);
+                                        } else if (choix == 0) {
+                                            detruire_combat(&combat_actuel);
+                                        }
+
                                         case_selection_x = carte_x;
                                         case_selection_y = carte_y;
                                     } else {
