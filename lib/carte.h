@@ -11,7 +11,7 @@
 #include "commun.h"
 
 /* Définitions */
-#define TAILLE_CARTE 100
+#define TAILLE_CARTE 75
 #define NB_COORD 4
 #define INFINI 5000
 
