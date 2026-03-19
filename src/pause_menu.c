@@ -139,7 +139,7 @@ int afficher_menu_pause(SDL_Renderer* renderer, TTF_Font* police, int windowW, i
         dessinerBoutonPause(renderer, tQuit, btnQuitter, rectTxtQuit, mousePos);
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(16); 
+        SDL_Delay(7); 
     }
 
     /* Nettoyage */
