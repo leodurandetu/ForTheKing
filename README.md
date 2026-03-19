@@ -85,4 +85,4 @@ Une fois dans le jeu :
 - Déplacez le personnage sur la carte avec ZQSD  
 - Déplacez le personnage sur la carte en cliquant sur une case voisine avec un carré au milieu (indicateur de déplacement possible)  
 - Appuyez sur la touche [N] quand vous n'avez plus de points de déplacement. Cela va les remplir et passer au prochain tour.  
-
+- Cliquez sur un monstre pour lancer le combat, ou soyez dans sa portée d'attaque (1 case)
