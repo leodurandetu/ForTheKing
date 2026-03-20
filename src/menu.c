@@ -7,6 +7,7 @@
 
 #include "../lib/menu.h"
 #include "../lib/perso.h"
+#include "../lib/fond_menu.h"
 
 // Layout = mise en page 
 const char *NOM_SLOT[] = { "", "Mage", "Assassin", "Brute", "Chasseur"};
@@ -240,20 +241,17 @@ int main() {
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-    /* Chargement des images de fond et logo */
-    SDL_Texture *backgroundTexture = NULL;
-    SDL_Surface *backgroundSurface = IMG_Load("img/fond_menu.jpg");
-    if (backgroundSurface) {
-        backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
-        SDL_FreeSurface(backgroundSurface);
-    }
+    /* Chargement de la video de fond */
+    SDL_GetWindowSize(window, &windowW, &windowH);
+    FondMenu *fondMenu = fond_menu_ouvrir(renderer, "img/fond_video.mp4", windowW, windowH);
+    SDL_Texture *backgroundTexture = NULL; /* pour le nettoyage */
 
-    SDL_Texture *texLogoMusique = NULL;
+    /*SDL_Texture *texLogoMusique = NULL;
     SDL_Surface *surfLogo = IMG_Load("img/logomusique.png");
     if (surfLogo) {
         texLogoMusique = SDL_CreateTextureFromSurface(renderer, surfLogo);
         SDL_FreeSurface(surfLogo);
-    }
+    }*/
 
     /* Chargement des images de personnages (index 0 = SLOT_VIDE = NULL) */
     SDL_Texture *textures_perso[NB_SLOTS];
@@ -555,11 +553,9 @@ int main() {
         /* Affichage */
         SDL_RenderClear(renderer);
 
-        /* Fond */
-        if (backgroundTexture) {
-            SDL_Rect dest = {0, 0, windowW, windowH};
-            SDL_RenderCopy(renderer, backgroundTexture, NULL, &dest);
-        }
+        /* Fond video */
+        fond_menu_update(fondMenu);
+        fond_menu_render(fondMenu, renderer, windowW, windowH);
 
         /* Titre (masque sur l'ecran de selection pour liberer de la place) */
         if (texTitre && etat != ETAT_SELECTION_PERSO) {
@@ -662,8 +658,8 @@ int main() {
         }
 
         /* Logo musique toujours visible */
-        if (texLogoMusique)
-            SDL_RenderCopy(renderer, texLogoMusique, NULL, &btnMusique);
+        /*if (texLogoMusique)
+            SDL_RenderCopy(renderer, texLogoMusique, NULL, &btnMusique);*/
 
         /* Boite de confirmation quitter (par-dessus tout le reste) */
         if (confirmer_quitter && texConfirmMsg && texConfirmOui && texConfirmNon) {
@@ -730,7 +726,8 @@ int main() {
     if (texRetour)         SDL_DestroyTexture(texRetour);
     if (texChoixTitre)     SDL_DestroyTexture(texChoixTitre);
     if (backgroundTexture) SDL_DestroyTexture(backgroundTexture);
-    if (texLogoMusique)    SDL_DestroyTexture(texLogoMusique);
+    fond_menu_fermer(fondMenu);
+    //if (texLogoMusique)    SDL_DestroyTexture(texLogoMusique);
     if (texConfirmMsg)     SDL_DestroyTexture(texConfirmMsg);
     if (texConfirmOui)     SDL_DestroyTexture(texConfirmOui);
     if (texConfirmNon)     SDL_DestroyTexture(texConfirmNon);
