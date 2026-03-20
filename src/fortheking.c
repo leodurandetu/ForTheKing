@@ -369,12 +369,12 @@ int main(int argc,char *argv[]) {
 
                         case SDL_SCANCODE_N:
 
-                            //if (perso->pts_deplacements <= 0) {
+                            if (perso->pts_deplacements <= 0) {
                                 restaurer_points_deplacements(perso);
-                                deplacer_monstres(carte, perso, &combat_actuel);
+                                deplacer_monstres(renderer, carte, perso, &combat_actuel);
                                 redonner_un_pv(perso);
                                 majAffichage = 1;
-                            //}
+                            }
 
                             break;
 
@@ -414,7 +414,7 @@ int main(int argc,char *argv[]) {
 
                                         if(choix == 1)
                                         {
-                                            ouvrir_fenetre_combat(&combat_actuel,carte);
+                                            ouvrir_fenetre_combat(renderer, &combat_actuel, carte);
                                         } else if (choix == 0) {
                                             detruire_combat(&combat_actuel);
                                         }
@@ -526,7 +526,7 @@ int main(int argc,char *argv[]) {
     TTF_CloseFont(police2);
 
     if (combat_actuel != NULL) {
-        combat_termine(&combat_actuel, carte, PAS_DE_VAINQUEUR);
+        combat_termine(renderer, &combat_actuel, carte, PAS_DE_VAINQUEUR);
         detruire_fenetre_combat(&combat_actuel);
     }
 

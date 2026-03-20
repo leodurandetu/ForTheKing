@@ -15,6 +15,7 @@ booleen_t ajouter_objet_inventaire(inventaire_t * inventaire, objet_t objet) {
             ajout_reussi = VRAI;
         } else if (inventaire->contenu[i].quantite > 0 && inventaire->contenu[i].type == objet.type) {
             inventaire->contenu[i].quantite += objet.quantite;
+            ajout_reussi = VRAI;
         }
 
         i++;
@@ -76,6 +77,23 @@ void initialiser_inventaire(inventaire_t * inventaire) {
     int i;
 
     for (i = 0; i < TAILLE_INVENTAIRE; i++) {
+        inventaire->contenu[i].quantite = -1;
+        inventaire->contenu[i].nom = NULL;
+        inventaire->contenu[i].texture = NULL;
+    }
+
+}
+
+/* Leo
+ * Cette fonction libère la mémoire
+ * de l'inventaire. Elle doit être
+ * appelée à la fin du main uniquement.
+ */
+void liberer_memoire_inventaire(inventaire_t * inventaire) {
+    int i;
+
+    for (i = 0; i < TAILLE_INVENTAIRE; i++) {
+        detruire_objet(&(inventaire->contenu[i]));
         inventaire->contenu[i].quantite = -1;
     }
 

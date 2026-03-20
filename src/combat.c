@@ -6,7 +6,7 @@
  * également de commencer un combat
  * en parallèle.
  */
-void ouvrir_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
     (*combat)->pFenetre = (SDL_CreateWindow("For The King - Combat", 
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE));
@@ -202,7 +202,7 @@ void ouvrir_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE
 
     }
 
-    combat_termine(combat, carte, vainqueur);
+    combat_termine(rendererPrincipal, combat, carte, vainqueur);
     detruire_fenetre_combat(combat);
 }
 
@@ -212,13 +212,14 @@ void ouvrir_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE
  * un combat ainsi que supprimer le
  * monstre sur la carte si il a perdu
  */
-void combat_termine(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur) {
+void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur) {
     /* si le joueur est le vainqueur,
      * on supprime le monstre de la carte,
      * et on lui donne de l'XP
      */
     if (vainqueur == JOUEUR_VAINQUEUR) {
         monstre_t * combat_monstre = (*combat)->monstre;
+        perso_t * perso = (*combat)->perso;
         int y = combat_monstre->y;
         int x = combat_monstre->x;
 
@@ -233,7 +234,10 @@ void combat_termine(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]
 
         }
 
-        monstre_tue((*combat)->perso);
+        monstre_tue(perso);
+
+        objet_t kit_de_soins = creer_kit_de_soins(rendererPrincipal);
+        ajouter_objet_inventaire(&(perso->inventaire), kit_de_soins);
     }
 }
 

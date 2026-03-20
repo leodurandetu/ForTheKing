@@ -609,7 +609,7 @@ void ajout_obstacles(case_t carte[TAILLE_CARTE][TAILLE_CARTE]){
  * Cette fonction déplace tous les monstres d'une case
  * sur la carte dans une direction aléatoire
  */
-void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t * perso, combat_t ** combat_actuel) {
+void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t * perso, combat_t ** combat_actuel) {
     /* on suppose qu'on a déjà fait srand(time(NULL)) dans le main */
     int x, y;
 
@@ -632,7 +632,7 @@ void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t * perso
 
                     if(choix == 1)
                     {
-                        ouvrir_fenetre_combat(combat_actuel,carte);
+                        ouvrir_fenetre_combat(rendererPrincipal, combat_actuel, carte);
                     } else if (choix == 0) {
                         detruire_combat(combat_actuel);
                     }

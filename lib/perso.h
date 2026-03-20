@@ -2,8 +2,9 @@
 #define PERSO_H
 
 #include <SDL2/SDL.h>
+#include "inventaire.h"
 
-/* Structures */
+/* Structures et Enums */
 
 typedef enum {
 
@@ -14,7 +15,7 @@ typedef enum {
 
 } perso_type_t;
 
-typedef struct {
+typedef struct perso_s {
 
     int x, y;
     int degats;
@@ -28,11 +29,12 @@ typedef struct {
 
     int niveau;
     int exp;
-    
+
+    inventaire_t inventaire;
+
     perso_type_t type;
 
 } perso_t;
-
 
 /* Prototypes des fonctions*/
 

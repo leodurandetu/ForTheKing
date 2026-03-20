@@ -15,8 +15,8 @@
 #include "combat_types.h"
 
 /* Leo */
-extern void ouvrir_fenetre_combat(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
-extern void combat_termine(combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur);
+extern void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]);
+extern void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur);
 extern void detruire_fenetre_combat(combat_t ** combat);
 extern void detruire_combat(combat_t ** combat);
 /* Massoud */

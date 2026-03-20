@@ -3,11 +3,11 @@
 /* Fonctions d'affichage */
 
 /*
-On stocke les cos et sin une fois dans un tableau, au lieu de le faire à chaque boucle 
+On stocke les cos et sin une fois dans un tableau, au lieu de le faire à chaque boucle
 Car les angles sont les mêmes pour chaque hexagone et ne changent pas.
 Cela permet de gagner en temps de calcul.
 */
-/* Léo: On sépare les valeurs pour les hexagones plats (carte) et pointus (badges/portrait) */
+/* Modif par Massoud: On sépare les valeurs pour les hexagones plats (carte) et pointus (badges/portrait) */
 float HEX_COS[6];
 float HEX_SIN[6];
 float POINTY_HEX_COS[6];
@@ -49,7 +49,7 @@ void dessiner_contour_hex(SDL_Renderer *renderer, float cx, float cy, float rayo
     }
 }
 
-/* Léo : Fonction pour dessiner le contour d'un hexagone pointu */
+/* Massoud : Fonction pour dessiner le contour d'un hexagone pointu */
 void dessiner_contour_hex_pointy(SDL_Renderer *renderer, float cx, float cy, float rayon, SDL_Color couleur)
 {
     SDL_SetRenderDrawColor(renderer, couleur.r, couleur.g, couleur.b, couleur.a);
@@ -89,7 +89,7 @@ void dessiner_hex_texture(SDL_Renderer * renderer, SDL_Texture * texture, float 
     SDL_RenderGeometry(renderer, texture, sommets, 7, indices, 18);
 }
 
-/* Léo : Fonction pour mapper une texture dans un hexagone pointu */
+/* Massoud : Fonction pour mapper une texture dans un hexagone pointu */
 void dessiner_hex_texture_pointy(SDL_Renderer * renderer, SDL_Texture * texture, float cx, float cy, float rayon)
 {
     SDL_Vertex sommets[7];
@@ -243,7 +243,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                     SDL_Texture * texture_batiment = NULL;
                             
                     if (maCase.batiment.type == TOUR_DU_BOSS) {
-                        texture_batiment = textures_batiments[1];
+                        texture_batiment = textures_batiments[1]; 
                     } else if (estVisible) {
 
                         switch (maCase.batiment.type) {
@@ -372,7 +372,7 @@ void preparer_avant_affichage() {
 
 }
 
-/* Léo
+/* Massoud
  * Dessine un badge hexagonal Pointy Top sombre
  * avec un nombre coloré au centre
  */
@@ -417,14 +417,15 @@ static void dessiner_insigne_stat(SDL_Renderer* renderer, TTF_Font* font, float 
     }
 }
 
-/* Leo 
+/* Leo principalement, et Massoud
  * Dessine l'interface du personnage
  * lorsqu'on est sur la carte du jeu
  * Cette fonction ne doit pas être
  * appelée depuis le main.
  */
 static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, const char* nom, int pv, int pv_max,
-    int xp, int xp_max, int niveau, int force, int intel, int rapidite, int evasion, int x, int y, int largeur_totale, int hauteur_totale)
+    int xp, int xp_max, int niveau, int force, int intel, int rapidite, int evasion, int x, int y, int largeur_totale, int hauteur_totale,
+    inventaire_t * inventaire)
 {
     /* Dessin du fond principal */
     SDL_Rect fond = { x, y, largeur_totale, hauteur_totale };
@@ -517,21 +518,57 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
     
     int inv_y = fond.y + 15 + r_nom.h + 5; 
 
-    for(int ligne = 0; ligne < 2; ligne++) {
-        for(int col = 0; col < 4; col++) {
-            SDL_Rect case_inv = {
-                start_droite_x + col * (taille_case_inv + esp_case),
-                inv_y + ligne * (taille_case_inv + esp_case),
-                taille_case_inv,
-                taille_case_inv
+    for (int i = 0; i < TAILLE_INVENTAIRE; i++) {
+        int ligne = i / 4;
+        int colonne = i % 4;
+
+        SDL_Rect case_inv = {
+            start_droite_x + colonne * (taille_case_inv + esp_case),
+            inv_y + ligne * (taille_case_inv + esp_case),
+            taille_case_inv,
+            taille_case_inv
+        };
+            
+        SDL_SetRenderDrawColor(renderer, 35, 35, 40, 255);
+        SDL_RenderFillRect(renderer, &case_inv);
+            
+        SDL_SetRenderDrawColor(renderer, 80, 80, 90, 255);
+        SDL_RenderDrawRect(renderer, &case_inv);
+
+        objet_t * obj = &(inventaire->contenu[i]);
+
+        if (obj->quantite > 0 && obj->texture != NULL) {
+
+            SDL_Rect rect_icone = {
+                case_inv.x + 2,
+                case_inv.y + 2,
+                case_inv.w - 4,
+                case_inv.h - 4
             };
-            
-            SDL_SetRenderDrawColor(renderer, 35, 35, 40, 255);
-            SDL_RenderFillRect(renderer, &case_inv);
-            
-            SDL_SetRenderDrawColor(renderer, 80, 80, 90, 255);
-            SDL_RenderDrawRect(renderer, &case_inv);
+
+            SDL_RenderCopy(renderer, obj->texture, NULL, &rect_icone);
+
+            /* Afficher la quantité */
+            char texte_quantite_str[8];
+            sprintf(texte_quantite_str, "%d", obj->quantite);
+
+            SDL_Rect rect_texte;
+            SDL_Texture * texte_quantite = creer_texte(renderer, font, texte_quantite_str, (SDL_Color) {255, 255, 255, 255}, &rect_texte);
+
+            if (texte_quantite) {
+                SDL_Rect rect_quantite = {
+                    case_inv.x + case_inv.w - rect_texte.w - 2,
+                    case_inv.y + case_inv.h - rect_texte.h - 2,
+                    rect_texte.w,
+                    rect_texte.h
+                };
+
+                SDL_RenderCopy(renderer, texte_quantite, NULL, &rect_quantite);
+                SDL_DestroyTexture(texte_quantite);
+            }
+
         }
+
     }
 
     /* Barres d'xp/pv fixées */
@@ -576,5 +613,5 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
     int expMax = xp_necessaire(perso->niveau);
 
     dessiner_interface_carte_bis(renderer, font, portrait, "Mage Joueur", perso->sante, perso->sante_max, perso->exp, expMax, perso->niveau,
-        perso->force, perso->intelligence, perso->rapidite, perso->evasion, x_menu, y_menu, largeur_menu, hauteur_menu);
+        perso->force, perso->intelligence, perso->rapidite, perso->evasion, x_menu, y_menu, largeur_menu, hauteur_menu, &(perso->inventaire));
 }

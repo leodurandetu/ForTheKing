@@ -67,6 +67,8 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 
     }
 
+    initialiser_inventaire(&(perso->inventaire));
+
     restaurer_points_deplacements(perso);
 
     return perso;
@@ -111,6 +113,10 @@ void restaurer_points_deplacements(perso_t * perso) {
 void detruire_perso(perso_t ** perso) {
 
     if (perso != NULL && *perso != NULL) {
+        inventaire_t * inventaire = &((*perso)->inventaire);
+
+        liberer_memoire_inventaire(inventaire);
+
         free(*perso);
         *perso = NULL;
     }

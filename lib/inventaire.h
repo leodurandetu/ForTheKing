@@ -19,5 +19,6 @@ booleen_t ajouter_objet_inventaire(inventaire_t * inventaire, objet_t objet);
 booleen_t enlever_objet_inventaire(inventaire_t * inventaire, objet_type_t objet_type);
 booleen_t utiliser_objet_inventaire(inventaire_t * inventaire, int indice_objet, perso_t * perso);
 void initialiser_inventaire(inventaire_t * inventaire);
+void liberer_memoire_inventaire(inventaire_t * inventaire);
 
 #endif

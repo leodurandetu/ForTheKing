@@ -32,7 +32,7 @@ void souris_vers_case(int mouseX, int mouseY, int *carte_x, int *carte_y, int ta
 int chemin_valide(case_t[TAILLE_CARTE][TAILLE_CARTE], int xDepart, int yDepart, int xCible, int yCible, int pts_deplacement_max, perso_t *perso, int *distance);
 booleen_t a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy);
 void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos);
-void deplacer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t * perso, combat_t ** combat_actuel);
+void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t * perso, combat_t ** combat_actuel);
 
 // placer des sanctuaires
 void placer_sanctuaires(case_t carte[TAILLE_CARTE][TAILLE_CARTE]);

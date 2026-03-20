@@ -2,9 +2,11 @@
 #define OBJET_H
 
 #include <SDL2/SDL.h>
-#include "perso.h"
+#include <SDL2/SDL_image.h>
 
-/* Structures */
+typedef struct perso_s perso_t;
+
+/* Structures et Enums */
 
 typedef enum {
     KIT_DE_SOINS
@@ -24,6 +26,7 @@ typedef struct {
 /* Prototypes des fonctions */
 
 void utiliser_kit_de_soins(perso_t * perso);
-objet_t creer_kit_de_soins();
+objet_t creer_kit_de_soins(SDL_Renderer * renderer);
+void detruire_objet(objet_t * objet);
 
 #endif
