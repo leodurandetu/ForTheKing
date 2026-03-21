@@ -5,7 +5,7 @@
 #include "commun.h"
 
 /* Structures et Enums */
-#define TAILLE_INVENTAIRE 8
+#define TAILLE_INVENTAIRE 10
 
 typedef struct {
 

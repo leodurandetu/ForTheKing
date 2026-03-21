@@ -8,7 +8,7 @@
 void utiliser_kit_de_soins(perso_t * perso) {
     printf("Vous avez utilisé un kit de soins.\n");
 
-    int pv_supplementaires = (int) (0.25f * perso->sante_max);
+    int pv_supplementaires = (int) (0.35f * perso->sante_max);
 
     int pv = perso->sante;
 

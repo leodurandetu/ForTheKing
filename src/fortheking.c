@@ -374,7 +374,6 @@ int main(int argc,char *argv[]) {
                             if (perso->pts_deplacements <= 0) {
                                 restaurer_points_deplacements(perso);
                                 deplacer_monstres(renderer, carte, perso, &combat_actuel);
-                                redonner_un_pv(perso);
                                 majAffichage = 1;
                             }
 

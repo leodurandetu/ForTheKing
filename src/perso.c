@@ -173,22 +173,3 @@ int get_pers_movements_points(perso_t *perso){
 
     return perso->pts_deplacements;
 }
-
-/* Leo
- * Cette fonction redonne un point de vie
- * au personnage. Elle doit être appelée
- * lors de la fin d'un tour.
- */
-void redonner_un_pv(perso_t * perso) {
-    
-    if (perso != NULL) {
-        int nouvSante = perso->sante + 1;
-
-        if(nouvSante > perso->sante_max) {
-            nouvSante = perso->sante_max;
-        }
-
-        perso->sante = nouvSante;
-    }
-
-}

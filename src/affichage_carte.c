@@ -528,14 +528,14 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
     }
 
     /* Inventaire (Au-dessus des barres) */
-    int taille_case_inv = 25;
+    int taille_case_inv = 28;
     int esp_case = 3;
     
     int inv_y = fond.y + 15 + r_nom.h + 5; 
 
     for (int i = 0; i < TAILLE_INVENTAIRE; i++) {
-        int ligne = i / 4;
-        int colonne = i % 4;
+        int ligne = i / 5;
+        int colonne = i % 5;
 
         SDL_Rect case_inv = {
             start_droite_x + colonne * (taille_case_inv + esp_case),
@@ -633,8 +633,8 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
 
     SDL_GetRendererOutputSize(renderer, &fenetre_largeur, &fenetre_hauteur);
 
-    int largeur_menu = 340; 
-    int hauteur_menu = 165; 
+    int largeur_menu = 330;
+    int hauteur_menu = 164;
 
     /* on centre le menu horizontalement */
     int x_menu = (fenetre_largeur - largeur_menu) / 2;
