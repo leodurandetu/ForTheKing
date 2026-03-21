@@ -66,6 +66,7 @@ Ce projet utilise SDL2.
 Voici un court guide pour l'installer sur Unix ou Linux :  
 sudo apt update  
 sudo apt install -y \ libsdl2-dev \ libsdl2-image-dev \ libsdl2-mixer-dev \ libsdl2-ttf-dev
+sudo apt install libavcodec-dev libavformat-dev libavutil-dev libswscale-dev
  
 **Compilation du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
