@@ -423,10 +423,25 @@ static void dessiner_insigne_stat(SDL_Renderer* renderer, TTF_Font* font, float 
  * Cette fonction ne doit pas être
  * appelée depuis le main.
  */
-static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, const char* nom, int pv, int pv_max,
-    int xp, int xp_max, int niveau, int force, int intel, int rapidite, int evasion, int x, int y, int largeur_totale, int hauteur_totale,
-    inventaire_t * inventaire)
+static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, const char* nom, int x, int y, int largeur_totale, int hauteur_totale,
+    perso_t * perso, int clic_gauche)
 {
+    int pv = perso->sante;
+    int pv_max = perso->sante_max;
+    int xp = perso->exp;
+    int xp_max = xp_necessaire(perso->niveau);
+    int niveau = perso->niveau;
+    int force = perso->force;
+    int intel = perso->intelligence;
+    int rapidite = perso->rapidite;
+    int evasion = perso->evasion;
+
+    inventaire_t * inventaire = &(perso->inventaire);
+
+    /* On obtient les coordonnées de la souris sur l'écran */
+    int souris_x, souris_y;
+    SDL_GetMouseState(&souris_x, &souris_y);
+
     /* Dessin du fond principal */
     SDL_Rect fond = { x, y, largeur_totale, hauteur_totale };
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -528,12 +543,29 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
             taille_case_inv,
             taille_case_inv
         };
-            
-        SDL_SetRenderDrawColor(renderer, 35, 35, 40, 255);
+
+        int souris_par_dessus = (souris_x >= case_inv.x && souris_x <= case_inv.x + case_inv.w)
+            && (souris_y >= case_inv.y && souris_y <= case_inv.y + case_inv.h);
+
+        if (souris_par_dessus) {
+            SDL_SetRenderDrawColor(renderer, 55, 55, 65, 255);
+        } else {
+            SDL_SetRenderDrawColor(renderer, 35, 35, 40, 255);
+        }
+
         SDL_RenderFillRect(renderer, &case_inv);
-            
-        SDL_SetRenderDrawColor(renderer, 80, 80, 90, 255);
+
+        if (souris_par_dessus) {
+            SDL_SetRenderDrawColor(renderer, 120, 120, 140, 255);
+        } else {
+            SDL_SetRenderDrawColor(renderer, 80, 80, 90, 255);
+        }
+
         SDL_RenderDrawRect(renderer, &case_inv);
+
+        if (souris_par_dessus && clic_gauche) {
+            utiliser_objet_inventaire(inventaire, i, perso);
+        }
 
         objet_t * obj = &(inventaire->contenu[i]);
 
@@ -596,7 +628,7 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
  * Dessine l'interface du personnage
  * lorsqu'on est sur la carte du jeu
  */
-void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Texture* portrait, perso_t * perso) {
+void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Texture* portrait, perso_t * perso, int clic_gauche) {
     int fenetre_largeur, fenetre_hauteur;
 
     SDL_GetRendererOutputSize(renderer, &fenetre_largeur, &fenetre_hauteur);
@@ -610,8 +642,5 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
     /* on affiche le menu 15 pixels au dessus le bas de l'écran */
     int y_menu = (fenetre_hauteur - hauteur_menu - 15);
 
-    int expMax = xp_necessaire(perso->niveau);
-
-    dessiner_interface_carte_bis(renderer, font, portrait, "Mage Joueur", perso->sante, perso->sante_max, perso->exp, expMax, perso->niveau,
-        perso->force, perso->intelligence, perso->rapidite, perso->evasion, x_menu, y_menu, largeur_menu, hauteur_menu, &(perso->inventaire));
+    dessiner_interface_carte_bis(renderer, font, portrait, "Mage Joueur", x_menu, y_menu, largeur_menu, hauteur_menu, perso, clic_gauche);
 }

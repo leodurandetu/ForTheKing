@@ -10,7 +10,7 @@ booleen_t ajouter_objet_inventaire(inventaire_t * inventaire, objet_t objet) {
 
     while( i < TAILLE_INVENTAIRE && ajout_reussi == FAUX) {
 
-        if (inventaire->contenu[i].quantite == -1) {
+        if (inventaire->contenu[i].quantite <= 0) {
             inventaire->contenu[i] = objet;
             ajout_reussi = VRAI;
         } else if (inventaire->contenu[i].quantite > 0 && inventaire->contenu[i].type == objet.type) {
@@ -57,7 +57,7 @@ booleen_t utiliser_objet_inventaire(inventaire_t * inventaire, int indice_objet,
     if (indice_objet >= 0 && indice_objet < TAILLE_INVENTAIRE) {
         objet_t objet = inventaire->contenu[indice_objet];
 
-        if (objet.quantite != -1) {
+        if (objet.quantite > 0) {
             objet.utiliser(perso);
             inventaire->contenu[indice_objet].quantite--;
             objet_trouve = VRAI;

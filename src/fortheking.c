@@ -265,6 +265,8 @@ int main(int argc,char *argv[]) {
      */
     int majBrouillard = 0;
 
+    int clic_gauche = 0;
+
     while (running) {
         SDL_Event e;
 
@@ -394,6 +396,7 @@ int main(int argc,char *argv[]) {
 
                 case SDL_MOUSEBUTTONDOWN:
                     if (e.button.button == SDL_BUTTON_LEFT) {
+                        clic_gauche = 1;
                         int carte_x = -1;
                         int carte_y = -1;
                         souris_vers_case(e.button.x, e.button.y, &carte_x, &carte_y, tailleCase, perso, renderer);
@@ -484,7 +487,7 @@ int main(int argc,char *argv[]) {
                 afficher_personnage(renderer, texture_perso, perso, tailleCase);
             }
 
-            dessiner_interface_carte(renderer, police2, texture_perso, perso);
+            dessiner_interface_carte(renderer, police2, texture_perso, perso, clic_gauche);
             char info_a_afficher[50];
 
             get_info_personnage(perso, "Pts_deplacements", info_a_afficher);
@@ -500,6 +503,7 @@ int main(int argc,char *argv[]) {
 
         }
 
+        clic_gauche = 0;
     }
 
     // Libération propre de la mémoire à la fermeture du jeu

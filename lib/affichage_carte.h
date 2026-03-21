@@ -33,6 +33,6 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
 void preparer_avant_affichage();
 
-void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* ffont, SDL_Texture* portrait, perso_t * perso);
+void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* ffont, SDL_Texture* portrait, perso_t * perso, int clic_gauche);
 
 #endif 
