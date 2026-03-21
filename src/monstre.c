@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../lib/monstre.h"
+#include "../lib/adapter_niveau.h"  
 
 /* Leo */
 /*
