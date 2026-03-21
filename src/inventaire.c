@@ -51,7 +51,7 @@ booleen_t enlever_objet_inventaire(inventaire_t * inventaire, objet_type_t objet
  * Cette fonction permet d'utiliser
  * un objet présent dans l'inventaire
  */
-booleen_t utiliser_objet_inventaire(inventaire_t * inventaire, int indice_objet, perso_t * perso) {
+booleen_t utiliser_objet_inventaire(inventaire_t * inventaire, int indice_objet, perso_t * perso, int * maj_affichage) {
     booleen_t objet_trouve = FAUX;
 
     if (indice_objet >= 0 && indice_objet < TAILLE_INVENTAIRE) {
@@ -61,6 +61,7 @@ booleen_t utiliser_objet_inventaire(inventaire_t * inventaire, int indice_objet,
             objet.utiliser(perso);
             inventaire->contenu[indice_objet].quantite--;
             objet_trouve = VRAI;
+            *maj_affichage = 1;
         }
 
     }

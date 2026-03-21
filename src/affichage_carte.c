@@ -424,7 +424,7 @@ static void dessiner_insigne_stat(SDL_Renderer* renderer, TTF_Font* font, float 
  * appelée depuis le main.
  */
 static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, const char* nom, int x, int y, int largeur_totale, int hauteur_totale,
-    perso_t * perso, int clic_gauche)
+    perso_t * perso, int clic_gauche, int * maj_affichage)
 {
     int pv = perso->sante;
     int pv_max = perso->sante_max;
@@ -564,7 +564,7 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
         SDL_RenderDrawRect(renderer, &case_inv);
 
         if (souris_par_dessus && clic_gauche) {
-            utiliser_objet_inventaire(inventaire, i, perso);
+            utiliser_objet_inventaire(inventaire, i, perso, maj_affichage);
         }
 
         objet_t * obj = &(inventaire->contenu[i]);
@@ -628,7 +628,7 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
  * Dessine l'interface du personnage
  * lorsqu'on est sur la carte du jeu
  */
-void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Texture* portrait, perso_t * perso, int clic_gauche) {
+void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Texture* portrait, perso_t * perso, int clic_gauche, int * maj_affichage) {
     int fenetre_largeur, fenetre_hauteur;
 
     SDL_GetRendererOutputSize(renderer, &fenetre_largeur, &fenetre_hauteur);
@@ -642,5 +642,5 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
     /* on affiche le menu 15 pixels au dessus le bas de l'écran */
     int y_menu = (fenetre_hauteur - hauteur_menu - 15);
 
-    dessiner_interface_carte_bis(renderer, font, portrait, "Mage Joueur", x_menu, y_menu, largeur_menu, hauteur_menu, perso, clic_gauche);
+    dessiner_interface_carte_bis(renderer, font, portrait, "Mage Joueur", x_menu, y_menu, largeur_menu, hauteur_menu, perso, clic_gauche, maj_affichage);
 }

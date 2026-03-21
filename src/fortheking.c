@@ -486,7 +486,7 @@ int main(int argc,char *argv[]) {
                 afficher_personnage(renderer, texture_perso, perso, tailleCase);
             }
 
-            dessiner_interface_carte(renderer, police2, texture_perso, perso, clic_gauche);
+            dessiner_interface_carte(renderer, police2, texture_perso, perso, clic_gauche, &majAffichage);
             char info_a_afficher[50];
 
             get_info_personnage(perso, "Pts_deplacements", info_a_afficher);
