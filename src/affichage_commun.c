@@ -92,3 +92,117 @@ void afficherMessageCentre(SDL_Renderer *renderer, TTF_Font *font, const char *m
 
     SDL_RenderCopy(renderer, *texture, NULL, &dest);
 }
+
+void dessiner_inventaire(SDL_Renderer * renderer, TTF_Font * font, perso_t * perso, SDL_Rect fond_interface,
+    SDL_Rect rect_nom, int clic_gauche, int * maj_affichage, orientation_inv_t orientation, int start_droite_x) {
+    
+    if (!perso) return;
+
+    inventaire_t* inventaire = &(perso->inventaire);
+
+    int souris_x, souris_y;
+    SDL_GetMouseState(&souris_x, &souris_y);
+
+    int espacement = 3;
+    int nb_cases_par_ligne = (orientation == INV_HORIZONTAL) ? 5 : 1;
+    int taille_case;
+    if (orientation == INV_VERTICAL) {
+        // Taille proportionnelle à la hauteur du menu
+        taille_case = fond_interface.h / 12;
+        if (taille_case > 48) taille_case = 48; // Maximum
+        if (taille_case < 24) taille_case = 24; // Minimum
+    } else {
+        taille_case = 28;
+    }
+
+    int start_x, start_y;
+
+    if (orientation == INV_HORIZONTAL) {
+        // Horizontal (comme dans la carte) : sous le nom
+        start_x = start_droite_x;
+        start_y = fond_interface.y + 15 + rect_nom.h + 5;
+    } else {
+        // Vertical (comme en combat) : à gauche ou sous le portrait
+        start_x = fond_interface.x + fond_interface.w + 10;
+
+        // Nombre de lignes dans l'inventaire vertical
+        int nb_lignes = (TAILLE_INVENTAIRE + nb_cases_par_ligne - 1) / nb_cases_par_ligne;
+
+        // Hauteur totale de l'inventaire
+        int hauteur_totale = nb_lignes * (taille_case + espacement) - espacement;
+
+        // Centrage vertical par rapport au menu
+        start_y = fond_interface.y + (fond_interface.h - hauteur_totale) / 2;
+    }
+    
+    for (int i = 0; i < TAILLE_INVENTAIRE; i++) {
+        int ligne = i / nb_cases_par_ligne;
+        int colonne = i % nb_cases_par_ligne;
+
+        SDL_Rect case_inv = {
+            start_x + colonne * (taille_case + espacement),
+            start_y + ligne * (taille_case + espacement),
+            taille_case,
+            taille_case
+        };
+
+        int souris_par_dessus = (souris_x >= case_inv.x && souris_x <= case_inv.x + case_inv.w)
+            && (souris_y >= case_inv.y && souris_y <= case_inv.y + case_inv.h);
+
+        if (souris_par_dessus) {
+            SDL_SetRenderDrawColor(renderer, 55, 55, 65, 255);
+        } else {
+            SDL_SetRenderDrawColor(renderer, 35, 35, 40, 255);
+        }
+
+        SDL_RenderFillRect(renderer, &case_inv);
+
+        if (souris_par_dessus) {
+            SDL_SetRenderDrawColor(renderer, 120, 120, 140, 255);
+        } else {
+            SDL_SetRenderDrawColor(renderer, 80, 80, 90, 255);
+        }
+
+        SDL_RenderDrawRect(renderer, &case_inv);
+
+        if (souris_par_dessus && clic_gauche) {
+            utiliser_objet_inventaire(inventaire, i, perso, maj_affichage);
+        }
+
+        objet_t * obj = &(inventaire->contenu[i]);
+
+        if (obj->quantite > 0 && obj->texture != NULL) {
+
+            SDL_Rect rect_icone = {
+                case_inv.x + 2,
+                case_inv.y + 2,
+                case_inv.w - 4,
+                case_inv.h - 4
+            };
+
+            SDL_RenderCopy(renderer, obj->texture, NULL, &rect_icone);
+
+            /* Afficher la quantité */
+            char texte_quantite_str[8];
+            sprintf(texte_quantite_str, "%d", obj->quantite);
+
+            SDL_Rect rect_texte;
+            SDL_Texture * texte_quantite = creer_texte(renderer, font, texte_quantite_str, (SDL_Color) {255, 255, 255, 255}, &rect_texte);
+
+            if (texte_quantite) {
+                SDL_Rect rect_quantite = {
+                    case_inv.x + case_inv.w - rect_texte.w - 2,
+                    case_inv.y + case_inv.h - rect_texte.h - 2,
+                    rect_texte.w,
+                    rect_texte.h
+                };
+
+                SDL_RenderCopy(renderer, texte_quantite, NULL, &rect_quantite);
+                SDL_DestroyTexture(texte_quantite);
+            }
+
+        }
+
+    }
+
+}

@@ -69,11 +69,11 @@ static void dessiner_fond_ecran(combat_t *combat, int largeur, int hauteur)
  * Cette fonction dessine un menu de statistiques sur le
  * côté à propos d'un personnage ou un monstre
  */
-static void dessiner_interface_combat(SDL_Renderer* r, TTF_Font* f, SDL_Texture* portrait, int a_gauche,
-    const char* nom, int pv, int pv_max, int force, int intel, int rapidite, int evasion)
+static void dessiner_interface_combat(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, int a_gauche,
+    const char* nom, int pv, int pv_max, int force, int intel, int rapidite, int evasion, perso_t * perso, int clic_gauche)
 {
     int fen_w, fen_h;
-    SDL_GetRendererOutputSize(r, &fen_w, &fen_h);
+    SDL_GetRendererOutputSize(renderer, &fen_w, &fen_h);
 
     /* Calcul de la taille du menu */
     int l_menu = fen_w * 0.22;
@@ -90,20 +90,20 @@ static void dessiner_interface_combat(SDL_Renderer* r, TTF_Font* f, SDL_Texture*
     SDL_Rect fond = { x_menu, y_menu, l_menu, h_menu };
 
     /* Dessin du cadre */
-    SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
-    SDL_SetRenderDrawColor(r, 20, 20, 25, 230);
-    SDL_RenderFillRect(r, &fond);
-    SDL_SetRenderDrawColor(r, 100, 100, 110, 255);
-    SDL_RenderDrawRect(r, &fond);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, 20, 20, 25, 230);
+    SDL_RenderFillRect(renderer, &fond);
+    SDL_SetRenderDrawColor(renderer, 100, 100, 110, 255);
+    SDL_RenderDrawRect(renderer, &fond);
 
     /* Éléments positionnés proportionnellement à h_menu */
 
     /* Nom (environ 5% du haut) */
     SDL_Rect r_nom;
-    SDL_Texture* t_nom = creer_texte(r, f, nom, (SDL_Color){255, 215, 0, 255}, &r_nom);
+    SDL_Texture* t_nom = creer_texte(renderer, font, nom, (SDL_Color){255, 215, 0, 255}, &r_nom);
     if (t_nom) {
         SDL_Rect pos = { fond.x + (fond.w - r_nom.w) / 2, fond.y + (h_menu * 0.04), r_nom.w, r_nom.h };
-        SDL_RenderCopy(r, t_nom, NULL, &pos);
+        SDL_RenderCopy(renderer, t_nom, NULL, &pos);
         SDL_DestroyTexture(t_nom);
     }
 
@@ -112,14 +112,14 @@ static void dessiner_interface_combat(SDL_Renderer* r, TTF_Font* f, SDL_Texture*
     if (taille_p > 100) taille_p = 100; // On le plafonne pour ne pas qu'il soit géant
 
     SDL_Rect r_portrait = { fond.x + (fond.w - taille_p) / 2, fond.y + (h_menu * 0.15), taille_p, taille_p };
-    SDL_SetRenderDrawColor(r, 60, 60, 65, 255);
-    SDL_RenderFillRect(r, &r_portrait);
-    if (portrait) SDL_RenderCopy(r, portrait, NULL, &r_portrait);
+    SDL_SetRenderDrawColor(renderer, 60, 60, 65, 255);
+    SDL_RenderFillRect(renderer, &r_portrait);
+    if (portrait) SDL_RenderCopy(renderer, portrait, NULL, &r_portrait);
 
     /* Barre de Vie */
     int h_barre = 22;
     SDL_Rect b_vie = { fond.x + 20, r_portrait.y + r_portrait.h + (h_menu * 0.08), fond.w - 40, h_barre };
-    dessiner_barre(r, f, "PV", pv, pv_max, b_vie, (SDL_Color){200, 40, 40, 255});
+    dessiner_barre(renderer, font, "PV", pv, pv_max, b_vie, (SDL_Color){200, 40, 40, 255});
 
     /* On affiche un texte pour chaque statistique avec sa valeur */
     const char* labels[] = {"Force", "Intelligence", "Rapidite", "Evasion"};
@@ -133,20 +133,25 @@ static void dessiner_interface_combat(SDL_Renderer* r, TTF_Font* f, SDL_Texture*
         char buf[64];
         sprintf(buf, "%s : %d", labels[i], valeurs[i]);
         SDL_Rect r_s;
-        SDL_Texture* t_s = creer_texte(r, f, buf, coul_texte, &r_s);
+        SDL_Texture* t_s = creer_texte(renderer, font, buf, coul_texte, &r_s);
         if (t_s) {
             SDL_Rect pos = { fond.x + 25, y_stats + (i * espacement), r_s.w, r_s.h };
-            SDL_RenderCopy(r, t_s, NULL, &pos);
+            SDL_RenderCopy(renderer, t_s, NULL, &pos);
             SDL_DestroyTexture(t_s);
         }
     }
+
+    if (perso != NULL) {
+        dessiner_inventaire(renderer, font, perso, fond, r_nom, clic_gauche, NULL, INV_VERTICAL, -1);
+    }
+
 }
 
 /* Leo
  * Cette fonction dessine et met à jour
  * l'affichage de la fenêtre de combat
  */
-void maj_affichage_fenetre_combat(combat_t *combat)
+void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche)
 {
     SDL_Renderer *renderer = combat->renderer;
 
@@ -163,7 +168,7 @@ void maj_affichage_fenetre_combat(combat_t *combat)
     int taille = largeur * 0.18f;
     int marge  = largeur * 0.03f;
 
-   int w_fond, h_fond;
+    int w_fond, h_fond;
     // On récupère les dimensions originales de l'image de fond
     if (combat->texture_fond_ecran) {
         SDL_QueryTexture(combat->texture_fond_ecran, NULL, NULL, &w_fond, &h_fond);
@@ -235,11 +240,11 @@ void maj_affichage_fenetre_combat(combat_t *combat)
     perso_t * perso = combat->perso;
     monstre_t * monstre = combat->monstre;
 
-    dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion);
+    dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion, perso, clicGauche);
     if(combat->monstre->type == SQUELETTE){
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
     } else if (combat->monstre->type == TROLL){
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
     }
 
     SDL_RenderPresent(renderer);

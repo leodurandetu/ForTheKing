@@ -107,6 +107,7 @@ void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat,
     vainqueur_t vainqueur = PAS_DE_VAINQUEUR;
     int running = 1;
     int majAffichage = 1;
+    int clic_gauche = 0;
     (*combat)->tour = TOUR_JOUEUR;
     SDL_Point point;
 
@@ -130,8 +131,12 @@ void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat,
                     majAffichage = 1;
                     break;
 
-                // COMBAT
                 case SDL_MOUSEBUTTONDOWN:
+
+                    if (e.button.button == SDL_BUTTON_LEFT) {
+                        clic_gauche = 1;
+                    }
+
                     point.x = e.button.x;
                     point.y = e.button.y;
 
@@ -196,10 +201,11 @@ void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat,
         }
 
         if (majAffichage) {
-            maj_affichage_fenetre_combat(*combat);
+            maj_affichage_fenetre_combat(*combat, clic_gauche);
             majAffichage = 0;
         }
 
+        clic_gauche = 0;
     }
 
     combat_termine(rendererPrincipal, combat, carte, vainqueur);

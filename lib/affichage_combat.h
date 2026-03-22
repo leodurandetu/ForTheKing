@@ -10,6 +10,6 @@
 
 /* Prototypes des fonctions */
 
-void maj_affichage_fenetre_combat(combat_t * combat);
+void maj_affichage_fenetre_combat(combat_t * combat, int clicGauche);
 
 #endif

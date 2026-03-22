@@ -436,8 +436,6 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
     int rapidite = perso->rapidite;
     int evasion = perso->evasion;
 
-    inventaire_t * inventaire = &(perso->inventaire);
-
     /* On obtient les coordonnées de la souris sur l'écran */
     int souris_x, souris_y;
     SDL_GetMouseState(&souris_x, &souris_y);
@@ -527,81 +525,7 @@ static void dessiner_interface_carte_bis(SDL_Renderer* renderer, TTF_Font* font,
         SDL_DestroyTexture(t_nom);
     }
 
-    /* Inventaire (Au-dessus des barres) */
-    int taille_case_inv = 28;
-    int esp_case = 3;
-    
-    int inv_y = fond.y + 15 + r_nom.h + 5; 
-
-    for (int i = 0; i < TAILLE_INVENTAIRE; i++) {
-        int ligne = i / 5;
-        int colonne = i % 5;
-
-        SDL_Rect case_inv = {
-            start_droite_x + colonne * (taille_case_inv + esp_case),
-            inv_y + ligne * (taille_case_inv + esp_case),
-            taille_case_inv,
-            taille_case_inv
-        };
-
-        int souris_par_dessus = (souris_x >= case_inv.x && souris_x <= case_inv.x + case_inv.w)
-            && (souris_y >= case_inv.y && souris_y <= case_inv.y + case_inv.h);
-
-        if (souris_par_dessus) {
-            SDL_SetRenderDrawColor(renderer, 55, 55, 65, 255);
-        } else {
-            SDL_SetRenderDrawColor(renderer, 35, 35, 40, 255);
-        }
-
-        SDL_RenderFillRect(renderer, &case_inv);
-
-        if (souris_par_dessus) {
-            SDL_SetRenderDrawColor(renderer, 120, 120, 140, 255);
-        } else {
-            SDL_SetRenderDrawColor(renderer, 80, 80, 90, 255);
-        }
-
-        SDL_RenderDrawRect(renderer, &case_inv);
-
-        if (souris_par_dessus && clic_gauche) {
-            utiliser_objet_inventaire(inventaire, i, perso, maj_affichage);
-        }
-
-        objet_t * obj = &(inventaire->contenu[i]);
-
-        if (obj->quantite > 0 && obj->texture != NULL) {
-
-            SDL_Rect rect_icone = {
-                case_inv.x + 2,
-                case_inv.y + 2,
-                case_inv.w - 4,
-                case_inv.h - 4
-            };
-
-            SDL_RenderCopy(renderer, obj->texture, NULL, &rect_icone);
-
-            /* Afficher la quantité */
-            char texte_quantite_str[8];
-            sprintf(texte_quantite_str, "%d", obj->quantite);
-
-            SDL_Rect rect_texte;
-            SDL_Texture * texte_quantite = creer_texte(renderer, font, texte_quantite_str, (SDL_Color) {255, 255, 255, 255}, &rect_texte);
-
-            if (texte_quantite) {
-                SDL_Rect rect_quantite = {
-                    case_inv.x + case_inv.w - rect_texte.w - 2,
-                    case_inv.y + case_inv.h - rect_texte.h - 2,
-                    rect_texte.w,
-                    rect_texte.h
-                };
-
-                SDL_RenderCopy(renderer, texte_quantite, NULL, &rect_quantite);
-                SDL_DestroyTexture(texte_quantite);
-            }
-
-        }
-
-    }
+    dessiner_inventaire(renderer, font, perso, fond, r_nom, clic_gauche, maj_affichage, INV_HORIZONTAL, start_droite_x);
 
     /* Barres d'xp/pv fixées */
     int h_barre = 14;
