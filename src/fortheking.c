@@ -217,6 +217,18 @@ int main(int argc,char *argv[]) {
         }
     }
 
+    // Chargement de l'image de vie 
+    SDL_Texture *texture_vie = NULL;
+    SDL_Surface *img_vie = IMG_Load("img/vie.png");
+    if (img_vie) {
+        texture_vie = SDL_CreateTextureFromSurface(renderer, img_vie);
+        SDL_SetTextureBlendMode(texture_vie, SDL_BLENDMODE_BLEND);
+        SDL_FreeSurface(img_vie);
+    }
+    
+    // Initialisation des vies globales
+    int vies_globales = 3;
+
     SDL_Texture *textures_obstacles[4] = {NULL};
 
     for (int i = 0; i < 4; i++) {
@@ -234,8 +246,8 @@ int main(int argc,char *argv[]) {
 
     inventaire_t inventaire_perso;
 
-    SDL_Texture *messageTexture = NULL;
-    char messageTexte[256] = "";
+    //SDL_Texture *messageTexture = NULL;
+    //char messageTexte[256] = "";
 
     // Génération du monde
     srand((unsigned int)time(NULL));
@@ -392,7 +404,7 @@ int main(int argc,char *argv[]) {
 
                                 if (perso->pts_deplacements <= 0) {
                                     restaurer_points_deplacements(perso);
-                                    deplacer_monstres(renderer, carte, perso, &combat_actuel);
+                                    deplacer_monstres(renderer, carte, perso, &combat_actuel,&vies_globales);
                                     majAffichage = 1;
                                 }
 
@@ -417,56 +429,72 @@ int main(int argc,char *argv[]) {
 
                 case SDL_MOUSEBUTTONDOWN:
                     if (e.button.button == SDL_BUTTON_LEFT) {
-                        clic_gauche = 1;
-                        int carte_x = -1;
-                        int carte_y = -1;
-                        souris_vers_case(e.button.x, e.button.y, &carte_x, &carte_y, tailleCase, perso, renderer);
+                        clic_gauche = 1; 
 
-                        if (carte_x >= 0 && carte_y >= 0) {
-                            int portee = get_pers_movements_points(perso);
-                            int distReelle = -1;
-                            int cheminTrouve = chemin_valide(carte, perso->x, perso->y, carte_x, carte_y, portee, perso, &distReelle);
+                        int fen_w, fen_h;
+                        SDL_GetRendererOutputSize(renderer, &fen_w, &fen_h);
+                        
+                        int largeur_menu = 300;
+                        int hauteur_menu = 160;
+                        int x_menu = 20; // Placé à gauche
+                        int y_menu = (fen_h - hauteur_menu - 15);
 
-                            if (cheminTrouve && distReelle != -1) {
+                        SDL_Rect rect_interface = { x_menu, y_menu, largeur_menu, hauteur_menu };
+                        SDL_Point point_clic = { e.button.x, e.button.y };
 
-                                if (case_occupee(carte, carte_x, carte_y, perso->x, perso->y) == VRAI) {
-                                    monstre_t * monstre = carte[carte_y][carte_x].monstre;
+                        // Si le clic est dans l'interface, on ne fait rien pour la carte
+                        if (SDL_PointInRect(&point_clic, &rect_interface)) {
+                            majAffichage = 1; 
+                        } else {
+                            int carte_x = -1;
+                            int carte_y = -1;
+                            souris_vers_case(e.button.x, e.button.y, &carte_x, &carte_y, tailleCase, perso, renderer);
 
-                                    if (monstre != NULL && combat_actuel == NULL) {
-                                        combat_actuel = creer_combat(perso, monstre);
-                                        int choix = ouvrir_fenetre_choix(combat_actuel);
+                            if (carte_x >= 0 && carte_y >= 0) {
+                                int portee = get_pers_movements_points(perso);
+                                int distReelle = -1;
+                                int cheminTrouve = chemin_valide(carte, perso->x, perso->y, carte_x, carte_y, portee, perso, &distReelle);
 
-                                        if(choix == 1)
-                                        {
-                                            ouvrir_fenetre_combat(renderer, &combat_actuel, carte);
-                                        } else if (choix == 0) {
-                                            detruire_combat(&combat_actuel);
+                                if (cheminTrouve && distReelle != -1) {
+
+                                    if (case_occupee(carte, carte_x, carte_y, perso->x, perso->y) == VRAI) {
+                                        monstre_t * monstre = carte[carte_y][carte_x].monstre;
+
+                                        if (monstre != NULL && combat_actuel == NULL) {
+                                            combat_actuel = creer_combat(perso, monstre);
+                                            int choix = ouvrir_fenetre_choix(combat_actuel);
+
+                                            if(choix == 1)
+                                            {
+                                                ouvrir_fenetre_combat(renderer, &combat_actuel, carte, &vies_globales);
+                                            } else if (choix == 0) {
+                                                detruire_combat(&combat_actuel);
+                                            }
+
+                                            case_selection_x = carte_x;
+                                            case_selection_y = carte_y;
+                                        } else {
+                                            case_selection_x = carte_x;
+                                            case_selection_y = carte_y;
                                         }
 
-                                        case_selection_x = carte_x;
-                                        case_selection_y = carte_y;
                                     } else {
-                                        case_selection_x = carte_x;
-                                        case_selection_y = carte_y;
+                                        perso->x = carte_x; 
+                                        perso->y = carte_y;
+                                        perso->pts_deplacements -= distReelle; 
+                                        case_selection_x = -1; 
+                                        case_selection_y = -1;
                                     }
 
                                 } else {
-                                    perso->x = carte_x; 
-                                    perso->y = carte_y;
-                                    perso->pts_deplacements -= distReelle; 
-                                    case_selection_x = -1; 
-                                    case_selection_y = -1;
+                                    case_selection_x = carte_x; 
+                                    case_selection_y = carte_y;
                                 }
-
-                            } else {
-                                case_selection_x = carte_x; 
-                                case_selection_y = carte_y;
                             }
-                        
+                            majBrouillard = 1;
                         }
-
+                        
                         majAffichage = 1;
-                        majBrouillard = 1;
                     }
                     break;
                     
@@ -499,13 +527,12 @@ int main(int argc,char *argv[]) {
             majBrouillard = 0;
         }
 
-        // Mise à jour de l'écran uniquement si nécessaire 
         if (majAffichage) {
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Fond noir
             SDL_RenderClear(renderer);
 
-            if (etat == CARTE) {
-                // Dessine la carte et les contours dorés
+            /* On dessine toujours la carte */
+            if (etat == CARTE || etat == GAME_OVER) {
                 afficher_carte_sdl(renderer, carte, textures_cases, textures_obstacles, texture_brouillard, textures_monstres,
                     textures_batiments, textures_sanctuaires, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
                     perso);
@@ -516,26 +543,76 @@ int main(int argc,char *argv[]) {
 
                 dessiner_interface_carte(renderer, police2, texture_perso, perso, clic_gauche, &majAffichage);
                 char info_a_afficher[50];
-
-                get_info_personnage(perso, "Pts_deplacements", info_a_afficher);
                 
+                /* Affichage du texte des points de déplacement */
+                get_info_personnage(perso, "Pts_deplacements", info_a_afficher);
                 mise_a_jour_texte(info_a_afficher, renderer, police, &texte, &texte_tex, &txtDestRect);
-                /* Ajout du texte en noir */
-                SDL_SetRenderDrawColor ( renderer , 0, 0, 0, 255);
-                SDL_RenderCopy ( renderer , texte_tex , NULL , &txtDestRect );
-            } else if (etat == GAME_OVER) {
-                int fenetre_w, fenetre_h;
-                SDL_GetWindowSize(pFenetre, &fenetre_w, &fenetre_h);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                SDL_RenderCopy(renderer, texte_tex, NULL, &txtDestRect);
 
-                afficherMessageCentre(renderer, police, "Vous n'avez plus de vies ! Partie terminee.", fenetre_w, fenetre_h, &messageTexture, messageTexte);
+                /* Affichage des vies */
+                if (texture_vie) {
+                    int taille_coeur = 48; 
+                    int espace_entre_coeurs = taille_coeur + 10;
+                    int x_depart_coeurs = txtDestRect.x + txtDestRect.w + 25; 
+                    int y_coeurs = txtDestRect.y + (txtDestRect.h - taille_coeur) / 2;
+
+                    for (int i = 0; i < vies_globales; i++) {
+                        SDL_Rect rect_vie = { x_depart_coeurs + (i * espace_entre_coeurs), y_coeurs, taille_coeur, taille_coeur }; 
+                        SDL_RenderCopy(renderer, texture_vie, NULL, &rect_vie);
+                    }
+                }
+            } 
+            
+            /* Si fin aventure, on ajoute le filtre sombre et le message */
+            if (etat == GAME_OVER) {
+                int w, h;
+                SDL_GetRendererOutputSize(renderer, &w, &h);
+
+                // Voile noir semi-transparent sur toute la carte
+                SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 160); 
+                SDL_Rect ecran_complet = {0, 0, w, h};
+                SDL_RenderFillRect(renderer, &ecran_complet);
+
+                // Boîte
+                int box_w = 400;
+                int box_h = 120;
+                SDL_Rect fond = { (w - box_w)/2, (h - box_h)/2, box_w, box_h };
+
+                SDL_SetRenderDrawColor(renderer, 25, 30, 25, 245); 
+                SDL_RenderFillRect(renderer, &fond);
+                
+                SDL_SetRenderDrawColor(renderer, 140, 150, 120, 255);
+                SDL_RenderDrawRect(renderer, &fond);
+                
+                SDL_Rect fond_int = { fond.x + 1, fond.y + 1, fond.w - 2, fond.h - 2 };
+                SDL_RenderDrawRect(renderer, &fond_int);
+
+                // Texte central
+                SDL_Color blanc = {255, 255, 255, 255};
+                SDL_Surface *surf = TTF_RenderUTF8_Blended(police, "L'aventure prend fin", blanc);
+                if (surf) {
+                    SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
+                    SDL_Rect pos = { (w - surf->w)/2, (h - surf->h)/2, surf->w, surf->h };
+                    SDL_RenderCopy(renderer, tex, NULL, &pos);
+                    SDL_DestroyTexture(tex);
+                    SDL_FreeSurface(surf);
+                }
             }
 
             SDL_RenderPresent(renderer);
             
+            /* Transition vers le menu */
+            if (etat == GAME_OVER) {
+                SDL_Delay(2000);     
+                relancer_menu = 1;   
+                running = 0;         
+            }
+
             majAffichage = 0;
-
         }
-
+            
         clic_gauche = 0;
     }
 
@@ -559,13 +636,13 @@ int main(int argc,char *argv[]) {
     }
     if (texte_tex) SDL_DestroyTexture(texte_tex);
 
-    if (messageTexture) SDL_DestroyTexture(messageTexture);
+    //if (messageTexture) SDL_DestroyTexture(messageTexture);
 
     TTF_CloseFont(police);
     TTF_CloseFont(police2);
 
     if (combat_actuel != NULL) {
-        combat_termine(renderer, &combat_actuel, carte, PAS_DE_VAINQUEUR);
+        combat_termine(renderer, &combat_actuel, carte, PAS_DE_VAINQUEUR,&vies_globales);
         detruire_fenetre_combat(&combat_actuel);
     }
 
@@ -586,3 +663,4 @@ int main(int argc,char *argv[]) {
 
     return 0;
 }
+
