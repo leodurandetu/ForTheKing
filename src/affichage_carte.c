@@ -410,7 +410,7 @@ static void dessiner_insigne_stat(SDL_Renderer* renderer, TTF_Font* font, float 
     SDL_Rect r_txt;
     SDL_Texture* t_txt = creer_texte(renderer, font, valeur, couleur_texte, &r_txt);
     if(t_txt) {
-        // On centre parfaitement le chiffre
+        // On centre le chiffre
         SDL_Rect pos_txt = { (int)(cx - r_txt.w/2.0f), (int)(cy - r_txt.h/2.0f), r_txt.w, r_txt.h };
         SDL_RenderCopy(renderer, t_txt, NULL, &pos_txt);
         SDL_DestroyTexture(t_txt);
@@ -557,13 +557,14 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
 
     SDL_GetRendererOutputSize(renderer, &fenetre_largeur, &fenetre_hauteur);
 
-    int largeur_menu = 330;
-    int hauteur_menu = 164;
+    /* On réduit un peu la taille  */
+    int largeur_menu = 300;
+    int hauteur_menu = 160;
 
-    /* on centre le menu horizontalement */
-    int x_menu = (fenetre_largeur - largeur_menu) / 2;
+    /* On le place à gauche au lieu de le centrer */
+    int x_menu = 20;
 
-    /* on affiche le menu 15 pixels au dessus le bas de l'écran */
+    /* On le garde en bas */
     int y_menu = (fenetre_hauteur - hauteur_menu - 15);
 
     dessiner_interface_carte_bis(renderer, font, portrait, "Mage Joueur", x_menu, y_menu, largeur_menu, hauteur_menu, perso, clic_gauche, maj_affichage);
