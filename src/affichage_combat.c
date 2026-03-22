@@ -249,3 +249,45 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche)
 
     SDL_RenderPresent(renderer);
 }
+
+/* Massoud
+ * Affiche une fenêtre au centre de l'écran 
+ * avec un message lors de la mort d'un personnage.
+ */
+void afficher_message_combat(combat_t *combat, const char *texte) {
+    SDL_Renderer *r = combat->renderer;
+    int w, h;
+    SDL_GetRendererOutputSize(r, &w, &h);
+
+    // Dimensions de la boîte de message
+    int box_w = 400;
+    int box_h = 120;
+    SDL_Rect fond = { (w - box_w)/2, (h - box_h)/2, box_w, box_h };
+
+    // Fond sombre transparent 
+    SDL_SetRenderDrawBlendMode(r, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(r, 25, 30, 25, 245); 
+    SDL_RenderFillRect(r, &fond);
+    
+    // Bordure fine 
+    SDL_SetRenderDrawColor(r, 140, 150, 120, 255);
+    SDL_RenderDrawRect(r, &fond);
+    
+    // On double la bordure vers l'intérieur pour qu'elle ressorte un peu mieux
+    SDL_Rect fond_interieur = { fond.x + 1, fond.y + 1, fond.w - 2, fond.h - 2 };
+    SDL_RenderDrawRect(r, &fond_interieur);
+
+    // Rendu du texte
+    SDL_Color blanc = {255, 255, 255, 255};
+    SDL_Surface *surf = TTF_RenderUTF8_Blended(combat->font, texte, blanc);
+    if (surf) {
+        SDL_Texture *tex = SDL_CreateTextureFromSurface(r, surf);
+        // On centre le texte au milieu de notre nouvelle boîte
+        SDL_Rect pos = { (w - surf->w)/2, (h - surf->h)/2, surf->w, surf->h };
+        SDL_RenderCopy(r, tex, NULL, &pos);
+        SDL_DestroyTexture(tex);
+        SDL_FreeSurface(surf);
+    }
+    
+    SDL_RenderPresent(r);
+}
