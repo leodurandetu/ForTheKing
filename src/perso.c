@@ -22,7 +22,7 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
     perso->niveau = 1;
     perso->exp = 0;
 
-    perso->nb_vies = 3;
+    
 
     switch (persoType)
     {
