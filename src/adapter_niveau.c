@@ -14,7 +14,7 @@ void appliquer_bonus_perso(perso_t *perso) {
                 perso->force += 5;
                 perso->intelligence += 5;
                 perso->sante += 7;
-                perso->sante_max = perso->sante;
+                perso->sante_max += 7 ;
                 perso->rapidite += 5;
                 perso->evasion += 5;
                 break;
@@ -22,7 +22,7 @@ void appliquer_bonus_perso(perso_t *perso) {
                 perso->force += 4;
                 perso->intelligence += 4;
                 perso->sante += 5;
-                perso->sante_max = perso->sante;
+                perso->sante_max += 5;
                 perso->rapidite += 4;
                 perso->evasion += 4;
                 break;
@@ -30,7 +30,7 @@ void appliquer_bonus_perso(perso_t *perso) {
                 perso->force += 3;
                 perso->intelligence += 3;
                 perso->sante += 3;
-                perso->sante_max = perso->sante;
+                perso->sante_max += 3;
                 perso->rapidite += 3;
                 perso->evasion += 3;
                 break;
@@ -38,7 +38,7 @@ void appliquer_bonus_perso(perso_t *perso) {
                 perso->force += 2;
                 perso->intelligence += 2;
                 perso->sante += 2;
-                perso->sante_max = perso->sante;
+                perso->sante_max += 2;
                 perso->rapidite += 2;
                 perso->evasion += 2;
                 break;
@@ -57,15 +57,15 @@ void appliquer_bonus_monstre(monstre_t *monstre) {
                 monstre->force += 2;
                 monstre->intelligence += 2;
                 monstre->sante += 3;
-                monstre->sante_max = monstre->sante;
+                monstre->sante_max += 3;
                 monstre->rapidite += 2;
                 monstre->evasion += 2;
                 break;
         case 3: monstre->degats += 4;
                 monstre->force += 4;
                 monstre->intelligence += 4;
-                monstre->sante += 5;
-                monstre->sante_max = monstre->sante;
+                monstre->sante += 4;
+                monstre->sante_max += 4;
                 monstre->rapidite += 4;
                 monstre->evasion += 4;
                 break;
@@ -73,7 +73,7 @@ void appliquer_bonus_monstre(monstre_t *monstre) {
                 monstre->force += 5;
                 monstre->intelligence += 5;
                 monstre->sante += 5;
-                monstre->sante_max = monstre->sante;
+                monstre->sante_max += 5;
                 monstre->rapidite += 5;
                 monstre->evasion += 5;
                 break;
@@ -81,7 +81,7 @@ void appliquer_bonus_monstre(monstre_t *monstre) {
                 monstre->force += 6;
                 monstre->intelligence += 6;
                 monstre->sante += 6;
-                monstre->sante_max = monstre->sante;
+                monstre->sante_max += 6;
                 monstre->rapidite += 6;
                 monstre->evasion += 6;
                 break;
