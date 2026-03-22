@@ -44,3 +44,51 @@ void dessiner_barre(SDL_Renderer* r, TTF_Font* f, const char* label, int val, in
         SDL_DestroyTexture(t_points);
     }
 }
+
+/* Leo
+ * Cette fonction affiche un message
+ * centré sur une fenêtre
+ */
+void afficherMessageCentre(SDL_Renderer *renderer, TTF_Font *font, const char *message, 
+    int fenetre_w, int fenetre_h, SDL_Texture **texture, char *ancienMessage)
+{
+    SDL_Color color = {255, 255, 255, 255};
+
+    // On recrée la texture seulement si le message change
+    if (*texture == NULL || strcmp(ancienMessage, message) != 0)
+    {
+        // Supprimer ancienne texture
+        if (*texture != NULL) {
+            SDL_DestroyTexture(*texture);
+            *texture = NULL;
+        }
+
+        SDL_Surface *surface = TTF_RenderText_Solid(font, message, color);
+        if (!surface) {
+            printf("Erreur surface: %s\n", TTF_GetError());
+            return;
+        }
+
+        *texture = SDL_CreateTextureFromSurface(renderer, surface);
+        if (!(*texture)) {
+            printf("Erreur texture: %s\n", SDL_GetError());
+            SDL_FreeSurface(surface);
+            return;
+        }
+
+        strcpy(ancienMessage, message);
+
+        SDL_FreeSurface(surface);
+    }
+
+    int textW, textH;
+    SDL_QueryTexture(*texture, NULL, NULL, &textW, &textH);
+
+    SDL_Rect dest;
+    dest.x = (fenetre_w - textW) / 2;
+    dest.y = (fenetre_h - textH) / 2;
+    dest.w = textW;
+    dest.h = textH;
+
+    SDL_RenderCopy(renderer, *texture, NULL, &dest);
+}

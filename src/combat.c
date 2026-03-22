@@ -213,13 +213,14 @@ void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat,
  * monstre sur la carte si il a perdu
  */
 void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur) {
+    perso_t * perso = (*combat)->perso;
+
     /* si le joueur est le vainqueur,
      * on supprime le monstre de la carte,
      * et on lui donne de l'XP
      */
     if (vainqueur == JOUEUR_VAINQUEUR) {
         monstre_t * combat_monstre = (*combat)->monstre;
-        perso_t * perso = (*combat)->perso;
         int y = combat_monstre->y;
         int x = combat_monstre->x;
 
@@ -238,7 +239,17 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
 
         objet_t kit_de_soins = creer_kit_de_soins(rendererPrincipal);
         ajouter_objet_inventaire(&(perso->inventaire), kit_de_soins);
+    } else if (vainqueur == MONSTRE_VAINQUEUR || perso->sante <= 0) {
+        perso->nb_vies--;
+
+        perso->sante = (int) (0.75f * perso->sante_max);
+
+        if (perso->nb_vies <= 0) {
+            perso->mort = 1;
+        }
+
     }
+
 }
 
 /* Leo

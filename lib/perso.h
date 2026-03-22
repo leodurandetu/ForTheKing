@@ -30,6 +30,9 @@ typedef struct perso_s {
     int niveau;
     int exp;
 
+    int nb_vies;
+    int mort;
+
     inventaire_t inventaire;
 
     perso_type_t type;

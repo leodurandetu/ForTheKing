@@ -16,6 +16,7 @@
 #include "../lib/affichage_carte.h"
 #include "../lib/option.h"
 #include "../lib/inventaire.h"
+#include "../lib/affichage_commun.h"
 
 case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 
@@ -23,6 +24,11 @@ case_t carte[TAILLE_CARTE][TAILLE_CARTE];
 #define TAILLE_CASE_DEPART 150
 #define TAILLE_CASE_MINI 100
 #define RAYON_DECOUVERTE_BROUILLARD 5
+
+typedef enum {
+    CARTE,
+    GAME_OVER
+} EtatJeu_t;
 
 int main(int argc,char *argv[]) {
 
@@ -228,6 +234,9 @@ int main(int argc,char *argv[]) {
 
     inventaire_t inventaire_perso;
 
+    SDL_Texture *messageTexture = NULL;
+    char messageTexte[256] = "";
+
     // Génération du monde
     srand((unsigned int)time(NULL));
     init_carte(carte);
@@ -267,6 +276,8 @@ int main(int argc,char *argv[]) {
 
     int clic_gauche = 0;
 
+    EtatJeu_t etat = CARTE;
+
     while (running) {
         SDL_Event e;
 
@@ -294,93 +305,104 @@ int main(int argc,char *argv[]) {
 
                 case SDL_KEYDOWN:
 
-                    // Déplacements au clavier
-                    switch(e.key.keysym.scancode) {
+                    if (etat == GAME_OVER) {
 
-                        // Menu de pause sur Echap
-                        case SDL_SCANCODE_ESCAPE:
-                            int windowW, windowH;
-                            SDL_GetWindowSize(pFenetre, &windowW, &windowH);
-                            
-                            int choix = afficher_menu_pause(renderer, police, windowW, windowH);
-                            
-                            if (choix == 1) { // L'utilisateur a cliqué sur Quitter
-                                running = 0;  
-                                relancer_menu = 1;
-                            }
-                            
-                            majAffichage = 1; // On force le rafraîchissement de la carte au retour
-                            break;
+                        if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+                            running = 0;
+                        }
 
-                        case SDL_SCANCODE_W: 
-                            if (perso->y - 1 >= 0 
-                                && deplacement_possible(carte, perso->x, perso->y - 1)
-                                && case_occupee(carte, perso->x, perso->y - 1, perso->x, perso->y) == FAUX
-                                && perso->pts_deplacements > 0) {
-                                majAffichage = 1;
-                                majBrouillard = 1;
-                                perso->y--;
-                                perso->pts_deplacements--;
-                            }
-                            break;
-                            
-                        case SDL_SCANCODE_A:
-                            
-                            if (perso->x - 1 >= 0 
-                                && deplacement_possible(carte, perso->x - 1, perso->y)
-                                && case_occupee(carte, perso->x - 1, perso->y, perso->x, perso->y) == FAUX
-                                && perso->pts_deplacements > 0
-                            ) {
-                                majAffichage = 1;
-                                majBrouillard = 1;
-                                perso->x--;
-                                perso->pts_deplacements--;
-                            }
+                    } else {
 
-                            break;
+                        // Déplacements au clavier
+                        switch(e.key.keysym.scancode) {
 
-                        case SDL_SCANCODE_S: 
-                            
-                            if (perso->y + 1 < TAILLE_CARTE 
-                                && deplacement_possible(carte, perso->x, perso->y + 1)
-                                && case_occupee(carte, perso->x, perso->y + 1, perso->x, perso->y) == FAUX
-                                && perso->pts_deplacements > 0
-                            ) {
-                                majAffichage = 1;
-                                majBrouillard = 1;
-                                perso->y++;
-                                perso->pts_deplacements--;
-                            }
+                            // Menu de pause sur Echap
+                            case SDL_SCANCODE_ESCAPE:
+                                int windowW, windowH;
+                                SDL_GetWindowSize(pFenetre, &windowW, &windowH);
+                                
+                                int choix = afficher_menu_pause(renderer, police, windowW, windowH);
+                                
+                                if (choix == 1) { // L'utilisateur a cliqué sur Quitter
+                                    running = 0;  
+                                    relancer_menu = 1;
+                                }
+                                
+                                majAffichage = 1; // On force le rafraîchissement de la carte au retour
+                                break;
 
-                            break;
+                            case SDL_SCANCODE_W: 
+                                if (perso->y - 1 >= 0 
+                                    && deplacement_possible(carte, perso->x, perso->y - 1)
+                                    && case_occupee(carte, perso->x, perso->y - 1, perso->x, perso->y) == FAUX
+                                    && perso->pts_deplacements > 0) {
+                                    majAffichage = 1;
+                                    majBrouillard = 1;
+                                    perso->y--;
+                                    perso->pts_deplacements--;
+                                }
+                                break;
+                                
+                            case SDL_SCANCODE_A:
+                                
+                                if (perso->x - 1 >= 0 
+                                    && deplacement_possible(carte, perso->x - 1, perso->y)
+                                    && case_occupee(carte, perso->x - 1, perso->y, perso->x, perso->y) == FAUX
+                                    && perso->pts_deplacements > 0
+                                ) {
+                                    majAffichage = 1;
+                                    majBrouillard = 1;
+                                    perso->x--;
+                                    perso->pts_deplacements--;
+                                }
 
-                        case SDL_SCANCODE_D:
+                                break;
 
-                            if (perso->x + 1 < TAILLE_CARTE 
-                                && deplacement_possible(carte, perso->x + 1, perso->y)
-                                && case_occupee(carte, perso->x + 1, perso->y, perso->x, perso->y) == FAUX
-                                && perso->pts_deplacements > 0
-                            ) {
-                                majAffichage = 1;
-                                majBrouillard = 1;
-                                perso->x++;
-                                perso->pts_deplacements--;
-                            }
+                            case SDL_SCANCODE_S: 
+                                
+                                if (perso->y + 1 < TAILLE_CARTE 
+                                    && deplacement_possible(carte, perso->x, perso->y + 1)
+                                    && case_occupee(carte, perso->x, perso->y + 1, perso->x, perso->y) == FAUX
+                                    && perso->pts_deplacements > 0
+                                ) {
+                                    majAffichage = 1;
+                                    majBrouillard = 1;
+                                    perso->y++;
+                                    perso->pts_deplacements--;
+                                }
 
-                            break;
+                                break;
 
-                        case SDL_SCANCODE_N:
+                            case SDL_SCANCODE_D:
 
-                            if (perso->pts_deplacements <= 0) {
-                                restaurer_points_deplacements(perso);
-                                deplacer_monstres(renderer, carte, perso, &combat_actuel);
-                                majAffichage = 1;
-                            }
+                                if (perso->x + 1 < TAILLE_CARTE 
+                                    && deplacement_possible(carte, perso->x + 1, perso->y)
+                                    && case_occupee(carte, perso->x + 1, perso->y, perso->x, perso->y) == FAUX
+                                    && perso->pts_deplacements > 0
+                                ) {
+                                    majAffichage = 1;
+                                    majBrouillard = 1;
+                                    perso->x++;
+                                    perso->pts_deplacements--;
+                                }
 
-                            break;
+                                break;
 
-                        default: break;
+                            case SDL_SCANCODE_N:
+
+                                if (perso->pts_deplacements <= 0) {
+                                    restaurer_points_deplacements(perso);
+                                    deplacer_monstres(renderer, carte, perso, &combat_actuel);
+                                    majAffichage = 1;
+                                }
+
+                                break;
+
+                            default: break;
+                        }
+
                     }
+
                     break;
 
                 case SDL_MOUSEMOTION:
@@ -467,6 +489,11 @@ int main(int argc,char *argv[]) {
             }
         }
 
+        if (perso->mort == 1 && etat != GAME_OVER) {
+            etat = GAME_OVER;
+            majAffichage = 1;
+        }
+
         if (majBrouillard) {
             devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
             majBrouillard = 0;
@@ -477,24 +504,31 @@ int main(int argc,char *argv[]) {
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Fond noir
             SDL_RenderClear(renderer);
 
-            // Dessine la carte et les contours dorés
-            afficher_carte_sdl(renderer, carte, textures_cases, textures_obstacles, texture_brouillard, textures_monstres,
-                textures_batiments, textures_sanctuaires, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
-                perso);
+            if (etat == CARTE) {
+                // Dessine la carte et les contours dorés
+                afficher_carte_sdl(renderer, carte, textures_cases, textures_obstacles, texture_brouillard, textures_monstres,
+                    textures_batiments, textures_sanctuaires, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
+                    perso);
+                    
+                if (texture_perso) {
+                    afficher_personnage(renderer, texture_perso, perso, tailleCase);
+                }
+
+                dessiner_interface_carte(renderer, police2, texture_perso, perso, clic_gauche, &majAffichage);
+                char info_a_afficher[50];
+
+                get_info_personnage(perso, "Pts_deplacements", info_a_afficher);
                 
-            if (texture_perso) {
-                afficher_personnage(renderer, texture_perso, perso, tailleCase);
+                mise_a_jour_texte(info_a_afficher, renderer, police, &texte, &texte_tex, &txtDestRect);
+                /* Ajout du texte en noir */
+                SDL_SetRenderDrawColor ( renderer , 0, 0, 0, 255);
+                SDL_RenderCopy ( renderer , texte_tex , NULL , &txtDestRect );
+            } else if (etat == GAME_OVER) {
+                int fenetre_w, fenetre_h;
+                SDL_GetWindowSize(pFenetre, &fenetre_w, &fenetre_h);
+
+                afficherMessageCentre(renderer, police, "Vous n'avez plus de vies ! Partie terminee.", fenetre_w, fenetre_h, &messageTexture, messageTexte);
             }
-
-            dessiner_interface_carte(renderer, police2, texture_perso, perso, clic_gauche, &majAffichage);
-            char info_a_afficher[50];
-
-            get_info_personnage(perso, "Pts_deplacements", info_a_afficher);
-            
-            mise_a_jour_texte(info_a_afficher, renderer, police, &texte, &texte_tex, &txtDestRect);
-            /* Ajout du texte en noir */
-            SDL_SetRenderDrawColor ( renderer , 0, 0, 0, 255);
-            SDL_RenderCopy ( renderer , texte_tex , NULL , &txtDestRect );
 
             SDL_RenderPresent(renderer);
             
@@ -524,6 +558,8 @@ int main(int argc,char *argv[]) {
         if (textures_obstacles[i]) SDL_DestroyTexture(textures_obstacles[i]);
     }
     if (texte_tex) SDL_DestroyTexture(texte_tex);
+
+    if (messageTexture) SDL_DestroyTexture(messageTexture);
 
     TTF_CloseFont(police);
     TTF_CloseFont(police2);

@@ -9,5 +9,6 @@
 
 SDL_Texture* creer_texte(SDL_Renderer* renderer, TTF_Font* police, const char* texte, SDL_Color couleur, SDL_Rect* rectangle_sortie);
 void dessiner_barre(SDL_Renderer* r, TTF_Font* f, const char* label, int val, int max, SDL_Rect zone, SDL_Color coul_barre);
+void afficherMessageCentre(SDL_Renderer *renderer, TTF_Font *font, const char *message, int fenetre_w, int fenetre_h, SDL_Texture **texture, char *ancienMessage);
 
 #endif
