@@ -6,7 +6,7 @@
  * également de commencer un combat
  * en parallèle.
  */
-void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE],int *vies_globales) {
     (*combat)->pFenetre = (SDL_CreateWindow("For The King - Combat", 
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE));
@@ -169,14 +169,31 @@ void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat,
                         majAffichage = 1;
                     }
 
-                    if((*combat)->perso->sante == 0){
-                        printf("Vous avez perdu.\n");
-                        vainqueur = MONSTRE_VAINQUEUR;
-                        running = 0;
-                    }
+                    /* Vérification de la mort du joueur */
+                    if((*combat)->perso->sante <= 0) {
+                        
+                        (*vies_globales)--; 
 
-                    if((*combat)->monstre->sante == 0){
-                        printf("Vous avez gagné.\n");
+                        if (*vies_globales >= 0) {
+                            // S'il reste des vies, on ressuscite directement dans le combat
+                            afficher_message_combat(*combat, "Une vie est utilisee...");
+                            SDL_Delay(1500);
+                            
+                            // On lui redonne ses 75% de PV max
+                            (*combat)->perso->sante = (int)(0.75f * (*combat)->perso->sante_max);
+                            
+                            majAffichage = 1; 
+                        } else {
+                            // Plus de vies du tout : Fin de l'aventure
+                            afficher_message_combat(*combat, "Combat terminé.");
+                            SDL_Delay(3000);
+                            
+                            vainqueur = MONSTRE_VAINQUEUR;
+                            running = 0; // on ferme la fenêtre
+                        }
+                    } 
+                    /* Vérification de la mort du monstre */
+                    else if((*combat)->monstre->sante <= 0) {
                         vainqueur = JOUEUR_VAINQUEUR;
                         running = 0;
                     }
@@ -208,7 +225,7 @@ void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat,
         clic_gauche = 0;
     }
 
-    combat_termine(rendererPrincipal, combat, carte, vainqueur);
+    combat_termine(rendererPrincipal, combat, carte, vainqueur,vies_globales);
     detruire_fenetre_combat(combat);
 }
 
@@ -218,7 +235,7 @@ void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat,
  * un combat ainsi que supprimer le
  * monstre sur la carte si il a perdu
  */
-void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur) {
+void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur,int *vies_globales) {
     perso_t * perso = (*combat)->perso;
 
     /* si le joueur est le vainqueur,
@@ -246,15 +263,12 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
         objet_t kit_de_soins = creer_kit_de_soins(rendererPrincipal);
         ajouter_objet_inventaire(&(perso->inventaire), kit_de_soins);
     } else if (vainqueur == MONSTRE_VAINQUEUR || perso->sante <= 0) {
-        perso->nb_vies--;
 
-        perso->sante = (int) (0.75f * perso->sante_max);
-
-        if (perso->nb_vies <= 0) {
-            perso->mort = 1;
+            // Si on arrive ici, c'est que le combat est perdu et qu'il n'y a plus de vies.
+            // La résurrection est gérée directement pendant le combat.
+            perso->sante = 0;
+            perso->mort = 1; 
         }
-
-    }
 
 }
 
