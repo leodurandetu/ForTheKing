@@ -11,5 +11,5 @@
 /* Prototypes des fonctions */
 
 void maj_affichage_fenetre_combat(combat_t * combat, int clicGauche);
-
+extern void afficher_message_combat(combat_t *combat, const char *texte);
 #endif
