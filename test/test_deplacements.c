@@ -95,6 +95,9 @@ int main() {
 
     carte[1][1].monstre = creer_monstre_aleatoire(SQUELETTE, 1, 1);
 
+    /* oui car lorsque le joueur se déplace sur la
+     * case d'un monstre, il lance un combat
+     */
     printf("TEST 6: Peut-on se déplacer sur une case avec un monstre dessus ? Attendu : OUI\n");
     assert(chemin_valide(carte, TAILLE_CARTE_TEST, 3, 3, 1, 1, 10, NULL, NULL) == VRAI);
     printf("OK.\n\n");
@@ -127,6 +130,28 @@ int main() {
 
     printf("TEST 9: Peut-on se déplacer sur une case en dehors de la carte ? Attendu : NON\n");
     assert(chemin_valide(carte, TAILLE_CARTE_TEST, 2, 2, 80, -41, 10, NULL, NULL) == FAUX);
+    printf("OK.\n\n");
+
+    printf("TEST 10: Peut-on se déplacer sur une case quelconque si on a aucun point de déplacement ? Attendu : NON\n");
+    assert(chemin_valide(carte, TAILLE_CARTE_TEST, 2, 2, 1, 1, 0, NULL, NULL) == FAUX);
+    printf("OK.\n\n");
+
+    carte[1][1].biome = DESERT;
+
+    printf("TEST 11: Peut-on se déplacer sur une case de desert ? Attendu : OUI\n");
+    assert(chemin_valide(carte, TAILLE_CARTE_TEST, 2, 2, 1, 1, 10, NULL, NULL) == VRAI);
+    printf("OK.\n\n");
+
+    printf("TEST 12: Peut-on se déplacer sur notre case actuelle ? Attendu : OUI\n");
+    assert(chemin_valide(carte, TAILLE_CARTE_TEST, 2, 2, 2, 2, 10, NULL, NULL) == VRAI);
+    printf("OK.\n\n");
+
+    reinitialiser_carte(carte);
+
+    carte[3][0].estVisible = 0;
+
+    printf("TEST 13: Peut-on se déplacer sur une case pas visible ? Attendu : NON\n");
+    assert(chemin_valide(carte, TAILLE_CARTE_TEST, 2, 2, 0, 3, 10, NULL, NULL) == FAUX);
     printf("OK.\n\n");
 
     liberer_memoire_carte(&carte, TAILLE_CARTE_TEST);
