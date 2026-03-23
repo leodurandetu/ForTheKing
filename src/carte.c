@@ -36,8 +36,6 @@ booleen_t deplacement_possible(case_t ** carte, int x, int y) {
         return FAUX;
     } else if (maCase.terrain != PAS_DE_TERRAIN) {
         return FAUX;
-    } else if (maCase.estVisible == 0) {
-        return FAUX;
     } else {
         return VRAI;
     }
