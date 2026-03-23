@@ -325,6 +325,8 @@ void liberer_memoire_carte(case_t *** carte, int taille_carte) {
 
             }
 
+            free((*carte)[i]);
+            (*carte)[i] = NULL;
         }
 
         free(*carte);
