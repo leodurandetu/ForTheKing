@@ -624,71 +624,55 @@ void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t carte[TAILLE_CAR
             monstre_t * monstre = carte[y][x].monstre;
 
             if (monstre != NULL && !dejaDeplace[y][x]) {
+                int direction = rand() % NB_DIRECTIONS;
+                int nx = x, ny = y;
 
-                if (persY - 1 <= monstre->y && persY + 1 >= monstre->y
-                &&  persX - 1 <= monstre->x && persX + 1 >= monstre->x) {
-                    *combat_actuel = creer_combat(perso, monstre);
-                    int choix = ouvrir_fenetre_choix(*combat_actuel);
+                switch (direction) {
 
-                    if(choix == 1)
-                    {
-                        ouvrir_fenetre_combat(rendererPrincipal, combat_actuel, carte,vies_globales);
-                    } else if (choix == 0) {
-                        detruire_combat(combat_actuel);
+                    case HAUT:
+                        ny = y - 1;
+                        break;
+
+                    case BAS:
+                        ny = y + 1;
+                        break;
+
+                    case GAUCHE:
+                        nx = x - 1;
+                        break;
+
+                    case DROITE:
+                        nx = x + 1;
+                        break;
+
+                }
+
+                dejaDeplace[y][x] = 1;
+
+                if (deplacement_possible(carte, nx, ny)
+                    && !case_occupee(carte, nx, ny,  persX, persY) &&
+                    carte[ny][nx].sanctuaires == PAS_DE_SANCTUAIRE) {
+
+                    // On vérifie le type du monstre actuel et le biome de destination
+                    int peut_bouger = 0;
+
+                    if (monstre->type == SQUELETTE && carte[ny][nx].biome == DESERT) {
+                        peut_bouger = 1;
+                    } else if (monstre->type == TROLL && carte[ny][nx].biome == FORET) {
+                        peut_bouger = 1;
+                    } else if (monstre->type != SQUELETTE && monstre->type != TROLL) {
+                        // Pour les monstres sans restriction de biome
+                        peut_bouger = 1;
                     }
 
-                } else {
-                    int direction = rand() % NB_DIRECTIONS;
-                    int nx = x, ny = y;
+                    if (peut_bouger) {
+                        carte[ny][nx].monstre = monstre;
+                        carte[y][x].monstre = NULL;
 
-                    switch (direction) {
+                        monstre->x = nx;
+                        monstre->y = ny;
 
-                        case HAUT:
-                            ny = y - 1;
-                            break;
-
-                        case BAS:
-                            ny = y + 1;
-                            break;
-
-                        case GAUCHE:
-                            nx = x - 1;
-                            break;
-
-                        case DROITE:
-                            nx = x + 1;
-                            break;
-
-                    }
-
-                    dejaDeplace[y][x] = 1;
-
-                    if (deplacement_possible(carte, nx, ny)
-                        && !case_occupee(carte, nx, ny,  persX, persY) &&
-                        carte[ny][nx].sanctuaires == PAS_DE_SANCTUAIRE) {
-
-                        // On vérifie le type du monstre actuel et le biome de destination
-                        int peut_bouger = 0;
-
-                        if (monstre->type == SQUELETTE && carte[ny][nx].biome == DESERT) {
-                            peut_bouger = 1;
-                        } else if (monstre->type == TROLL && carte[ny][nx].biome == FORET) {
-                            peut_bouger = 1;
-                        } else if (monstre->type != SQUELETTE && monstre->type != TROLL) {
-                            // Pour les monstres sans restriction de biome
-                            peut_bouger = 1;
-                        }
-
-                        if (peut_bouger) {
-                            carte[ny][nx].monstre = monstre;
-                            carte[y][x].monstre = NULL;
-
-                            monstre->x = nx;
-                            monstre->y = ny;
-
-                            dejaDeplace[ny][nx] = 1;
-                        }
-
+                        dejaDeplace[ny][nx] = 1;
                     }
 
                 }

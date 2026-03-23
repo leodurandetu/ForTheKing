@@ -6,10 +6,8 @@
  * également de commencer un combat
  * en parallèle.
  */
-void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE],int *vies_globales) {
-    (*combat)->pFenetre = (SDL_CreateWindow("For The King - Combat", 
-            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-            640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE));
+void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE],int *vies_globales) {
+    (*combat)->pFenetre = pFenetrePrincipal;
 
     if (!((*combat)->pFenetre)) {
         fprintf(stderr, "Erreur fenêtre : %s\n", SDL_GetError());
@@ -17,7 +15,7 @@ void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat,
     }
 
     // Création du moteur de rendu (accéléré par la carte graphique)
-    (*combat)->renderer = (SDL_CreateRenderer((*combat)->pFenetre, -1, SDL_RENDERER_ACCELERATED));
+    (*combat)->renderer = rendererPrincipal;
     if (!((*combat)->renderer)) {
         fprintf(stderr, "Erreur renderer : %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
@@ -104,129 +102,7 @@ void ouvrir_fenetre_combat(SDL_Renderer * rendererPrincipal, combat_t ** combat,
         SDL_FreeSurface(surf_lourd);
     }
 
-    vainqueur_t vainqueur = PAS_DE_VAINQUEUR;
-    int running = 1;
-    int majAffichage = 1;
-    int clic_gauche = 0;
     (*combat)->tour = TOUR_JOUEUR;
-    SDL_Point point;
-
-    while (running) {
-        SDL_Event e;
-
-        while (SDL_PollEvent(&e)) {
-
-            switch (e.type) {
-                case SDL_QUIT:
-                    running = 0;
-                    break;
-
-                case SDL_MOUSEMOTION:
-                    point.x = e.motion.x;
-                    point.y = e.motion.y;
-
-                    (*combat)->survole_bouton_leger = SDL_PointInRect(&point, &((*combat)->bouton_leger));
-                    (*combat)->survole_bouton_lourd = SDL_PointInRect(&point, &((*combat)->bouton_lourd));
-
-                    majAffichage = 1;
-                    break;
-
-                case SDL_MOUSEBUTTONDOWN:
-
-                    if (e.button.button == SDL_BUTTON_LEFT) {
-                        clic_gauche = 1;
-                    }
-
-                    point.x = e.button.x;
-                    point.y = e.button.y;
-
-                    if((*combat)->tour == TOUR_JOUEUR){
-                        if (SDL_PointInRect(&point, &((*combat)->bouton_leger))) {
-                            printf("Attaque légère\n");
-                            attaque_legere(*combat);
-                            (*combat)->tour = changer_tour(*combat);
-                            printf("Le joueur a joué\n");
-                            printf("santé monstre : %d",(*combat)->monstre->sante);
-                            
-
-                        } else if (SDL_PointInRect(&point, &((*combat)->bouton_lourd))) {
-                            printf("Attaque lourde\n");
-                            attaque_lourde(*combat);
-                            (*combat)->tour = changer_tour(*combat);
-                            printf("Le joueur a joué\n");
-                            printf("santé monstre : %d",(*combat)->monstre->sante);
-                        }
-
-                    }
-
-                    if ((*combat)->tour == TOUR_MONSTRE) {
-                        printf("\nTour du monstre\n");
-                        choix_attaque_monstre(*combat);
-                        (*combat)->tour = changer_tour(*combat);
-                        printf("Le monstre a joué\n");
-                        printf("Santé joueur : %d\n",(*combat)->perso->sante);
-
-                        majAffichage = 1;
-                    }
-
-                    /* Vérification de la mort du joueur */
-                    if((*combat)->perso->sante <= 0) {
-                        
-                        (*vies_globales)--; 
-
-                        if (*vies_globales >= 0) {
-                            // S'il reste des vies, on ressuscite directement dans le combat
-                            afficher_message_combat(*combat, "Une vie est utilisee...");
-                            SDL_Delay(1500);
-                            
-                            // On lui redonne ses 75% de PV max
-                            (*combat)->perso->sante = (int)(0.75f * (*combat)->perso->sante_max);
-                            
-                            majAffichage = 1; 
-                        } else {
-                            // Plus de vies du tout : Fin de l'aventure
-                            afficher_message_combat(*combat, "Combat terminé.");
-                            SDL_Delay(3000);
-                            
-                            vainqueur = MONSTRE_VAINQUEUR;
-                            running = 0; // on ferme la fenêtre
-                        }
-                    } 
-                    /* Vérification de la mort du monstre */
-                    else if((*combat)->monstre->sante <= 0) {
-                        vainqueur = JOUEUR_VAINQUEUR;
-                        running = 0;
-                    }
-                    
-                    break;
-
-                case SDL_WINDOWEVENT:
-
-                    if (e.window.event == SDL_WINDOWEVENT_RESIZED
-                        || e.window.event == SDL_WINDOWEVENT_EXPOSED) {
-                        majAffichage = 1;
-                    }
-
-                    if (e.window.event == SDL_WINDOWEVENT_CLOSE) {
-                        running = 0;
-                    }
-
-                    break;
-
-            }
-
-        }
-
-        if (majAffichage) {
-            maj_affichage_fenetre_combat(*combat, clic_gauche);
-            majAffichage = 0;
-        }
-
-        clic_gauche = 0;
-    }
-
-    combat_termine(rendererPrincipal, combat, carte, vainqueur,vies_globales);
-    detruire_fenetre_combat(combat);
 }
 
 /* Leo
@@ -271,72 +147,6 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
         }
 
 }
-
-/* Leo
- * Cette fonction libère la mémoire d'un combat,
- * et de sa fenêtre et des éléments graphiques.
- */
-void detruire_fenetre_combat(combat_t ** combat) {
-
-    if (combat != NULL && *combat != NULL) {
-
-        if ((*combat)->texture_attaque_legere != NULL) {
-            SDL_DestroyTexture((*combat)->texture_attaque_legere);
-            (*combat)->texture_attaque_legere = NULL;
-        }
-
-        if ((*combat)->texture_attaque_lourde != NULL) {
-            SDL_DestroyTexture((*combat)->texture_attaque_lourde);
-            (*combat)->texture_attaque_lourde = NULL;
-        }
-
-        if ((*combat)->texture_monstre != NULL) {
-            SDL_DestroyTexture((*combat)->texture_monstre);
-            (*combat)->texture_monstre = NULL;
-        }
-
-        if ((*combat)->texture_perso != NULL) {
-            SDL_DestroyTexture((*combat)->texture_perso);
-            (*combat)->texture_perso = NULL;
-        }
-
-        if ((*combat)->texture_fond_ecran != NULL) {
-            SDL_DestroyTexture((*combat)->texture_fond_ecran);
-            (*combat)->texture_fond_ecran = NULL;
-        }
-
-        if (((*combat)->renderer) != NULL) {
-            SDL_DestroyRenderer((*combat)->renderer);
-            ((*combat)->renderer) = NULL;
-        }
-
-        if (((*combat)->pFenetre) != NULL) {
-            SDL_DestroyWindow((*combat)->pFenetre);
-            ((*combat)->pFenetre) = NULL;
-        }
-
-        if (((*combat)->texture_texte_leger) != NULL) {
-            SDL_DestroyTexture((*combat)->texture_texte_leger);
-            (*combat)->texture_texte_leger = NULL;
-        }
-
-        if (((*combat)->texture_texte_lourd) != NULL) {
-            SDL_DestroyTexture((*combat)->texture_texte_lourd);
-            (*combat)->texture_texte_lourd = NULL;
-        }
-
-        if ((*combat)->font != NULL) {
-            TTF_CloseFont((*combat)->font);
-            (*combat)->font = NULL;
-        }
-
-        free(*combat);
-        *combat = NULL;
-    }
-
-}
-
-
 
 /* Massoud 
  * Cette fonction est faite pour alterner le tour.
@@ -483,7 +293,56 @@ combat_t* creer_combat(perso_t *perso, monstre_t *monstre) {
     return combat;
 }
 
+/* Leo
+ * Cette fonction libère la mémoire
+ * d'un combat qui est terminé
+ */
 void detruire_combat(combat_t ** combat) {
-    free(*combat);
-    *combat = NULL;
+
+    if (combat != NULL && *combat != NULL) {
+
+        if ((*combat)->texture_attaque_legere != NULL) {
+            SDL_DestroyTexture((*combat)->texture_attaque_legere);
+            (*combat)->texture_attaque_legere = NULL;
+        }
+
+        if ((*combat)->texture_attaque_lourde != NULL) {
+            SDL_DestroyTexture((*combat)->texture_attaque_lourde);
+            (*combat)->texture_attaque_lourde = NULL;
+        }
+
+        if ((*combat)->texture_monstre != NULL) {
+            SDL_DestroyTexture((*combat)->texture_monstre);
+            (*combat)->texture_monstre = NULL;
+        }
+
+        if ((*combat)->texture_perso != NULL) {
+            SDL_DestroyTexture((*combat)->texture_perso);
+            (*combat)->texture_perso = NULL;
+        }
+
+        if ((*combat)->texture_fond_ecran != NULL) {
+            SDL_DestroyTexture((*combat)->texture_fond_ecran);
+            (*combat)->texture_fond_ecran = NULL;
+        }
+
+        if (((*combat)->texture_texte_leger) != NULL) {
+            SDL_DestroyTexture((*combat)->texture_texte_leger);
+            (*combat)->texture_texte_leger = NULL;
+        }
+
+        if (((*combat)->texture_texte_lourd) != NULL) {
+            SDL_DestroyTexture((*combat)->texture_texte_lourd);
+            (*combat)->texture_texte_lourd = NULL;
+        }
+
+        if ((*combat)->font != NULL) {
+            TTF_CloseFont((*combat)->font);
+            (*combat)->font = NULL;
+        }
+
+        free(*combat);
+        *combat = NULL;
+    }
+
 }
