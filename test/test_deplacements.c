@@ -4,8 +4,25 @@
 
 #define TAILLE_CARTE_TEST 4
 
-void reinitialiser_carte(case_t **carte) {
+void reinitialiser_carte(case_t ** carte) {
     int i, j;
+
+     if (carte != NULL) {
+    
+        for (i = 0; i < TAILLE_CARTE_TEST; i++) {
+
+            for (j = 0; j < TAILLE_CARTE_TEST; j++) {
+                monstre_t *monstre = carte[i][j].monstre;
+
+                if (monstre != NULL) {
+                    free(monstre);
+                }
+
+            }
+
+        }
+
+    }
 
     for (i = 0; i < TAILLE_CARTE_TEST; i++) {
 
@@ -76,8 +93,7 @@ int main() {
 
     reinitialiser_carte(carte);
 
-    monstre_t * monstre = creer_monstre_aleatoire(SQUELETTE, 1, 1);
-    carte[1][1].monstre = monstre;
+    carte[1][1].monstre = creer_monstre_aleatoire(SQUELETTE, 1, 1);
 
     printf("TEST 6: Peut-on se déplacer sur une case avec un monstre dessus ? Attendu : OUI\n");
     assert(chemin_valide(carte, TAILLE_CARTE_TEST, 3, 3, 1, 1, 10, NULL, NULL) == VRAI);
@@ -112,4 +128,6 @@ int main() {
     printf("TEST 9: Peut-on se déplacer sur une case en dehors de la carte ? Attendu : NON\n");
     assert(chemin_valide(carte, TAILLE_CARTE_TEST, 2, 2, 80, -41, 10, NULL, NULL) == FAUX);
     printf("OK.\n\n");
+
+    liberer_memoire_carte(&carte, TAILLE_CARTE_TEST);
 }
