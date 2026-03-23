@@ -18,8 +18,6 @@
 #include "../lib/inventaire.h"
 #include "../lib/affichage_commun.h"
 
-case_t carte[TAILLE_CARTE][TAILLE_CARTE];
-
 #define TAILLE_CASE_MAXI 250
 #define TAILLE_CASE_DEPART 150
 #define TAILLE_CASE_MINI 100
@@ -253,6 +251,16 @@ int main(int argc,char *argv[]) {
     //SDL_Texture *messageTexture = NULL;
     //char messageTexte[256] = "";
 
+    case_t ** carte;
+    
+    carte = malloc(sizeof(case_t) * TAILLE_CARTE);
+
+    int k;
+
+    for (k = 0; k < TAILLE_CARTE; k++) {
+        carte[k] = malloc(sizeof(case_t) * TAILLE_CARTE);
+    }
+
     // Génération du monde
     srand((unsigned int)time(NULL));
     init_carte(carte);
@@ -469,7 +477,7 @@ int main(int argc,char *argv[]) {
                                 if (carte_x >= 0 && carte_y >= 0) {
                                     int portee = get_pers_movements_points(perso);
                                     int distReelle = -1;
-                                    int cheminTrouve = chemin_valide(carte, perso->x, perso->y, carte_x, carte_y, portee, perso, &distReelle);
+                                    int cheminTrouve = chemin_valide(carte, TAILLE_CARTE, perso->x, perso->y, carte_x, carte_y, portee, perso, &distReelle);
 
                                     if (cheminTrouve && distReelle != -1) {
 

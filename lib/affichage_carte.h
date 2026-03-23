@@ -19,7 +19,7 @@ void dessiner_contour_double_dore(SDL_Renderer* r, float cx, float cy, float ray
 void dessiner_contour_ftk(SDL_Renderer* r, float cx, float cy, float rayon, int epaisseur, SDL_Color couleur);
 void afficher_hex_couleur(SDL_Renderer* renderer, float cx, float cy, float rayon, SDL_Color couleur);
 void afficher_carte_sdl(SDL_Renderer * renderer,
-    case_t carte[TAILLE_CARTE][TAILLE_CARTE],
+    case_t ** carte,
     SDL_Texture * textures_cases[NB_BIOMES],
     SDL_Texture * textures_obstacles[4], 
     SDL_Texture * texture_brouillard,

@@ -6,7 +6,7 @@
  * également de commencer un combat
  * en parallèle.
  */
-void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE],int *vies_globales) {
+void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t ** carte,int *vies_globales) {
     (*combat)->pFenetre = pFenetrePrincipal;
 
     if (!((*combat)->pFenetre)) {
@@ -111,7 +111,7 @@ void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * render
  * un combat ainsi que supprimer le
  * monstre sur la carte si il a perdu
  */
-void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t carte[TAILLE_CARTE][TAILLE_CARTE], vainqueur_t vainqueur,int *vies_globales) {
+void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t ** carte, vainqueur_t vainqueur,int *vies_globales) {
     perso_t * perso = (*combat)->perso;
 
     /* si le joueur est le vainqueur,

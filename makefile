@@ -8,13 +8,16 @@ INCS=-I${SDL_INC_DIR}
 PROG=bin/fortheking
 MENU=bin/menu
 
-all: mon_prog mon_menu
+all: mon_prog mon_menu test_deplacements
 
 mon_prog: src/fortheking.c
 	${CC} -o ${PROG} src/fortheking.c src/niveau.c src/adapter_niveau.c src/inventaire.c src/objet.c src/combat.c src/affichage_carte.c src/affichage_combat.c src/affichage_commun.c src/maths.c src/pause_menu.c src/carte.c src/couleur.c src/perso.c src/monstre.c src/affichage_infos.c src/option.c ${LIBS} ${INCS} ${FLAGS}
 
 mon_menu: src/menu.c
 	${CC} -o ${MENU} src/menu.c ${LIBS} ${INCS} ${FLAGS}
+
+test_deplacements: test/test_deplacements.c
+	${CC} -o bin/test_deplacements test/test_deplacements.c src/carte.c src/monstre.c ${LIBS} ${INCS} ${FLAGS}
 
 clean:
 	rm -f ${PROG}

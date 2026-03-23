@@ -8,7 +8,7 @@
  * d'une case libre sur la carte choisie aléatoirement
  * (sans monstres, batiments et pas dans l'eau) 
 */
-void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y) {
+void coords_case_libre(case_t ** carte, int *x, int *y) {
     *x = rand() % TAILLE_CARTE;
     *y = rand() % TAILLE_CARTE;
 
@@ -24,7 +24,7 @@ void coords_case_libre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int *x, int *y)
  * Cette fonction retourne VRAI si le personnage
  * peut se déplacer sur cette case, FAUX sinon.
  */
-booleen_t deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y) {
+booleen_t deplacement_possible(case_t ** carte, int x, int y) {
     //  On vérifie les bords D'ABORD -> sinon seg fault
     if (x < 0 || x >= TAILLE_CARTE || y < 0 || y >= TAILLE_CARTE) {
         return FAUX;
@@ -39,6 +39,7 @@ booleen_t deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
     } else {
         return VRAI;
     }
+
 }
 
 /* Leo */
@@ -50,7 +51,7 @@ booleen_t deplacement_possible(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
  * soit par le joueur,
  * soit si la case est en dehors de la carte
  */
-booleen_t case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
+booleen_t case_occupee(case_t ** carte,
     int x, int y, int persX, int persY) {
 
     if (x < 0 || x >= TAILLE_CARTE || y < 0 || y >= TAILLE_CARTE) {
@@ -78,7 +79,7 @@ booleen_t case_occupee(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
  * à partir d'un point donné d'abscisse x et d'ordonnée y,
  * et avec un rayon donné.
  */
-void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, int y, int rayon) {
+void devoiler_brouillard_rayon(case_t ** carte, int x, int y, int rayon) {
      int i, j;
 
     for (i = 0; i < TAILLE_CARTE; i++) {
@@ -105,7 +106,7 @@ void devoiler_brouillard_rayon(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int x, 
  * à une case de terre, vide, cachée par le brouillard,
  * sans monstre ni batiment.
  */
-void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void init_carte(case_t ** carte) {
     int x, y;
 
     for (x = 0; x < TAILLE_CARTE; x++) {
@@ -153,7 +154,7 @@ void init_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  * sur la carte, de manière aléatoire, et de façon
  * à ce que ça paraisse naturel.
  */
-void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void generer_eau(case_t ** carte) {
     
     int nb_zones = 15 + rand() % 25;
 
@@ -170,7 +171,7 @@ void generer_eau(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 }
 
 /*Saandi*/
-void remplir_zone(case_t carte[TAILLE_CARTE][TAILLE_CARTE], biome_t biome, coordonnee_t dep, coordonnee_t arr) {
+void remplir_zone(case_t ** carte, biome_t biome, coordonnee_t dep, coordonnee_t arr) {
     int x_min = fmax(0, fmin(dep.x, arr.x));
     int x_max = fmin(TAILLE_CARTE - 1, fmax(dep.x, arr.x));
     int y_min = fmax(0, fmin(dep.y, arr.y));
@@ -183,7 +184,7 @@ void remplir_zone(case_t carte[TAILLE_CARTE][TAILLE_CARTE], biome_t biome, coord
     }
 }
 /* Saandi */
-void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void generer_biomes(case_t ** carte) {
     // La TERRE est déjà initialisée partout par init_carte
     biome_t liste[] = {DESERT, NEIGE, FORET};
     
@@ -206,7 +207,7 @@ void generer_biomes(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
 
 // Massoud
 // Vérifie à un rayon de 2 cases (grille hexagonale) pour éviter que les monstres s'agglutinent
-booleen_t a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, int cy) {
+booleen_t a_un_voisin_monstre(case_t ** carte, int cx, int cy) {
     // On scanne un petit carré de 5x5 autour de la case cible (rayon d'environ 2 hexagones)
     for (int y = cy - 2; y <= cy + 2; y++) {
         for (int x = cx - 2; x <= cx + 2; x++) {
@@ -233,7 +234,7 @@ booleen_t a_un_voisin_monstre(case_t carte[TAILLE_CARTE][TAILLE_CARTE], int cx, 
 }
 
 // Massoud
-void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos) {
+void faire_apparaitre_groupe(case_t ** carte, type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos) {
     // Minimum 15 cases de biome (évite les monstres isolés sur les bords)
     if (nb_cases_dispos < 15) return; 
 
@@ -264,7 +265,7 @@ void faire_apparaitre_groupe(case_t carte[TAILLE_CARTE][TAILLE_CARTE], type_mons
  * Cette fonction permet de placer un certain nombre
  * de monstres sur la carte de manière aléatoire
  */
-void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void placer_monstres(case_t ** carte) {
     // Taille du secteur scanné (12x12 cases)
     int taille_secteur = 12; 
 
@@ -308,7 +309,7 @@ void placer_monstres(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  * Notamment les pointeurs vers les monstres qui sont 
  * stockés (ou pas) sur chaque case de la carte.
  */
-void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void liberer_memoire_carte(case_t ** carte) {
     int i, j;
     
     for (i = 0; i < TAILLE_CARTE; i++) {
@@ -333,7 +334,7 @@ void liberer_memoire_carte(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
  * Cette fonction place également les 4 tours du boss
  * aux coins de la carte
  */
-void placer_batiments(case_t carte[TAILLE_CARTE][TAILLE_CARTE]) {
+void placer_batiments(case_t ** carte) {
     int i;
     int nb = 60 + rand() % 38;
 
@@ -430,9 +431,9 @@ void souris_vers_case(int mouseX, int mouseY,
  * 
  * Elle est récursive pour l'instant.
  */
-static int peut_atteindre_rec(case_t carte[TAILLE_CARTE][TAILLE_CARTE], 
-    int xDepart, int yDepart, int xCible, int yCible, 
-    int pts_deplacement_restants, booleen_t dejaVisite[TAILLE_CARTE][TAILLE_CARTE], perso_t *perso)
+static int peut_atteindre_rec(case_t ** carte,
+    int taille_carte, int xDepart, int yDepart, int xCible, int yCible, 
+    int pts_deplacement_restants, booleen_t ** dejaVisite, perso_t *perso)
 {
 
     /* Cas d'arrêt : on est arrivé à destination */
@@ -441,8 +442,8 @@ static int peut_atteindre_rec(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     }
 
     /* Si l'un des chemins va en dehors de la carte */
-    if (xCible < 0 || xDepart < 0 || xCible >= TAILLE_CARTE || xDepart >= TAILLE_CARTE
-        || yCible < 0 || yDepart < 0 || yCible >= TAILLE_CARTE || yDepart >= TAILLE_CARTE) {
+    if (xCible < 0 || xDepart < 0 || xCible >= taille_carte || xDepart >= taille_carte
+        || yCible < 0 || yDepart < 0 || yCible >= taille_carte || yDepart >= taille_carte) {
         return INFINI;
     }
 
@@ -482,11 +483,11 @@ static int peut_atteindre_rec(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
         int ny = yDepart + dy[xDepart % 2][direction];
         int cout = cout_deplacement[xDepart % 2][direction];
 
-        if (nx >= 0 && nx < TAILLE_CARTE && ny >= 0 && ny < TAILLE_CARTE) {
+        if (nx >= 0 && nx < taille_carte && ny >= 0 && ny < taille_carte) {
 
             if (deplacement_possible(carte, nx, ny)) {
                 /* Appel récursif */
-                int distance = peut_atteindre_rec(carte, nx, ny, xCible, yCible, pts_deplacement_restants - cout, dejaVisite, perso);
+                int distance = peut_atteindre_rec(carte, taille_carte, nx, ny, xCible, yCible, pts_deplacement_restants - cout, dejaVisite, perso);
 
                 if (distance != INFINI) {
 
@@ -517,7 +518,7 @@ static int peut_atteindre_rec(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
  * le paramètre pointeur sur entier *distance, ou -1 si il
  * n'y a pas de chemin valide.
  */
-int chemin_valide(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
+int chemin_valide(case_t ** carte, int taille_carte,
     int xDepart, int yDepart, int xCible, int yCible, 
     int pts_deplacement_max, perso_t *perso, int *distance)
 {
@@ -529,27 +530,43 @@ int chemin_valide(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
     /* on prépare un tableau de booleen_t qui regarde
        si une case a déjà été visitée pour éviter
        des appels récursifs inutiles */
-    booleen_t dejaVisite[TAILLE_CARTE][TAILLE_CARTE];
+    booleen_t ** dejaVisite;
+
+    dejaVisite = malloc(sizeof(booleen_t) * taille_carte);
+
+    int k;
+
+    for (k = 0; k < taille_carte; k++) {
+        dejaVisite[k] = malloc(sizeof(booleen_t) * taille_carte);
+    }
 
     int i, j;
 
-    for (i = 0; i < TAILLE_CARTE; i++) {
+    for (i = 0; i < taille_carte; i++) {
 
-        for (j = 0; j < TAILLE_CARTE; j++) {
+        for (j = 0; j < taille_carte; j++) {
             dejaVisite[i][j] = FAUX;
         }
     }
 
     int resultat = peut_atteindre_rec(
-        carte, xDepart, yDepart, xCible, 
+        carte, taille_carte, xDepart, yDepart, xCible, 
         yCible, pts_deplacement_max, dejaVisite, perso
     );
 
     if (resultat != INFINI) {
-        *distance = resultat;
+
+        if (distance != NULL) {
+            *distance = resultat;
+        }
+
         return VRAI;
     } else {
-        *distance = -1;
+
+        if (distance != NULL) {
+            *distance = -1;
+        }
+
         return FAUX;
     }
 
@@ -562,7 +579,7 @@ int chemin_valide(case_t carte[TAILLE_CARTE][TAILLE_CARTE],
  * pour chaque type de biome, tels que les arbres,
  * montagnes, cactus et la boue, aléatoirement.
  */
-void ajout_obstacles(case_t carte[TAILLE_CARTE][TAILLE_CARTE]){
+void ajout_obstacles(case_t ** carte){
     int i, j;
 
     for(i = 0; i < TAILLE_CARTE; i++){
@@ -609,7 +626,7 @@ void ajout_obstacles(case_t carte[TAILLE_CARTE][TAILLE_CARTE]){
  * Cette fonction déplace tous les monstres d'une case
  * sur la carte dans une direction aléatoire
  */
-void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t carte[TAILLE_CARTE][TAILLE_CARTE], perso_t * perso, combat_t ** combat_actuel,int *vies_globales) {
+void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t ** carte, perso_t * perso, combat_t ** combat_actuel,int *vies_globales) {
     /* on suppose qu'on a déjà fait srand(time(NULL)) dans le main */
     int x, y;
 
@@ -689,7 +706,7 @@ void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t carte[TAILLE_CAR
  * Cette fonction place 100(pour le moment) sanctuaires aléatoirement
  * sur des cases libres de la carte.
  */
-void placer_sanctuaires(case_t carte[TAILLE_CARTE][TAILLE_CARTE]){
+void placer_sanctuaires(case_t ** carte){
     int nb_sanc_places = 0;
 
     while (nb_sanc_places < 100) {

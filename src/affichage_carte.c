@@ -135,7 +135,7 @@ void dessiner_hex_texture_pointy(SDL_Renderer * renderer, SDL_Texture * texture,
  * sélectionné
  */
 void afficher_carte_sdl(SDL_Renderer * renderer,
-    case_t carte[TAILLE_CARTE][TAILLE_CARTE],
+    case_t ** carte,
     SDL_Texture * textures_cases[NB_BIOMES], 
     SDL_Texture * textures_obstacles[4],
     SDL_Texture * texture_brouillard,
@@ -282,7 +282,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
         float cy = case_selection_y * espacementY + decalageColonne + hauteurHex / 2.0f + decalageY;
         int distanceChemin = -1;
 
-        if (chemin_valide(carte, persX, persY, case_selection_x, case_selection_y, portee, perso, &distanceChemin)) {
+        if (chemin_valide(carte, TAILLE_CARTE, persX, persY, case_selection_x, case_selection_y, portee, perso, &distanceChemin)) {
             
             if (carte[case_selection_y][case_selection_x].monstre != NULL) {
                 SDL_Color couleur = { 0, 255, 0, 120 }; // Vert : monstre atteignable
@@ -319,7 +319,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
             for (int y = yDepart; y <= yArrivee; y++) {
                 int distanceChemin = -1;
                 
-                if (chemin_valide(carte, persX, persY, x, y, portee, perso, &distanceChemin)) {
+                if (chemin_valide(carte, TAILLE_CARTE, persX, persY, x, y, portee, perso, &distanceChemin)) {
                     float cx = x * espacementX + largeurHex / 2.0f + decalageX;
                     float decalageColonne = (x % 2) ? (hauteurHex / 2.0f) : 0.0f;
                     float cy = y * espacementY + decalageColonne + hauteurHex / 2.0f + decalageY;
