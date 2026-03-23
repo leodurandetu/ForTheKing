@@ -289,6 +289,11 @@ combat_t* creer_combat(perso_t *perso, monstre_t *monstre) {
     combat->texture_monstre = NULL;
     combat->texture_perso = NULL;
     combat->texture_fond_ecran = NULL;
+    combat->texture_attaque_legere = NULL;
+    combat->texture_attaque_lourde = NULL;
+    combat->texture_texte_leger = NULL;
+    combat->texture_texte_lourd = NULL;
+    combat->font = NULL;
 
     return combat;
 }

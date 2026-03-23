@@ -486,6 +486,7 @@ int main(int argc,char *argv[]) {
                                                     etat = COMBAT;
                                                 } else if (choix == 0) {
                                                     detruire_combat(&combat_actuel);
+                                                    etat = CARTE;
                                                 }
 
                                                 case_selection_x = carte_x;
@@ -516,73 +517,77 @@ int main(int argc,char *argv[]) {
 
                     } else if (etat == COMBAT) {
 
-                        if (e.button.button == SDL_BUTTON_LEFT) {
-                            clic_gauche = 1;
-                        }
+                        if (combat_actuel != NULL) {
 
-                        point.x = e.button.x;
-                        point.y = e.button.y;
-
-                        if(combat_actuel->tour == TOUR_JOUEUR) {
-
-                            if (SDL_PointInRect(&point, &(combat_actuel->bouton_leger))) {
-                                printf("Attaque légère\n");
-                                attaque_legere(combat_actuel);
-                                combat_actuel->tour = changer_tour(combat_actuel);
-                                printf("Le joueur a joué\n");
-                                printf("santé monstre : %d",combat_actuel->monstre->sante);
-                                
-
-                            } else if (SDL_PointInRect(&point, &(combat_actuel->bouton_lourd))) {
-                                printf("Attaque lourde\n");
-                                attaque_lourde(combat_actuel);
-                                combat_actuel->tour = changer_tour(combat_actuel);
-                                printf("Le joueur a joué\n");
-                                printf("santé monstre : %d",combat_actuel->monstre->sante);
+                            if (e.button.button == SDL_BUTTON_LEFT) {
+                                clic_gauche = 1;
                             }
 
-                        }
+                            point.x = e.button.x;
+                            point.y = e.button.y;
 
-                        if (combat_actuel->tour == TOUR_MONSTRE) {
-                            printf("\nTour du monstre\n");
-                            choix_attaque_monstre(combat_actuel);
-                            combat_actuel->tour = changer_tour(combat_actuel);
-                            printf("Le monstre a joué\n");
-                            printf("Santé joueur : %d\n",combat_actuel->perso->sante);
+                            if(combat_actuel->tour == TOUR_JOUEUR) {
 
-                            majAffichage = 1;
-                        }
+                                if (SDL_PointInRect(&point, &(combat_actuel->bouton_leger))) {
+                                    printf("Attaque légère\n");
+                                    attaque_legere(combat_actuel);
+                                    combat_actuel->tour = changer_tour(combat_actuel);
+                                    printf("Le joueur a joué\n");
+                                    printf("santé monstre : %d",combat_actuel->monstre->sante);
+                                    
 
-                        /* Vérification de la mort du joueur */
-                        if(combat_actuel->perso->sante <= 0) {
-                            
-                            vies_globales--; 
+                                } else if (SDL_PointInRect(&point, &(combat_actuel->bouton_lourd))) {
+                                    printf("Attaque lourde\n");
+                                    attaque_lourde(combat_actuel);
+                                    combat_actuel->tour = changer_tour(combat_actuel);
+                                    printf("Le joueur a joué\n");
+                                    printf("santé monstre : %d",combat_actuel->monstre->sante);
+                                }
 
-                            if (vies_globales >= 0) {
-                                // S'il reste des vies, on ressuscite directement dans le combat
-                                afficher_message_combat(combat_actuel, "Une vie est utilisee...");
+                            }
 
-                                // On lui redonne ses 75% de PV max
-                                combat_actuel->perso->sante = (int)(0.75f * combat_actuel->perso->sante_max);
+                            if (combat_actuel->tour == TOUR_MONSTRE) {
+                                printf("\nTour du monstre\n");
+                                choix_attaque_monstre(combat_actuel);
+                                combat_actuel->tour = changer_tour(combat_actuel);
+                                printf("Le monstre a joué\n");
+                                printf("Santé joueur : %d\n",combat_actuel->perso->sante);
+
+                                majAffichage = 1;
+                            }
+
+                            /* Vérification de la mort du joueur */
+                            if(combat_actuel->perso->sante <= 0) {
                                 
-                                majAffichage = 1; 
-                            } else {
-                                // Plus de vies du tout : Fin de l'aventure
-                                afficher_message_combat(combat_actuel, "Combat terminé.");
-                                
-                                vainqueur = MONSTRE_VAINQUEUR;
+                                vies_globales--; 
+
+                                if (vies_globales >= 0) {
+                                    // S'il reste des vies, on ressuscite directement dans le combat
+                                    afficher_message_combat(combat_actuel, "Une vie est utilisee...");
+
+                                    // On lui redonne ses 75% de PV max
+                                    combat_actuel->perso->sante = (int)(0.75f * combat_actuel->perso->sante_max);
+                                    
+                                    majAffichage = 1; 
+                                } else {
+                                    // Plus de vies du tout : Fin de l'aventure
+                                    afficher_message_combat(combat_actuel, "Combat terminé.");
+                                    
+                                    vainqueur = MONSTRE_VAINQUEUR;
+                                    combat_termine(renderer, &combat_actuel, carte, vainqueur, &vies_globales);
+                                    detruire_combat(&combat_actuel);
+                                    etat = CARTE;
+                                }
+
+                            } 
+                            /* Vérification de la mort du monstre */
+                            else if(combat_actuel->monstre->sante <= 0) {
+                                vainqueur = JOUEUR_VAINQUEUR;
                                 combat_termine(renderer, &combat_actuel, carte, vainqueur, &vies_globales);
                                 detruire_combat(&combat_actuel);
                                 etat = CARTE;
                             }
 
-                        } 
-                        /* Vérification de la mort du monstre */
-                        else if(combat_actuel->monstre->sante <= 0) {
-                            vainqueur = JOUEUR_VAINQUEUR;
-                            combat_termine(renderer, &combat_actuel, carte, vainqueur, &vies_globales);
-                            detruire_combat(&combat_actuel);
-                            etat = CARTE;
                         }
 
                     }
