@@ -7,7 +7,7 @@
 
 #include "../lib/menu.h"
 #include "../lib/perso.h"
-#include "../lib/fond_menu.h"
+/*#include "../lib/fond_menu.h"*/
 
 // Layout = mise en page 
 const char *NOM_SLOT[] = { "", "Mage", "Assassin", "Brute", "Chasseur"};
@@ -243,15 +243,12 @@ int main() {
 
     /* Chargement de la video de fond */
     SDL_GetWindowSize(window, &windowW, &windowH);
-    FondMenu *fondMenu = fond_menu_ouvrir(renderer, "img/fond_video.mp4", windowW, windowH);
     SDL_Texture *backgroundTexture = NULL; /* pour le nettoyage */
-
-    /*SDL_Texture *texLogoMusique = NULL;
-    SDL_Surface *surfLogo = IMG_Load("img/logomusique.png");
-    if (surfLogo) {
-        texLogoMusique = SDL_CreateTextureFromSurface(renderer, surfLogo);
-        SDL_FreeSurface(surfLogo);
-    }*/
+    SDL_Surface *backgroundSurface = IMG_Load("img/menu.jpg");
+    if (backgroundSurface) {
+        backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
+        SDL_FreeSurface(backgroundSurface);
+    }
 
     /* Chargement des images de personnages (index 0 = SLOT_VIDE = NULL) */
     SDL_Texture *textures_perso[NB_SLOTS];
@@ -554,8 +551,10 @@ int main() {
         SDL_RenderClear(renderer);
 
         /* Fond video */
-        fond_menu_update(fondMenu);
-        fond_menu_render(fondMenu, renderer, windowW, windowH);
+        if (backgroundTexture) {
+            SDL_Rect dest = {0, 0, windowW, windowH};
+            SDL_RenderCopy(renderer, backgroundTexture, NULL, &dest);
+        }
 
         /* Titre (masque sur l'ecran de selection pour liberer de la place) */
         if (texTitre && etat != ETAT_SELECTION_PERSO) {
@@ -726,7 +725,7 @@ int main() {
     if (texRetour)         SDL_DestroyTexture(texRetour);
     if (texChoixTitre)     SDL_DestroyTexture(texChoixTitre);
     if (backgroundTexture) SDL_DestroyTexture(backgroundTexture);
-    fond_menu_fermer(fondMenu);
+    /*fond_menu_fermer(fondMenu);*/
     //if (texLogoMusique)    SDL_DestroyTexture(texLogoMusique);
     if (texConfirmMsg)     SDL_DestroyTexture(texConfirmMsg);
     if (texConfirmOui)     SDL_DestroyTexture(texConfirmOui);
