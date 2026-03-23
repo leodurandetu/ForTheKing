@@ -22,7 +22,7 @@ void remplir_zone(case_t ** carte, biome_t biome, coordonnee_t dep, coordonnee_t
 int test_etat_case(case_t ** carte, int x, int y);
 void afficher_carte(case_t ** carte); // Console
 void devoiler_brouillard_rayon(case_t ** carte, int x, int y, int rayon);
-void liberer_memoire_carte(case_t ** carte);
+void liberer_memoire_carte(case_t *** carte, int taille_carte);
 void placer_monstres(case_t ** carte);
 void ajout_obstacles(case_t ** carte);
 booleen_t deplacement_possible(case_t ** carte, int x, int y);

@@ -762,12 +762,12 @@ int main(int argc,char *argv[]) {
     TTF_CloseFont(police2);
 
     if (combat_actuel != NULL) {
-        combat_termine(renderer, &combat_actuel, carte, PAS_DE_VAINQUEUR,&vies_globales);
+        combat_termine(renderer, &combat_actuel, carte, PAS_DE_VAINQUEUR, &vies_globales);
         detruire_combat(&combat_actuel);
     }
 
     // Destruction en mémoire des monstres notamment sur la carte
-    liberer_memoire_carte(carte);
+    liberer_memoire_carte(&carte, TAILLE_CARTE);
 
     // Destruction du personnagec
     detruire_perso(&perso);

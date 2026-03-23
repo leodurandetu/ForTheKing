@@ -309,20 +309,26 @@ void placer_monstres(case_t ** carte) {
  * Notamment les pointeurs vers les monstres qui sont 
  * stockés (ou pas) sur chaque case de la carte.
  */
-void liberer_memoire_carte(case_t ** carte) {
+void liberer_memoire_carte(case_t *** carte, int taille_carte) {
     int i, j;
+
+    if (carte != NULL) {
     
-    for (i = 0; i < TAILLE_CARTE; i++) {
+        for (i = 0; i < taille_carte; i++) {
 
-        for (j = 0; j < TAILLE_CARTE; j++) {
-            monstre_t *monstre = carte[i][j].monstre;
+            for (j = 0; j < taille_carte; j++) {
+                monstre_t *monstre = (*carte)[i][j].monstre;
 
-            if (monstre != NULL) {
-                free(monstre);
+                if (monstre != NULL) {
+                    free(monstre);
+                }
+
             }
 
         }
 
+        free(*carte);
+        *carte = NULL;
     }
 
 }
@@ -433,7 +439,7 @@ void souris_vers_case(int mouseX, int mouseY,
  */
 static int peut_atteindre_rec(case_t ** carte,
     int taille_carte, int xDepart, int yDepart, int xCible, int yCible, 
-    int pts_deplacement_restants, booleen_t ** dejaVisite, perso_t *perso)
+    int pts_deplacement_restants, perso_t *perso)
 {
 
     /* Cas d'arrêt : on est arrivé à destination */
@@ -452,13 +458,6 @@ static int peut_atteindre_rec(case_t ** carte,
         return INFINI;
     }
 
-    /* On évite les boucles en regardant
-       si on a déjà visité le chemin */
-    if (dejaVisite[yDepart][xDepart]) {
-        return INFINI;
-    }
-
-    dejaVisite[yDepart][xDepart] = VRAI;
     int meilleure_dist = INFINI;
 
     int dx[2][6] = {
@@ -487,7 +486,7 @@ static int peut_atteindre_rec(case_t ** carte,
 
             if (deplacement_possible(carte, nx, ny)) {
                 /* Appel récursif */
-                int distance = peut_atteindre_rec(carte, taille_carte, nx, ny, xCible, yCible, pts_deplacement_restants - cout, dejaVisite, perso);
+                int distance = peut_atteindre_rec(carte, taille_carte, nx, ny, xCible, yCible, pts_deplacement_restants - cout, perso);
 
                 if (distance != INFINI) {
 
@@ -502,8 +501,6 @@ static int peut_atteindre_rec(case_t ** carte,
         }
 
     }
-
-    dejaVisite[yDepart][xDepart] = FAUX;
 
     return meilleure_dist;
 }
@@ -527,31 +524,9 @@ int chemin_valide(case_t ** carte, int taille_carte,
         return FAUX;
     }
 
-    /* on prépare un tableau de booleen_t qui regarde
-       si une case a déjà été visitée pour éviter
-       des appels récursifs inutiles */
-    booleen_t ** dejaVisite;
-
-    dejaVisite = malloc(sizeof(booleen_t) * taille_carte);
-
-    int k;
-
-    for (k = 0; k < taille_carte; k++) {
-        dejaVisite[k] = malloc(sizeof(booleen_t) * taille_carte);
-    }
-
-    int i, j;
-
-    for (i = 0; i < taille_carte; i++) {
-
-        for (j = 0; j < taille_carte; j++) {
-            dejaVisite[i][j] = FAUX;
-        }
-    }
-
     int resultat = peut_atteindre_rec(
         carte, taille_carte, xDepart, yDepart, xCible, 
-        yCible, pts_deplacement_max, dejaVisite, perso
+        yCible, pts_deplacement_max, perso
     );
 
     if (resultat != INFINI) {
