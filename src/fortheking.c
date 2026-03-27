@@ -17,6 +17,7 @@
 #include "../lib/option.h"
 #include "../lib/inventaire.h"
 #include "../lib/affichage_commun.h"
+#include "../lib/perlin_noise.h"
 
 #define TAILLE_CASE_MAXI 250
 #define TAILLE_CASE_DEPART 150
@@ -262,7 +263,7 @@ int main(int argc,char *argv[]) {
     }
 
     // Génération du monde
-    srand((unsigned int)time(NULL));
+    perlin_init((unsigned int)time(NULL));
     init_carte(carte);
     generer_eau(carte);
     generer_biomes(carte);
