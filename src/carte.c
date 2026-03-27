@@ -1,5 +1,5 @@
 #include "../lib/carte.h"
-
+#include "../lib/perlin_noise.h"
 /* ========================================================================*/
 
 /* Leo */
@@ -161,22 +161,21 @@ void remplir_brouillard(case_t ** carte) {
 /* Massoud */
 /*
  * Cette fonction permet de placer des cases d'eau
- * sur la carte, de manière aléatoire, et de façon
- * à ce que ça paraisse naturel.
+ * sur la carte, de manière aléatoire an utilisant
+ * l'algorithme de Perlin Noise.
  */
-void generer_eau(case_t ** carte) {
-    
-    int nb_zones = 15 + rand() % 25;
+void generer_eau(case_t **carte) {
 
-    for (int z = 0; z < nb_zones; z++) {
-        coordonnee_t dep = { rand() % TAILLE_CARTE, rand() % TAILLE_CARTE };
-        
-        // Entre 7 et 15 cases de large/haut
-        int largeur = 7 + rand() % 9;
-        int hauteur = 7 + rand() % 9;
+    float echelle = 0.08f;
 
-        coordonnee_t arr = { dep.x + largeur, dep.y + hauteur };
-        remplir_zone(carte, EAU, dep, arr);
+    for (int y = 0; y < TAILLE_CARTE; y++) {
+        for (int x = 0; x < TAILLE_CARTE; x++) {
+            float val = perlin_2d(x * echelle, y * echelle);
+            /* Les zones avec val > 0.25 deviennent de l'eau */
+            if (val > 0.25f) {
+                carte[y][x].biome = EAU;
+            }
+        }
     }
 }
 
@@ -194,31 +193,35 @@ void remplir_zone(case_t ** carte, biome_t biome, coordonnee_t dep, coordonnee_t
     }
 }
 /* Saandi */
-void generer_biomes(case_t ** carte) {
-    // La TERRE est déjà initialisée partout par init_carte
-    biome_t liste[] = {DESERT, NEIGE, FORET};
-    
-    for (int i = 0; i < 3; i++) {
-        // 36 à 50 zones
-        int nb_zones = 36 + rand() % 15; 
-        
-        for (int z = 0; z < nb_zones; z++) {
-            coordonnee_t dep = { rand() % TAILLE_CARTE, rand() % TAILLE_CARTE };
-            
-            // 5 à 11 cases
-            int largeur = 5 + rand() % 7;
-            int hauteur = 5 + rand() % 7;
-            
-            coordonnee_t arr = { dep.x + largeur, dep.y + hauteur };
-            remplir_zone(carte, liste[i], dep, arr);
+void generer_biomes(case_t **carte) {
+    float echelle = 0.06f;
+
+    for (int y = 0; y < TAILLE_CARTE; y++) {
+        for (int x = 0; x < TAILLE_CARTE; x++) {
+            if (carte[y][x].biome == EAU) continue; 
+
+            /* Trois échantillons décalés dans l'espace */
+            float foret  = perlin_2d(x * echelle + 50.0f, y * echelle);
+            float desert = perlin_2d(x * echelle + 100.0f, y * echelle + 30.0f);
+            float neige  = perlin_2d(x * echelle, y * echelle + 80.0f);
+
+            /* On prend le biome dont le bruit est le plus fort */
+            if (foret > desert && foret > neige && foret > 0.1f)
+                carte[y][x].biome = FORET;
+            else if (desert > neige && desert > 0.1f)
+                carte[y][x].biome = DESERT;
+            else if (neige > 0.1f)
+                carte[y][x].biome = NEIGE;
+            /* sinon on garde TERRE */
         }
     }
 }
 
+
 // Massoud
-// Vérifie à un rayon de 2 cases (grille hexagonale) pour éviter que les monstres s'agglutinent
+// Vérifie à un rayon de 2 cases pour éviter que les monstres s'agglutinent
 booleen_t a_un_voisin_monstre(case_t ** carte, int cx, int cy) {
-    // On scanne un petit carré de 5x5 autour de la case cible (rayon d'environ 2 hexagones)
+    // On scanne un petit carré de 5x5 autour de la case cible 
     for (int y = cy - 2; y <= cy + 2; y++) {
         for (int x = cx - 2; x <= cx + 2; x++) {
             
@@ -232,7 +235,7 @@ booleen_t a_un_voisin_monstre(case_t ** carte, int cx, int cy) {
                     int diff_x = abs(x - cx);
                     int diff_y = abs(y - cy);
                     
-                    // Approximation : si c'est dans un rayon de  environ 2 cases -> on refuse
+                    // Si c'est dans un rayon de  environ 2 cases -> on refuse
                     if (diff_x + diff_y <= 3) { 
                         return VRAI; 
                     }
