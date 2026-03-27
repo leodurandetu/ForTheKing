@@ -12,12 +12,12 @@ static void dessiner_icone(combat_t *combat, SDL_Rect *r_icone, int survole, SDL
 
     if (survole) {
         // Survolé -> fond un peu plus clair et bordure Jaune/Or
-        SDL_SetRenderDrawColor(combat->renderer, 255, 255, 255, 60); 
+        SDL_SetRenderDrawColor(combat->renderer, 150, 150, 155, 180); 
         SDL_RenderFillRect(combat->renderer, r_icone);
         SDL_SetRenderDrawColor(combat->renderer, 255, 215, 0, 255); 
     } else {
         // fond très sombre transparent et bordure grise
-        SDL_SetRenderDrawColor(combat->renderer, 0, 0, 0, 100); 
+        SDL_SetRenderDrawColor(combat->renderer, 20, 20, 25, 180); 
         SDL_RenderFillRect(combat->renderer, r_icone);
         SDL_SetRenderDrawColor(combat->renderer, 150, 150, 150, 255); 
     }
@@ -63,6 +63,10 @@ static void dessiner_fond_ecran(combat_t *combat, int largeur, int hauteur)
     rect.y = (hauteur - rect.h) / 2;
 
     SDL_RenderCopy(combat->renderer, combat->texture_fond_ecran, NULL, &rect);
+
+    SDL_SetRenderDrawColor(combat->renderer, 0, 0, 0, 80);
+    SDL_Rect overlay = {0, 0, largeur, hauteur};
+    SDL_RenderFillRect(combat->renderer, &overlay);
 }
 
 /* Leo
@@ -127,17 +131,17 @@ static void dessiner_interface_combat(SDL_Renderer* renderer, TTF_Font* font, SD
     SDL_Color coul_texte = {220, 220, 220, 255};
 
     int y_stats = b_vie.y + b_vie.h + (h_menu * 0.08);
-    int espacement = (h_menu * 0.09); // Espacement relatif
+    int espacement = (h_menu * 0.09);
 
     for (int i = 0; i < 4; i++) {
-        char buf[64];
-        sprintf(buf, "%s : %d", labels[i], valeurs[i]);
-        SDL_Rect r_s;
-        SDL_Texture* t_s = creer_texte(renderer, font, buf, coul_texte, &r_s);
-        if (t_s) {
-            SDL_Rect pos = { fond.x + 25, y_stats + (i * espacement), r_s.w, r_s.h };
-            SDL_RenderCopy(renderer, t_s, NULL, &pos);
-            SDL_DestroyTexture(t_s);
+        char texte[64];
+        sprintf(texte, "%s : %d", labels[i], valeurs[i]);
+        SDL_Rect rect_texte;
+        SDL_Texture* texture_texte = creer_texte(renderer, font, texte, coul_texte, &rect_texte);
+        if (texture_texte) {
+            SDL_Rect pos = { fond.x + 25, y_stats + (i * espacement), rect_texte.w, rect_texte.h };
+            SDL_RenderCopy(renderer, texture_texte, NULL, &pos);
+            SDL_DestroyTexture(texture_texte);
         }
     }
 
@@ -196,11 +200,6 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche)
         taille,
         taille
     };
-
-    /* fond blanc sous les personnages */
-    //SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    //SDL_RenderFillRect(renderer, &perso);
-    //SDL_RenderFillRect(renderer, &monstre);
 
     if (combat->texture_perso)
         SDL_RenderCopy(renderer, combat->texture_perso, NULL, &rect_perso);
