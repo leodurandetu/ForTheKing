@@ -15,7 +15,7 @@
 #include "combat_types.h"
 
 /* Leo */
-extern void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t ** carte, int *vies_globales);
+extern void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, biome_t biome, combat_t ** combat, case_t ** carte, int *vies_globales);
 extern void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t ** carte, vainqueur_t vainqueur,int *vies_globales);
 extern void detruire_combat(combat_t ** combat);
 /* Massoud */

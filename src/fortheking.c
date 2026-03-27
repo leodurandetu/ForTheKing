@@ -492,7 +492,7 @@ int main(int argc,char *argv[]) {
 
                                                 if(choix == 1)
                                                 {
-                                                    ouvrir_fenetre_combat(pFenetre, renderer, &combat_actuel, carte, &vies_globales);
+                                                    ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, &combat_actuel, carte, &vies_globales);
                                                     etat = COMBAT;
                                                 } else if (choix == 0) {
                                                     detruire_combat(&combat_actuel);

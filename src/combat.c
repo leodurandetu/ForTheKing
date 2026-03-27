@@ -6,7 +6,7 @@
  * également de commencer un combat
  * en parallèle.
  */
-void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t ** carte,int *vies_globales) {
+void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, biome_t biome, combat_t ** combat, case_t ** carte, int *vies_globales) {
     (*combat)->pFenetre = pFenetrePrincipal;
 
     if (!((*combat)->pFenetre)) {
@@ -50,14 +50,28 @@ void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * render
     } else {
         fprintf(stderr, "Erreur chargement image monstre : %s\n", IMG_GetError());
     }
+
+    (*combat)->biome = biome;
+
+    char *fond_biome;
+
+    if (biome == TERRE) {
+        fond_biome = "img/fond_terre.png";
+    } else if (biome == DESERT) {
+        fond_biome = "img/fond_desert.png";
+    } else if (biome == NEIGE) {
+        fond_biome = "img/fond_neige.png";
+    } else {
+        fond_biome = "img/fond_foret.png";
+    }
     
     // Chargement du sprite du fond d'écran
     (*combat)->texture_fond_ecran = NULL;
-    SDL_Surface *img_fond_foret = IMG_Load("img/fond_foret.png");
-    if (img_fond_foret) {
-        (*combat)->texture_fond_ecran = (SDL_CreateTextureFromSurface((*combat)->renderer, img_fond_foret));
+    SDL_Surface *img_fond = IMG_Load(fond_biome);
+    if (img_fond) {
+        (*combat)->texture_fond_ecran = (SDL_CreateTextureFromSurface((*combat)->renderer, img_fond));
         SDL_SetTextureBlendMode((*combat)->texture_fond_ecran, SDL_BLENDMODE_BLEND);
-        SDL_FreeSurface(img_fond_foret);
+        SDL_FreeSurface(img_fond);
     }
 
     // Chargement des symboles de l'attaque legère

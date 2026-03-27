@@ -4,6 +4,7 @@
 #include "perso.h"
 #include "monstre.h"
 #include "math.h"
+#include "carte_types.h"
 
 /* Structures et Enums */
 
@@ -46,6 +47,8 @@ typedef struct {
 
     SDL_Rect rect_texte_leger;
     SDL_Rect rect_texte_lourd;
+
+    biome_t biome;
 
 } combat_t;
 
