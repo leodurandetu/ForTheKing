@@ -1,0 +1,241 @@
+\hypertarget{menu_8h}{}\doxysection{lib/menu.h File Reference}
+\label{menu_8h}\index{lib/menu.h@{lib/menu.h}}
+
+
+Gestion de l\textquotesingle{}interface des menus et de la sélection des personnages.  
+
+
+{\ttfamily \#include $<$SDL2/\+SDL.\+h$>$}\newline
+{\ttfamily \#include $<$SDL2/\+SDL\+\_\+ttf.\+h$>$}\newline
+{\ttfamily \#include $<$SDL2/\+SDL\+\_\+image.\+h$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structSlotPerso}{Slot\+Perso}}
+\begin{DoxyCompactList}\small\item\em Données d\textquotesingle{}un emplacement de sélection de personnage. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{menu_8h_a35f58aba00ae61700ebff2a8db18e037}{Etat\+Menu}} \{ \mbox{\hyperlink{menu_8h_a35f58aba00ae61700ebff2a8db18e037a3aa6fcf609cfaf92ecac2165b6e59c59}{ETAT\+\_\+\+PRINCIPAL}}
+, \mbox{\hyperlink{menu_8h_a35f58aba00ae61700ebff2a8db18e037a705b8bb5e6988b766d3130afe98a75de}{ETAT\+\_\+\+SELECTION\+\_\+\+PERSO}}
+ \}
+\begin{DoxyCompactList}\small\item\em États de navigation dans l\textquotesingle{}interface du menu. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{menu_8h_aeafc1557dae4f64aa9ad17d055f3139c}{Slot\+Type}} \{ \newline
+\mbox{\hyperlink{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca70c9ddcd4fd2ffd37925290e640c7ce8}{SLOT\+\_\+\+VIDE}} = 0
+, \mbox{\hyperlink{menu_8h_aeafc1557dae4f64aa9ad17d055f3139cade849cb4d2b6e84bb1632a6458dec09b}{SLOT\+\_\+\+MAGE}}
+, \mbox{\hyperlink{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca3aec558fe52ba4225d912279eb13b7d8}{SLOT\+\_\+\+ASSASSIN}}
+, \mbox{\hyperlink{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca4b60eb1d015f9363a36a7c1c9798aa00}{SLOT\+\_\+\+BRUTE}}
+, \newline
+\mbox{\hyperlink{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca55798223de3930ff92d722752f53f976}{SLOT\+\_\+\+CHASSEUR}}
+, \mbox{\hyperlink{menu_8h_aeafc1557dae4f64aa9ad17d055f3139caa9482b3ae89ac17ddae2130d6ec284c6}{NB\+\_\+\+SLOTS}}
+ \}
+\begin{DoxyCompactList}\small\item\em Types de classes disponibles pour les emplacements (slots) de personnage. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{menu_8h_a47e1a6ac0ae127693cd12dec3901e923}{dessiner\+Bouton}} (SDL\+\_\+\+Renderer $\ast$renderer, SDL\+\_\+\+Texture $\ast$texture, SDL\+\_\+\+Rect rect\+Btn, SDL\+\_\+\+Rect rect\+Txt, SDL\+\_\+\+Point mouse)
+\begin{DoxyCompactList}\small\item\em Dessine un bouton interactif avec gestion du survol. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_a1c5bc8c5180dbbaf4e1d0b3ebace8028}{dessiner\+Panneau}} (SDL\+\_\+\+Renderer $\ast$renderer, SDL\+\_\+\+Rect r)
+\begin{DoxyCompactList}\small\item\em Dessine un panneau d\textquotesingle{}interface stylisé avec une double bordure. \end{DoxyCompactList}\item 
+SDL\+\_\+\+Texture $\ast$ \mbox{\hyperlink{menu_8h_a2b05eb6e37ffe8bbe78020ca9adbd199}{charger\+Texture}} (SDL\+\_\+\+Renderer $\ast$renderer, const char $\ast$chemin)
+\begin{DoxyCompactList}\small\item\em Charge une image et applique une clé de couleur pour la transparence. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_ae72e48a46e75b445305ac105e438c794}{dessiner\+Slot}} (SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$police\+Nom, TTF\+\_\+\+Font $\ast$police\+Grand, SDL\+\_\+\+Rect rect, \mbox{\hyperlink{structSlotPerso}{Slot\+Perso}} $\ast$slot, SDL\+\_\+\+Point mouse, SDL\+\_\+\+Texture $\ast$textures\+\_\+perso\mbox{[}\mbox{\hyperlink{menu_8h_aeafc1557dae4f64aa9ad17d055f3139caa9482b3ae89ac17ddae2130d6ec284c6}{NB\+\_\+\+SLOTS}}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Affiche un emplacement de sélection de personnage. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const char $\ast$ \mbox{\hyperlink{menu_8h_aefa7761085ee27d4619eecf9d8f665dd}{NOM\+\_\+\+SLOT}} \mbox{[}$\,$\mbox{]}
+\item 
+const char $\ast$ \mbox{\hyperlink{menu_8h_a958894520fb937fd599192972358a489}{CHEMIN\+\_\+\+IMG}} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Gestion de l\textquotesingle{}interface des menus et de la sélection des personnages. 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{menu_8h_a35f58aba00ae61700ebff2a8db18e037}\label{menu_8h_a35f58aba00ae61700ebff2a8db18e037}} 
+\index{menu.h@{menu.h}!EtatMenu@{EtatMenu}}
+\index{EtatMenu@{EtatMenu}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{EtatMenu}{EtatMenu}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{menu_8h_a35f58aba00ae61700ebff2a8db18e037}{Etat\+Menu}}}
+
+
+
+États de navigation dans l\textquotesingle{}interface du menu. 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ETAT\_PRINCIPAL@{ETAT\_PRINCIPAL}!menu.h@{menu.h}}\index{menu.h@{menu.h}!ETAT\_PRINCIPAL@{ETAT\_PRINCIPAL}}}\mbox{\Hypertarget{menu_8h_a35f58aba00ae61700ebff2a8db18e037a3aa6fcf609cfaf92ecac2165b6e59c59}\label{menu_8h_a35f58aba00ae61700ebff2a8db18e037a3aa6fcf609cfaf92ecac2165b6e59c59}} 
+ETAT\+\_\+\+PRINCIPAL&Écran d\textquotesingle{}accueil (Jouer, Quitter). \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ETAT\_SELECTION\_PERSO@{ETAT\_SELECTION\_PERSO}!menu.h@{menu.h}}\index{menu.h@{menu.h}!ETAT\_SELECTION\_PERSO@{ETAT\_SELECTION\_PERSO}}}\mbox{\Hypertarget{menu_8h_a35f58aba00ae61700ebff2a8db18e037a705b8bb5e6988b766d3130afe98a75de}\label{menu_8h_a35f58aba00ae61700ebff2a8db18e037a705b8bb5e6988b766d3130afe98a75de}} 
+ETAT\+\_\+\+SELECTION\+\_\+\+PERSO&Écran de choix de la classe du personnage. \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{menu_8h_aeafc1557dae4f64aa9ad17d055f3139c}\label{menu_8h_aeafc1557dae4f64aa9ad17d055f3139c}} 
+\index{menu.h@{menu.h}!SlotType@{SlotType}}
+\index{SlotType@{SlotType}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{SlotType}{SlotType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{menu_8h_aeafc1557dae4f64aa9ad17d055f3139c}{Slot\+Type}}}
+
+
+
+Types de classes disponibles pour les emplacements (slots) de personnage. 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_VIDE@{SLOT\_VIDE}!menu.h@{menu.h}}\index{menu.h@{menu.h}!SLOT\_VIDE@{SLOT\_VIDE}}}\mbox{\Hypertarget{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca70c9ddcd4fd2ffd37925290e640c7ce8}\label{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca70c9ddcd4fd2ffd37925290e640c7ce8}} 
+SLOT\+\_\+\+VIDE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_MAGE@{SLOT\_MAGE}!menu.h@{menu.h}}\index{menu.h@{menu.h}!SLOT\_MAGE@{SLOT\_MAGE}}}\mbox{\Hypertarget{menu_8h_aeafc1557dae4f64aa9ad17d055f3139cade849cb4d2b6e84bb1632a6458dec09b}\label{menu_8h_aeafc1557dae4f64aa9ad17d055f3139cade849cb4d2b6e84bb1632a6458dec09b}} 
+SLOT\+\_\+\+MAGE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_ASSASSIN@{SLOT\_ASSASSIN}!menu.h@{menu.h}}\index{menu.h@{menu.h}!SLOT\_ASSASSIN@{SLOT\_ASSASSIN}}}\mbox{\Hypertarget{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca3aec558fe52ba4225d912279eb13b7d8}\label{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca3aec558fe52ba4225d912279eb13b7d8}} 
+SLOT\+\_\+\+ASSASSIN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_BRUTE@{SLOT\_BRUTE}!menu.h@{menu.h}}\index{menu.h@{menu.h}!SLOT\_BRUTE@{SLOT\_BRUTE}}}\mbox{\Hypertarget{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca4b60eb1d015f9363a36a7c1c9798aa00}\label{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca4b60eb1d015f9363a36a7c1c9798aa00}} 
+SLOT\+\_\+\+BRUTE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SLOT\_CHASSEUR@{SLOT\_CHASSEUR}!menu.h@{menu.h}}\index{menu.h@{menu.h}!SLOT\_CHASSEUR@{SLOT\_CHASSEUR}}}\mbox{\Hypertarget{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca55798223de3930ff92d722752f53f976}\label{menu_8h_aeafc1557dae4f64aa9ad17d055f3139ca55798223de3930ff92d722752f53f976}} 
+SLOT\+\_\+\+CHASSEUR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NB\_SLOTS@{NB\_SLOTS}!menu.h@{menu.h}}\index{menu.h@{menu.h}!NB\_SLOTS@{NB\_SLOTS}}}\mbox{\Hypertarget{menu_8h_aeafc1557dae4f64aa9ad17d055f3139caa9482b3ae89ac17ddae2130d6ec284c6}\label{menu_8h_aeafc1557dae4f64aa9ad17d055f3139caa9482b3ae89ac17ddae2130d6ec284c6}} 
+NB\+\_\+\+SLOTS&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{menu_8h_a2b05eb6e37ffe8bbe78020ca9adbd199}\label{menu_8h_a2b05eb6e37ffe8bbe78020ca9adbd199}} 
+\index{menu.h@{menu.h}!chargerTexture@{chargerTexture}}
+\index{chargerTexture@{chargerTexture}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{chargerTexture()}{chargerTexture()}}
+{\footnotesize\ttfamily SDL\+\_\+\+Texture$\ast$ charger\+Texture (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{const char $\ast$}]{chemin }\end{DoxyParamCaption})}
+
+
+
+Charge une image et applique une clé de couleur pour la transparence. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Utilisé pour rendre le fond (souvent blanc) d\textquotesingle{}un sprite transparent. 
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em chemin} & Chemin du fichier image à charger. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+SDL\+\_\+\+Texture$\ast$ La texture résultante ou NULL en cas d\textquotesingle{}erreur. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{menu_8h_a47e1a6ac0ae127693cd12dec3901e923}\label{menu_8h_a47e1a6ac0ae127693cd12dec3901e923}} 
+\index{menu.h@{menu.h}!dessinerBouton@{dessinerBouton}}
+\index{dessinerBouton@{dessinerBouton}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{dessinerBouton()}{dessinerBouton()}}
+{\footnotesize\ttfamily void dessiner\+Bouton (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{SDL\+\_\+\+Texture $\ast$}]{texture,  }\item[{SDL\+\_\+\+Rect}]{rect\+Btn,  }\item[{SDL\+\_\+\+Rect}]{rect\+Txt,  }\item[{SDL\+\_\+\+Point}]{mouse }\end{DoxyParamCaption})}
+
+
+
+Dessine un bouton interactif avec gestion du survol. 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em texture} & La texture visuelle du bouton. \\
+\hline
+{\em rect\+Btn} & Rectangle définissant la zone cliquable du bouton. \\
+\hline
+{\em rect\+Txt} & Rectangle pour le positionnement du texte interne. \\
+\hline
+{\em mouse} & Position actuelle du curseur de la souris. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{menu_8h_a1c5bc8c5180dbbaf4e1d0b3ebace8028}\label{menu_8h_a1c5bc8c5180dbbaf4e1d0b3ebace8028}} 
+\index{menu.h@{menu.h}!dessinerPanneau@{dessinerPanneau}}
+\index{dessinerPanneau@{dessinerPanneau}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{dessinerPanneau()}{dessinerPanneau()}}
+{\footnotesize\ttfamily void dessiner\+Panneau (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{SDL\+\_\+\+Rect}]{r }\end{DoxyParamCaption})}
+
+
+
+Dessine un panneau d\textquotesingle{}interface stylisé avec une double bordure. 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em r} & Rectangle définissant les dimensions du panneau. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{menu_8h_ae72e48a46e75b445305ac105e438c794}\label{menu_8h_ae72e48a46e75b445305ac105e438c794}} 
+\index{menu.h@{menu.h}!dessinerSlot@{dessinerSlot}}
+\index{dessinerSlot@{dessinerSlot}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{dessinerSlot()}{dessinerSlot()}}
+{\footnotesize\ttfamily void dessiner\+Slot (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{police\+Nom,  }\item[{TTF\+\_\+\+Font $\ast$}]{police\+Grand,  }\item[{SDL\+\_\+\+Rect}]{rect,  }\item[{\mbox{\hyperlink{structSlotPerso}{Slot\+Perso}} $\ast$}]{slot,  }\item[{SDL\+\_\+\+Point}]{mouse,  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+perso\mbox{[}\+NB\+\_\+\+SLOTS\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Affiche un emplacement de sélection de personnage. 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em police\+Nom} & Police pour le nom de la classe. \\
+\hline
+{\em police\+Grand} & Police pour les indicateurs visuels. \\
+\hline
+{\em rect} & Zone d\textquotesingle{}affichage du slot. \\
+\hline
+{\em slot} & Données de l\textquotesingle{}emplacement à afficher. \\
+\hline
+{\em mouse} & Position du curseur pour l\textquotesingle{}interaction. \\
+\hline
+{\em textures\+\_\+perso} & Tableau des textures de personnages chargées. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{menu_8h_a958894520fb937fd599192972358a489}\label{menu_8h_a958894520fb937fd599192972358a489}} 
+\index{menu.h@{menu.h}!CHEMIN\_IMG@{CHEMIN\_IMG}}
+\index{CHEMIN\_IMG@{CHEMIN\_IMG}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{CHEMIN\_IMG}{CHEMIN\_IMG}}
+{\footnotesize\ttfamily const char$\ast$ CHEMIN\+\_\+\+IMG\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+
+Chemins d\textquotesingle{}accès aux fichiers images. \mbox{\Hypertarget{menu_8h_aefa7761085ee27d4619eecf9d8f665dd}\label{menu_8h_aefa7761085ee27d4619eecf9d8f665dd}} 
+\index{menu.h@{menu.h}!NOM\_SLOT@{NOM\_SLOT}}
+\index{NOM\_SLOT@{NOM\_SLOT}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{NOM\_SLOT}{NOM\_SLOT}}
+{\footnotesize\ttfamily const char$\ast$ NOM\+\_\+\+SLOT\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+
+Libellés textuels des classes. 

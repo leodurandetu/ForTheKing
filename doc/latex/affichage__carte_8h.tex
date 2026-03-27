@@ -1,0 +1,226 @@
+\hypertarget{affichage__carte_8h}{}\doxysection{lib/affichage\+\_\+carte.h File Reference}
+\label{affichage__carte_8h}\index{lib/affichage\_carte.h@{lib/affichage\_carte.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$SDL2/\+SDL.\+h$>$}\newline
+{\ttfamily \#include $<$SDL2/\+SDL\+\_\+ttf.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}couleur.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}monstre.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}perso.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}carte.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}maths.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}affichage\+\_\+commun.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}niveau.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{affichage__carte_8h_a00e06cdabad7f24ca8226edf1d9bdda9}{afficher\+\_\+hex\+\_\+texture}} (SDL\+\_\+\+Renderer $\ast$renderer, float cx, float cy, float rayon, SDL\+\_\+\+Texture $\ast$texture, SDL\+\_\+\+Color \mbox{\hyperlink{couleur_8h_a9c0ebe82ea8e3ed5ee86e04f78400eac}{couleur}})
+\begin{DoxyCompactList}\small\item\em Affiche un hexagone avec une texture et une teinte de couleur appliquée. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__carte_8h_a8b5641d401921541272af4bc4bf818ff}{dessiner\+\_\+contour\+\_\+double\+\_\+dore}} (SDL\+\_\+\+Renderer $\ast$r, float cx, float cy, float rayon, int alpha)
+\begin{DoxyCompactList}\small\item\em Dessine un contour doré décoratif (style double trait) autour d\textquotesingle{}une case. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__carte_8h_af353b87be36c72c23cf963e498349d34}{dessiner\+\_\+contour\+\_\+ftk}} (SDL\+\_\+\+Renderer $\ast$r, float cx, float cy, float rayon, int epaisseur, SDL\+\_\+\+Color \mbox{\hyperlink{couleur_8h_a9c0ebe82ea8e3ed5ee86e04f78400eac}{couleur}})
+\begin{DoxyCompactList}\small\item\em Dessine un contour épais personnalisé (style \textquotesingle{}For The King\textquotesingle{}). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__carte_8h_abeb995d310350f250396634467088b18}{afficher\+\_\+hex\+\_\+couleur}} (SDL\+\_\+\+Renderer $\ast$renderer, float cx, float cy, float rayon, SDL\+\_\+\+Color \mbox{\hyperlink{couleur_8h_a9c0ebe82ea8e3ed5ee86e04f78400eac}{couleur}})
+\begin{DoxyCompactList}\small\item\em Affiche un hexagone plein avec une couleur simple (sans texture). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__carte_8h_a5de85f569354a3b9dd8f3631607cb958}{afficher\+\_\+carte\+\_\+sdl}} (SDL\+\_\+\+Renderer $\ast$renderer, \mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}} $\ast$$\ast$carte, SDL\+\_\+\+Texture $\ast$textures\+\_\+cases\mbox{[}\mbox{\hyperlink{carte__types_8h_a77b4c00a966c8e93f7e089661bc26122ab70750a39faa86e4220021869a550a93}{NB\+\_\+\+BIOMES}}\mbox{]}, SDL\+\_\+\+Texture $\ast$textures\+\_\+obstacles\mbox{[}4\mbox{]}, SDL\+\_\+\+Texture $\ast$texture\+\_\+brouillard, SDL\+\_\+\+Texture $\ast$textures\+\_\+monstres\mbox{[}2\mbox{]}, SDL\+\_\+\+Texture $\ast$textures\+\_\+batiments\mbox{[}3\mbox{]}, SDL\+\_\+\+Texture $\ast$textures\+\_\+sanctuaires\mbox{[}4\mbox{]}, int taille\+Case, int persX, int persY, int case\+\_\+selection\+\_\+x, int case\+\_\+selection\+\_\+y, \mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$perso)
+\begin{DoxyCompactList}\small\item\em Fonction principale gérant tout l\textquotesingle{}affichage du monde et de ses entités. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__carte_8h_a268ad648888841c386ec22f02d5d9320}{preparer\+\_\+avant\+\_\+affichage}} ()
+\begin{DoxyCompactList}\small\item\em Nettoie le renderer et prépare les états de rendu pour la nouvelle frame. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__carte_8h_a3d39f0d8d2dac8f57daa40685e7daaf1}{dessiner\+\_\+interface\+\_\+carte}} (SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$ffont, SDL\+\_\+\+Texture $\ast$portrait, \mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$perso, int clic\+\_\+gauche, int $\ast$maj\+\_\+affichage)
+\begin{DoxyCompactList}\small\item\em Dessine les éléments de l\textquotesingle{}interface utilisateur (HUD) par-\/dessus la carte. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{affichage__carte_8h_a5de85f569354a3b9dd8f3631607cb958}\label{affichage__carte_8h_a5de85f569354a3b9dd8f3631607cb958}} 
+\index{affichage\_carte.h@{affichage\_carte.h}!afficher\_carte\_sdl@{afficher\_carte\_sdl}}
+\index{afficher\_carte\_sdl@{afficher\_carte\_sdl}!affichage\_carte.h@{affichage\_carte.h}}
+\doxysubsubsection{\texorpdfstring{afficher\_carte\_sdl()}{afficher\_carte\_sdl()}}
+{\footnotesize\ttfamily void afficher\+\_\+carte\+\_\+sdl (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{\mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}} $\ast$$\ast$}]{carte,  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+cases\mbox{[}\+NB\+\_\+\+BIOMES\mbox{]},  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+obstacles\mbox{[}4\mbox{]},  }\item[{SDL\+\_\+\+Texture $\ast$}]{texture\+\_\+brouillard,  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+monstres\mbox{[}2\mbox{]},  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+batiments\mbox{[}3\mbox{]},  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+sanctuaires\mbox{[}4\mbox{]},  }\item[{int}]{taille\+Case,  }\item[{int}]{persX,  }\item[{int}]{persY,  }\item[{int}]{case\+\_\+selection\+\_\+x,  }\item[{int}]{case\+\_\+selection\+\_\+y,  }\item[{\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$}]{perso }\end{DoxyParamCaption})}
+
+
+
+Fonction principale gérant tout l\textquotesingle{}affichage du monde et de ses entités. 
+
+\begin{DoxyAuthor}{Author}
+Massoud \& Léo
+\end{DoxyAuthor}
+Parcourt la matrice de la carte pour afficher biomes, obstacles, brouillard, monstres, bâtiments et sanctuaires en fonction de la position du joueur. 
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em carte} & Matrice de structures case\+\_\+t représentant le monde. \\
+\hline
+{\em textures\+\_\+cases} & Tableau des textures de sol par biome. \\
+\hline
+{\em textures\+\_\+obstacles} & Tableau des textures d\textquotesingle{}éléments de décor. \\
+\hline
+{\em texture\+\_\+brouillard} & Texture recouvrant les zones non explorées. \\
+\hline
+{\em textures\+\_\+monstres} & Tableau des sprites des ennemis. \\
+\hline
+{\em textures\+\_\+batiments} & Tableau des textures des structures interactives. \\
+\hline
+{\em textures\+\_\+sanctuaires} & Tableau des textures des bonus de map. \\
+\hline
+{\em taille\+Case} & Taille d\textquotesingle{}affichage d\textquotesingle{}une case. \\
+\hline
+{\em persX} & Coordonnée X actuelle du personnage. \\
+\hline
+{\em persY} & Coordonnée Y actuelle du personnage. \\
+\hline
+{\em case\+\_\+selection\+\_\+x} & Coordonnée X de la case actuellement survolée/sélectionnée. \\
+\hline
+{\em case\+\_\+selection\+\_\+y} & Coordonnée Y de la case actuellement survolée/sélectionnée. \\
+\hline
+{\em perso} & Pointeur vers la structure du personnage pour ses infos d\textquotesingle{}affichage. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__carte_8h_abeb995d310350f250396634467088b18}\label{affichage__carte_8h_abeb995d310350f250396634467088b18}} 
+\index{affichage\_carte.h@{affichage\_carte.h}!afficher\_hex\_couleur@{afficher\_hex\_couleur}}
+\index{afficher\_hex\_couleur@{afficher\_hex\_couleur}!affichage\_carte.h@{affichage\_carte.h}}
+\doxysubsubsection{\texorpdfstring{afficher\_hex\_couleur()}{afficher\_hex\_couleur()}}
+{\footnotesize\ttfamily void afficher\+\_\+hex\+\_\+couleur (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon,  }\item[{SDL\+\_\+\+Color}]{couleur }\end{DoxyParamCaption})}
+
+
+
+Affiche un hexagone plein avec une couleur simple (sans texture). 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em cx} & Coordonnée X du centre. \\
+\hline
+{\em cy} & Coordonnée Y du centre. \\
+\hline
+{\em rayon} & Taille de l\textquotesingle{}hexagone. \\
+\hline
+{\em couleur} & Couleur de remplissage. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__carte_8h_a00e06cdabad7f24ca8226edf1d9bdda9}\label{affichage__carte_8h_a00e06cdabad7f24ca8226edf1d9bdda9}} 
+\index{affichage\_carte.h@{affichage\_carte.h}!afficher\_hex\_texture@{afficher\_hex\_texture}}
+\index{afficher\_hex\_texture@{afficher\_hex\_texture}!affichage\_carte.h@{affichage\_carte.h}}
+\doxysubsubsection{\texorpdfstring{afficher\_hex\_texture()}{afficher\_hex\_texture()}}
+{\footnotesize\ttfamily void afficher\+\_\+hex\+\_\+texture (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon,  }\item[{SDL\+\_\+\+Texture $\ast$}]{texture,  }\item[{SDL\+\_\+\+Color}]{couleur }\end{DoxyParamCaption})}
+
+
+
+Affiche un hexagone avec une texture et une teinte de couleur appliquée. 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em cx} & Coordonnée X du centre de l\textquotesingle{}hexagone. \\
+\hline
+{\em cy} & Coordonnée Y du centre de l\textquotesingle{}hexagone. \\
+\hline
+{\em rayon} & Distance entre le centre et un sommet. \\
+\hline
+{\em texture} & Pointeur vers la texture SDL à plaquer. \\
+\hline
+{\em couleur} & Couleur de modulation (teinte) à appliquer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__carte_8h_a8b5641d401921541272af4bc4bf818ff}\label{affichage__carte_8h_a8b5641d401921541272af4bc4bf818ff}} 
+\index{affichage\_carte.h@{affichage\_carte.h}!dessiner\_contour\_double\_dore@{dessiner\_contour\_double\_dore}}
+\index{dessiner\_contour\_double\_dore@{dessiner\_contour\_double\_dore}!affichage\_carte.h@{affichage\_carte.h}}
+\doxysubsubsection{\texorpdfstring{dessiner\_contour\_double\_dore()}{dessiner\_contour\_double\_dore()}}
+{\footnotesize\ttfamily void dessiner\+\_\+contour\+\_\+double\+\_\+dore (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{r,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon,  }\item[{int}]{alpha }\end{DoxyParamCaption})}
+
+
+
+Dessine un contour doré décoratif (style double trait) autour d\textquotesingle{}une case. 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & Le moteur de rendu SDL. \\
+\hline
+{\em cx} & Coordonnée X du centre. \\
+\hline
+{\em cy} & Coordonnée Y du centre. \\
+\hline
+{\em rayon} & Taille de l\textquotesingle{}hexagone. \\
+\hline
+{\em alpha} & Niveau d\textquotesingle{}opacité du doré (0-\/255). \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__carte_8h_af353b87be36c72c23cf963e498349d34}\label{affichage__carte_8h_af353b87be36c72c23cf963e498349d34}} 
+\index{affichage\_carte.h@{affichage\_carte.h}!dessiner\_contour\_ftk@{dessiner\_contour\_ftk}}
+\index{dessiner\_contour\_ftk@{dessiner\_contour\_ftk}!affichage\_carte.h@{affichage\_carte.h}}
+\doxysubsubsection{\texorpdfstring{dessiner\_contour\_ftk()}{dessiner\_contour\_ftk()}}
+{\footnotesize\ttfamily void dessiner\+\_\+contour\+\_\+ftk (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{r,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon,  }\item[{int}]{epaisseur,  }\item[{SDL\+\_\+\+Color}]{couleur }\end{DoxyParamCaption})}
+
+
+
+Dessine un contour épais personnalisé (style \textquotesingle{}For The King\textquotesingle{}). 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & Le moteur de rendu SDL. \\
+\hline
+{\em cx} & Coordonnée X du centre. \\
+\hline
+{\em cy} & Coordonnée Y du centre. \\
+\hline
+{\em rayon} & Taille de l\textquotesingle{}hexagone. \\
+\hline
+{\em epaisseur} & Largeur du trait de contour. \\
+\hline
+{\em couleur} & Couleur du contour. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__carte_8h_a3d39f0d8d2dac8f57daa40685e7daaf1}\label{affichage__carte_8h_a3d39f0d8d2dac8f57daa40685e7daaf1}} 
+\index{affichage\_carte.h@{affichage\_carte.h}!dessiner\_interface\_carte@{dessiner\_interface\_carte}}
+\index{dessiner\_interface\_carte@{dessiner\_interface\_carte}!affichage\_carte.h@{affichage\_carte.h}}
+\doxysubsubsection{\texorpdfstring{dessiner\_interface\_carte()}{dessiner\_interface\_carte()}}
+{\footnotesize\ttfamily void dessiner\+\_\+interface\+\_\+carte (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{ffont,  }\item[{SDL\+\_\+\+Texture $\ast$}]{portrait,  }\item[{\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$}]{perso,  }\item[{int}]{clic\+\_\+gauche,  }\item[{int $\ast$}]{maj\+\_\+affichage }\end{DoxyParamCaption})}
+
+
+
+Dessine les éléments de l\textquotesingle{}interface utilisateur (HUD) par-\/dessus la carte. 
+
+\begin{DoxyAuthor}{Author}
+Léo 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em ffont} & Police de caractères pour les textes. \\
+\hline
+{\em portrait} & Texture de l\textquotesingle{}avatar du personnage. \\
+\hline
+{\em perso} & Pointeur vers les données du personnage (PV, XP, etc.). \\
+\hline
+{\em clic\+\_\+gauche} & État du clic souris. \\
+\hline
+{\em maj\+\_\+affichage} & Pointeur d\textquotesingle{}état permettant de forcer le rafraîchissement graphique. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__carte_8h_a268ad648888841c386ec22f02d5d9320}\label{affichage__carte_8h_a268ad648888841c386ec22f02d5d9320}} 
+\index{affichage\_carte.h@{affichage\_carte.h}!preparer\_avant\_affichage@{preparer\_avant\_affichage}}
+\index{preparer\_avant\_affichage@{preparer\_avant\_affichage}!affichage\_carte.h@{affichage\_carte.h}}
+\doxysubsubsection{\texorpdfstring{preparer\_avant\_affichage()}{preparer\_avant\_affichage()}}
+{\footnotesize\ttfamily void preparer\+\_\+avant\+\_\+affichage (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Nettoie le renderer et prépare les états de rendu pour la nouvelle frame. 
+
+\begin{DoxyAuthor}{Author}
+Léo 
+\end{DoxyAuthor}

@@ -1,0 +1,224 @@
+\hypertarget{combat_8h}{}\doxysection{lib/combat.h File Reference}
+\label{combat_8h}\index{lib/combat.h@{lib/combat.h}}
+{\ttfamily \#include $<$SDL2/\+SDL.\+h$>$}\newline
+{\ttfamily \#include $<$SDL2/\+SDL\+\_\+image.\+h$>$}\newline
+{\ttfamily \#include $<$SDL2/\+SDL\+\_\+ttf.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}perso.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}monstre.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}carte\+\_\+types.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}math.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}affichage\+\_\+combat.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}niveau.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}combat\+\_\+types.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{combat_8h_a73bc80a28237ed14db88102b1d71ff1c}{ouvrir\+\_\+fenetre\+\_\+combat}} (SDL\+\_\+\+Window $\ast$p\+Fenetre\+Principal, SDL\+\_\+\+Renderer $\ast$renderer\+Principal, \mbox{\hyperlink{carte__types_8h_a77b4c00a966c8e93f7e089661bc26122}{biome\+\_\+t}} biome, \mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$$\ast$combat, \mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}} $\ast$$\ast$carte, int $\ast$vies\+\_\+globales)
+\begin{DoxyCompactList}\small\item\em Initialise les ressources et prépare l\textquotesingle{}affichage de la scène de combat. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{combat_8h_a6c4e087e0379597fd4216d30fe7d5279}{combat\+\_\+termine}} (SDL\+\_\+\+Renderer $\ast$renderer\+Principal, \mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$$\ast$combat, \mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}} $\ast$$\ast$carte, \mbox{\hyperlink{combat__types_8h_adbace4b20790c289ef8b3e58c49a792d}{vainqueur\+\_\+t}} vainqueur, int $\ast$vies\+\_\+globales)
+\begin{DoxyCompactList}\small\item\em Gère la clôture du combat et applique les conséquences de l\textquotesingle{}issue du duel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{combat_8h_a204ff2170e21845004edf1aa7170c959}{detruire\+\_\+combat}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$$\ast$combat)
+\begin{DoxyCompactList}\small\item\em Libère proprement la mémoire et détruit toutes les textures liées au combat. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$ \mbox{\hyperlink{combat_8h_ae577ac2f341fdb8df47e846f77ed9d37}{creer\+\_\+combat}} (\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$perso, \mbox{\hyperlink{structmonstre__t}{monstre\+\_\+t}} $\ast$monstre)
+\begin{DoxyCompactList}\small\item\em Alloue la structure de combat et lie le joueur à son adversaire. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{combat__types_8h_ac1ee9aacbb03c705d4e194bfce455037}{tour\+\_\+t}} \mbox{\hyperlink{combat_8h_ab32cc3a5c7a20d53df0fdafd9f25f764}{changer\+\_\+tour}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$combat)
+\begin{DoxyCompactList}\small\item\em Alterne le tour de jeu de manière cyclique. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{combat_8h_a232f8689d8aaf32bc6b20478689a1153}{attaque\+\_\+lourde}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$combat)
+\begin{DoxyCompactList}\small\item\em Exécute une attaque puissante du joueur sur le monstre. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{combat_8h_a2eda4ae957ef40a7f8bf936767409145}{attaque\+\_\+legere}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$combat)
+\begin{DoxyCompactList}\small\item\em Exécute une attaque rapide du joueur sur le monstre. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{combat_8h_a456f4c8223dccbeae0a38fe5dc8161be}{attaque\+\_\+legere\+\_\+monstre}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$combat)
+\begin{DoxyCompactList}\small\item\em Exécute une attaque rapide du monstre sur le joueur. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{combat_8h_aabe55ac1b7910870402d440dccc0df64}{choix\+\_\+attaque\+\_\+monstre}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$combat)
+\begin{DoxyCompactList}\small\item\em IA du monstre \+: décide de l\textquotesingle{}action à entreprendre selon la situation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{combat_8h_a2eda4ae957ef40a7f8bf936767409145}\label{combat_8h_a2eda4ae957ef40a7f8bf936767409145}} 
+\index{combat.h@{combat.h}!attaque\_legere@{attaque\_legere}}
+\index{attaque\_legere@{attaque\_legere}!combat.h@{combat.h}}
+\doxysubsubsection{\texorpdfstring{attaque\_legere()}{attaque\_legere()}}
+{\footnotesize\ttfamily void attaque\+\_\+legere (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$}]{combat }\end{DoxyParamCaption})}
+
+
+
+Exécute une attaque rapide du joueur sur le monstre. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Calcule des dégâts aléatoires compris entre 20\% et 40\% des dégâts de base du joueur. 
+\begin{DoxyParams}{Parameters}
+{\em combat} & Pointeur vers le contexte de combat. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{combat_8h_a456f4c8223dccbeae0a38fe5dc8161be}\label{combat_8h_a456f4c8223dccbeae0a38fe5dc8161be}} 
+\index{combat.h@{combat.h}!attaque\_legere\_monstre@{attaque\_legere\_monstre}}
+\index{attaque\_legere\_monstre@{attaque\_legere\_monstre}!combat.h@{combat.h}}
+\doxysubsubsection{\texorpdfstring{attaque\_legere\_monstre()}{attaque\_legere\_monstre()}}
+{\footnotesize\ttfamily void attaque\+\_\+legere\+\_\+monstre (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$}]{combat }\end{DoxyParamCaption})}
+
+
+
+Exécute une attaque rapide du monstre sur le joueur. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Calcule des dégâts aléatoires compris entre 5\% et 30\% des dégâts de base du monstre. 
+\begin{DoxyParams}{Parameters}
+{\em combat} & Pointeur vers le contexte de combat. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{combat_8h_a232f8689d8aaf32bc6b20478689a1153}\label{combat_8h_a232f8689d8aaf32bc6b20478689a1153}} 
+\index{combat.h@{combat.h}!attaque\_lourde@{attaque\_lourde}}
+\index{attaque\_lourde@{attaque\_lourde}!combat.h@{combat.h}}
+\doxysubsubsection{\texorpdfstring{attaque\_lourde()}{attaque\_lourde()}}
+{\footnotesize\ttfamily void attaque\+\_\+lourde (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$}]{combat }\end{DoxyParamCaption})}
+
+
+
+Exécute une attaque puissante du joueur sur le monstre. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Calcule des dégâts aléatoires compris entre 30\% et 60\% des dégâts de base du joueur. 
+\begin{DoxyParams}{Parameters}
+{\em combat} & Pointeur vers le contexte de combat contenant l\textquotesingle{}attaquant et la cible. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{combat_8h_ab32cc3a5c7a20d53df0fdafd9f25f764}\label{combat_8h_ab32cc3a5c7a20d53df0fdafd9f25f764}} 
+\index{combat.h@{combat.h}!changer\_tour@{changer\_tour}}
+\index{changer\_tour@{changer\_tour}!combat.h@{combat.h}}
+\doxysubsubsection{\texorpdfstring{changer\_tour()}{changer\_tour()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{combat__types_8h_ac1ee9aacbb03c705d4e194bfce455037}{tour\+\_\+t}} changer\+\_\+tour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$}]{combat }\end{DoxyParamCaption})}
+
+
+
+Alterne le tour de jeu de manière cyclique. 
+
+\begin{DoxyAuthor}{Author}
+Massoud 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & Pointeur vers le contexte de combat actuel. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tour\+\_\+t Le nouveau tour actif (TOUR\+\_\+\+JOUEUR ou TOUR\+\_\+\+MONSTRE). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{combat_8h_aabe55ac1b7910870402d440dccc0df64}\label{combat_8h_aabe55ac1b7910870402d440dccc0df64}} 
+\index{combat.h@{combat.h}!choix\_attaque\_monstre@{choix\_attaque\_monstre}}
+\index{choix\_attaque\_monstre@{choix\_attaque\_monstre}!combat.h@{combat.h}}
+\doxysubsubsection{\texorpdfstring{choix\_attaque\_monstre()}{choix\_attaque\_monstre()}}
+{\footnotesize\ttfamily void choix\+\_\+attaque\+\_\+monstre (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$}]{combat }\end{DoxyParamCaption})}
+
+
+
+IA du monstre \+: décide de l\textquotesingle{}action à entreprendre selon la situation. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Analyse la santé restante du joueur et du monstre pour choisir entre une attaque légère ou lourde, intégrant une part de hasard pour l\textquotesingle{}imprévisibilité. 
+\begin{DoxyParams}{Parameters}
+{\em combat} & Pointeur vers le contexte de combat. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{combat_8h_a6c4e087e0379597fd4216d30fe7d5279}\label{combat_8h_a6c4e087e0379597fd4216d30fe7d5279}} 
+\index{combat.h@{combat.h}!combat\_termine@{combat\_termine}}
+\index{combat\_termine@{combat\_termine}!combat.h@{combat.h}}
+\doxysubsubsection{\texorpdfstring{combat\_termine()}{combat\_termine()}}
+{\footnotesize\ttfamily void combat\+\_\+termine (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer\+Principal,  }\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$$\ast$}]{combat,  }\item[{\mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}} $\ast$$\ast$}]{carte,  }\item[{\mbox{\hyperlink{combat__types_8h_adbace4b20790c289ef8b3e58c49a792d}{vainqueur\+\_\+t}}}]{vainqueur,  }\item[{int $\ast$}]{vies\+\_\+globales }\end{DoxyParamCaption})}
+
+
+
+Gère la clôture du combat et applique les conséquences de l\textquotesingle{}issue du duel. 
+
+\begin{DoxyAuthor}{Author}
+Léo
+\end{DoxyAuthor}
+En cas de victoire, attribue l\textquotesingle{}XP, génère un loot (kit de soins) et place une tombe. En cas de défaite, gère l\textquotesingle{}état de mort du personnage. 
+\begin{DoxyParams}{Parameters}
+{\em renderer\+Principal} & Moteur de rendu pour la création d\textquotesingle{}éventuels objets de loot. \\
+\hline
+{\em combat} & Pointeur vers la structure du combat qui se termine. \\
+\hline
+{\em carte} & Matrice de la carte pour la suppression du monstre et l\textquotesingle{}ajout d\textquotesingle{}un bâtiment (tombe). \\
+\hline
+{\em vainqueur} & Identifiant du gagnant (JOUEUR\+\_\+\+VAINQUEUR ou MONSTRE\+\_\+\+VAINQUEUR). \\
+\hline
+{\em vies\+\_\+globales} & Pointeur vers le compteur de vies pour la gestion de la défaite. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{combat_8h_ae577ac2f341fdb8df47e846f77ed9d37}\label{combat_8h_ae577ac2f341fdb8df47e846f77ed9d37}} 
+\index{combat.h@{combat.h}!creer\_combat@{creer\_combat}}
+\index{creer\_combat@{creer\_combat}!combat.h@{combat.h}}
+\doxysubsubsection{\texorpdfstring{creer\_combat()}{creer\_combat()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structcombat__t}{combat\+\_\+t}}$\ast$ creer\+\_\+combat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$}]{perso,  }\item[{\mbox{\hyperlink{structmonstre__t}{monstre\+\_\+t}} $\ast$}]{monstre }\end{DoxyParamCaption})}
+
+
+
+Alloue la structure de combat et lie le joueur à son adversaire. 
+
+\begin{DoxyAuthor}{Author}
+Saandi 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em perso} & Pointeur vers la structure du personnage joueur. \\
+\hline
+{\em monstre} & Pointeur vers la structure du monstre rencontré. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+combat\+\_\+t$\ast$ Un pointeur vers la structure de combat nouvellement allouée.
+\end{DoxyReturn}
+Fonction qui creer un combat \mbox{\Hypertarget{combat_8h_a204ff2170e21845004edf1aa7170c959}\label{combat_8h_a204ff2170e21845004edf1aa7170c959}} 
+\index{combat.h@{combat.h}!detruire\_combat@{detruire\_combat}}
+\index{detruire\_combat@{detruire\_combat}!combat.h@{combat.h}}
+\doxysubsubsection{\texorpdfstring{detruire\_combat()}{detruire\_combat()}}
+{\footnotesize\ttfamily void detruire\+\_\+combat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$$\ast$}]{combat }\end{DoxyParamCaption})}
+
+
+
+Libère proprement la mémoire et détruit toutes les textures liées au combat. 
+
+\begin{DoxyAuthor}{Author}
+Léo 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & Pointeur de pointeur vers la structure de combat à désallouer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{combat_8h_a73bc80a28237ed14db88102b1d71ff1c}\label{combat_8h_a73bc80a28237ed14db88102b1d71ff1c}} 
+\index{combat.h@{combat.h}!ouvrir\_fenetre\_combat@{ouvrir\_fenetre\_combat}}
+\index{ouvrir\_fenetre\_combat@{ouvrir\_fenetre\_combat}!combat.h@{combat.h}}
+\doxysubsubsection{\texorpdfstring{ouvrir\_fenetre\_combat()}{ouvrir\_fenetre\_combat()}}
+{\footnotesize\ttfamily void ouvrir\+\_\+fenetre\+\_\+combat (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Window $\ast$}]{p\+Fenetre\+Principal,  }\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer\+Principal,  }\item[{\mbox{\hyperlink{carte__types_8h_a77b4c00a966c8e93f7e089661bc26122}{biome\+\_\+t}}}]{biome,  }\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$$\ast$}]{combat,  }\item[{\mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}} $\ast$$\ast$}]{carte,  }\item[{int $\ast$}]{vies\+\_\+globales }\end{DoxyParamCaption})}
+
+
+
+Initialise les ressources et prépare l\textquotesingle{}affichage de la scène de combat. 
+
+\begin{DoxyAuthor}{Author}
+Léo
+\end{DoxyAuthor}
+Charge les textures (joueur, monstre, fond selon le biome), initialise la police et configure les boutons d\textquotesingle{}action. Définit le premier tour pour le joueur. 
+\begin{DoxyParams}{Parameters}
+{\em p\+Fenetre\+Principal} & Fenêtre parente utilisée pour le contexte d\textquotesingle{}affichage. \\
+\hline
+{\em renderer\+Principal} & Moteur de rendu principal pour la création des textures. \\
+\hline
+{\em biome} & Type de biome actuel servant à déterminer l\textquotesingle{}image de fond. \\
+\hline
+{\em combat} & Pointeur vers la structure de combat à initialiser. \\
+\hline
+{\em carte} & Matrice de la carte de jeu. \\
+\hline
+{\em vies\+\_\+globales} & Pointeur vers le compteur de vies du joueur. \\
+\hline
+\end{DoxyParams}

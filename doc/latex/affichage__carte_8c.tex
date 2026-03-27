@@ -1,0 +1,186 @@
+\hypertarget{affichage__carte_8c}{}\doxysection{src/affichage\+\_\+carte.c File Reference}
+\label{affichage__carte_8c}\index{src/affichage\_carte.c@{src/affichage\_carte.c}}
+{\ttfamily \#include \char`\"{}../lib/affichage\+\_\+carte.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{affichage__carte_8c_a70c0f98362d5e473c8f09265937fb1b6}{remplir\+\_\+hexagone}} (SDL\+\_\+\+Renderer $\ast$renderer, float cx, float cy, float rayon, SDL\+\_\+\+Color \mbox{\hyperlink{couleur_8h_a9c0ebe82ea8e3ed5ee86e04f78400eac}{couleur}})
+\item 
+void \mbox{\hyperlink{affichage__carte_8c_aff4a11b7c8c973ac4c1e6db739c1193e}{dessiner\+\_\+contour\+\_\+hex}} (SDL\+\_\+\+Renderer $\ast$renderer, float cx, float cy, float rayon, SDL\+\_\+\+Color \mbox{\hyperlink{couleur_8h_a9c0ebe82ea8e3ed5ee86e04f78400eac}{couleur}})
+\item 
+void \mbox{\hyperlink{affichage__carte_8c_a1d7a678d03ae6e16625f653a7778dd9a}{dessiner\+\_\+contour\+\_\+hex\+\_\+pointy}} (SDL\+\_\+\+Renderer $\ast$renderer, float cx, float cy, float rayon, SDL\+\_\+\+Color \mbox{\hyperlink{couleur_8h_a9c0ebe82ea8e3ed5ee86e04f78400eac}{couleur}})
+\item 
+void \mbox{\hyperlink{affichage__carte_8c_a5f858ca6fb07f435e7e27f777d19ec0d}{dessiner\+\_\+contour\+\_\+dore}} (SDL\+\_\+\+Renderer $\ast$renderer, float cx, float cy, float rayon)
+\item 
+void \mbox{\hyperlink{affichage__carte_8c_a88674341fc2a5d621a9791b726620107}{dessiner\+\_\+hex\+\_\+texture}} (SDL\+\_\+\+Renderer $\ast$renderer, SDL\+\_\+\+Texture $\ast$texture, float cx, float cy, float rayon)
+\item 
+void \mbox{\hyperlink{affichage__carte_8c_afdeae5d6dede358170ffa6e4127299de}{dessiner\+\_\+hex\+\_\+texture\+\_\+pointy}} (SDL\+\_\+\+Renderer $\ast$renderer, SDL\+\_\+\+Texture $\ast$texture, float cx, float cy, float rayon)
+\item 
+void \mbox{\hyperlink{affichage__carte_8c_a5de85f569354a3b9dd8f3631607cb958}{afficher\+\_\+carte\+\_\+sdl}} (SDL\+\_\+\+Renderer $\ast$renderer, \mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}} $\ast$$\ast$carte, SDL\+\_\+\+Texture $\ast$textures\+\_\+cases\mbox{[}\mbox{\hyperlink{carte__types_8h_a77b4c00a966c8e93f7e089661bc26122ab70750a39faa86e4220021869a550a93}{NB\+\_\+\+BIOMES}}\mbox{]}, SDL\+\_\+\+Texture $\ast$textures\+\_\+obstacles\mbox{[}4\mbox{]}, SDL\+\_\+\+Texture $\ast$texture\+\_\+brouillard, SDL\+\_\+\+Texture $\ast$textures\+\_\+monstres\mbox{[}2\mbox{]}, SDL\+\_\+\+Texture $\ast$textures\+\_\+batiments\mbox{[}3\mbox{]}, SDL\+\_\+\+Texture $\ast$textures\+\_\+sanctuaires\mbox{[}4\mbox{]}, int taille\+Case, int persX, int persY, int case\+\_\+selection\+\_\+x, int case\+\_\+selection\+\_\+y, \mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$perso)
+\begin{DoxyCompactList}\small\item\em Fonction principale gérant tout l\textquotesingle{}affichage du monde et de ses entités. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__carte_8c_a268ad648888841c386ec22f02d5d9320}{preparer\+\_\+avant\+\_\+affichage}} ()
+\begin{DoxyCompactList}\small\item\em Nettoie le renderer et prépare les états de rendu pour la nouvelle frame. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__carte_8c_a5287b8be93132a360fbd396d1fee9728}{dessiner\+\_\+interface\+\_\+carte}} (SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$font, SDL\+\_\+\+Texture $\ast$portrait, \mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$perso, int clic\+\_\+gauche, int $\ast$maj\+\_\+affichage)
+\begin{DoxyCompactList}\small\item\em Dessine les éléments de l\textquotesingle{}interface utilisateur (HUD) par-\/dessus la carte. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{affichage__carte_8c_aeaa31e362c3d34a9b97416d23a91e014}{HEX\+\_\+\+COS}} \mbox{[}6\mbox{]}
+\item 
+float \mbox{\hyperlink{affichage__carte_8c_a24fc61703120d8a1123a30e601fe3122}{HEX\+\_\+\+SIN}} \mbox{[}6\mbox{]}
+\item 
+float \mbox{\hyperlink{affichage__carte_8c_a5e9239948949a9cd7f869667e8183dc1}{POINTY\+\_\+\+HEX\+\_\+\+COS}} \mbox{[}6\mbox{]}
+\item 
+float \mbox{\hyperlink{affichage__carte_8c_a7808f9011710df4eef1b818b0eb6182e}{POINTY\+\_\+\+HEX\+\_\+\+SIN}} \mbox{[}6\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{affichage__carte_8c_a5de85f569354a3b9dd8f3631607cb958}\label{affichage__carte_8c_a5de85f569354a3b9dd8f3631607cb958}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!afficher\_carte\_sdl@{afficher\_carte\_sdl}}
+\index{afficher\_carte\_sdl@{afficher\_carte\_sdl}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{afficher\_carte\_sdl()}{afficher\_carte\_sdl()}}
+{\footnotesize\ttfamily void afficher\+\_\+carte\+\_\+sdl (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{\mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}} $\ast$$\ast$}]{carte,  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+cases\mbox{[}\+NB\+\_\+\+BIOMES\mbox{]},  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+obstacles\mbox{[}4\mbox{]},  }\item[{SDL\+\_\+\+Texture $\ast$}]{texture\+\_\+brouillard,  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+monstres\mbox{[}2\mbox{]},  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+batiments\mbox{[}3\mbox{]},  }\item[{SDL\+\_\+\+Texture $\ast$}]{textures\+\_\+sanctuaires\mbox{[}4\mbox{]},  }\item[{int}]{taille\+Case,  }\item[{int}]{persX,  }\item[{int}]{persY,  }\item[{int}]{case\+\_\+selection\+\_\+x,  }\item[{int}]{case\+\_\+selection\+\_\+y,  }\item[{\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$}]{perso }\end{DoxyParamCaption})}
+
+
+
+Fonction principale gérant tout l\textquotesingle{}affichage du monde et de ses entités. 
+
+\begin{DoxyAuthor}{Author}
+Massoud \& Léo
+\end{DoxyAuthor}
+Parcourt la matrice de la carte pour afficher biomes, obstacles, brouillard, monstres, bâtiments et sanctuaires en fonction de la position du joueur. 
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em carte} & Matrice de structures case\+\_\+t représentant le monde. \\
+\hline
+{\em textures\+\_\+cases} & Tableau des textures de sol par biome. \\
+\hline
+{\em textures\+\_\+obstacles} & Tableau des textures d\textquotesingle{}éléments de décor. \\
+\hline
+{\em texture\+\_\+brouillard} & Texture recouvrant les zones non explorées. \\
+\hline
+{\em textures\+\_\+monstres} & Tableau des sprites des ennemis. \\
+\hline
+{\em textures\+\_\+batiments} & Tableau des textures des structures interactives. \\
+\hline
+{\em textures\+\_\+sanctuaires} & Tableau des textures des bonus de map. \\
+\hline
+{\em taille\+Case} & Taille d\textquotesingle{}affichage d\textquotesingle{}une case. \\
+\hline
+{\em persX} & Coordonnée X actuelle du personnage. \\
+\hline
+{\em persY} & Coordonnée Y actuelle du personnage. \\
+\hline
+{\em case\+\_\+selection\+\_\+x} & Coordonnée X de la case actuellement survolée/sélectionnée. \\
+\hline
+{\em case\+\_\+selection\+\_\+y} & Coordonnée Y de la case actuellement survolée/sélectionnée. \\
+\hline
+{\em perso} & Pointeur vers la structure du personnage pour ses infos d\textquotesingle{}affichage. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__carte_8c_a5f858ca6fb07f435e7e27f777d19ec0d}\label{affichage__carte_8c_a5f858ca6fb07f435e7e27f777d19ec0d}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!dessiner\_contour\_dore@{dessiner\_contour\_dore}}
+\index{dessiner\_contour\_dore@{dessiner\_contour\_dore}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_contour\_dore()}{dessiner\_contour\_dore()}}
+{\footnotesize\ttfamily void dessiner\+\_\+contour\+\_\+dore (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{affichage__carte_8c_aff4a11b7c8c973ac4c1e6db739c1193e}\label{affichage__carte_8c_aff4a11b7c8c973ac4c1e6db739c1193e}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!dessiner\_contour\_hex@{dessiner\_contour\_hex}}
+\index{dessiner\_contour\_hex@{dessiner\_contour\_hex}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_contour\_hex()}{dessiner\_contour\_hex()}}
+{\footnotesize\ttfamily void dessiner\+\_\+contour\+\_\+hex (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon,  }\item[{SDL\+\_\+\+Color}]{couleur }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{affichage__carte_8c_a1d7a678d03ae6e16625f653a7778dd9a}\label{affichage__carte_8c_a1d7a678d03ae6e16625f653a7778dd9a}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!dessiner\_contour\_hex\_pointy@{dessiner\_contour\_hex\_pointy}}
+\index{dessiner\_contour\_hex\_pointy@{dessiner\_contour\_hex\_pointy}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_contour\_hex\_pointy()}{dessiner\_contour\_hex\_pointy()}}
+{\footnotesize\ttfamily void dessiner\+\_\+contour\+\_\+hex\+\_\+pointy (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon,  }\item[{SDL\+\_\+\+Color}]{couleur }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{affichage__carte_8c_a88674341fc2a5d621a9791b726620107}\label{affichage__carte_8c_a88674341fc2a5d621a9791b726620107}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!dessiner\_hex\_texture@{dessiner\_hex\_texture}}
+\index{dessiner\_hex\_texture@{dessiner\_hex\_texture}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_hex\_texture()}{dessiner\_hex\_texture()}}
+{\footnotesize\ttfamily void dessiner\+\_\+hex\+\_\+texture (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{SDL\+\_\+\+Texture $\ast$}]{texture,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{affichage__carte_8c_afdeae5d6dede358170ffa6e4127299de}\label{affichage__carte_8c_afdeae5d6dede358170ffa6e4127299de}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!dessiner\_hex\_texture\_pointy@{dessiner\_hex\_texture\_pointy}}
+\index{dessiner\_hex\_texture\_pointy@{dessiner\_hex\_texture\_pointy}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_hex\_texture\_pointy()}{dessiner\_hex\_texture\_pointy()}}
+{\footnotesize\ttfamily void dessiner\+\_\+hex\+\_\+texture\+\_\+pointy (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{SDL\+\_\+\+Texture $\ast$}]{texture,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{affichage__carte_8c_a5287b8be93132a360fbd396d1fee9728}\label{affichage__carte_8c_a5287b8be93132a360fbd396d1fee9728}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!dessiner\_interface\_carte@{dessiner\_interface\_carte}}
+\index{dessiner\_interface\_carte@{dessiner\_interface\_carte}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_interface\_carte()}{dessiner\_interface\_carte()}}
+{\footnotesize\ttfamily void dessiner\+\_\+interface\+\_\+carte (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{ffont,  }\item[{SDL\+\_\+\+Texture $\ast$}]{portrait,  }\item[{\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$}]{perso,  }\item[{int}]{clic\+\_\+gauche,  }\item[{int $\ast$}]{maj\+\_\+affichage }\end{DoxyParamCaption})}
+
+
+
+Dessine les éléments de l\textquotesingle{}interface utilisateur (HUD) par-\/dessus la carte. 
+
+\begin{DoxyAuthor}{Author}
+Léo 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em ffont} & Police de caractères pour les textes. \\
+\hline
+{\em portrait} & Texture de l\textquotesingle{}avatar du personnage. \\
+\hline
+{\em perso} & Pointeur vers les données du personnage (PV, XP, etc.). \\
+\hline
+{\em clic\+\_\+gauche} & État du clic souris. \\
+\hline
+{\em maj\+\_\+affichage} & Pointeur d\textquotesingle{}état permettant de forcer le rafraîchissement graphique. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__carte_8c_a268ad648888841c386ec22f02d5d9320}\label{affichage__carte_8c_a268ad648888841c386ec22f02d5d9320}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!preparer\_avant\_affichage@{preparer\_avant\_affichage}}
+\index{preparer\_avant\_affichage@{preparer\_avant\_affichage}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{preparer\_avant\_affichage()}{preparer\_avant\_affichage()}}
+{\footnotesize\ttfamily void preparer\+\_\+avant\+\_\+affichage (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Nettoie le renderer et prépare les états de rendu pour la nouvelle frame. 
+
+\begin{DoxyAuthor}{Author}
+Léo 
+\end{DoxyAuthor}
+\mbox{\Hypertarget{affichage__carte_8c_a70c0f98362d5e473c8f09265937fb1b6}\label{affichage__carte_8c_a70c0f98362d5e473c8f09265937fb1b6}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!remplir\_hexagone@{remplir\_hexagone}}
+\index{remplir\_hexagone@{remplir\_hexagone}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{remplir\_hexagone()}{remplir\_hexagone()}}
+{\footnotesize\ttfamily void remplir\+\_\+hexagone (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{float}]{cx,  }\item[{float}]{cy,  }\item[{float}]{rayon,  }\item[{SDL\+\_\+\+Color}]{couleur }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{affichage__carte_8c_aeaa31e362c3d34a9b97416d23a91e014}\label{affichage__carte_8c_aeaa31e362c3d34a9b97416d23a91e014}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!HEX\_COS@{HEX\_COS}}
+\index{HEX\_COS@{HEX\_COS}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{HEX\_COS}{HEX\_COS}}
+{\footnotesize\ttfamily float HEX\+\_\+\+COS\mbox{[}6\mbox{]}}
+
+\mbox{\Hypertarget{affichage__carte_8c_a24fc61703120d8a1123a30e601fe3122}\label{affichage__carte_8c_a24fc61703120d8a1123a30e601fe3122}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!HEX\_SIN@{HEX\_SIN}}
+\index{HEX\_SIN@{HEX\_SIN}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{HEX\_SIN}{HEX\_SIN}}
+{\footnotesize\ttfamily float HEX\+\_\+\+SIN\mbox{[}6\mbox{]}}
+
+\mbox{\Hypertarget{affichage__carte_8c_a5e9239948949a9cd7f869667e8183dc1}\label{affichage__carte_8c_a5e9239948949a9cd7f869667e8183dc1}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!POINTY\_HEX\_COS@{POINTY\_HEX\_COS}}
+\index{POINTY\_HEX\_COS@{POINTY\_HEX\_COS}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{POINTY\_HEX\_COS}{POINTY\_HEX\_COS}}
+{\footnotesize\ttfamily float POINTY\+\_\+\+HEX\+\_\+\+COS\mbox{[}6\mbox{]}}
+
+\mbox{\Hypertarget{affichage__carte_8c_a7808f9011710df4eef1b818b0eb6182e}\label{affichage__carte_8c_a7808f9011710df4eef1b818b0eb6182e}} 
+\index{affichage\_carte.c@{affichage\_carte.c}!POINTY\_HEX\_SIN@{POINTY\_HEX\_SIN}}
+\index{POINTY\_HEX\_SIN@{POINTY\_HEX\_SIN}!affichage\_carte.c@{affichage\_carte.c}}
+\doxysubsubsection{\texorpdfstring{POINTY\_HEX\_SIN}{POINTY\_HEX\_SIN}}
+{\footnotesize\ttfamily float POINTY\+\_\+\+HEX\+\_\+\+SIN\mbox{[}6\mbox{]}}
+

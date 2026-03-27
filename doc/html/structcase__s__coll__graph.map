@@ -1,0 +1,5 @@
+<map id="case_s" name="case_s">
+<area shape="rect" id="node1" title="Structure principale d&#39;une cellule de la grille (la case)." alt="" coords="76,95,143,121"/>
+<area shape="rect" id="node2" href="$structbatiment__t.html" title="Structure représentant un bâtiment." alt="" coords="5,5,99,32"/>
+<area shape="rect" id="node3" href="$structmonstre__t.html" title="Structure représentant un monstre et ses statistiques de combat." alt="" coords="123,5,211,32"/>
+</map>

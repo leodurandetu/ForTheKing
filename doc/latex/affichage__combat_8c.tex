@@ -1,0 +1,53 @@
+\hypertarget{affichage__combat_8c}{}\doxysection{src/affichage\+\_\+combat.c File Reference}
+\label{affichage__combat_8c}\index{src/affichage\_combat.c@{src/affichage\_combat.c}}
+{\ttfamily \#include \char`\"{}../lib/affichage\+\_\+combat.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{affichage__combat_8c_a8a66e8b6e7fb8934659f7e46fa6dc3ee}{maj\+\_\+affichage\+\_\+fenetre\+\_\+combat}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$combat, int clic\+Gauche)
+\begin{DoxyCompactList}\small\item\em Gère la boucle de rendu et les interactions de la fenêtre de combat. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__combat_8c_a19c16c25da3e90b87be22934f57ac90c}{afficher\+\_\+message\+\_\+combat}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$combat, const char $\ast$texte)
+\begin{DoxyCompactList}\small\item\em Affiche un log ou un message textuel spécifique au combat. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{affichage__combat_8c_a19c16c25da3e90b87be22934f57ac90c}\label{affichage__combat_8c_a19c16c25da3e90b87be22934f57ac90c}} 
+\index{affichage\_combat.c@{affichage\_combat.c}!afficher\_message\_combat@{afficher\_message\_combat}}
+\index{afficher\_message\_combat@{afficher\_message\_combat}!affichage\_combat.c@{affichage\_combat.c}}
+\doxysubsubsection{\texorpdfstring{afficher\_message\_combat()}{afficher\_message\_combat()}}
+{\footnotesize\ttfamily void afficher\+\_\+message\+\_\+combat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$}]{combat,  }\item[{const char $\ast$}]{texte }\end{DoxyParamCaption})}
+
+
+
+Affiche un log ou un message textuel spécifique au combat. 
+
+\begin{DoxyAuthor}{Author}
+Massoud \& Léo
+\end{DoxyAuthor}
+Cette fonction permet de donner un feedback textuel au joueur sur les actions réalisées. Déclarée en \textquotesingle{}extern\textquotesingle{} car son implémentation peut se situer dans un autre module de rendu. 
+\begin{DoxyParams}{Parameters}
+{\em combat} & Pointeur vers la structure de combat pour accéder au renderer et aux polices. \\
+\hline
+{\em texte} & Chaîne de caractères contenant le message à afficher (ex\+: \char`\"{}\+Coup critique !\char`\"{}). \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__combat_8c_a8a66e8b6e7fb8934659f7e46fa6dc3ee}\label{affichage__combat_8c_a8a66e8b6e7fb8934659f7e46fa6dc3ee}} 
+\index{affichage\_combat.c@{affichage\_combat.c}!maj\_affichage\_fenetre\_combat@{maj\_affichage\_fenetre\_combat}}
+\index{maj\_affichage\_fenetre\_combat@{maj\_affichage\_fenetre\_combat}!affichage\_combat.c@{affichage\_combat.c}}
+\doxysubsubsection{\texorpdfstring{maj\_affichage\_fenetre\_combat()}{maj\_affichage\_fenetre\_combat()}}
+{\footnotesize\ttfamily void maj\+\_\+affichage\+\_\+fenetre\+\_\+combat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$}]{combat,  }\item[{int}]{clic\+Gauche }\end{DoxyParamCaption})}
+
+
+
+Gère la boucle de rendu et les interactions de la fenêtre de combat. 
+
+\begin{DoxyAuthor}{Author}
+Massoud \& Léo
+\end{DoxyAuthor}
+Met à jour l\textquotesingle{}affichage des entités (joueur et monstre), des barres de vie et traite les clics utilisateur pour déclencher les actions de combat. 
+\begin{DoxyParams}{Parameters}
+{\em combat} & Pointeur vers la structure d\textquotesingle{}état contenant toutes les données du combat en cours. \\
+\hline
+{\em clic\+Gauche} & État logique du clic souris (1 si le bouton est pressé, 0 sinon). \\
+\hline
+\end{DoxyParams}

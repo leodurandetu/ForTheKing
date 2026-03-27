@@ -1,0 +1,56 @@
+\hypertarget{perlin__noise_8c}{}\doxysection{src/perlin\+\_\+noise.c File Reference}
+\label{perlin__noise_8c}\index{src/perlin\_noise.c@{src/perlin\_noise.c}}
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../lib/perlin\+\_\+noise.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{perlin__noise_8c_ac7b73792904bc20cd760e8904c358fe7}{perlin\+\_\+init}} (unsigned int graine)
+\begin{DoxyCompactList}\small\item\em Initialise le générateur de bruit de Perlin. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{perlin__noise_8c_a1e936b5e3e751ee880c270678aae4675}{perlin\+\_\+2d}} (float x, float y)
+\begin{DoxyCompactList}\small\item\em Calcule la valeur du bruit de Perlin pour un point en deux dimensions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{perlin__noise_8c_a1e936b5e3e751ee880c270678aae4675}\label{perlin__noise_8c_a1e936b5e3e751ee880c270678aae4675}} 
+\index{perlin\_noise.c@{perlin\_noise.c}!perlin\_2d@{perlin\_2d}}
+\index{perlin\_2d@{perlin\_2d}!perlin\_noise.c@{perlin\_noise.c}}
+\doxysubsubsection{\texorpdfstring{perlin\_2d()}{perlin\_2d()}}
+{\footnotesize\ttfamily float perlin\+\_\+2d (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})}
+
+
+
+Calcule la valeur du bruit de Perlin pour un point en deux dimensions. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Génère une valeur de bruit lisse. Pour varier la précision du relief, il convient d\textquotesingle{}ajuster la fréquence des coordonnées fournies. 
+\begin{DoxyParams}{Parameters}
+{\em x} & Coordonnée horizontale sur la grille. \\
+\hline
+{\em y} & Coordonnée verticale sur la grille. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float Valeur du bruit comprise théoriquement dans l\textquotesingle{}intervalle \mbox{[}-\/1.\+0, 1.\+0\mbox{]}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{perlin__noise_8c_ac7b73792904bc20cd760e8904c358fe7}\label{perlin__noise_8c_ac7b73792904bc20cd760e8904c358fe7}} 
+\index{perlin\_noise.c@{perlin\_noise.c}!perlin\_init@{perlin\_init}}
+\index{perlin\_init@{perlin\_init}!perlin\_noise.c@{perlin\_noise.c}}
+\doxysubsubsection{\texorpdfstring{perlin\_init()}{perlin\_init()}}
+{\footnotesize\ttfamily void perlin\+\_\+init (\begin{DoxyParamCaption}\item[{unsigned int}]{graine }\end{DoxyParamCaption})}
+
+
+
+Initialise le générateur de bruit de Perlin. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Prépare les tables de permutation et les gradients nécessaires au calcul. Doit être appelée une seule fois (souvent au lancement du programme) avant toute utilisation de la fonction de calcul 2D. 
+\begin{DoxyParams}{Parameters}
+{\em graine} & Valeur entière (graine aléatoire) permettant de générer une suite déterministe. Une même graine produira toujours le même motif de carte. \\
+\hline
+\end{DoxyParams}

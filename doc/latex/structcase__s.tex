@@ -1,0 +1,81 @@
+\hypertarget{structcase__s}{}\doxysection{case\+\_\+s Struct Reference}
+\label{structcase__s}\index{case\_s@{case\_s}}
+
+
+Structure principale d\textquotesingle{}une cellule de la grille (la case).  
+
+
+
+
+{\ttfamily \#include $<$carte\+\_\+types.\+h$>$}
+
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{carte__types_8h_a9aea9b4fa760b4bd1ebad91535dd270c}{type\+\_\+sanc\+\_\+t}} \mbox{\hyperlink{structcase__s_a358f85cad0a9e975f89f6a5d2f488b2e}{sanctuaires}}
+\item 
+\mbox{\hyperlink{carte__types_8h_a77b4c00a966c8e93f7e089661bc26122}{biome\+\_\+t}} \mbox{\hyperlink{structcase__s_a9047f33de0e6be3fba6a8287c88f485b}{biome}}
+\item 
+\mbox{\hyperlink{carte__types_8h_a40e19f56fc061f21fa6b4c06e6177ae0}{terrain\+\_\+t}} \mbox{\hyperlink{structcase__s_a453e512371d21656bf27f2672273c12a}{terrain}}
+\item 
+\mbox{\hyperlink{structbatiment__t}{batiment\+\_\+t}} \mbox{\hyperlink{structcase__s_a7bb22df743d2eb4650d036c35ff2fc6b}{batiment}}
+\item 
+\mbox{\hyperlink{structmonstre__t}{monstre\+\_\+t}} $\ast$ \mbox{\hyperlink{structcase__s_a01f6ce571e6a606a6b474a680330a756}{monstre}}
+\item 
+int \mbox{\hyperlink{structcase__s_acc9e44ae0e4cd12eb9cc7a22bf583966}{est\+Visible}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Structure principale d\textquotesingle{}une cellule de la grille (la case). 
+
+
+\begin{DoxyItemize}
+\item \begin{DoxyAuthor}{Author}
+Léo, Saandi \& Massoud
+\end{DoxyAuthor}
+Regroupe toutes les informations d\textquotesingle{}occupation, d\textquotesingle{}environnement et d\textquotesingle{}affichage. 
+\end{DoxyItemize}
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structcase__s_a7bb22df743d2eb4650d036c35ff2fc6b}\label{structcase__s_a7bb22df743d2eb4650d036c35ff2fc6b}} 
+\index{case\_s@{case\_s}!batiment@{batiment}}
+\index{batiment@{batiment}!case\_s@{case\_s}}
+\doxysubsubsection{\texorpdfstring{batiment}{batiment}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structbatiment__t}{batiment\+\_\+t}} case\+\_\+s\+::batiment}
+
+Bâtiment présent sur la case. \mbox{\Hypertarget{structcase__s_a9047f33de0e6be3fba6a8287c88f485b}\label{structcase__s_a9047f33de0e6be3fba6a8287c88f485b}} 
+\index{case\_s@{case\_s}!biome@{biome}}
+\index{biome@{biome}!case\_s@{case\_s}}
+\doxysubsubsection{\texorpdfstring{biome}{biome}}
+{\footnotesize\ttfamily \mbox{\hyperlink{carte__types_8h_a77b4c00a966c8e93f7e089661bc26122}{biome\+\_\+t}} case\+\_\+s\+::biome}
+
+Type de biome (fond). \mbox{\Hypertarget{structcase__s_acc9e44ae0e4cd12eb9cc7a22bf583966}\label{structcase__s_acc9e44ae0e4cd12eb9cc7a22bf583966}} 
+\index{case\_s@{case\_s}!estVisible@{estVisible}}
+\index{estVisible@{estVisible}!case\_s@{case\_s}}
+\doxysubsubsection{\texorpdfstring{estVisible}{estVisible}}
+{\footnotesize\ttfamily int case\+\_\+s\+::est\+Visible}
+
+État pour le brouillard de guerre (1 pour visible, 0 pour caché). \mbox{\Hypertarget{structcase__s_a01f6ce571e6a606a6b474a680330a756}\label{structcase__s_a01f6ce571e6a606a6b474a680330a756}} 
+\index{case\_s@{case\_s}!monstre@{monstre}}
+\index{monstre@{monstre}!case\_s@{case\_s}}
+\doxysubsubsection{\texorpdfstring{monstre}{monstre}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmonstre__t}{monstre\+\_\+t}}$\ast$ case\+\_\+s\+::monstre}
+
+Pointeur vers un monstre présent, NULL si la case est vide de monstre. \mbox{\Hypertarget{structcase__s_a358f85cad0a9e975f89f6a5d2f488b2e}\label{structcase__s_a358f85cad0a9e975f89f6a5d2f488b2e}} 
+\index{case\_s@{case\_s}!sanctuaires@{sanctuaires}}
+\index{sanctuaires@{sanctuaires}!case\_s@{case\_s}}
+\doxysubsubsection{\texorpdfstring{sanctuaires}{sanctuaires}}
+{\footnotesize\ttfamily \mbox{\hyperlink{carte__types_8h_a9aea9b4fa760b4bd1ebad91535dd270c}{type\+\_\+sanc\+\_\+t}} case\+\_\+s\+::sanctuaires}
+
+Sanctuaire présent sur la case. \mbox{\Hypertarget{structcase__s_a453e512371d21656bf27f2672273c12a}\label{structcase__s_a453e512371d21656bf27f2672273c12a}} 
+\index{case\_s@{case\_s}!terrain@{terrain}}
+\index{terrain@{terrain}!case\_s@{case\_s}}
+\doxysubsubsection{\texorpdfstring{terrain}{terrain}}
+{\footnotesize\ttfamily \mbox{\hyperlink{carte__types_8h_a40e19f56fc061f21fa6b4c06e6177ae0}{terrain\+\_\+t}} case\+\_\+s\+::terrain}
+
+Type de terrain (obstacle). 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+lib/\mbox{\hyperlink{carte__types_8h}{carte\+\_\+types.\+h}}\end{DoxyCompactItemize}

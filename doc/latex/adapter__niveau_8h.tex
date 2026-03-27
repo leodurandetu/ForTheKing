@@ -1,0 +1,77 @@
+\hypertarget{adapter__niveau_8h}{}\doxysection{lib/adapter\+\_\+niveau.h File Reference}
+\label{adapter__niveau_8h}\index{lib/adapter\_niveau.h@{lib/adapter\_niveau.h}}
+{\ttfamily \#include \char`\"{}perso.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}monstre.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{adapter__niveau_8h_a2a44227ba4b3709e357a727dc45ef91a}{appliquer\+\_\+bonus\+\_\+perso}} (\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$perso)
+\begin{DoxyCompactList}\small\item\em Met à jour les statistiques du personnage lors d\textquotesingle{}un gain de niveau. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{adapter__niveau_8h_ac1a0ee61dcef3b73366589be35f1cd83}{appliquer\+\_\+bonus\+\_\+monstre}} (\mbox{\hyperlink{structmonstre__t}{monstre\+\_\+t}} $\ast$monstre)
+\begin{DoxyCompactList}\small\item\em Définit les statistiques d\textquotesingle{}un monstre selon son niveau actuel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{adapter__niveau_8h_ae1da6fbcb76d48f147fd9fd274f4e289}{niveau\+\_\+monstre}} (\mbox{\hyperlink{structmonstre__t}{monstre\+\_\+t}} $\ast$monstre, \mbox{\hyperlink{monstre_8h_a99490a386439839dbe510f00783d1904}{type\+\_\+monstre\+\_\+t}} type)
+\begin{DoxyCompactList}\small\item\em Génère aléatoirement le niveau d\textquotesingle{}un monstre selon sa catégorie. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{adapter__niveau_8h_ac1a0ee61dcef3b73366589be35f1cd83}\label{adapter__niveau_8h_ac1a0ee61dcef3b73366589be35f1cd83}} 
+\index{adapter\_niveau.h@{adapter\_niveau.h}!appliquer\_bonus\_monstre@{appliquer\_bonus\_monstre}}
+\index{appliquer\_bonus\_monstre@{appliquer\_bonus\_monstre}!adapter\_niveau.h@{adapter\_niveau.h}}
+\doxysubsubsection{\texorpdfstring{appliquer\_bonus\_monstre()}{appliquer\_bonus\_monstre()}}
+{\footnotesize\ttfamily void appliquer\+\_\+bonus\+\_\+monstre (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmonstre__t}{monstre\+\_\+t}} $\ast$}]{monstre }\end{DoxyParamCaption})}
+
+
+
+Définit les statistiques d\textquotesingle{}un monstre selon son niveau actuel. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+À utiliser lors de l\textquotesingle{}instanciation d\textquotesingle{}un monstre pour adapter sa difficulté (scaling) avant le combat. 
+\begin{DoxyParams}{Parameters}
+{\em monstre} & Pointeur vers le monstre dont on souhaite ajuster les stats. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{adapter__niveau_8h_a2a44227ba4b3709e357a727dc45ef91a}\label{adapter__niveau_8h_a2a44227ba4b3709e357a727dc45ef91a}} 
+\index{adapter\_niveau.h@{adapter\_niveau.h}!appliquer\_bonus\_perso@{appliquer\_bonus\_perso}}
+\index{appliquer\_bonus\_perso@{appliquer\_bonus\_perso}!adapter\_niveau.h@{adapter\_niveau.h}}
+\doxysubsubsection{\texorpdfstring{appliquer\_bonus\_perso()}{appliquer\_bonus\_perso()}}
+{\footnotesize\ttfamily void appliquer\+\_\+bonus\+\_\+perso (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$}]{perso }\end{DoxyParamCaption})}
+
+
+
+Met à jour les statistiques du personnage lors d\textquotesingle{}un gain de niveau. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Calcule et applique les augmentations de caractéristiques (PV, attaque, etc.) en fonction du nouveau niveau du joueur. 
+\begin{DoxyParams}{Parameters}
+{\em perso} & Pointeur vers la structure du personnage à améliorer. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{adapter__niveau_8h_ae1da6fbcb76d48f147fd9fd274f4e289}\label{adapter__niveau_8h_ae1da6fbcb76d48f147fd9fd274f4e289}} 
+\index{adapter\_niveau.h@{adapter\_niveau.h}!niveau\_monstre@{niveau\_monstre}}
+\index{niveau\_monstre@{niveau\_monstre}!adapter\_niveau.h@{adapter\_niveau.h}}
+\doxysubsubsection{\texorpdfstring{niveau\_monstre()}{niveau\_monstre()}}
+{\footnotesize\ttfamily void niveau\+\_\+monstre (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmonstre__t}{monstre\+\_\+t}} $\ast$}]{monstre,  }\item[{\mbox{\hyperlink{monstre_8h_a99490a386439839dbe510f00783d1904}{type\+\_\+monstre\+\_\+t}}}]{type }\end{DoxyParamCaption})}
+
+
+
+Génère aléatoirement le niveau d\textquotesingle{}un monstre selon sa catégorie. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Définit les plages de niveaux suivantes \+:
+\begin{DoxyItemize}
+\item TROLL \+: Niveau 1 ou 2.
+\item SQUELETTE \+: Niveau 2 ou 3. 
+\begin{DoxyParams}{Parameters}
+{\em monstre} & Pointeur vers le monstre qui va recevoir le niveau. \\
+\hline
+{\em type} & Le type de monstre permettant de déterminer la plage de niveau aléatoire. \\
+\hline
+\end{DoxyParams}
+
+\end{DoxyItemize}

@@ -1,0 +1,80 @@
+\hypertarget{option_8c}{}\doxysection{src/option.c File Reference}
+\label{option_8c}\index{src/option.c@{src/option.c}}
+{\ttfamily \#include \char`\"{}../lib/option.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{option_8c_a66f09d4dda168c48f7135bee88f6dfa8}{dessiner\+\_\+bouton}} (SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$font, SDL\+\_\+\+Rect bouton, const char $\ast$texte, SDL\+\_\+\+Color \mbox{\hyperlink{couleur_8h_a9c0ebe82ea8e3ed5ee86e04f78400eac}{couleur}})
+\begin{DoxyCompactList}\small\item\em Dessine un bouton interactif avec du texte centré. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{option_8c_a11c3decf5c80d1034d5b87b0090bf38f}{dessiner\+\_\+monstre}} (SDL\+\_\+\+Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Affiche visuellement le monstre dans l\textquotesingle{}interface de choix. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{option_8c_a19bf4464318ba4b5649a709659fc32b9}{ouvrir\+\_\+fenetre\+\_\+choix}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$combat)
+\begin{DoxyCompactList}\small\item\em Ouvre une boîte de dialogue demandant au joueur de confirmer une action. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{option_8c_a66f09d4dda168c48f7135bee88f6dfa8}\label{option_8c_a66f09d4dda168c48f7135bee88f6dfa8}} 
+\index{option.c@{option.c}!dessiner\_bouton@{dessiner\_bouton}}
+\index{dessiner\_bouton@{dessiner\_bouton}!option.c@{option.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_bouton()}{dessiner\_bouton()}}
+{\footnotesize\ttfamily void dessiner\+\_\+bouton (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{font,  }\item[{SDL\+\_\+\+Rect}]{bouton,  }\item[{const char $\ast$}]{texte,  }\item[{SDL\+\_\+\+Color}]{couleur }\end{DoxyParamCaption})}
+
+
+
+Dessine un bouton interactif avec du texte centré. 
+
+\begin{DoxyAuthor}{Author}
+Saandi 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em font} & La police de caractères pour le texte du bouton. \\
+\hline
+{\em bouton} & Rectangle définissant la zone du bouton. \\
+\hline
+{\em texte} & Le libellé à afficher à l\textquotesingle{}intérieur. \\
+\hline
+{\em couleur} & La couleur de fond ou de bordure du bouton. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{option_8c_a11c3decf5c80d1034d5b87b0090bf38f}\label{option_8c_a11c3decf5c80d1034d5b87b0090bf38f}} 
+\index{option.c@{option.c}!dessiner\_monstre@{dessiner\_monstre}}
+\index{dessiner\_monstre@{dessiner\_monstre}!option.c@{option.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_monstre()}{dessiner\_monstre()}}
+{\footnotesize\ttfamily void dessiner\+\_\+monstre (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer }\end{DoxyParamCaption})}
+
+
+
+Affiche visuellement le monstre dans l\textquotesingle{}interface de choix. 
+
+\begin{DoxyAuthor}{Author}
+Saandi 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{option_8c_a19bf4464318ba4b5649a709659fc32b9}\label{option_8c_a19bf4464318ba4b5649a709659fc32b9}} 
+\index{option.c@{option.c}!ouvrir\_fenetre\_choix@{ouvrir\_fenetre\_choix}}
+\index{ouvrir\_fenetre\_choix@{ouvrir\_fenetre\_choix}!option.c@{option.c}}
+\doxysubsubsection{\texorpdfstring{ouvrir\_fenetre\_choix()}{ouvrir\_fenetre\_choix()}}
+{\footnotesize\ttfamily int ouvrir\+\_\+fenetre\+\_\+choix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$}]{combat }\end{DoxyParamCaption})}
+
+
+
+Ouvre une boîte de dialogue demandant au joueur de confirmer une action. 
+
+\begin{DoxyAuthor}{Author}
+Saandi 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & Contexte de combat utilisé pour l\textquotesingle{}affichage des protagonistes. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Retourne le choix de l\textquotesingle{}utilisateur (1 pour confirmer, 0 pour annuler). 
+\end{DoxyReturn}

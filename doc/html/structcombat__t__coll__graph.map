@@ -1,0 +1,7 @@
+<map id="combat_t" name="combat_t">
+<area shape="rect" id="node1" title="Structure de contexte pour une instance de combat." alt="" coords="82,273,165,300"/>
+<area shape="rect" id="node2" href="$structperso__s.html" title="Structure principale représentant le joueur." alt="" coords="19,184,91,211"/>
+<area shape="rect" id="node3" href="$structinventaire__t.html" title="Structure représentant le sac à dos du personnage." alt="" coords="5,95,105,121"/>
+<area shape="rect" id="node4" href="$structobjet__t.html" title="Structure représentant un objet de l&#39;inventaire." alt="" coords="22,5,89,32"/>
+<area shape="rect" id="node5" href="$structmonstre__t.html" title="Structure représentant un monstre et ses statistiques de combat." alt="" coords="115,184,203,211"/>
+</map>

@@ -1,0 +1,16 @@
+<map id="lib/affichage_combat.h" name="lib/affichage_combat.h">
+<area shape="rect" id="node1" title=" " alt="" coords="273,5,444,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="160,379,256,405"/>
+<area shape="rect" id="node3" title=" " alt="" coords="348,379,492,405"/>
+<area shape="rect" id="node4" title=" " alt="" coords="43,155,160,181"/>
+<area shape="rect" id="node5" href="$affichage__commun_8h.html" title=" " alt="" coords="189,80,347,107"/>
+<area shape="rect" id="node11" href="$combat__types_8h.html" title="Définitions des types et structures pour la gestion des combats." alt="" coords="487,80,614,107"/>
+<area shape="rect" id="node13" title=" " alt="" coords="734,155,802,181"/>
+<area shape="rect" id="node6" title=" " alt="" coords="235,155,301,181"/>
+<area shape="rect" id="node7" href="$perso_8h.html" title="Définition du personnage joueur et de ses caractéristiques." alt="" coords="326,155,397,181"/>
+<area shape="rect" id="node8" href="$inventaire_8h.html" title="Gestion du système d&#39;inventaire et du stockage des objets du personnage." alt="" coords="311,229,411,256"/>
+<area shape="rect" id="node9" href="$objet_8h.html" title="Définition des objets et de leurs comportements via des pointeurs de fonctions." alt="" coords="271,304,337,331"/>
+<area shape="rect" id="node10" href="$commun_8h.html" title="Définitions de base partagées par l&#39;ensemble des modules du projet." alt="" coords="361,304,452,331"/>
+<area shape="rect" id="node12" href="$monstre_8h.html" title="Définition des ennemis et de leurs statistiques de combat." alt="" coords="487,155,575,181"/>
+<area shape="rect" id="node14" href="$carte__types_8h.html" title="Définitions des structures et énumérations fondamentales de la carte." alt="" coords="599,155,710,181"/>
+</map>

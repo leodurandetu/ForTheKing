@@ -1,0 +1,113 @@
+\hypertarget{option_8h}{}\doxysection{lib/option.h File Reference}
+\label{option_8h}\index{lib/option.h@{lib/option.h}}
+{\ttfamily \#include $<$SDL2/\+SDL.\+h$>$}\newline
+{\ttfamily \#include $<$SDL2/\+SDL\+\_\+image.\+h$>$}\newline
+{\ttfamily \#include $<$SDL2/\+SDL\+\_\+ttf.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../lib/carte.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../lib/perso.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../lib/monstre.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../lib/combat.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{option_8h_a66f09d4dda168c48f7135bee88f6dfa8}{dessiner\+\_\+bouton}} (SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$font, SDL\+\_\+\+Rect bouton, const char $\ast$texte, SDL\+\_\+\+Color \mbox{\hyperlink{couleur_8h_a9c0ebe82ea8e3ed5ee86e04f78400eac}{couleur}})
+\begin{DoxyCompactList}\small\item\em Dessine un bouton interactif avec du texte centré. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{option_8h_a11c3decf5c80d1034d5b87b0090bf38f}{dessiner\+\_\+monstre}} (SDL\+\_\+\+Renderer $\ast$renderer)
+\begin{DoxyCompactList}\small\item\em Affiche visuellement le monstre dans l\textquotesingle{}interface de choix. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{option_8h_a19bf4464318ba4b5649a709659fc32b9}{ouvrir\+\_\+fenetre\+\_\+choix}} (\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$combat)
+\begin{DoxyCompactList}\small\item\em Ouvre une boîte de dialogue demandant au joueur de confirmer une action. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{option_8h_a6dcd6eeb4863489d56abb8baf60a0026}{monstre\+\_\+dans\+\_\+case\+\_\+cliquee}} (\mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}} carte\mbox{[}\mbox{\hyperlink{carte__types_8h_af91bd98335718018d86a625d1713b0f7}{TAILLE\+\_\+\+CARTE}}\mbox{]}\mbox{[}\mbox{\hyperlink{carte__types_8h_af91bd98335718018d86a625d1713b0f7}{TAILLE\+\_\+\+CARTE}}\mbox{]}, int x, int y)
+\begin{DoxyCompactList}\small\item\em Vérifie si la case ciblée par le clic contient un monstre. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{option_8h_a66f09d4dda168c48f7135bee88f6dfa8}\label{option_8h_a66f09d4dda168c48f7135bee88f6dfa8}} 
+\index{option.h@{option.h}!dessiner\_bouton@{dessiner\_bouton}}
+\index{dessiner\_bouton@{dessiner\_bouton}!option.h@{option.h}}
+\doxysubsubsection{\texorpdfstring{dessiner\_bouton()}{dessiner\_bouton()}}
+{\footnotesize\ttfamily void dessiner\+\_\+bouton (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{font,  }\item[{SDL\+\_\+\+Rect}]{bouton,  }\item[{const char $\ast$}]{texte,  }\item[{SDL\+\_\+\+Color}]{couleur }\end{DoxyParamCaption})}
+
+
+
+Dessine un bouton interactif avec du texte centré. 
+
+\begin{DoxyAuthor}{Author}
+Saandi 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em font} & La police de caractères pour le texte du bouton. \\
+\hline
+{\em bouton} & Rectangle définissant la zone du bouton. \\
+\hline
+{\em texte} & Le libellé à afficher à l\textquotesingle{}intérieur. \\
+\hline
+{\em couleur} & La couleur de fond ou de bordure du bouton. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{option_8h_a11c3decf5c80d1034d5b87b0090bf38f}\label{option_8h_a11c3decf5c80d1034d5b87b0090bf38f}} 
+\index{option.h@{option.h}!dessiner\_monstre@{dessiner\_monstre}}
+\index{dessiner\_monstre@{dessiner\_monstre}!option.h@{option.h}}
+\doxysubsubsection{\texorpdfstring{dessiner\_monstre()}{dessiner\_monstre()}}
+{\footnotesize\ttfamily void dessiner\+\_\+monstre (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer }\end{DoxyParamCaption})}
+
+
+
+Affiche visuellement le monstre dans l\textquotesingle{}interface de choix. 
+
+\begin{DoxyAuthor}{Author}
+Saandi 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{option_8h_a6dcd6eeb4863489d56abb8baf60a0026}\label{option_8h_a6dcd6eeb4863489d56abb8baf60a0026}} 
+\index{option.h@{option.h}!monstre\_dans\_case\_cliquee@{monstre\_dans\_case\_cliquee}}
+\index{monstre\_dans\_case\_cliquee@{monstre\_dans\_case\_cliquee}!option.h@{option.h}}
+\doxysubsubsection{\texorpdfstring{monstre\_dans\_case\_cliquee()}{monstre\_dans\_case\_cliquee()}}
+{\footnotesize\ttfamily int monstre\+\_\+dans\+\_\+case\+\_\+cliquee (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{carte__types_8h_a2a628b5c03e983edabf5b05625e5d9b5}{case\+\_\+t}}}]{carte\mbox{[}\+TAILLE\+\_\+\+CARTE\mbox{]}\mbox{[}\+TAILLE\+\_\+\+CARTE\mbox{]},  }\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})}
+
+
+
+Vérifie si la case ciblée par le clic contient un monstre. 
+
+\begin{DoxyAuthor}{Author}
+Saandi 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em carte} & La matrice représentant la carte du jeu. \\
+\hline
+{\em x} & Coordonnée X de la case dans la grille. \\
+\hline
+{\em y} & Coordonnée Y de la case dans la grille. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Retourne 1 si un monstre est présent, 0 sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{option_8h_a19bf4464318ba4b5649a709659fc32b9}\label{option_8h_a19bf4464318ba4b5649a709659fc32b9}} 
+\index{option.h@{option.h}!ouvrir\_fenetre\_choix@{ouvrir\_fenetre\_choix}}
+\index{ouvrir\_fenetre\_choix@{ouvrir\_fenetre\_choix}!option.h@{option.h}}
+\doxysubsubsection{\texorpdfstring{ouvrir\_fenetre\_choix()}{ouvrir\_fenetre\_choix()}}
+{\footnotesize\ttfamily int ouvrir\+\_\+fenetre\+\_\+choix (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcombat__t}{combat\+\_\+t}} $\ast$}]{combat }\end{DoxyParamCaption})}
+
+
+
+Ouvre une boîte de dialogue demandant au joueur de confirmer une action. 
+
+\begin{DoxyAuthor}{Author}
+Saandi 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & Contexte de combat utilisé pour l\textquotesingle{}affichage des protagonistes. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Retourne le choix de l\textquotesingle{}utilisateur (1 pour confirmer, 0 pour annuler). 
+\end{DoxyReturn}

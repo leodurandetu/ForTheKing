@@ -1,0 +1,13 @@
+<map id="src/niveau.c" name="src/niveau.c">
+<area shape="rect" id="node1" title=" " alt="" coords="130,5,230,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,80,72,107"/>
+<area shape="rect" id="node3" href="$niveau_8h.html" title="Gestion de la progression, de l&#39;expérience et de la montée de niveau." alt="" coords="287,80,398,107"/>
+<area shape="rect" id="node11" href="$adapter__niveau_8h.html" title=" " alt="" coords="97,80,263,107"/>
+<area shape="rect" id="node4" href="$perso_8h.html" title="Définition du personnage joueur et de ses caractéristiques." alt="" coords="174,155,245,181"/>
+<area shape="rect" id="node10" href="$monstre_8h.html" title="Définition des ennemis et de leurs statistiques de combat." alt="" coords="284,155,372,181"/>
+<area shape="rect" id="node5" title=" " alt="" coords="139,379,235,405"/>
+<area shape="rect" id="node6" href="$inventaire_8h.html" title="Gestion du système d&#39;inventaire et du stockage des objets du personnage." alt="" coords="203,229,303,256"/>
+<area shape="rect" id="node7" href="$objet_8h.html" title="Définition des objets et de leurs comportements via des pointeurs de fonctions." alt="" coords="317,304,384,331"/>
+<area shape="rect" id="node9" href="$commun_8h.html" title="Définitions de base partagées par l&#39;ensemble des modules du projet." alt="" coords="203,304,293,331"/>
+<area shape="rect" id="node8" title=" " alt="" coords="279,379,423,405"/>
+</map>

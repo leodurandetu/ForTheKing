@@ -1,0 +1,43 @@
+\hypertarget{pause__menu_8c}{}\doxysection{src/pause\+\_\+menu.c File Reference}
+\label{pause__menu_8c}\index{src/pause\_menu.c@{src/pause\_menu.c}}
+{\ttfamily \#include \char`\"{}../lib/pause\+\_\+menu.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$SDL2/\+SDL\+\_\+mixer.\+h$>$}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{pause__menu_8c_a94baf5d3ea27fbbe0c20edb1f549cf7a}{afficher\+\_\+menu\+\_\+pause}} (SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$police, int windowW, int windowH)
+\begin{DoxyCompactList}\small\item\em Affiche une interface de pause en superposition (overlay) du jeu. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{pause__menu_8c_a94baf5d3ea27fbbe0c20edb1f549cf7a}\label{pause__menu_8c_a94baf5d3ea27fbbe0c20edb1f549cf7a}} 
+\index{pause\_menu.c@{pause\_menu.c}!afficher\_menu\_pause@{afficher\_menu\_pause}}
+\index{afficher\_menu\_pause@{afficher\_menu\_pause}!pause\_menu.c@{pause\_menu.c}}
+\doxysubsubsection{\texorpdfstring{afficher\_menu\_pause()}{afficher\_menu\_pause()}}
+{\footnotesize\ttfamily int afficher\+\_\+menu\+\_\+pause (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{police,  }\item[{int}]{windowW,  }\item[{int}]{windowH }\end{DoxyParamCaption})}
+
+
+
+Affiche une interface de pause en superposition (overlay) du jeu. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Cette fonction interrompt la logique principale pour capturer les entrées utilisateur (Continuer ou Quitter). 
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL2. \\
+\hline
+{\em police} & La police de caractères pour les options du menu. \\
+\hline
+{\em windowW} & Largeur de la fenêtre pour le centrage des éléments. \\
+\hline
+{\em windowH} & Hauteur de la fenêtre pour le centrage des éléments. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int Code d\textquotesingle{}action utilisateur \+:
+\begin{DoxyItemize}
+\item 0 \+: Reprendre la partie (Continuer).
+\item 1 \+: Quitter la session actuelle et revenir au menu principal. 
+\end{DoxyItemize}
+\end{DoxyReturn}

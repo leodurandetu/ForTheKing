@@ -1,0 +1,140 @@
+\hypertarget{affichage__commun_8c}{}\doxysection{src/affichage\+\_\+commun.c File Reference}
+\label{affichage__commun_8c}\index{src/affichage\_commun.c@{src/affichage\_commun.c}}
+{\ttfamily \#include \char`\"{}../lib/affichage\+\_\+commun.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+SDL\+\_\+\+Texture $\ast$ \mbox{\hyperlink{affichage__commun_8c_aaeac1dd96fd4d6ca6fe673a290d93cff}{creer\+\_\+texte}} (SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$police, const char $\ast$texte, SDL\+\_\+\+Color \mbox{\hyperlink{couleur_8h_a9c0ebe82ea8e3ed5ee86e04f78400eac}{couleur}}, SDL\+\_\+\+Rect $\ast$rectangle\+\_\+sortie)
+\begin{DoxyCompactList}\small\item\em Crée une texture SDL à partir d\textquotesingle{}une chaîne de caractères. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__commun_8c_aeed96c791f281401770c23ec13db3164}{dessiner\+\_\+barre}} (SDL\+\_\+\+Renderer $\ast$r, TTF\+\_\+\+Font $\ast$f, const char $\ast$label, int val, int \mbox{\hyperlink{maths_8h_af082905f7eac6d03e92015146bbc1925}{max}}, SDL\+\_\+\+Rect zone, SDL\+\_\+\+Color coul\+\_\+barre)
+\begin{DoxyCompactList}\small\item\em Dessine une barre de progression (ex\+: PV, Expérience) avec un label textuel. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__commun_8c_a260b28380100463341fde663ac1822e7}{afficher\+Message\+Centre}} (SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$font, const char $\ast$message, int fenetre\+\_\+w, int fenetre\+\_\+h, SDL\+\_\+\+Texture $\ast$$\ast$texture, char $\ast$ancien\+Message)
+\begin{DoxyCompactList}\small\item\em Affiche un message d\textquotesingle{}alerte ou d\textquotesingle{}information centré sur l\textquotesingle{}écran. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__commun_8c_ae135ba2e180acc86de48f1397765b431}{dessiner\+\_\+inventaire}} (SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$font, \mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$perso, SDL\+\_\+\+Rect fond\+\_\+interface, SDL\+\_\+\+Rect rect\+\_\+nom, int clic\+\_\+gauche, int $\ast$maj\+\_\+affichage, \mbox{\hyperlink{affichage__commun_8h_afb92c708d098cf765c0bcb952bd823b6}{orientation\+\_\+inv\+\_\+t}} orientation, int start\+\_\+droite\+\_\+x)
+\begin{DoxyCompactList}\small\item\em Gère l\textquotesingle{}affichage complet et l\textquotesingle{}interaction de l\textquotesingle{}inventaire du personnage. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{affichage__commun_8c_a260b28380100463341fde663ac1822e7}\label{affichage__commun_8c_a260b28380100463341fde663ac1822e7}} 
+\index{affichage\_commun.c@{affichage\_commun.c}!afficherMessageCentre@{afficherMessageCentre}}
+\index{afficherMessageCentre@{afficherMessageCentre}!affichage\_commun.c@{affichage\_commun.c}}
+\doxysubsubsection{\texorpdfstring{afficherMessageCentre()}{afficherMessageCentre()}}
+{\footnotesize\ttfamily void afficher\+Message\+Centre (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{font,  }\item[{const char $\ast$}]{message,  }\item[{int}]{fenetre\+\_\+w,  }\item[{int}]{fenetre\+\_\+h,  }\item[{SDL\+\_\+\+Texture $\ast$$\ast$}]{texture,  }\item[{char $\ast$}]{ancien\+Message }\end{DoxyParamCaption})}
+
+
+
+Affiche un message d\textquotesingle{}alerte ou d\textquotesingle{}information centré sur l\textquotesingle{}écran. 
+
+\begin{DoxyAuthor}{Author}
+Saandi \& Léo 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em font} & La police de caractères. \\
+\hline
+{\em message} & Le texte à afficher. \\
+\hline
+{\em fenetre\+\_\+w} & Largeur de la fenêtre pour le calcul du centrage. \\
+\hline
+{\em fenetre\+\_\+h} & Hauteur de la fenêtre pour le calcul du centrage. \\
+\hline
+{\em texture} & Pointeur vers la texture SDL (permet de réutiliser ou mettre à jour la texture existante). \\
+\hline
+{\em ancien\+Message} & Chaîne de caractères permettant de vérifier si le message a changé pour éviter une régénération inutile de texture. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__commun_8c_aaeac1dd96fd4d6ca6fe673a290d93cff}\label{affichage__commun_8c_aaeac1dd96fd4d6ca6fe673a290d93cff}} 
+\index{affichage\_commun.c@{affichage\_commun.c}!creer\_texte@{creer\_texte}}
+\index{creer\_texte@{creer\_texte}!affichage\_commun.c@{affichage\_commun.c}}
+\doxysubsubsection{\texorpdfstring{creer\_texte()}{creer\_texte()}}
+{\footnotesize\ttfamily SDL\+\_\+\+Texture$\ast$ creer\+\_\+texte (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{police,  }\item[{const char $\ast$}]{texte,  }\item[{SDL\+\_\+\+Color}]{couleur,  }\item[{SDL\+\_\+\+Rect $\ast$}]{rectangle\+\_\+sortie }\end{DoxyParamCaption})}
+
+
+
+Crée une texture SDL à partir d\textquotesingle{}une chaîne de caractères. 
+
+\begin{DoxyAuthor}{Author}
+Saandi \& Léo 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em police} & La police TTF à utiliser pour générer le texte. \\
+\hline
+{\em texte} & La chaîne de caractères à transformer en texture. \\
+\hline
+{\em couleur} & La couleur du texte. \\
+\hline
+{\em rectangle\+\_\+sortie} & Pointeur vers un SDL\+\_\+\+Rect qui récupérera les dimensions automatiques du texte généré. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+SDL\+\_\+\+Texture$\ast$ La texture créée, ou NULL en cas d\textquotesingle{}erreur d\textquotesingle{}allocation ou de rendu. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{affichage__commun_8c_aeed96c791f281401770c23ec13db3164}\label{affichage__commun_8c_aeed96c791f281401770c23ec13db3164}} 
+\index{affichage\_commun.c@{affichage\_commun.c}!dessiner\_barre@{dessiner\_barre}}
+\index{dessiner\_barre@{dessiner\_barre}!affichage\_commun.c@{affichage\_commun.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_barre()}{dessiner\_barre()}}
+{\footnotesize\ttfamily void dessiner\+\_\+barre (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{r,  }\item[{TTF\+\_\+\+Font $\ast$}]{f,  }\item[{const char $\ast$}]{label,  }\item[{int}]{val,  }\item[{int}]{max,  }\item[{SDL\+\_\+\+Rect}]{zone,  }\item[{SDL\+\_\+\+Color}]{coul\+\_\+barre }\end{DoxyParamCaption})}
+
+
+
+Dessine une barre de progression (ex\+: PV, Expérience) avec un label textuel. 
+
+\begin{DoxyAuthor}{Author}
+Saandi \& Léo 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em r} & Le moteur de rendu SDL. \\
+\hline
+{\em f} & La police pour afficher le label. \\
+\hline
+{\em label} & Le nom de la statistique (ex\+: \char`\"{}\+PV\char`\"{}). \\
+\hline
+{\em val} & La valeur actuelle de la statistique. \\
+\hline
+{\em max} & La valeur maximale de la statistique pour calculer le ratio de remplissage. \\
+\hline
+{\em zone} & Le rectangle (position et taille) définissant l\textquotesingle{}emplacement de la barre à l\textquotesingle{}écran. \\
+\hline
+{\em coul\+\_\+barre} & La couleur de remplissage de la barre. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__commun_8c_ae135ba2e180acc86de48f1397765b431}\label{affichage__commun_8c_ae135ba2e180acc86de48f1397765b431}} 
+\index{affichage\_commun.c@{affichage\_commun.c}!dessiner\_inventaire@{dessiner\_inventaire}}
+\index{dessiner\_inventaire@{dessiner\_inventaire}!affichage\_commun.c@{affichage\_commun.c}}
+\doxysubsubsection{\texorpdfstring{dessiner\_inventaire()}{dessiner\_inventaire()}}
+{\footnotesize\ttfamily void dessiner\+\_\+inventaire (\begin{DoxyParamCaption}\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{font,  }\item[{\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$}]{perso,  }\item[{SDL\+\_\+\+Rect}]{fond\+\_\+interface,  }\item[{SDL\+\_\+\+Rect}]{rect\+\_\+nom,  }\item[{int}]{clic\+\_\+gauche,  }\item[{int $\ast$}]{maj\+\_\+affichage,  }\item[{\mbox{\hyperlink{affichage__commun_8h_afb92c708d098cf765c0bcb952bd823b6}{orientation\+\_\+inv\+\_\+t}}}]{orientation,  }\item[{int}]{start\+\_\+droite\+\_\+x }\end{DoxyParamCaption})}
+
+
+
+Gère l\textquotesingle{}affichage complet et l\textquotesingle{}interaction de l\textquotesingle{}inventaire du personnage. 
+
+\begin{DoxyAuthor}{Author}
+Saandi \& Léo 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em font} & La police pour le nom des objets. \\
+\hline
+{\em perso} & Pointeur vers le personnage possédant l\textquotesingle{}inventaire. \\
+\hline
+{\em fond\+\_\+interface} & Rectangle définissant la zone de fond de l\textquotesingle{}inventaire. \\
+\hline
+{\em rect\+\_\+nom} & Rectangle de destination pour le titre de l\textquotesingle{}inventaire. \\
+\hline
+{\em clic\+\_\+gauche} & État du bouton gauche de la souris pour les interactions. \\
+\hline
+{\em maj\+\_\+affichage} & Pointeur permettant de notifier une modification graphique (ex\+: après consommation d\textquotesingle{}un objet). \\
+\hline
+{\em orientation} & Choix entre un affichage en ligne (horizontal) ou en colonne (vertical). \\
+\hline
+{\em start\+\_\+droite\+\_\+x} & Coordonnée de départ X si l\textquotesingle{}affichage doit être décalé sur la droite. \\
+\hline
+\end{DoxyParams}

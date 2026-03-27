@@ -1,0 +1,65 @@
+\hypertarget{affichage__infos_8h}{}\doxysection{lib/affichage\+\_\+infos.h File Reference}
+\label{affichage__infos_8h}\index{lib/affichage\_infos.h@{lib/affichage\_infos.h}}
+{\ttfamily \#include $<$SDL2/\+SDL.\+h$>$}\newline
+{\ttfamily \#include $<$SDL2/\+SDL\+\_\+ttf.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}perso.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{affichage__infos_8h_a5e13b3839b4714b143eccaf95f9d4684}{mise\+\_\+a\+\_\+jour\+\_\+texte}} (char $\ast$contenu, SDL\+\_\+\+Renderer $\ast$renderer, TTF\+\_\+\+Font $\ast$police, SDL\+\_\+\+Surface $\ast$$\ast$texte, SDL\+\_\+\+Texture $\ast$$\ast$texte\+\_\+tex, SDL\+\_\+\+Rect $\ast$txt\+Dest\+Rect)
+\begin{DoxyCompactList}\small\item\em Met à jour les ressources SDL (surface et texture) pour afficher un nouveau texte. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{affichage__infos_8h_a267c9e837f3b4cdb00f97d67a9cde7b8}{get\+\_\+info\+\_\+personnage}} (\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$perso, const char $\ast$attribut, char $\ast$buffer\+\_\+sortie)
+\begin{DoxyCompactList}\small\item\em Extrait une information spécifique d\textquotesingle{}une structure personnage sous forme de chaîne. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{affichage__infos_8h_a267c9e837f3b4cdb00f97d67a9cde7b8}\label{affichage__infos_8h_a267c9e837f3b4cdb00f97d67a9cde7b8}} 
+\index{affichage\_infos.h@{affichage\_infos.h}!get\_info\_personnage@{get\_info\_personnage}}
+\index{get\_info\_personnage@{get\_info\_personnage}!affichage\_infos.h@{affichage\_infos.h}}
+\doxysubsubsection{\texorpdfstring{get\_info\_personnage()}{get\_info\_personnage()}}
+{\footnotesize\ttfamily void get\+\_\+info\+\_\+personnage (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{objet_8h_a550089442e996a6b42d393992dbc5436}{perso\+\_\+t}} $\ast$}]{perso,  }\item[{const char $\ast$}]{attribut,  }\item[{char $\ast$}]{buffer\+\_\+sortie }\end{DoxyParamCaption})}
+
+
+
+Extrait une information spécifique d\textquotesingle{}une structure personnage sous forme de chaîne. 
+
+\begin{DoxyAuthor}{Author}
+Massoud
+\end{DoxyAuthor}
+Formate une statistique du personnage (ex\+: \char`\"{}\+PV \+: 10/20\char`\"{}) dans un buffer pour l\textquotesingle{}affichage. 
+\begin{DoxyParams}{Parameters}
+{\em perso} & Pointeur vers le personnage dont on veut extraire les données. \\
+\hline
+{\em attribut} & Le nom de la caractéristique à récupérer (ex\+: \char`\"{}\+PV\char`\"{}, \char`\"{}\+Force\char`\"{}, \char`\"{}\+XP\char`\"{}). \\
+\hline
+{\em buffer\+\_\+sortie} & Le tableau de caractères (chaîne) où sera stocké le texte formaté final. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{affichage__infos_8h_a5e13b3839b4714b143eccaf95f9d4684}\label{affichage__infos_8h_a5e13b3839b4714b143eccaf95f9d4684}} 
+\index{affichage\_infos.h@{affichage\_infos.h}!mise\_a\_jour\_texte@{mise\_a\_jour\_texte}}
+\index{mise\_a\_jour\_texte@{mise\_a\_jour\_texte}!affichage\_infos.h@{affichage\_infos.h}}
+\doxysubsubsection{\texorpdfstring{mise\_a\_jour\_texte()}{mise\_a\_jour\_texte()}}
+{\footnotesize\ttfamily void mise\+\_\+a\+\_\+jour\+\_\+texte (\begin{DoxyParamCaption}\item[{char $\ast$}]{contenu,  }\item[{SDL\+\_\+\+Renderer $\ast$}]{renderer,  }\item[{TTF\+\_\+\+Font $\ast$}]{police,  }\item[{SDL\+\_\+\+Surface $\ast$$\ast$}]{texte,  }\item[{SDL\+\_\+\+Texture $\ast$$\ast$}]{texte\+\_\+tex,  }\item[{SDL\+\_\+\+Rect $\ast$}]{txt\+Dest\+Rect }\end{DoxyParamCaption})}
+
+
+
+Met à jour les ressources SDL (surface et texture) pour afficher un nouveau texte. 
+
+\begin{DoxyAuthor}{Author}
+Léo
+\end{DoxyAuthor}
+Libère l\textquotesingle{}ancienne texture avant de créer la nouvelle pour éviter les fuites mémoire lors de la mise à jour dynamique des informations (ex\+: compteurs de points de vie). 
+\begin{DoxyParams}{Parameters}
+{\em contenu} & La nouvelle chaîne de caractères à transformer en texture. \\
+\hline
+{\em renderer} & Le moteur de rendu SDL. \\
+\hline
+{\em police} & La police de caractères TTF à utiliser. \\
+\hline
+{\em texte} & Pointeur vers la surface SDL (sera mise à jour). \\
+\hline
+{\em texte\+\_\+tex} & Pointeur vers la texture SDL (sera libérée puis recréée). \\
+\hline
+{\em txt\+Dest\+Rect} & Pointeur vers le rectangle de destination pour mettre à jour les dimensions. \\
+\hline
+\end{DoxyParams}
