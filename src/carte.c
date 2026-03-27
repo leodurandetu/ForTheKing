@@ -36,6 +36,8 @@ booleen_t deplacement_possible(case_t ** carte, int x, int y) {
         return FAUX;
     } else if (maCase.terrain != PAS_DE_TERRAIN) {
         return FAUX;
+    } else if (maCase.estVisible == 0) {
+        return FAUX;
     } else {
         return VRAI;
     }
@@ -124,17 +126,7 @@ void init_carte(case_t ** carte) {
              * sauf celles à un rayon de 1 des tours du boss
              */
 
-            if (x >= 1 && x <= 3 && y >= 1 && y <= 3) {
-                maCase.estVisible = 1;
-            } else if (x >= TAILLE_CARTE - 4 && x <= TAILLE_CARTE - 2 && y >= 1 && y <= 3) {
-                maCase.estVisible = 1;
-            } else if (x >= TAILLE_CARTE - 4 && x <= TAILLE_CARTE - 2 && y >= TAILLE_CARTE - 4 && y <= TAILLE_CARTE - 2) {
-                maCase.estVisible = 1;
-            } else if (x >= 1 && x <= 3 && y >= TAILLE_CARTE - 4 && y <= TAILLE_CARTE - 2) {
-                maCase.estVisible = 1;
-            } else {
-                maCase.estVisible = 0;
-            }
+            maCase.estVisible = 1;
 
             maCase.monstre = NULL;
             maCase.terrain = PAS_DE_TERRAIN;
@@ -147,6 +139,24 @@ void init_carte(case_t ** carte) {
 
 }
 
+/* Leo */
+/*
+ * Cette fonction ajoute du brouillard
+ * sur toutes les cases de la carte
+ */
+void remplir_brouillard(case_t ** carte) {
+    int x, y;
+
+    for (x = 0; x < TAILLE_CARTE; x++) {
+
+        for (y = 0; y < TAILLE_CARTE; y++) {
+            carte[x][y].estVisible = 0;
+
+        }
+
+    }
+
+}
 
 /* Massoud */
 /*

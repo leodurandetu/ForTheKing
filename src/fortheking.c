@@ -283,6 +283,8 @@ int main(int argc,char *argv[]) {
 
     perso_t *perso = init_perso(MAGE, xApparition, yApparition); 
 
+    remplir_brouillard(carte);
+
     devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
 
     int tailleCase = TAILLE_CASE_DEPART;
