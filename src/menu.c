@@ -7,7 +7,6 @@
 
 #include "../lib/menu.h"
 #include "../lib/perso.h"
-/*#include "../lib/fond_menu.h"*/
 
 // Layout = mise en page 
 const char *NOM_SLOT[] = { "", "Mage", "Assassin", "Brute", "Chasseur"};
@@ -39,6 +38,27 @@ void dessinerBouton(SDL_Renderer *renderer, SDL_Texture *texture,
 
     SDL_SetTextureColorMod(texture, 255, 255, 255);
 }
+
+
+/* Dessine l'encadré d'une touche de clavier */
+void dessinerToucheClavier(SDL_Renderer *renderer, SDL_Texture *texLettre, int x, int y, int w, int h) {
+    SDL_Rect fond = {x, y, w, h};
+    
+    // Fond sombre de la touche
+    SDL_SetRenderDrawColor(renderer, 30, 25, 35, 255);
+    SDL_RenderFillRect(renderer, &fond);
+    
+    // Bordure de la touche
+    SDL_SetRenderDrawColor(renderer, 150, 145, 130, 255);
+    SDL_RenderDrawRect(renderer, &fond);
+
+    // Centre les boutons
+    int tw, th;
+    SDL_QueryTexture(texLettre, NULL, NULL, &tw, &th);
+    SDL_Rect rectTxt = {x + (w - tw) / 2, y + (h - th) / 2, tw, th};
+    SDL_RenderCopy(renderer, texLettre, NULL, &rectTxt);
+}
+
 
 /* Dessine un panneau sombre avec double bordure */
 void dessinerPanneau(SDL_Renderer *renderer, SDL_Rect r) {
@@ -244,7 +264,7 @@ int main() {
     /* Chargement de la video de fond */
     SDL_GetWindowSize(window, &windowW, &windowH);
     SDL_Texture *backgroundTexture = NULL; /* pour le nettoyage */
-    SDL_Surface *backgroundSurface = IMG_Load("img/menu.jpg");
+    SDL_Surface *backgroundSurface = IMG_Load("img/fond_menu.jpg");
     if (backgroundSurface) {
         backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
         SDL_FreeSurface(backgroundSurface);
@@ -282,6 +302,18 @@ int main() {
     int wConfirmMsg = 0, hConfirmMsg = 0;
     int wConfirmOui = 0, hConfirmOui = 0;
     int wConfirmNon = 0, hConfirmNon = 0;
+
+    /* Textures : commandes dans les options (Style Touches) */
+    SDL_Texture *texCmdTitre = NULL;
+    int wCmdTitre = 0, hCmdTitre = 0;
+
+    /* Textures des lettres individuelles */
+    SDL_Texture *tKZ = NULL, *tKQ = NULL, *tKS = NULL, *tKD = NULL, *tKN = NULL, *tKEchap = NULL;
+    
+    /* Textures des descriptions */
+    SDL_Texture *tDescDepl = NULL, *tDescPasser = NULL, *tDescMenu = NULL;
+    int wDD = 0, hDD = 0, wDP = 0, hDP = 0, wDM = 0, hDM = 0;
+
 
     if (policeMenu && policeTitre) {
         SDL_Surface *surf;
@@ -330,6 +362,24 @@ int main() {
 
         surf = TTF_RenderText_Blended(policeMenu, "Non", couleurTexte);
         texConfirmNon = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texConfirmNon, NULL, NULL, &wConfirmNon, &hConfirmNon); SDL_FreeSurface(surf);
+
+        /* --- Textes pour les touches --- */
+        surf = TTF_RenderText_Blended(policeMenu, "Commandes :", couleurTexte);
+        texCmdTitre = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texCmdTitre, NULL, NULL, &wCmdTitre, &hCmdTitre); SDL_FreeSurface(surf);
+
+        // On met les lettres en doré pour qu'elles ressortent dans les carrés
+        SDL_Color colTouche = {255, 215, 0, 255}; 
+        surf = TTF_RenderText_Blended(policePerso, "Z", colTouche); tKZ = SDL_CreateTextureFromSurface(renderer, surf); SDL_FreeSurface(surf);
+        surf = TTF_RenderText_Blended(policePerso, "Q", colTouche); tKQ = SDL_CreateTextureFromSurface(renderer, surf); SDL_FreeSurface(surf);
+        surf = TTF_RenderText_Blended(policePerso, "S", colTouche); tKS = SDL_CreateTextureFromSurface(renderer, surf); SDL_FreeSurface(surf);
+        surf = TTF_RenderText_Blended(policePerso, "D", colTouche); tKD = SDL_CreateTextureFromSurface(renderer, surf); SDL_FreeSurface(surf);
+        surf = TTF_RenderText_Blended(policePerso, "N", colTouche); tKN = SDL_CreateTextureFromSurface(renderer, surf); SDL_FreeSurface(surf);
+        surf = TTF_RenderText_Blended(policePerso, "Echap", colTouche); tKEchap = SDL_CreateTextureFromSurface(renderer, surf); SDL_FreeSurface(surf);
+
+        // Les descriptions en blanc
+        surf = TTF_RenderText_Blended(policePerso, "Se deplacer", couleurTexte); tDescDepl = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(tDescDepl, NULL, NULL, &wDD, &hDD); SDL_FreeSurface(surf);
+        surf = TTF_RenderText_Blended(policePerso, "Passer le tour", couleurTexte); tDescPasser = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(tDescPasser, NULL, NULL, &wDP, &hDP); SDL_FreeSurface(surf);
+        surf = TTF_RenderText_Blended(policePerso, "Menu / Retour", couleurTexte); tDescMenu = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(tDescMenu, NULL, NULL, &wDM, &hDM); SDL_FreeSurface(surf);
     }
 
     /* Declarations des rectangles */
@@ -377,22 +427,27 @@ int main() {
         btnQuitter = (SDL_Rect){startX, startY + espacement*3, btnWidth, btnHeight};
 
         /* Options */
-        rectTxtVolume = (SDL_Rect){btnParam.x + btnParam.w + 50 + (btnWidth - wVolume)/2, btnParam.y, wVolume, hVolume};
-        barreVolumeFond = (SDL_Rect){btnParam.x + btnParam.w + 50, btnParam.y + espacement, btnWidth, 20};
-        btnFullscreen = (SDL_Rect){btnParam.x + btnParam.w + 50, btnParam.y + espacement + 40, btnWidth, btnHeight};
+        int optX = btnParam.x + btnParam.w + 80;
+        int optionsY = startY - 10; // On l'aligne avec le haut du menu principal
 
-        btnMusique = (SDL_Rect){windowW - 80, windowH - 80, 60, 60};
+        rectTxtVolume = (SDL_Rect){optX + (btnWidth - wVolume)/2, optionsY, wVolume, hVolume};
+        barreVolumeFond = (SDL_Rect){optX, optionsY + espacement, btnWidth, 20};
+        btnFullscreen = (SDL_Rect){optX, optionsY + espacement + 40, btnWidth, btnHeight};
 
         /* Panneaux */
         panneauPrincipal = (SDL_Rect){
             startX - padding, startY - padding,
             btnWidth + (padding*2), (espacement*3) + btnHeight + (padding*2)};
 
+        /* Hauteur paneaux */
         panneauOptions = (SDL_Rect){
-            barreVolumeFond.x - padding, rectTxtVolume.y - padding,
-            btnWidth + (padding*2), espacement + 40 + btnHeight + (padding*2)};
+            optX - padding, 
+            rectTxtVolume.y - padding,
+            btnWidth + (padding*2) + 40, 
+            espacement + 40 + btnHeight + (padding*2) + 220}; 
 
         btnFermerOptions = (SDL_Rect){panneauOptions.x + panneauOptions.w - 35, panneauOptions.y + 5, 30, 30};
+
         rectTxtCroix = (SDL_Rect){
             btnFermerOptions.x + (btnFermerOptions.w - wCroix)/2,
             btnFermerOptions.y + (btnFermerOptions.h - hCroix)/2,
@@ -597,10 +652,47 @@ int main() {
                 if (fullscreen) {
                     rectTxtFullscreen = (SDL_Rect){btnFullscreen.x + (btnFullscreen.w - wFsOn)/2,  btnFullscreen.y + (btnFullscreen.h - hFsOn)/2,  wFsOn,  hFsOn};
                     dessinerBouton(renderer, texFsOn, btnFullscreen, rectTxtFullscreen, mousePos);
+
                 } else {
                     rectTxtFullscreen = (SDL_Rect){btnFullscreen.x + (btnFullscreen.w - wFsOff)/2, btnFullscreen.y + (btnFullscreen.h - hFsOff)/2, wFsOff, hFsOff};
                     dessinerBouton(renderer, texFsOff, btnFullscreen, rectTxtFullscreen, mousePos);
                 }
+
+                    /* Affichage des commandes */
+                int startCmdX = panneauOptions.x + 35; // Marge gauche
+                int cmdY = btnFullscreen.y + btnFullscreen.h + 20;
+                
+                // Titre
+                SDL_Rect rectCmdTitre = { panneauOptions.x + (panneauOptions.w - wCmdTitre)/2, cmdY, wCmdTitre, hCmdTitre };
+                SDL_RenderCopy(renderer, texCmdTitre, NULL, &rectCmdTitre);
+                cmdY += hCmdTitre + 15;
+
+                int tailleTouche = 35; // Taille d'un petit bouton carré
+                int espTouche = 12;     // Espace entre chaque bouton
+
+                // Ligne 1 : [Z] [Q] [S] [D]  Se deplacer
+                dessinerToucheClavier(renderer, tKZ, startCmdX, cmdY, tailleTouche, tailleTouche);
+                dessinerToucheClavier(renderer, tKQ, startCmdX + tailleTouche + espTouche, cmdY, tailleTouche, tailleTouche);
+                dessinerToucheClavier(renderer, tKS, startCmdX + (tailleTouche + espTouche)*2, cmdY, tailleTouche, tailleTouche);
+                dessinerToucheClavier(renderer, tKD, startCmdX + (tailleTouche + espTouche)*3, cmdY, tailleTouche, tailleTouche);
+                
+                SDL_Rect rDescDepl = {startCmdX + (tailleTouche + espTouche)*4 + 10, cmdY + (tailleTouche - hDD)/2, wDD, hDD};
+                SDL_RenderCopy(renderer, tDescDepl, NULL, &rDescDepl);
+                
+                cmdY += tailleTouche + 10;
+
+                // Ligne 2 : [N]  Passer le tour
+                dessinerToucheClavier(renderer, tKN, startCmdX, cmdY, tailleTouche, tailleTouche);
+                SDL_Rect rDescPasser = {startCmdX + tailleTouche + espTouche + 10, cmdY + (tailleTouche - hDP)/2, wDP, hDP};
+                SDL_RenderCopy(renderer, tDescPasser, NULL, &rDescPasser);
+                
+                cmdY += tailleTouche + 10;
+
+                // Ligne 3 : [Echap]  Menu / Retour
+                int largEchap = 75; 
+                dessinerToucheClavier(renderer, tKEchap, startCmdX, cmdY, largEchap, tailleTouche);
+                SDL_Rect rDescMenu = {startCmdX + largEchap + espTouche + 10, cmdY + (tailleTouche - hDM)/2, wDM, hDM};
+                SDL_RenderCopy(renderer, tDescMenu, NULL, &rDescMenu);
             }
         }
 
@@ -656,11 +748,7 @@ int main() {
             }
         }
 
-        /* Logo musique toujours visible */
-        /*if (texLogoMusique)
-            SDL_RenderCopy(renderer, texLogoMusique, NULL, &btnMusique);*/
-
-        /* Boite de confirmation quitter (par-dessus tout le reste) */
+        
         if (confirmer_quitter && texConfirmMsg && texConfirmOui && texConfirmNon) {
 
             int boiteW = wConfirmMsg + 80;
@@ -730,6 +818,16 @@ int main() {
     if (texConfirmMsg)     SDL_DestroyTexture(texConfirmMsg);
     if (texConfirmOui)     SDL_DestroyTexture(texConfirmOui);
     if (texConfirmNon)     SDL_DestroyTexture(texConfirmNon);
+    if (texCmdTitre)   SDL_DestroyTexture(texCmdTitre);
+    if (tKZ)           SDL_DestroyTexture(tKZ);
+    if (tKQ)           SDL_DestroyTexture(tKQ);
+    if (tKS)           SDL_DestroyTexture(tKS);
+    if (tKD)           SDL_DestroyTexture(tKD);
+    if (tKN)           SDL_DestroyTexture(tKN);
+    if (tKEchap)       SDL_DestroyTexture(tKEchap);
+    if (tDescDepl)     SDL_DestroyTexture(tDescDepl);
+    if (tDescPasser)   SDL_DestroyTexture(tDescPasser);
+    if (tDescMenu)     SDL_DestroyTexture(tDescMenu);
 
     for (int i = 1; i < NB_SLOTS; i++)
         if (textures_perso[i]) SDL_DestroyTexture(textures_perso[i]);
