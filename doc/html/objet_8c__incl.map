@@ -1,9 +1,0 @@
-<map id="src/objet.c" name="src/objet.c">
-<area shape="rect" id="node1" title=" " alt="" coords="83,5,173,32"/>
-<area shape="rect" id="node2" href="$objet_8h.html" title="Définition des objets et de leurs comportements via des pointeurs de fonctions." alt="" coords="28,229,127,256"/>
-<area shape="rect" id="node5" href="$perso_8h.html" title="Définition du personnage joueur et de ses caractéristiques." alt="" coords="134,80,237,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="201,304,297,331"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,304,149,331"/>
-<area shape="rect" id="node6" href="$inventaire_8h.html" title="Gestion du système d&#39;inventaire et du stockage des objets du personnage." alt="" coords="135,155,235,181"/>
-<area shape="rect" id="node7" href="$commun_8h.html" title="Définitions de base partagées par l&#39;ensemble des modules du projet." alt="" coords="151,229,241,256"/>
-</map>

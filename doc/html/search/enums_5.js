@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['slottype_500',['SlotType',['../menu_8h.html#aeafc1557dae4f64aa9ad17d055f3139c',1,'menu.h']]]
+  ['slottype_504',['SlotType',['../menu_8h.html#aeafc1557dae4f64aa9ad17d055f3139c',1,'menu.h']]]
 ];

@@ -1,8 +1,0 @@
-<map id="src/inventaire.c" name="src/inventaire.c">
-<area shape="rect" id="node1" title=" " alt="" coords="115,5,237,32"/>
-<area shape="rect" id="node2" href="$inventaire_8h.html" title="Gestion du système d&#39;inventaire et du stockage des objets du personnage." alt="" coords="110,80,242,107"/>
-<area shape="rect" id="node3" href="$objet_8h.html" title="Définition des objets et de leurs comportements via des pointeurs de fonctions." alt="" coords="92,155,159,181"/>
-<area shape="rect" id="node6" href="$commun_8h.html" title="Définitions de base partagées par l&#39;ensemble des modules du projet." alt="" coords="183,155,273,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,229,101,256"/>
-<area shape="rect" id="node5" title=" " alt="" coords="125,229,269,256"/>
-</map>
