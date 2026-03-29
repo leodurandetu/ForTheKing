@@ -154,6 +154,8 @@ int main(int argc,char *argv[]) {
 
     etat_jeu_t etat = CARTE;
 
+    int nb_fuites = 0;
+
     while (running) {
         SDL_Event e;
 
@@ -298,15 +300,38 @@ int main(int argc,char *argv[]) {
 
                                             if (monstre != NULL && combat_actuel == NULL) {
                                                 combat_actuel = creer_combat(perso, monstre);
-                                                int choix = ouvrir_fenetre_choix(combat_actuel);
+                                                 TTF_Font *gFont = TTF_OpenFont("Fonts/Enchanted Land.otf", 20);
 
+                                                // Conversion coordonnées carte → pixels écran
+                                                int windowW, windowH;
+                                                SDL_GetWindowSize(pFenetre, &windowW, &windowH);
+
+                                                int centre_x = windowW / 2;
+                                                int centre_y = windowH / 2;
+
+                                                // Position pixel du personnage à l'écran (il est toujours centré)
+                                                int perso_px = centre_x;
+                                                int perso_py = centre_y;
+
+                                                // Taille du sprite à l'écran (même logique que dans afficher_personnage)
+                                                int sprite_w = tailleCase;
+                                                int sprite_h = tailleCase;
+
+                                                int choix;
+
+                                                choix = afficher_option(renderer, gFont,
+                                                                            perso_px, perso_py,
+                                                                            sprite_w, sprite_h,
+                                                                            nb_fuites >= MAX_FUITE);
                                                 if(choix == 1)
                                                 {
                                                     ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, &combat_actuel, carte, &vies_globales);
                                                     etat = COMBAT;
+                                                    nb_fuites = 0;
                                                 } else if (choix == 0) {
                                                     detruire_combat(&combat_actuel);
                                                     etat = CARTE;
+                                                    nb_fuites++;
                                                 }
 
                                                 case_selection_x = carte_x;
