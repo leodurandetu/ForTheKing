@@ -199,4 +199,16 @@ void souris_vers_case(int mouseX, int mouseY, int *carte_x, int *carte_y, int ta
  */
 int chemin_valide(case_t **carte, int taille_carte, int xDepart, int yDepart, int xCible, int yCible, int pts_deplacement_max, perso_t *perso, int *distance);
 
+/**
+ * @author Léo
+ * @brief Deplace le personnage d'un certain décalage si possible, ne fait rien sinon.
+ * @param perso Pointeur vers le personnage à déplacer.
+ * @param carte La matrice de cases représentant la carte du jeu.
+ * @param dx Le décalage sur l'axe des abscisses
+ * @param dy Le décalage sur l'axe des ordonnées
+ * @param majAffichage Pointeur sur l'entier dans le main qui dit si on doit mettre à jour l'affichage
+ * @param majBrouillard Pointeur sur l'entier dans le main qui dit si on doit mettre à jour le brouillard
+ */
+void deplacer_perso_si_possible(perso_t * perso, case_t ** carte, int dx, int dy, int * majAffichage, int * majBrouillard);
+
 #endif

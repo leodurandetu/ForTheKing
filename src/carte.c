@@ -720,3 +720,27 @@ void placer_sanctuaires(case_t ** carte){
         }
     }
 }
+
+/* Leo
+ * Cette fonction permet de déplacer le
+ * personnage d'un certain décalage si
+ * possible, sinon elle ne fait rien.
+ */
+void deplacer_perso_si_possible(perso_t * perso, case_t ** carte, int dx, int dy, int * majAffichage, int * majBrouillard) {
+    int dest_x = perso->x + dx;
+    int dest_y = perso->y + dy;
+
+    if (dest_x >= 0 && dest_x < TAILLE_CARTE
+        && dest_y >= 0 && dest_y < TAILLE_CARTE
+        && deplacement_possible(carte, dest_x, dest_y)
+        && case_occupee(carte, dest_x, dest_y, perso->x, perso->y) == FAUX
+        && perso->pts_deplacements > 0)
+    {
+        *majAffichage = 1;
+        *majBrouillard = 1;
+        perso->y = dest_y;
+        perso->x = dest_x;
+        perso->pts_deplacements--;
+    }
+
+}

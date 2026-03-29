@@ -33,7 +33,6 @@ typedef enum {
 } etat_jeu_t;
 
 int main(int argc,char *argv[]) {
-
     int plein_ecran_depart = 0;
     int relancer_menu = 0;
 
@@ -174,6 +173,7 @@ int main(int argc,char *argv[]) {
 
         // Traitement des actions du joueur
         while (SDL_PollEvent(&e)) {
+
             switch(e.type) {
                 
                 case SDL_QUIT:
@@ -208,61 +208,20 @@ int main(int argc,char *argv[]) {
                                 majAffichage = 1; // On force le rafraîchissement de la carte au retour
                                 break;
 
-                            case SDL_SCANCODE_W: 
-                                if (perso->y - 1 >= 0 
-                                    && deplacement_possible(carte, perso->x, perso->y - 1)
-                                    && case_occupee(carte, perso->x, perso->y - 1, perso->x, perso->y) == FAUX
-                                    && perso->pts_deplacements > 0) {
-                                    majAffichage = 1;
-                                    majBrouillard = 1;
-                                    perso->y--;
-                                    perso->pts_deplacements--;
-                                }
+                            case SDL_SCANCODE_W:
+                                deplacer_perso_si_possible(perso, carte, 0, -1, &majAffichage, &majBrouillard);
                                 break;
-                                
+
                             case SDL_SCANCODE_A:
-                                
-                                if (perso->x - 1 >= 0 
-                                    && deplacement_possible(carte, perso->x - 1, perso->y)
-                                    && case_occupee(carte, perso->x - 1, perso->y, perso->x, perso->y) == FAUX
-                                    && perso->pts_deplacements > 0
-                                ) {
-                                    majAffichage = 1;
-                                    majBrouillard = 1;
-                                    perso->x--;
-                                    perso->pts_deplacements--;
-                                }
-
+                                deplacer_perso_si_possible(perso, carte, -1, 0, &majAffichage, &majBrouillard);
                                 break;
 
-                            case SDL_SCANCODE_S: 
-                                
-                                if (perso->y + 1 < TAILLE_CARTE 
-                                    && deplacement_possible(carte, perso->x, perso->y + 1)
-                                    && case_occupee(carte, perso->x, perso->y + 1, perso->x, perso->y) == FAUX
-                                    && perso->pts_deplacements > 0
-                                ) {
-                                    majAffichage = 1;
-                                    majBrouillard = 1;
-                                    perso->y++;
-                                    perso->pts_deplacements--;
-                                }
-
+                            case SDL_SCANCODE_S:
+                                deplacer_perso_si_possible(perso, carte, 0, 1, &majAffichage, &majBrouillard);
                                 break;
 
                             case SDL_SCANCODE_D:
-
-                                if (perso->x + 1 < TAILLE_CARTE 
-                                    && deplacement_possible(carte, perso->x + 1, perso->y)
-                                    && case_occupee(carte, perso->x + 1, perso->y, perso->x, perso->y) == FAUX
-                                    && perso->pts_deplacements > 0
-                                ) {
-                                    majAffichage = 1;
-                                    majBrouillard = 1;
-                                    perso->x++;
-                                    perso->pts_deplacements--;
-                                }
-
+                                deplacer_perso_si_possible(perso, carte, 1, 0, &majAffichage, &majBrouillard);
                                 break;
 
                             case SDL_SCANCODE_N:
