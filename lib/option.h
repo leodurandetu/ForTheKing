@@ -9,6 +9,8 @@
 #include "../lib/monstre.h"
 #include "../lib/combat.h"
 
+#define MAX_FUITE 3
+
 /**
  * @file option_af.h
  * @author Saandi
@@ -19,34 +21,52 @@
 
 /**
  * @author Saandi
- * @brief Dessine un bouton interactif avec du texte centré.
- * @param renderer Le moteur de rendu SDL.
- * @param font La police de caractères pour le texte du bouton.
- * @param bouton Rectangle définissant la zone du bouton.
- * @param texte Le libellé à afficher à l'intérieur.
- * @param couleur La couleur de fond ou de bordure du bouton.
+ * @brief Dessine un bouton coloré avec son libellé centré sur une surface SDL.
+ *
+ * @param surface  La surface SDL sur laquelle le bouton est dessiné.
+ * @param font     La police de caractères utilisée pour le texte du bouton.
+ * @param bouton   Rectangle définissant la position et la taille du bouton.
+ * @param texte    Le libellé à afficher au centre du bouton.
+ * @param couleur  La couleur de fond du bouton (RGB).
  */
-void dessiner_bouton(SDL_Renderer *renderer, TTF_Font *font,
-                     SDL_Rect bouton, const char *texte,
+void dessiner_bouton(SDL_Surface *surface, TTF_Font *font,
+                     SDL_Rect *bouton, const char *texte,
                      SDL_Color couleur);
 
 /**
  * @author Saandi
- * @brief Affiche visuellement le monstre dans l'interface de choix.
- * @param renderer Le moteur de rendu SDL.
+ * @brief Charge et affiche le sprite du monstre (squelette) dans le renderer.
+ *
+ * @param renderer Le moteur de rendu SDL utilisé pour l'affichage.
+ * @return SDL_Rect Rectangle représentant la zone occupée par le monstre à l'écran.
  */
-void dessiner_monstre(SDL_Renderer *renderer);
+SDL_Rect dessiner_monstre(SDL_Renderer *renderer);
 
 
 /* --- Logique de sélection et fenêtrage --- */
 
 /**
  * @author Saandi
- * @brief Ouvre une boîte de dialogue demandant au joueur de confirmer une action.
- * @param combat Contexte de combat utilisé pour l'affichage des protagonistes.
- * @return int Retourne le choix de l'utilisateur (1 pour confirmer, 0 pour annuler).
+ * @brief Affiche un menu contextuel à côté du joueur proposant d'attaquer ou de fuir.
+ *
+ * Le menu se positionne automatiquement à droite du sprite du joueur,
+ * ou à gauche si la place manque. Il reste toujours dans les limites
+ * de la fenêtre grâce à une récupération dynamique de la taille du renderer.
+ * Si @p fuite_bloquee est non nul, le bouton "Fuir" est affiché en gris
+ * et les clics sur celui-ci sont ignorés.
+ *
+ * @param gRenderer    Le moteur de rendu SDL utilisé pour l'affichage.
+ * @param gFont        La police de caractères utilisée pour les boutons.
+ * @param perso_x      Position X en pixels du sprite du joueur à l'écran.
+ * @param perso_y      Position Y en pixels du sprite du joueur à l'écran.
+ * @param perso_w      Largeur en pixels du sprite du joueur.
+ * @param perso_h      Hauteur en pixels du sprite du joueur.
+ * @param fuite_bloquee 1 si la fuite est interdite (max de fuites atteint), 0 sinon.
+ * @return int          1 si le joueur choisit d'attaquer, 0 s'il choisit de fuir.
  */
-int ouvrir_fenetre_choix(combat_t* combat);
+int afficher_option(SDL_Renderer *gRenderer, TTF_Font *gFont,
+                    int perso_x, int perso_y, int perso_w, int perso_h,
+                    int fuite_bloquee);
 
 /**
  * @author Saandi
