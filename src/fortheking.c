@@ -18,6 +18,8 @@
 #include "../lib/inventaire.h"
 #include "../lib/affichage_commun.h"
 #include "../lib/perlin_noise.h"
+#include "../lib/ressources.h"
+#include "../lib/init_sdl.h"
 
 #define TAILLE_CASE_MAXI 250
 #define TAILLE_CASE_DEPART 150
@@ -33,57 +35,21 @@ typedef enum {
 int main(int argc,char *argv[]) {
 
     int plein_ecran_depart = 0;
+    int relancer_menu = 0;
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--plein-ecran") == 0)
             plein_ecran_depart = 1;
     }
 
-    int relancer_menu = 0;
-    printf("For The King!\n");
-
-
-    // Initialisation globale de la SDL (Vidéo + Audio)
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
-        fprintf(stderr, "Echec de l'initialisation de la SDL : %s\n", SDL_GetError());
-        return -1;
-    }
-
-    if(TTF_Init() == -1) 
-    {
-        fprintf(stderr, "Erreur TTF_Init: %s\n", TTF_GetError());
-        return -1;
-    }
-
-    TTF_Font* police;
-
-    if (( police = TTF_OpenFont("Fonts/Enchanted Land.otf", 32)) == NULL) {
-        fprintf( stderr , " erreur chargement font \n");
-        exit( EXIT_FAILURE );
-    }
-
-    TTF_Font* police2;
-
-    if (( police2 = TTF_OpenFont("Fonts/Enchanted Land.otf", 24)) == NULL) {
-        fprintf( stderr , " erreur chargement font \n");
-        exit( EXIT_FAILURE );
+    // --- Initialisation globale du sdl ---
+    if (init_sdl_global() != 0) {
+        return EXIT_FAILURE;
     }
 
     SDL_Surface * texte = NULL;
     SDL_Texture * texte_tex = NULL;
     SDL_Rect txtDestRect;
-
-    // Préparation du son
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-        fprintf(stderr, "Erreur SDL_mixer : %s\n", Mix_GetError());
-        return -1;
-    }
-
-    Mix_Music *musique = Mix_LoadMUS("audio/Main_theme.mp3");
-
-    if (!musique) {
-        fprintf(stderr, "Attention: Musique introuvable (%s)\n", Mix_GetError());
-    }
 
     Uint32 debutMusique = SDL_GetTicks();
     int dureeBoucle = 30000;
@@ -110,137 +76,25 @@ int main(int argc,char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    char *nom_images[NB_BIOMES] = {
-        "img/terrev1.png", "img/eauv2.png",
-        "img/desertv1.png", "img/neigev3.png",
-        "img/foretv1.png"
-    };
-
-    SDL_Texture *textures_cases[NB_BIOMES];
-
-    // Chargement sécurisé des textures de la carte
-    for (int i = 0; i < NB_BIOMES; i++) {
-        SDL_Surface *image = IMG_Load(nom_images[i]);
-        if (!image) {
-            fprintf(stderr, "Erreur critique : Image %s manquante !\n", nom_images[i]);
-            exit(EXIT_FAILURE);
-        }
-
-        textures_cases[i] = SDL_CreateTextureFromSurface(renderer, image);
-        SDL_FreeSurface(image); // On vide la RAM une fois l'image envoyée à la carte graphique (optionnel mais mieux)
+    // --- Chargement des ressources ---
+    RessourcesJeu ressources = {0};
+    if (charger_ressources(renderer, &ressources) != 0) {
+        fprintf(stderr, "Erreur critique lors du chargement des ressources.\n");
+        liberer_ressources(&ressources);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(pFenetre);
+        SDL_Quit();
+        return EXIT_FAILURE;
     }
 
-    // Chargement du sprite du personnage
-    SDL_Texture *texture_perso = NULL;
-    SDL_Surface *img_perso = IMG_Load("img/mage.png");
-    if (img_perso) {
-        // Rend la couleur blanche (255, 255, 255) transparente
-        SDL_SetColorKey(img_perso, SDL_TRUE, SDL_MapRGB(img_perso->format, 255, 255, 255));
-        texture_perso = SDL_CreateTextureFromSurface(renderer, img_perso);
-        SDL_SetTextureBlendMode(texture_perso, SDL_BLENDMODE_BLEND);
-        SDL_FreeSurface(img_perso);
-    }
+    // --- Chargement musique ---
+    Mix_Music *musique = init_sdl_musique();
 
-    // Chargement du sprite du monstre (unique pour l'instant)
-    SDL_Texture *texture_squelette = NULL;
-    SDL_Surface *img_squelette = IMG_Load("img/squelette.png");
-    if (img_squelette) {
-        texture_squelette = SDL_CreateTextureFromSurface(renderer, img_squelette);
-        SDL_SetTextureBlendMode(texture_squelette, SDL_BLENDMODE_BLEND);
-        SDL_FreeSurface(img_squelette);
-    }
+    TTF_Font* police = ressources.police_max;
+    TTF_Font* police2 = ressources.police_min;
 
-    // Chargement du troll
-    SDL_Texture *texture_troll = NULL;
-    SDL_Surface *img_troll = IMG_Load("img/troll.png");
-    if (img_troll) {
-        texture_troll = SDL_CreateTextureFromSurface(renderer, img_troll);
-        SDL_SetTextureBlendMode(texture_troll, SDL_BLENDMODE_BLEND);
-        SDL_FreeSurface(img_troll);
-    }
-
-    SDL_Texture *textures_monstres[2] = {texture_squelette, texture_troll};
-
-
-    // Chargement de la texture du brouillard
-    SDL_Texture *texture_brouillard = NULL;
-    SDL_Surface *img_brouillard = IMG_Load("img/brouillard.png");
-    if (img_brouillard) {
-        texture_brouillard = SDL_CreateTextureFromSurface(renderer, img_brouillard);
-        SDL_SetTextureBlendMode(texture_brouillard, SDL_BLENDMODE_BLEND);
-        SDL_FreeSurface(img_brouillard);
-    }
-
-    // Chargement de la texture des batiments
-
-    char *nom_images_batiments[3] = {
-        "img/campement.png", "img/tour_boss.png", "img/tombe.png"
-    };
-
-    SDL_Texture *textures_batiments[3] = {NULL};
-
-    for (int i = 0; i < 3; i++) {
-        SDL_Surface *img_batiment = IMG_Load(nom_images_batiments[i]);
-
-        if (img_batiment) {
-            textures_batiments[i] = SDL_CreateTextureFromSurface(renderer, img_batiment);
-            SDL_SetTextureBlendMode(textures_batiments[i], SDL_BLENDMODE_BLEND);
-            SDL_FreeSurface(img_batiment);
-        }
-
-    }
-
-    // Chargement des obstacles
-    char *nom_images_obstacles[4] = {
-        "img/arbres.png", "img/montagnes.png",
-        "img/cactus.png", "img/boue.png" 
-    };
-
-    // Chargement des sanctuaires
-    char *nom_images_sanctuaires[4] = {
-        "img/sanc_puissance.png", // Correspond à PUISSANCE (index 0)
-        "img/sanc_rapidité.png",  // Correspond à RAPIDITE (index 1)
-        "img/sanc_intelligence.png", // Correspond à INTELLIGENCE (index 2)
-        "img/sanc_experience.png" // Correspond à EXPERIANCE (index 3)
-    };
-
-    SDL_Texture *textures_sanctuaires[4] = {NULL};
-
-    for (int i = 0; i < 4; i++) {
-        SDL_Surface *image_sanc = IMG_Load(nom_images_sanctuaires[i]);
-        if (!image_sanc) {
-            fprintf(stderr, "Attention : Image sanctuaire %s manquante !\n", nom_images_sanctuaires[i]);
-        } else {
-            textures_sanctuaires[i] = SDL_CreateTextureFromSurface(renderer, image_sanc);
-            SDL_SetTextureBlendMode(textures_sanctuaires[i], SDL_BLENDMODE_BLEND);
-            SDL_FreeSurface(image_sanc);
-        }
-    }
-
-    // Chargement de l'image de vie 
-    SDL_Texture *texture_vie = NULL;
-    SDL_Surface *img_vie = IMG_Load("img/vie.png");
-    if (img_vie) {
-        texture_vie = SDL_CreateTextureFromSurface(renderer, img_vie);
-        SDL_SetTextureBlendMode(texture_vie, SDL_BLENDMODE_BLEND);
-        SDL_FreeSurface(img_vie);
-    }
-    
     // Initialisation des vies globales
     int vies_globales = 3;
-
-    SDL_Texture *textures_obstacles[4] = {NULL};
-
-    for (int i = 0; i < 4; i++) {
-        SDL_Surface *image_obs = IMG_Load(nom_images_obstacles[i]);
-        if (!image_obs) {
-            fprintf(stderr, "Attention : Image obstacle %s manquante !\n", nom_images_obstacles[i]);
-        } else {
-            textures_obstacles[i] = SDL_CreateTextureFromSurface(renderer, image_obs);
-            SDL_SetTextureBlendMode(textures_obstacles[i], SDL_BLENDMODE_BLEND); // Active la transparence
-            SDL_FreeSurface(image_obs);
-        }
-    }
 
     combat_t * combat_actuel = NULL;
     vainqueur_t vainqueur = PAS_DE_VAINQUEUR;
@@ -248,13 +102,9 @@ int main(int argc,char *argv[]) {
     SDL_Point point;
 
     inventaire_t inventaire_perso;
-
-    //SDL_Texture *messageTexture = NULL;
-    //char messageTexte[256] = "";
-
-    case_t ** carte;
     
-    carte = malloc(sizeof(case_t) * TAILLE_CARTE);
+    case_t ** carte;
+    carte = malloc(sizeof(case_t *) * TAILLE_CARTE); 
 
     int k;
 
@@ -598,9 +448,7 @@ int main(int argc,char *argv[]) {
                                 detruire_combat(&combat_actuel);
                                 etat = CARTE;
                             }
-
                         }
-
                     }
 
                     break;
@@ -624,8 +472,6 @@ int main(int argc,char *argv[]) {
                     }
 
                     break;
-
-
             }
         }
 
@@ -654,15 +500,16 @@ int main(int argc,char *argv[]) {
             } else {
                 /* On dessine toujours la carte */
                 if (etat == CARTE || etat == GAME_OVER) {
-                    afficher_carte_sdl(renderer, carte, textures_cases, textures_obstacles, texture_brouillard, textures_monstres,
-                        textures_batiments, textures_sanctuaires, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
+                
+                    afficher_carte_sdl(renderer, carte, ressources.cases, ressources.obstacles, ressources.brouillard, ressources.monstres,
+                        ressources.batiments, ressources.sanctuaires, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
                         perso);
                         
-                    if (texture_perso) {
-                        afficher_personnage(renderer, texture_perso, perso, tailleCase);
+                    if (ressources.perso) {
+                        afficher_personnage(renderer, ressources.perso, perso, tailleCase);
                     }
 
-                    dessiner_interface_carte(renderer, police2, texture_perso, perso, clic_gauche, &majAffichage);
+                    dessiner_interface_carte(renderer, police2, ressources.perso, perso, clic_gauche, &majAffichage);
                     char info_a_afficher[50];
                     
                     /* Affichage du texte des points de déplacement */
@@ -672,7 +519,7 @@ int main(int argc,char *argv[]) {
                     SDL_RenderCopy(renderer, texte_tex, NULL, &txtDestRect);
 
                     /* Affichage des vies */
-                    if (texture_vie) {
+                    if (ressources.vie) {
                         int taille_coeur = 48; 
                         int espace_entre_coeurs = taille_coeur + 10;
                         int x_depart_coeurs = txtDestRect.x + txtDestRect.w + 25; 
@@ -680,7 +527,7 @@ int main(int argc,char *argv[]) {
 
                         for (int i = 0; i < vies_globales; i++) {
                             SDL_Rect rect_vie = { x_depart_coeurs + (i * espace_entre_coeurs), y_coeurs, taille_coeur, taille_coeur }; 
-                            SDL_RenderCopy(renderer, texture_vie, NULL, &rect_vie);
+                            SDL_RenderCopy(renderer, ressources.vie, NULL, &rect_vie);
                         }
                     }
                 } 
@@ -739,30 +586,14 @@ int main(int argc,char *argv[]) {
         clic_gauche = 0;
     }
 
-    // Libération propre de la mémoire à la fermeture du jeu
+    // --- Nettoyage des ressources ---
+    liberer_ressources(&ressources);
+    
+    // Libération de la musique 
     if (musique) Mix_FreeMusic(musique);
-    for (int i = 0; i < NB_BIOMES; i++) {
-        if (textures_cases[i]) SDL_DestroyTexture(textures_cases[i]);
-    }
-    if (texture_perso) SDL_DestroyTexture(texture_perso);
-    if (texture_brouillard) SDL_DestroyTexture(texture_brouillard);
-    if (texture_squelette) SDL_DestroyTexture(texture_squelette);
-    if (texture_troll) SDL_DestroyTexture(texture_troll);
-    for(int i = 0; i < 4; i++){
-        if(textures_sanctuaires[i]) SDL_DestroyTexture(textures_sanctuaires[i]);
-    }
-    for (int i = 0; i < 3; i++) {
-        if (textures_batiments[i]) SDL_DestroyTexture(textures_batiments[i]);
-    }
-    for (int i = 0; i < 4; i++) {
-        if (textures_obstacles[i]) SDL_DestroyTexture(textures_obstacles[i]);
-    }
+
     if (texte_tex) SDL_DestroyTexture(texte_tex);
 
-    //if (messageTexture) SDL_DestroyTexture(messageTexture);
-
-    TTF_CloseFont(police);
-    TTF_CloseFont(police2);
 
     if (combat_actuel != NULL) {
         combat_termine(renderer, &combat_actuel, carte, PAS_DE_VAINQUEUR, &vies_globales);
@@ -772,7 +603,7 @@ int main(int argc,char *argv[]) {
     // Destruction en mémoire des monstres notamment sur la carte
     liberer_memoire_carte(&carte, TAILLE_CARTE);
 
-    // Destruction du personnagec
+    // Destruction du personnage
     detruire_perso(&perso);
 
     Mix_CloseAudio();
@@ -786,4 +617,3 @@ int main(int argc,char *argv[]) {
 
     return 0;
 }
-
