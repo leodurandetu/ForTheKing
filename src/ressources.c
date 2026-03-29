@@ -3,10 +3,10 @@
 #include <string.h>     
 #include "../lib/init_sdl.h"
 
-int charger_ressources(SDL_Renderer* renderer, RessourcesJeu* res) {
+int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res) {
     
     /* Initialisation de la structure à zéro par sécurité */
-    memset(res, 0, sizeof(RessourcesJeu));
+    memset(res, 0, sizeof(ressources_jeu_t));
     
     /* Chargement des polices d'écriture */
     res->police_max = init_ttf_max();
@@ -116,7 +116,7 @@ int charger_ressources(SDL_Renderer* renderer, RessourcesJeu* res) {
     return 0; 
 }
 
-void liberer_ressources(RessourcesJeu* res) {
+void liberer_ressources(ressources_jeu_t* res) {
     /* Libération de la mémoire pour les textures individuelles */
     if (res->perso) SDL_DestroyTexture(res->perso);
     if (res->brouillard) SDL_DestroyTexture(res->brouillard);

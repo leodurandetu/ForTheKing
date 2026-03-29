@@ -31,24 +31,24 @@ typedef struct {
     
     TTF_Font* police_max;            /**< Police d'écriture grande taille */
     TTF_Font* police_min;            /**< Police d'écriture petite taille */
-} RessourcesJeu;
+} ressources_jeu_t;
 
 /**
  * @brief Charge l'ensemble des ressources du jeu en mémoire.
  * * @details Lit les fichiers d'assets (images, polices) sur le disque et génère 
  * les textures SDL correspondantes.
  * * @param renderer Le moteur de rendu SDL utilisé pour créer les textures.
- * @param res Pointeur vers la structure RessourcesJeu à peupler.
+ * @param res Pointeur vers la structure ressources_jeu_t à peupler.
  * * @return 0 en cas de succès, un code d'erreur (-1) si un fichier est manquant.
  */
-int charger_ressources(SDL_Renderer* renderer, RessourcesJeu* res);
+int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res);
 
 /**
  * @brief Libère la mémoire allouée pour les ressources du jeu.
  * * @details Détruit toutes les textures et ferme les polices contenues 
  * dans la structure pour éviter les fuites de mémoire. À appeler avant de quitter.
- * * @param res Pointeur vers la structure RessourcesJeu contenant les éléments à détruire.
+ * * @param res Pointeur vers la structure ressources_jeu_t contenant les éléments à détruire.
  */
-void liberer_ressources(RessourcesJeu* res);
+void liberer_ressources(ressources_jeu_t* res);
 
 #endif /* RESSOURCES_H */

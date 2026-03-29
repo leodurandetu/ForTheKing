@@ -30,7 +30,7 @@ typedef enum {
     CARTE,
     GAME_OVER,
     COMBAT
-} EtatJeu_t;
+} etat_jeu_t;
 
 int main(int argc,char *argv[]) {
 
@@ -77,7 +77,7 @@ int main(int argc,char *argv[]) {
     }
 
     // --- Chargement des ressources ---
-    RessourcesJeu ressources = {0};
+    ressources_jeu_t ressources = {0};
     if (charger_ressources(renderer, &ressources) != 0) {
         fprintf(stderr, "Erreur critique lors du chargement des ressources.\n");
         liberer_ressources(&ressources);
@@ -153,7 +153,7 @@ int main(int argc,char *argv[]) {
 
     int clic_gauche = 0;
 
-    EtatJeu_t etat = CARTE;
+    etat_jeu_t etat = CARTE;
 
     while (running) {
         SDL_Event e;
