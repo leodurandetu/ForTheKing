@@ -154,9 +154,10 @@ void dessinerSlot(SDL_Renderer *renderer, TTF_Font *policeNom,
         SDL_Texture *img = textures_perso[slot->type];
         if (img) {
             float facteur = 1.0f;
-            if (slot->type == SLOT_ASSASSIN) facteur = 1.55f;
-            if (slot->type == SLOT_CHASSEUR) facteur = 1.45f;
-            if (slot->type == SLOT_BRUTE) facteur = 1.1f; // Taille personnage
+            if (slot->type == SLOT_MAGE)     facteur = 0.8f; 
+            if (slot->type == SLOT_ASSASSIN) facteur = 0.8f;
+            if (slot->type == SLOT_CHASSEUR) facteur = 0.8f;
+            if (slot->type == SLOT_BRUTE)    facteur = 0.8f;
 
             int taille = (int)((rect.h - 55) * facteur);
 
@@ -460,7 +461,7 @@ int main() {
         rectTxtQuitter = (SDL_Rect){btnQuitter.x   + (btnQuitter.w   - wQuitter)/2,   btnQuitter.y   + (btnQuitter.h   - hQuitter)/2,   wQuitter,   hQuitter};
         rectTxtTitre = (SDL_Rect){titleX, startY - 180, wTitre, hTitre};
 
-        /* Layout des 3 slots de selection */
+        /* Mise en page des 3 slots de selection */
         int slotW = 200, slotH = 280, slotGap = 40;
         int totalW = slotW * 3 + slotGap * 2;
         int slotStartX = (windowW - totalW) / 2;
@@ -569,7 +570,7 @@ int main() {
             if (confirmer_quitter && event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
                 SDL_Point p = {event.button.x, event.button.y};
 
-                /* Calcul des rectangles de la boite (meme logique que dans l'affichage) */
+                /* Calcul des rectangles de la boite  */
                 int boiteW = wConfirmMsg + 80;
                 int boiteH = 160;
                 SDL_Rect panneauConfirm = {
@@ -849,8 +850,27 @@ int main() {
     IMG_Quit();
     SDL_Quit();
 
-    if (lancer_jeu == 1)
-        system(fullscreen ? "./bin/fortheking --plein-ecran" : "./bin/fortheking");
+        if (lancer_jeu == 1) {
+            /* Trouve le type du premier slot non vide */
+            const char *noms_classes[] = {"", "mage", "assassin", "brute", "chasseur"};
+            const char *classe = "mage"; // valeur par défaut
+            for (int i = 0; i < 3; i++) {
+                if (slots[i].type != SLOT_VIDE) {
+                    classe = noms_classes[slots[i].type];
+                    break;
+                }
+            }
+ 
+            char commande[256];
+            if (fullscreen)
+                snprintf(commande, sizeof(commande),
+                        "./bin/fortheking --plein-ecran --classe %s", classe);
+            else
+                snprintf(commande, sizeof(commande),
+                        "./bin/fortheking --classe %s", classe);
+    
+            system(commande);
+        }
 
     return EXIT_SUCCESS;
 }
