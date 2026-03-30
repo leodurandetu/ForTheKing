@@ -35,10 +35,18 @@ typedef enum {
 int main(int argc,char *argv[]) {
     int plein_ecran_depart = 0;
     int relancer_menu = 0;
+    perso_type_t classe_choisie = MAGE; // valeur par défaut
 
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--plein-ecran") == 0)
+        if (strcmp(argv[i], "--plein-ecran") == 0) {
             plein_ecran_depart = 1;
+        } else if (strcmp(argv[i], "--classe") == 0 && i + 1 < argc) {
+            i++;
+            if      (strcmp(argv[i], "assassin") == 0) classe_choisie = ASSASSIN;
+            else if (strcmp(argv[i], "brute")    == 0) classe_choisie = BRUTE;
+            else if (strcmp(argv[i], "chasseur") == 0) classe_choisie = CHASSEUR;
+            else                                        classe_choisie = MAGE;
+        }
     }
 
     // --- Initialisation globale du sdl ---
@@ -77,7 +85,7 @@ int main(int argc,char *argv[]) {
 
     // --- Chargement des ressources ---
     ressources_jeu_t ressources = {0};
-    if (charger_ressources(renderer, &ressources) != 0) {
+    if (charger_ressources(renderer, &ressources, classe_choisie) != 0) {
         fprintf(stderr, "Erreur critique lors du chargement des ressources.\n");
         liberer_ressources(&ressources);
         SDL_DestroyRenderer(renderer);
@@ -133,7 +141,7 @@ int main(int argc,char *argv[]) {
 
     coords_case_libre(carte, &xApparition, &yApparition);
 
-    perso_t *perso = init_perso(MAGE, xApparition, yApparition); 
+    perso_t *perso = init_perso(classe_choisie, xApparition, yApparition); 
 
     remplir_brouillard(carte);
 
