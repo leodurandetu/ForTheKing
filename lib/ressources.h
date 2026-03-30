@@ -39,9 +39,10 @@ typedef struct {
  * les textures SDL correspondantes.
  * * @param renderer Le moteur de rendu SDL utilisé pour créer les textures.
  * @param res Pointeur vers la structure ressources_jeu_t à peupler.
+ * @param type_perso Le type du personnage à charger.
  * * @return 0 en cas de succès, un code d'erreur (-1) si un fichier est manquant.
  */
-int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res);
+int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res, perso_type_t type_perso);
 
 /**
  * @brief Libère la mémoire allouée pour les ressources du jeu.
