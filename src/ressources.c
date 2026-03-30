@@ -3,7 +3,7 @@
 #include <string.h>     
 #include "../lib/init_sdl.h"
 
-int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res) {
+int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res, perso_type_t type_perso) {
     
     /* Initialisation de la structure à zéro par sécurité */
     memset(res, 0, sizeof(ressources_jeu_t));
@@ -25,8 +25,15 @@ int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res) {
         SDL_FreeSurface(image);
     }
 
-    /* Chargement de la texture du personnage principal avec détourage du fond blanc */
-    SDL_Surface *img_perso = IMG_Load("img/mage.png");
+    /* Chargement de la texture des personnages avec détourage du fond blanc */
+    const char *chemins_perso[] = {
+                    "img/brute.png",    // BRUTE = 0
+                    "img/chasseur.png", // CHASSEUR = 1
+                    "img/assassin.png", // ASSASSIN = 2
+                    "img/mage.png"      // MAGE = 3
+    };
+
+    SDL_Surface *img_perso = IMG_Load(chemins_perso[type_perso]);
     if (img_perso) {
         SDL_SetColorKey(img_perso, SDL_TRUE, SDL_MapRGB(img_perso->format, 255, 255, 255));
         res->perso = SDL_CreateTextureFromSurface(renderer, img_perso);
@@ -52,7 +59,7 @@ int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res) {
     SDL_Surface *img_yeti = IMG_Load("img/yeti.png");
     if (img_yeti) {
         res->monstres[2] = SDL_CreateTextureFromSurface(renderer, img_yeti);
-        SDL_SetTextureBlendMode(res->monstres[2], SDL_BLENDMODE_BLEND);
+        SDL_SetTextureBlendMode(res->monstres[1], SDL_BLENDMODE_BLEND);
         SDL_FreeSurface(img_yeti);
     }
 
@@ -119,8 +126,8 @@ int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res) {
         SDL_FreeSurface(img_vie);
     }
     
-    /* Indique que le chargement s'est terminé avec succès */
-    return 0; 
+    
+    return 0; // succès
 }
 
 void liberer_ressources(ressources_jeu_t* res) {
@@ -133,7 +140,7 @@ void liberer_ressources(ressources_jeu_t* res) {
     for (int i = 0; i < NB_BIOMES; i++) {
         if (res->cases[i]) SDL_DestroyTexture(res->cases[i]);
     }
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 2; i++) {
         if (res->monstres[i]) SDL_DestroyTexture(res->monstres[i]);
     }
     for (int i = 0; i < 3; i++) {
