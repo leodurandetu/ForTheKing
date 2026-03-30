@@ -65,7 +65,7 @@ cd ForTheKing
 Ce projet utilise SDL2.  
 Voici un court guide pour l'installer sur Unix ou Linux :  
 sudo apt update  
-sudo apt install -y \ libsdl2-dev \ libsdl2-image-dev \ libsdl2-mixer-dev \ libsdl2-ttf-dev  
+sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev  
  
 **Compilation du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
@@ -85,4 +85,5 @@ Une fois dans le jeu :
 - Déplacez le personnage sur la carte avec ZQSD  
 - Déplacez le personnage sur la carte en cliquant sur une case voisine avec un carré au milieu (indicateur de déplacement possible)  
 - Appuyez sur la touche [N] quand vous n'avez plus de points de déplacement. Cela va les remplir et passer au prochain tour.  
-- Cliquez sur un monstre pour lancer le combat, ou soyez dans sa portée d'attaque (1 case)
+- Cliquez sur un monstre pour lancer le combat
+- Appuyez sur la touche [ECHAP] pour ouvrir le menu de pause
