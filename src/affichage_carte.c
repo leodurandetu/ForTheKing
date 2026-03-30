@@ -284,7 +284,10 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
         if (chemin_valide(carte, TAILLE_CARTE, persX, persY, case_selection_x, case_selection_y, portee, perso, &distanceChemin)) {
             
-            if (carte[case_selection_y][case_selection_x].monstre != NULL) {
+            if (carte[case_selection_y][case_selection_x].batiment.type == TOUR_DU_BOSS) {
+                SDL_Color couleur = { 0, 255, 0, 120 }; // Vert : batiment atteignable
+                remplir_hexagone(renderer, cx, cy, rayonHex, couleur);
+            } else if (carte[case_selection_y][case_selection_x].monstre != NULL) {
                 SDL_Color couleur = { 0, 255, 0, 120 }; // Vert : monstre atteignable
                 remplir_hexagone(renderer, cx, cy, rayonHex, couleur);
             } else if (carte[case_selection_y][case_selection_x].batiment.type != PAS_DE_BATIMENT) {
@@ -328,13 +331,16 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
                     SDL_Rect rect = { (int)cx - tailleCarre / 2, (int)cy - tailleCarre / 2, tailleCarre, tailleCarre };
                     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-                    if (carte[y][x].monstre != NULL) {
+                    if (carte[y][x].batiment.type == TOUR_DU_BOSS) {
+                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 200); // Point rouge sur tour du boss
+                    } else if (carte[y][x].monstre != NULL) {
                         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 200); // Point rouge sur monstre
                     } else {
                         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);   // Point noir sur case libre
                     }
 
-                    if (carte[y][x].batiment.type == PAS_DE_BATIMENT) {
+                    if (carte[y][x].batiment.type == PAS_DE_BATIMENT
+                        || carte[y][x].batiment.type == TOUR_DU_BOSS) {
                         SDL_RenderFillRect(renderer, &rect);
                     }
 

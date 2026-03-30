@@ -111,6 +111,8 @@ int main(int argc,char *argv[]) {
         carte[k] = malloc(sizeof(case_t) * TAILLE_CARTE);
     }
 
+    monstre_t * boss_final = creer_boss_final();
+
     // Génération du monde
     perlin_init((unsigned int)time(NULL));
     init_carte(carte);
@@ -300,7 +302,7 @@ int main(int argc,char *argv[]) {
 
                                             if (monstre != NULL && combat_actuel == NULL) {
                                                 combat_actuel = creer_combat(perso, monstre);
-                                                 TTF_Font *gFont = TTF_OpenFont("Fonts/Enchanted Land.otf", 20);
+                                                TTF_Font *gFont = TTF_OpenFont("Fonts/Enchanted Land.otf", 20);
 
                                                 // Conversion coordonnées carte → pixels écran
                                                 int windowW, windowH;
@@ -332,6 +334,42 @@ int main(int argc,char *argv[]) {
                                                     detruire_combat(&combat_actuel);
                                                     etat = CARTE;
                                                     nb_fuites++;
+                                                }
+
+                                                case_selection_x = carte_x;
+                                                case_selection_y = carte_y;
+                                            } else if (carte[carte_y][carte_x].batiment.type == TOUR_DU_BOSS) {
+                                                combat_actuel = creer_combat(perso, boss_final);
+                                                TTF_Font *gFont = TTF_OpenFont("Fonts/Enchanted Land.otf", 20);
+
+                                                // Conversion coordonnées carte → pixels écran
+                                                int windowW, windowH;
+                                                SDL_GetWindowSize(pFenetre, &windowW, &windowH);
+
+                                                int centre_x = windowW / 2;
+                                                int centre_y = windowH / 2;
+
+                                                // Position pixel du personnage à l'écran (il est toujours centré)
+                                                int perso_px = centre_x;
+                                                int perso_py = centre_y;
+
+                                                // Taille du sprite à l'écran (même logique que dans afficher_personnage)
+                                                int sprite_w = tailleCase;
+                                                int sprite_h = tailleCase;
+
+                                                int choix;
+
+                                                choix = afficher_option(renderer, gFont,
+                                                                            perso_px, perso_py,
+                                                                            sprite_w, sprite_h,
+                                                                            nb_fuites >= MAX_FUITE);
+                                                if(choix == 1)
+                                                {
+                                                    ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, &combat_actuel, carte, &vies_globales);
+                                                    etat = COMBAT;
+                                                } else if (choix == 0) {
+                                                    detruire_combat(&combat_actuel);
+                                                    etat = CARTE;
                                                 }
 
                                                 case_selection_x = carte_x;
@@ -582,6 +620,10 @@ int main(int argc,char *argv[]) {
     if (combat_actuel != NULL) {
         combat_termine(renderer, &combat_actuel, carte, PAS_DE_VAINQUEUR, &vies_globales);
         detruire_combat(&combat_actuel);
+    }
+
+    if (boss_final != NULL) {
+        free(boss_final);
     }
 
     // Destruction en mémoire des monstres notamment sur la carte

@@ -12,7 +12,8 @@
  */
 typedef enum {
     SQUELETTE,
-    TROLL
+    TROLL,
+    BOSS_FINAL
 } type_monstre_t;
 
 /** * @author Léo, Saandi & Massoud
@@ -47,5 +48,12 @@ typedef struct {
  * @return monstre_t* Un pointeur vers le monstre créé, ou NULL en cas d'erreur.
  */
 monstre_t * creer_monstre_aleatoire(type_monstre_t type, int x, int y);
+
+/**
+ * @author Léo
+ * @brief Alloue et initialise un nouveau monstre de type boss final.
+ * @return monstre_t* Un pointeur vers le monstre créé, ou NULL en cas d'erreur.
+ */
+monstre_t * creer_boss_final();
 
 #endif

@@ -240,10 +240,13 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche)
     monstre_t * monstre = combat->monstre;
 
     dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion, perso, clicGauche);
-    if(combat->monstre->type == SQUELETTE){
+    
+    if(combat->monstre->type == SQUELETTE) {
         dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
-    } else if (combat->monstre->type == TROLL){
+    } else if (combat->monstre->type == TROLL) {
         dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
+    } else if (combat->monstre->type == BOSS_FINAL) {
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Boss Final", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
     }
 
     SDL_RenderPresent(renderer);

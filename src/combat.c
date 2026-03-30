@@ -40,6 +40,8 @@ void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * render
         img_monstre = IMG_Load("img/squelette.png");
     } else if ((*combat)->monstre->type == TROLL) {
         img_monstre = IMG_Load("img/troll.png");
+    } else if ((*combat)->monstre->type == BOSS_FINAL) {
+        img_monstre = IMG_Load("img/boss_final.png");
     }
 
     if (img_monstre) {
@@ -55,7 +57,9 @@ void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * render
 
     char *fond_biome;
 
-    if (biome == TERRE) {
+    if ((*combat)->monstre->type == BOSS_FINAL) {
+        fond_biome = "img/fond_chateau.png";
+    } else if (biome == TERRE) {
         fond_biome = "img/fond_terre.png";
     } else if (biome == DESERT) {
         fond_biome = "img/fond_desert.png";
@@ -138,12 +142,16 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
         int x = combat_monstre->x;
 
         if (combat_monstre != NULL) {
-            monstre_t * monstre = carte[y][x].monstre;
 
-            if (monstre != NULL) {
-                carte[y][x].batiment.type = TOMBE;
-                carte[y][x].monstre = NULL;
-                free(monstre);
+            if (x >= 0 && y >= 0 && x < TAILLE_CARTE && y < TAILLE_CARTE) {
+                monstre_t * monstre = carte[y][x].monstre;
+
+                if (monstre != NULL) {
+                    carte[y][x].batiment.type = TOMBE;
+                    carte[y][x].monstre = NULL;
+                    free(monstre);
+                }
+
             }
 
         }
@@ -153,12 +161,11 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
         objet_t kit_de_soins = creer_kit_de_soins(rendererPrincipal);
         ajouter_objet_inventaire(&(perso->inventaire), kit_de_soins);
     } else if (vainqueur == MONSTRE_VAINQUEUR || perso->sante <= 0) {
-
-            // Si on arrive ici, c'est que le combat est perdu et qu'il n'y a plus de vies.
-            // La résurrection est gérée directement pendant le combat.
-            perso->sante = 0;
-            perso->mort = 1; 
-        }
+        // Si on arrive ici, c'est que le combat est perdu et qu'il n'y a plus de vies.
+        // La résurrection est gérée directement pendant le combat.
+        perso->sante = 0;
+        perso->mort = 1; 
+    }
 
 }
 
