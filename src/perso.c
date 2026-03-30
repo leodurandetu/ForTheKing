@@ -152,8 +152,15 @@ void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, p
     float cx_finale = cx + decalageX;
     float cy_finale = cy + decalageY;
 
-    /* Taille du personnage */
-    float echelle = 0.4f; // On ajustera encore !
+    /* Taille du personnage selon la classe */
+    float echelle;
+    switch (perso->type) {
+        case BRUTE:    echelle = 0.65f; break;
+        case CHASSEUR: echelle = 0.75f; break;
+        case ASSASSIN: echelle = 0.75f; break;
+        case MAGE:
+        default:       echelle = 0.4f;  break;
+    }
 
     SDL_Rect dstRect;
     dstRect.w = (int) (hex_w * echelle);
