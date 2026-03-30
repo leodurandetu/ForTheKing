@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../lib/perso.h"
 #include "../lib/monstre.h"
+#include "../lib/adapter_niveau.h"
 
 /* Massoud
  * Applique les bonus de stats au personnage

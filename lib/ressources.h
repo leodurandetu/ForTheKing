@@ -22,7 +22,7 @@
 typedef struct {
     SDL_Texture* cases[NB_BIOMES];   /**< Textures des différents biomes composant la carte */
     SDL_Texture* perso;              /**< Texture du personnage principal */
-    SDL_Texture* monstres[2];        /**< Textures des différents types de monstres */
+    SDL_Texture* monstres[3];        /**< Textures des différents types de monstres */
     SDL_Texture* brouillard;         /**< Texture du brouillard de guerre */
     SDL_Texture* batiments[3];       /**< Textures des bâtiments interactifs ou décoratifs */
     SDL_Texture* sanctuaires[4];     /**< Textures des sanctuaires */

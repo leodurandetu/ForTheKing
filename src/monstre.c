@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../lib/monstre.h"
-#include "../lib/adapter_niveau.h"  
 
 /* Leo */
 /*
@@ -22,10 +21,12 @@ monstre_t * creer_monstre_aleatoire(type_monstre_t type, int x, int y) {
     monstre->y = y;
 
      /* Niveau selon le type */
-    if (monstre->type == SQUELETTE) {
+    if (monstre->type == TROLL) {
         monstre->niveau = 1;
-    } else {
-        monstre->niveau = 2;
+    } else if (monstre->type == SQUELETTE) {
+        monstre->niveau = 1 + rand() % 2;
+    } else if (monstre->type == YETI) {
+        monstre->niveau = 3 + rand() % 2;
     }
 
 
@@ -37,7 +38,6 @@ monstre_t * creer_monstre_aleatoire(type_monstre_t type, int x, int y) {
     monstre->intelligence = 6 + rand() % 11;
     monstre->rapidite = 6 + rand() % 11;
     monstre->evasion = 4 + rand() % 8;
-
 
     return monstre;
 }
@@ -57,17 +57,16 @@ monstre_t * creer_boss_final() {
     monstre->y = -1;
 
      /* Niveau selon le type */
-    monstre->niveau = 1;
+    monstre->niveau = 8;
 
     /* on changera les valeurs plus tard, elles sont provisoires */
     monstre->force = 54 + rand() % 33;
-    monstre->sante = 111 + rand() % 30;
+    monstre->sante = 111 + rand() % 40;
     monstre->sante_max = monstre->sante;
     monstre->degats = 27 + rand() % 21;
     monstre->intelligence = 54 + rand() % 33;
     monstre->rapidite = 54 + rand() % 33;
     monstre->evasion = 36 + rand() % 24;
-
 
     return monstre;
 }

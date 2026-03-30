@@ -49,6 +49,13 @@ int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res) {
         SDL_FreeSurface(img_troll);
     }
 
+    SDL_Surface *img_yeti = IMG_Load("img/yeti.png");
+    if (img_yeti) {
+        res->monstres[2] = SDL_CreateTextureFromSurface(renderer, img_yeti);
+        SDL_SetTextureBlendMode(res->monstres[2], SDL_BLENDMODE_BLEND);
+        SDL_FreeSurface(img_yeti);
+    }
+
     /* Chargement de la texture gérant le brouillard */
     SDL_Surface *img_brouillard = IMG_Load("img/brouillard.png");
     if (img_brouillard) {
@@ -126,7 +133,7 @@ void liberer_ressources(ressources_jeu_t* res) {
     for (int i = 0; i < NB_BIOMES; i++) {
         if (res->cases[i]) SDL_DestroyTexture(res->cases[i]);
     }
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 3; i++) {
         if (res->monstres[i]) SDL_DestroyTexture(res->monstres[i]);
     }
     for (int i = 0; i < 3; i++) {

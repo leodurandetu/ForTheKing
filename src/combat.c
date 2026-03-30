@@ -40,6 +40,8 @@ void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * render
         img_monstre = IMG_Load("img/squelette.png");
     } else if ((*combat)->monstre->type == TROLL) {
         img_monstre = IMG_Load("img/troll.png");
+    } else if ((*combat)->monstre->type == YETI) {
+        img_monstre = IMG_Load("img/yeti.png");
     } else if ((*combat)->monstre->type == BOSS_FINAL) {
         img_monstre = IMG_Load("img/boss_final.png");
     }

@@ -286,7 +286,8 @@ void placer_monstres(case_t ** carte) {
         for (int j = 0; j < TAILLE_CARTE; j += taille_secteur) {
             coordonnee_t cases_foret[144]; 
             coordonnee_t cases_desert[144];
-            int nb_foret = 0, nb_desert = 0;
+            coordonnee_t cases_neige[144];
+            int nb_foret = 0, nb_desert = 0, nb_neige = 0;
             
             // Scan du secteur pour lister les cases libres par biome
             for (int y = i; y < i + taille_secteur && y < TAILLE_CARTE; y++) {
@@ -303,13 +304,21 @@ void placer_monstres(case_t ** carte) {
                             cases_desert[nb_desert].x = x;
                             cases_desert[nb_desert].y = y;
                             nb_desert++;
+                        } else if (carte[y][x].biome == NEIGE) {
+                            cases_neige[nb_neige].x = x;
+                            cases_neige[nb_neige].y = y;
+                            nb_neige++;
                         }
+
                     }
+
                 }
+
             }
             
             faire_apparaitre_groupe(carte, TROLL, cases_foret, nb_foret);
             faire_apparaitre_groupe(carte, SQUELETTE, cases_desert, nb_desert);
+            faire_apparaitre_groupe(carte, YETI, cases_neige, nb_neige);
         }
     }
 
@@ -666,6 +675,8 @@ void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t ** carte, perso_
                     if (monstre->type == SQUELETTE && carte[ny][nx].biome == DESERT) {
                         peut_bouger = 1;
                     } else if (monstre->type == TROLL && carte[ny][nx].biome == FORET) {
+                        peut_bouger = 1;
+                    } else if (monstre->type == YETI && carte[ny][nx].biome == NEIGE) {
                         peut_bouger = 1;
                     } else if (monstre->type != SQUELETTE && monstre->type != TROLL) {
                         // Pour les monstres sans restriction de biome

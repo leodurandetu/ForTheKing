@@ -245,6 +245,8 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche)
         dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
     } else if (combat->monstre->type == TROLL) {
         dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
+    } else if (combat->monstre->type == YETI) {
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Yeti", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
     } else if (combat->monstre->type == BOSS_FINAL) {
         dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Boss Final", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
     }
