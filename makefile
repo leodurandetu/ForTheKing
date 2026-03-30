@@ -17,7 +17,7 @@ mon_menu: src/menu.c
 	${CC} -o ${MENU} src/menu.c ${LIBS} ${INCS} ${FLAGS}
 
 test_deplacements: test/test_deplacements.c
-	${CC} -o bin/test_deplacements test/test_deplacements.c src/perlin_noise.c src/carte.c src/monstre.c ${LIBS} ${INCS} ${FLAGS}
+	${CC} -o bin/test_deplacements test/test_deplacements.c src/adapter_niveau.c src/niveau.c src/perlin_noise.c src/carte.c src/monstre.c ${LIBS} ${INCS} ${FLAGS}
 
 clean:
 	rm -f ${PROG}

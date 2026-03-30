@@ -1,8 +1,8 @@
 #ifndef ADAPTER_NIVEAU_H
 #define ADAPTER_NIVEAU_H
 
-#include "perso.h"
 #include "monstre.h"
+#include "perso.h"
 
 /**
  * @author Massoud

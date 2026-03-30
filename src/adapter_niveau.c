@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../lib/perso.h"
-#include "../lib/monstre.h"
 #include "../lib/adapter_niveau.h"
 
 /* Massoud
@@ -98,9 +96,28 @@ void appliquer_bonus_monstre(monstre_t *monstre) {
  * - SQUELETTE : niveau 2 ou 3
  */
 void niveau_monstre(monstre_t *monstre, type_monstre_t type) {
-    switch(type) {
-        case TROLL:     monstre->niveau = 1 + rand() % 2; break; // 1 ou 2
-        case SQUELETTE: monstre->niveau = 2 + rand() % 2; break; // 2 ou 3
-        default: printf("Erreur niveau : func niveau_troll.\n"); break;
-    }
+        int niveau_final = 1;
+
+        switch(type) {
+                case TROLL:
+                        niveau_final = 1 + rand() % 2;
+                        break;
+                case SQUELETTE:
+                        niveau_final = 2 + rand() % 2;
+                        break;
+                case YETI:
+                        niveau_final = 4 + rand() % 2;
+                        break;
+                default:
+                        printf("Erreur niveau : func niveau_troll.\n");
+                        break;
+        }
+
+        monstre->niveau = 1;
+
+        for (int i = 1; i <= niveau_final; i++) {
+                monstre->niveau = monstre->niveau + 1;
+                appliquer_bonus_monstre(monstre);
+        }
+
 }

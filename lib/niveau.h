@@ -2,7 +2,6 @@
 #define NIVEAU_H
 
 #include "perso.h"
-#include "monstre.h"
 
 /**
  * @file niveau.h
