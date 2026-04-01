@@ -485,18 +485,18 @@ static int peut_atteindre_rec(case_t ** carte,
     int meilleure_dist = INFINI;
 
     int dx[2][6] = {
-        { 1,  0, -1, -1, -1,  0 },  // pair
-        { 1,  1,  0, -1,  0,  1 }   // impair
+        { +1,  0, -1, -1,  0, +1 },
+        { +1,  0, -1, -1,  0, +1 }
     };
 
     int dy[2][6] = {
-        { 0,  1,  1,  0, -1, -1 },  // pair
-        { 0,  1,  1,  0, -1, -1 }   // impair
+        {  0, +1,  0, -1, -1, -1 },
+        { +1, +1, +1,  0, -1,  0 }
     };
 
     int cout_deplacement[2][6] = {
-        { 1,  1,  2,  1,  2,  1 },  // pair
-        { 1,  2,  1,  1,  1,  2 }    // impair
+        { 1,  1,  1,  1,  1,  1 },  // pair
+        { 1,  1,  1,  1,  1,  1 }   // impair
     };
 
     int direction;
@@ -509,13 +509,17 @@ static int peut_atteindre_rec(case_t ** carte,
         if (nx >= 0 && nx < taille_carte && ny >= 0 && ny < taille_carte) {
 
             if (deplacement_possible(carte, nx, ny)) {
-                /* Appel récursif */
-                int distance = peut_atteindre_rec(carte, taille_carte, nx, ny, xCible, yCible, pts_deplacement_restants - cout, perso);
 
-                if (distance != INFINI) {
+                if (cout <= pts_deplacement_restants) {
+                    /* Appel récursif */
+                    int distance = peut_atteindre_rec(carte, taille_carte, nx, ny, xCible, yCible, pts_deplacement_restants - cout, perso);
 
-                    if (distance + cout < meilleure_dist) {
-                        meilleure_dist = distance + cout;
+                    if (distance != INFINI) {
+
+                        if (distance + cout < meilleure_dist) {
+                            meilleure_dist = distance + cout;
+                        }
+
                     }
 
                 }
