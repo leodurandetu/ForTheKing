@@ -15,7 +15,7 @@ int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res, perso_type
     /* Chargement des textures correspondant aux différents biomes */
     char *nom_images[NB_BIOMES] = {
         "img/terrev1.png", "img/eauv2.png",
-        "img/desertv1.png", "img/neigev3.png",
+        "img/desertv1.png", "img/neigev4.png",
         "img/foretv2.png"
     };
     for (int i = 0; i < NB_BIOMES; i++) {
