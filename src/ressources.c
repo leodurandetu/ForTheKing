@@ -86,7 +86,7 @@ int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res, perso_type
 
     /* Chargement des éléments de décor agissant comme obstacles */
     char *nom_images_obstacles[4] = {
-        "img/arbres.png", "img/montagnesv1.png",
+        "img/arbres.png", "img/montagnes.png",
         "img/cactus.png", "img/boue.png" 
     };
     for (int i = 0; i < 4; i++) {
