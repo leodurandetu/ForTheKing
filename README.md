@@ -84,14 +84,6 @@ Ou, alternativement,
 ## Comment jouer au Jeu
 
 Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.  
-Une fois dans le jeu :
-
-- Utilisez la molette de la souris pour zoomer ou dézoomer la carte
-- Déplacez le personnage sur la carte avec ZQSD
-- Déplacez le personnage sur la carte en cliquant sur une case voisine avec un carré au milieu (indicateur de déplacement possible)
-- Appuyez sur la touche [N] quand vous n'avez plus de points de déplacement. Cela va les remplir et passer au prochain tour.
-- Cliquez sur un monstre pour lancer le combat
-- Appuyez sur la touche [ECHAP] pour ouvrir le menu de pause
 
 #### _Voici les commandes du jeu :_
 
