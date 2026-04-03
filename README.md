@@ -3,6 +3,7 @@
 Ceci est le répertoire GitHub d'un projet de Licence 2 Informatique à l'université du Mans. Ce projet commence le 5 janvier 2026 avec le choix du sujet et se termine le 16 avril 2026, la veille d'une soutenance orale. Il s'agit d'un jeu en 2D programmé en C.
 
 ## Membres du Groupe
+
 - MOHAMED Saandi
 - DURAND Leo
 - TSAMARAYEV Massoud
@@ -10,12 +11,12 @@ Ceci est le répertoire GitHub d'un projet de Licence 2 Informatique à l'univer
 ## Description du Jeu
 
 Notre projet est basé sur le jeu For The King.
-For The King est un jeu de rôle et d’aventure au tour par tour.  
-  
-Le but du jeu est de sauver le royaume de Fahrul, plongé dans le chaos après la mort du roi. Le joueur contrôle un groupe de un à trois héros qui doivent explorer le monde, accomplir des quêtes, combattre des ennemis et vaincre une menace finale.  
-  
-Le monde est généré aléatoirement à chaque partie, ce qui rend chaque aventure différente. Les déplacements se font sur une carte où l’on découvre des villes, des donjons et des événements. Les combats sont au tour par tour et reposent sur des statistiques et des jets de dés.  
-  
+For The King est un jeu de rôle et d’aventure au tour par tour.
+
+Le but du jeu est de sauver le royaume de Fahrul, plongé dans le chaos après la mort du roi. Le joueur contrôle un groupe de un à trois héros qui doivent explorer le monde, accomplir des quêtes, combattre des ennemis et vaincre une menace finale.
+
+Le monde est généré aléatoirement à chaque partie, ce qui rend chaque aventure différente. Les déplacements se font sur une carte où l’on découvre des villes, des donjons et des événements. Les combats sont au tour par tour et reposent sur des statistiques et des jets de dés.
+
 Le jeu comporte une dimension de survie : si tous les héros meurent, la partie s’arrête. L’objectif principal est donc d’explorer, progresser, devenir plus fort et rétablir la paix dans le royaume.
 
 ## Fonctionnalités détaillées
@@ -48,42 +49,62 @@ Si un personnage meurt, il peut parfois être ressuscité. Si toute l’équipe 
 Pour gagner, il faut accomplir les quêtes principales et vaincre le boss final afin de sauver le royaume.
 
 ## Outils Techniques utilisés
+
 Nous utilisons la librairie SDL2 pour gérer l'interface graphique.  
 Gcc nous sert à compiler les programmes en C.  
 Le makefile est utilisé pour compiler un projet en plusieurs parties, et de recompiler seulement les fichiers modifiés.  
 Nous utilisons également Git pour pouvoir travailler en équipe sur un projet informatique.
 
 ## Comment Installer le Jeu
+
 Remarque : ce guide est valable pour les machines Unix ou Linux.
 
 **Initialisation du dépôt git**  
 cd chemin/ou/stocker/le/projet  
 git clone https://github.com/leodurandetu/ForTheKing.git ForTheKing  
-cd ForTheKing  
+cd ForTheKing
 
 **Installation des librairies nécessaires**  
 Ce projet utilise SDL2.  
 Voici un court guide pour l'installer sur Unix ou Linux :  
 sudo apt update  
-sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev  
- 
+sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+
 **Compilation du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
 Important : pour compiler le projet, vous devez avoir le compilateur C gcc.  
-make clean all  
+make clean all
 
 **Test du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
 ./bin/menu  
 Ou, alternativement,  
-./bin/fortheking  
+./bin/fortheking
 
 ## Comment jouer au Jeu
+
 Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.  
-Une fois dans le jeu :  
-- Utilisez la molette de la souris pour zoomer ou dézoomer la carte  
-- Déplacez le personnage sur la carte avec ZQSD  
-- Déplacez le personnage sur la carte en cliquant sur une case voisine avec un carré au milieu (indicateur de déplacement possible)  
-- Appuyez sur la touche [N] quand vous n'avez plus de points de déplacement. Cela va les remplir et passer au prochain tour.  
+Une fois dans le jeu :
+
+- Utilisez la molette de la souris pour zoomer ou dézoomer la carte
+- Déplacez le personnage sur la carte avec ZQSD
+- Déplacez le personnage sur la carte en cliquant sur une case voisine avec un carré au milieu (indicateur de déplacement possible)
+- Appuyez sur la touche [N] quand vous n'avez plus de points de déplacement. Cela va les remplir et passer au prochain tour.
 - Cliquez sur un monstre pour lancer le combat
 - Appuyez sur la touche [ECHAP] pour ouvrir le menu de pause
+
+#### _Voici les commandes du jeu :_
+
+|        Touche        | Action          | Déscription                                                                               |
+| :------------------: | :-------------- | :---------------------------------------------------------------------------------------- |
+|   **<kbd>Z</kbd>**   | Avancer         | Se déplacer vers l'avant                                                                  |
+|   **<kbd>Q</kbd>**   | Aller à gauche  | Se déplacer vers la gauche                                                                |
+|   **<kbd>S</kbd>**   | Reculer         | Se déplacer vers l'arrière                                                                |
+|   **<kbd>D</kbd>**   | Aller à droite  | Se déplacer vers la droite                                                                |
+|   **<kbd>N</kbd>**   | Remplir         | Réinitialiser le compteur de point de déplacement pour permettre au joueur de se déplacer |
+| **<kbd>ECHAP</kbd>** | Mettre en pause | Ouvrir le menu pause                                                                      |
+
+|            Souris            | Action            | Déscription                                                                                                                                                                                        |
+| :--------------------------: | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|    **<kbd>Molette</kbd>**    | Zoomer / Dézoomer | La molette de la souris te permet de zoomer/dézoomer sur la carte                                                                                                                                  |
+| **<kbd>clique gauche</kbd>** | Se Déplacer       | Le clique gauche de la souris te permet de te déplacer sur la case que tu as cliquer. <br>Tu peux te déplacer que sur les cases avec un carrée au milieu (qui représente un point de déplacement). |
