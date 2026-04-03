@@ -5,7 +5,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <math.h>
-#include "couleur.h"
 #include "monstre.h"
 #include "perso.h"
 #include "carte.h"

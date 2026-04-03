@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <math.h>
-#include "couleur.h"
 #include "monstre.h"
 #include "perso.h"
 #include "maths.h"
