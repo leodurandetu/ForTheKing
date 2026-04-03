@@ -85,7 +85,7 @@ Ou, alternativement,
 
 Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.  
 
-#### _Voici les commandes du jeu :_
+#### _Voici les commandes pour jouer au jeu :_
 
 |        Touche        | Action          | Déscription                                                                               |
 | :------------------: | :-------------- | :---------------------------------------------------------------------------------------- |
