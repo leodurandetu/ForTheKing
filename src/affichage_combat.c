@@ -146,7 +146,9 @@ static void dessiner_interface_combat(SDL_Renderer* renderer, TTF_Font* font, SD
     }
 
     if (perso != NULL) {
-        dessiner_inventaire(renderer, font, perso, fond, r_nom, clic_gauche, NULL, INV_VERTICAL, -1);
+        /* il ne sert à rien mais c'est pour éviter d'avoir un pointeur à NULL */
+        int maj_affichage = 0;
+        dessiner_inventaire(renderer, font, perso, fond, r_nom, clic_gauche, &maj_affichage, INV_VERTICAL, -1);
     }
 
 }
