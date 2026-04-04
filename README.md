@@ -81,7 +81,7 @@ Important : il faut être à la racine du projet (ForTheKing/)
 Ou, alternativement,  
 ./bin/fortheking
 
-## Comment jouer au Jeu
+## Comment Jouer au Jeu
 
 Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.  
 
@@ -98,5 +98,5 @@ Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.
 
 |            Souris            | Action            | Déscription                                                                                                                                                                                        |
 | :--------------------------: | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    **<kbd>Molette</kbd>**    | Zoomer / Dézoomer | La molette de la souris te permet de zoomer/dézoomer sur la carte                                                                                                                                  |
-| **<kbd>clique gauche</kbd>** | Se Déplacer       | Le clique gauche de la souris te permet de te déplacer sur la case que tu as cliqué. <br>Tu peux te déplacer que sur les cases avec un carrée au milieu (qui représente un point de déplacement). |
+|    **<kbd>Molette</kbd>**    | Zoomer / Dézoomer | La molette de la souris vous permet de zoomer/dézoomer sur la carte                                                                                                                                  |
+| **<kbd>Clic Gauche</kbd>** | Se Déplacer       | Le clic gauche de la souris vous permet de vous déplacer sur la case que vous avez cliqué. <br>Vous pouvez vous déplacer uniquement sur les cases avec un carré au milieu (qui représente un point de déplacement). |
