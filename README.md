@@ -2,13 +2,13 @@
 
 Ceci est le répertoire GitHub d'un projet de Licence 2 Informatique à l'université du Mans. Ce projet commence le 5 janvier 2026 avec le choix du sujet et se termine le 16 avril 2026, la veille d'une soutenance orale. Il s'agit d'un jeu en 2D programmé en C.
 
-## Membres du Groupe
+## 👥 Membres du Groupe
 
 - MOHAMED Saandi
 - DURAND Leo
 - TSAMARAYEV Massoud
 
-## Description du Jeu
+## 📌 Description du Jeu
 
 Notre projet est basé sur le jeu For The King.
 For The King est un jeu de rôle et d’aventure au tour par tour.
@@ -19,7 +19,7 @@ Le monde est généré aléatoirement à chaque partie, ce qui rend chaque avent
 
 Le jeu comporte une dimension de survie : si tous les héros meurent, la partie s’arrête. L’objectif principal est donc d’explorer, progresser, devenir plus fort et rétablir la paix dans le royaume.
 
-## Fonctionnalités détaillées
+## ⚙️ Fonctionnalités détaillées
 
 **Composition de l’équipe**  
 Le joueur contrôle une équipe de 1 à 3 personnages. Chaque personnage a une classe, des statistiques et un rôle différent.
@@ -39,23 +39,21 @@ Les héros peuvent acheter ou trouver des armes, des armures et des objets. L’
 **Or et ressources**  
 L’or est partagé entre les héros et sert à acheter de l’équipement ou des services. Des objets de soin et de survie sont nécessaires pour continuer l’aventure.
 
-**Menace du chaos**  
-Le niveau de chaos augmente avec le temps. S’il devient trop élevé, le monde devient plus dangereux avec des ennemis plus puissants.
-
 **Mort des personnages**  
 Si un personnage meurt, il peut parfois être ressuscité. Si toute l’équipe meurt, la partie est perdue.
 
 **Objectif final**  
 Pour gagner, il faut accomplir les quêtes principales et vaincre le boss final afin de sauver le royaume.
 
-## Outils Techniques utilisés
+## 🛠️ Outils Techniques utilisés
 
-Nous utilisons la librairie SDL2 pour gérer l'interface graphique.  
-Gcc nous sert à compiler les programmes en C.  
-Le makefile est utilisé pour compiler un projet en plusieurs parties, et de recompiler seulement les fichiers modifiés.  
-Nous utilisons également Git pour pouvoir travailler en équipe sur un projet informatique.
+- 🎮 **SDL2** : Interface graphique  
+- 🧠 **Langage C** : Langage de programmation
+- ⚙️ **GCC** : Compilation  
+- 🧩 **Makefile** : Gestion de compilation  
+- 🌐 **Git** : Travail collaboratif  
 
-## Comment Installer le Jeu
+## 🚀 Comment Installer le Jeu
 
 Remarque : ce guide est valable pour les machines Unix ou Linux.
 
@@ -81,7 +79,7 @@ Important : il faut être à la racine du projet (ForTheKing/)
 Ou, alternativement,  
 ./bin/fortheking
 
-## Comment Jouer au Jeu
+## 🎮 Comment Jouer au Jeu
 
 Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.  
 
