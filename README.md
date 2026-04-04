@@ -49,9 +49,11 @@ Pour gagner, il faut accomplir les quêtes principales et vaincre le boss final 
 
 - 🎮 **SDL2** : Interface graphique  
 - 🧠 **Langage C** : Langage de programmation
-- ⚙️ **GCC** : Compilation  
-- 🧩 **Makefile** : Gestion de compilation  
-- 🌐 **Git** : Travail collaboratif  
+- ⚙️ **GCC** : Compilation en C 
+- 🧩 **Makefile** : Compilation automatique
+- 🌐 **Git** : Travail collaboratif
+- 📚 **Doxygen** : Génération automatique de documentation
+- 📅 **Diagramme de Gantt** : Pour planifier les tâches
 
 ## 🚀 Comment Installer le Jeu
 
