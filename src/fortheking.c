@@ -20,6 +20,7 @@
 #include "../lib/perlin_noise.h"
 #include "../lib/ressources.h"
 #include "../lib/init_sdl.h"
+#include "../lib/sauvegarde.h"
 
 #define TAILLE_CASE_MAXI 250
 #define TAILLE_CASE_DEPART 150
@@ -617,6 +618,9 @@ int main(int argc,char *argv[]) {
             
         clic_gauche = 0;
     }
+
+    // Sauvegarde dans un fichier
+    sauvegarder_partie("sauvegarde_01.txt", perso, carte);
 
     // --- Nettoyage des ressources ---
     liberer_ressources(&ressources);
