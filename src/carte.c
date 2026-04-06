@@ -31,17 +31,19 @@ booleen_t deplacement_possible(case_t ** carte, int x, int y) {
     } 
     
     case_t maCase = carte[y][x];
-
+ 
     if (maCase.biome == EAU) {
         return FAUX;
     } else if (maCase.terrain != PAS_DE_TERRAIN) {
         return FAUX;
     } else if (maCase.estVisible == 0) {
         return FAUX;
+    } else if (maCase.sanctuaires != PAS_DE_SANCTUAIRE) {
+        return FAUX;
     } else {
         return VRAI;
     }
-
+ 
 }
 
 /* Leo */
@@ -131,6 +133,7 @@ void init_carte(case_t ** carte) {
             maCase.monstre = NULL;
             maCase.terrain = PAS_DE_TERRAIN;
             maCase.sanctuaires = PAS_DE_SANCTUAIRE;
+            maCase.sanctuaire_pris = 0;
 
             carte[x][y] = maCase;
         }
