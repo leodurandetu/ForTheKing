@@ -49,7 +49,7 @@ void dessiner_contour_hex(SDL_Renderer *renderer, float cx, float cy, float rayo
     }
 }
 
-/* Massoud : Fonction pour dessiner le contour d'un hexagone pointu */
+/* Massoud : Fonction pour dessiner le contour d'un hexagone */
 void dessiner_contour_hex_pointy(SDL_Renderer *renderer, float cx, float cy, float rayon, SDL_Color couleur)
 {
     SDL_SetRenderDrawColor(renderer, couleur.r, couleur.g, couleur.b, couleur.a);
