@@ -21,6 +21,7 @@
 #include "../lib/ressources.h"
 #include "../lib/init_sdl.h"
 #include "../lib/sauvegarde.h"
+#include "../lib/sanctuaire_menu.h"
 
 #define TAILLE_CASE_MAXI 250
 #define TAILLE_CASE_DEPART 150
@@ -309,6 +310,33 @@ int main(int argc,char *argv[]) {
                                 souris_vers_case(e.button.x, e.button.y, &carte_x, &carte_y, tailleCase, perso, renderer);
 
                                 if (carte_x >= 0 && carte_y >= 0) {
+
+                                    /* Si la case cliquée est un sanctuaire adjacent au joueur,
+                                     * on ouvre directement le menu sans déplacement */
+                                    int dx_hex[2][6] = {
+                                        { +1,  0, -1, -1,  0, +1 },
+                                        { +1,  0, -1, -1,  0, +1 }
+                                    };
+                                    int dy_hex[2][6] = {
+                                        {  0, +1,  0, -1, -1, -1 },
+                                        { +1, +1, +1,  0, -1,  0 }
+                                    };
+                                    int est_voisin_sanctuaire = 0;
+                                    for (int dir = 0; dir < 6; dir++) {
+                                        int vx = perso->x + dx_hex[perso->x % 2][dir];
+                                        int vy = perso->y + dy_hex[perso->x % 2][dir];
+                                        if (vx == carte_x && vy == carte_y &&
+                                            (carte[carte_y][carte_x].sanctuaires != PAS_DE_SANCTUAIRE)) {
+                                            est_voisin_sanctuaire = 1;
+                                            break;
+                                        }
+                                    }
+                                    if (est_voisin_sanctuaire) {
+                                        afficher_menu_sanctuaire(renderer, police2,
+                                            perso, carte, carte_x, carte_y, tailleCase);
+                                        majAffichage = 1;
+                                    } else {
+
                                     int portee = get_pers_movements_points(perso);
                                     int distReelle = -1;
                                     int cheminTrouve = chemin_valide(carte, TAILLE_CARTE, perso->x, perso->y, carte_x, carte_y, portee, perso, &distReelle);
@@ -409,6 +437,7 @@ int main(int argc,char *argv[]) {
                                         case_selection_x = carte_x; 
                                         case_selection_y = carte_y;
                                     }
+                                    } // fin else (pas un sanctuaire voisin)
                                 }
                                 majBrouillard = 1;
                             }
