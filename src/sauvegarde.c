@@ -64,13 +64,16 @@ int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte) {
 
         for (int j = 0; j < TAILLE_CARTE; j++) {
             /* Charger les données de base de la case */
-            if (fread(&carte[i][j], sizeof(case_t), 1, fichier) != 1) {
+            case_t temp_case;
+            
+            if (fread(&temp_case, sizeof(case_t), 1, fichier) != 1) {
                 fprintf(stderr, "Erreur lors de la lecture de la case [%d][%d].\n", i, j);
                 fclose(fichier);
                 return 0;
             }
 
-            carte[i][j].monstre = NULL;
+            temp_case.monstre = NULL;
+            carte[i][j] = temp_case;
         }
 
     }

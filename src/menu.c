@@ -405,6 +405,7 @@ int main() {
     int drag_volume = 0;
     int menuActif = 1;
     int confirmer_quitter = 0; /* 1 = la boite de confirmation est affichee */
+    int charger_sauvegarde = 0;
 
     SDL_Event event;
 
@@ -522,7 +523,11 @@ int main() {
                         etat = ETAT_SELECTION_PERSO;
                         afficher_options = 0;
                     }
-                    if (SDL_PointInRect(&p, &btnContinuer)) { lancer_jeu = 1; menuActif = 0; }
+                    if (SDL_PointInRect(&p, &btnContinuer)) {
+                        lancer_jeu = 1; 
+                        menuActif = 0;
+                        charger_sauvegarde = 1;
+                    }
                     if (SDL_PointInRect(&p, &btnParam))
                         afficher_options = !afficher_options;
                     if (SDL_PointInRect(&p, &btnQuitter))
@@ -862,12 +867,27 @@ int main() {
             }
  
             char commande[256];
-            if (fullscreen)
-                snprintf(commande, sizeof(commande),
+            if (fullscreen) {
+
+                if (charger_sauvegarde == 1) {
+                    snprintf(commande, sizeof(commande),
+                        "./bin/fortheking --plein-ecran --classe %s --charger-sauvegarde", classe);
+                } else {
+                    snprintf(commande, sizeof(commande),
                         "./bin/fortheking --plein-ecran --classe %s", classe);
-            else
-                snprintf(commande, sizeof(commande),
+                }
+
+            } else {
+                
+                if (charger_sauvegarde == 1) {
+                    snprintf(commande, sizeof(commande),
+                        "./bin/fortheking --classe %s --charger-sauvegarde", classe);
+                } else {
+                    snprintf(commande, sizeof(commande),
                         "./bin/fortheking --classe %s", classe);
+                }
+
+            }
     
             system(commande);
         }

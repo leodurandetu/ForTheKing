@@ -35,6 +35,7 @@ typedef enum {
 
 int main(int argc,char *argv[]) {
     int plein_ecran_depart = 0;
+    int charger_sauvegarde = 0;
     int relancer_menu = 0;
     perso_type_t classe_choisie = MAGE; // valeur par défaut
 
@@ -47,6 +48,8 @@ int main(int argc,char *argv[]) {
             else if (strcmp(argv[i], "brute")    == 0) classe_choisie = BRUTE;
             else if (strcmp(argv[i], "chasseur") == 0) classe_choisie = CHASSEUR;
             else                                        classe_choisie = MAGE;
+        } else if (strcmp(argv[i], "--charger-sauvegarde") == 0) {
+            charger_sauvegarde = 1;
         }
     }
 
@@ -86,6 +89,7 @@ int main(int argc,char *argv[]) {
 
     // --- Chargement des ressources ---
     ressources_jeu_t ressources = {0};
+
     if (charger_ressources(renderer, &ressources, classe_choisie) != 0) {
         fprintf(stderr, "Erreur critique lors du chargement des ressources.\n");
         liberer_ressources(&ressources);
@@ -108,8 +112,6 @@ int main(int argc,char *argv[]) {
     vainqueur_t vainqueur = PAS_DE_VAINQUEUR;
 
     SDL_Point point;
-
-    inventaire_t inventaire_perso;
     
     case_t ** carte;
     carte = malloc(sizeof(case_t *) * TAILLE_CARTE); 
@@ -121,32 +123,39 @@ int main(int argc,char *argv[]) {
     }
 
     monstre_t * boss_final = creer_boss_final();
+    perso_t * perso = NULL;
 
     // Génération du monde
     perlin_init((unsigned int)time(NULL));
     init_carte(carte);
-    generer_eau(carte);
-    generer_biomes(carte);
-    ajout_obstacles(carte);
-    placer_sanctuaires(carte);
+
+    if (charger_sauvegarde == 1) {
+        perso = malloc(sizeof(perso_t));
+        charger_partie("sauvegarde_01.txt", perso, carte);
+    } else {
+        generer_eau(carte);
+        generer_biomes(carte);
+        ajout_obstacles(carte);
+        placer_sanctuaires(carte);
+    }
+    
     placer_monstres(carte);
     placer_batiments(carte);
 
     preparer_avant_affichage();
-    initialiser_inventaire(&inventaire_perso);
 
     if (musique) Mix_FadeInMusic(musique, 1, 3000);
 
-    int xApparition;
-    int yApparition;
+    //if (charger_sauvegarde == 0) {
+        int xApparition;
+        int yApparition;
 
-    coords_case_libre(carte, &xApparition, &yApparition);
+        coords_case_libre(carte, &xApparition, &yApparition);
+        perso = init_perso(classe_choisie, xApparition, yApparition);
 
-    perso_t *perso = init_perso(classe_choisie, xApparition, yApparition); 
-
-    remplir_brouillard(carte);
-
-    devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
+        remplir_brouillard(carte);
+        devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
+    //}
 
     int tailleCase = TAILLE_CASE_DEPART;
     int case_selection_x = -1;
