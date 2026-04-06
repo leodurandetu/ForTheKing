@@ -11,7 +11,7 @@
 #define TAILLE_CARTE 75
 #define NB_COORD 4
 #define INFINI 5000
-
+#include "monstre.h"
 /** * @author Léo, Saandi & Massoud
  * @brief Types de biomes disponibles sur la carte.
  * @details Détermine la texture de fond de la case (sol).
@@ -72,6 +72,7 @@ typedef struct {
  */
 typedef struct case_s {
     type_sanc_t sanctuaires; /**< Sanctuaire présent sur la case. */
+    int sanctuaire_pris;     /**< 1 si le sanctuaire a déjà été saisi, 0 sinon. */
     biome_t biome;           /**< Type de biome (fond). */
     terrain_t terrain;       /**< Type de terrain (obstacle). */
     batiment_t batiment;     /**< Bâtiment présent sur la case. */
