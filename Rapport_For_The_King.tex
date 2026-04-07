@@ -18,10 +18,10 @@
 }
 
 \begin{figure}[t]
-
-\includegraphics[height=2cm]{logolemansU.png}\\
-\includegraphics[height=2cm]{logo_IC2.png}\\
-
+\centering
+\includegraphics[height=1.5cm]{logolemansU.png}
+\hfill
+\includegraphics[height=1.5cm]{logo_IC2.png}
 \end{figure}
 
 \maketitle
@@ -33,11 +33,47 @@
 
 \section{Introduction}
 
-\textit{Cette introduction présentera le sujet qui sera traité et le travail avec une présentation du plan adopté}
+\textit{Cette introduction présentera le sujet qui sera traité et le travail avec une présentation du plan adopté} \\
 
-Ce document présente le projet de jeu For The King réalisé dans le cadre de la formation de L2 informatique de l'université du Mans pendant la période de janvier à avril 2026.
-Ce projet a été développé en langage C avec la librairie SDL.
-Ce jeu fait ceci cela...
+\textbf{Contexte du projet} \\
+Ce document présente le projet de développement du jeu For The King, réalisé dans le cadre de la deuxième année de licence Informatique à l'université du Mans, pendant la période de de janvier à février 2026.
+L'objectif principal est la conception et l'implémentation d'un jeu vidéo en langage C, en utilisant la bibliothèque graphique SDL2 pour la gestion de l'affichage et des interactions.
+
+\medskip
+
+\textbf{Présentation et principe du jeu}
+
+\noindent\textit{For The King} est un jeu de rôle (RPG) et d'aventure intégrant des mécaniques de combat au tour par tour. 
+Le joueur est placé dans le royaume, plongé dans le chaos. 
+L'objetic est de préparer le héros à un affrontement contre le boss final pour restaurer la paix dans le royaume. 
+
+Le gameplay repose sur une boucle de progression stratégique autour de trois axes : 
+
+\begin{itemize}
+	\item \textbf{L'exploration et les quêtes} : Le joueur parcourt la carte pour découvrir des campements, des sanctuaires et remplir des objectifs secondaires.
+	\item \textbf{Le combat au tour par tour} : Les affrontements opposent le personnage aux diffrérents monstres. Chaque tour permet de choisir entre une attaque légère (précise mais moins puissante) et une attaque lourde (dégâts élevés mais probabilité d'échec élevés).
+	\item \textbf{La gestion des ressources} : L'élimination des ennemis octroie de l'or et des objets de soin. L'or est une ressource essentielle permettant de se reposer afin de regagner de la vie ou d'acheter des kits de soin dans les campements.
+\end{itemize} 
+
+\medskip
+
+\textbf{Mécaniques de progression} 
+
+\noindent La progression du personnage est nécessaire pour vaincre le boss final. 
+Le joueur peut obtenir des bénédictions via les sanctuaires. 
+Les sanctuaires sont rares c'est pourquoi, ils offrent des bonus de statistiques permanents. 
+Chaque sanctuaire ne peut être utilisé qu'une seule fois, ce qui demande au joueur de faire des choix stratégiques durant son aventure.
+
+\medskip
+
+\textbf{Objectifs techniques} \\
+Ce projet vise à mettre en pratique des concepts informatiques fondamentaux :
+\begin{itemize}
+	\item \textbf{Gestion de la mémoire} : Manipulation des pointeurs et des structures en C pour éviter toute fuite mémoire.
+	\item \textbf{Architecture logicielle} : Structuration du code pour séparer la logique de jeu (moteur) du rendu graphique (SDL2).
+	\item \textbf{Interface utilisateur} : Création d'un système de menus interactifs et d'un affichage dynamique de la carte et des combats.
+\end{itemize}
+
 
 \section{Conception}
 
@@ -49,6 +85,7 @@ For the king est un jeu tour par tour, basé sur de l'aléatoire.
 
 \subsection{Fonctionnalités du jeu}
 
+La figure \ref{fig1} % Refaire les ref
 \begin{figure}[h]
 \begin{center}
 \includegraphics[height=7cm]{image.png}\\
