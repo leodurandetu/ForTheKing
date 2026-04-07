@@ -35,35 +35,34 @@ void dessiner_bouton(SDL_Surface *surface, TTF_Font *font,
     SDL_FreeSurface(surfTexte);
 }
 
-SDL_Rect dessiner_monstre(SDL_Renderer *renderer)
+SDL_Texture* dessiner_monstre(SDL_Renderer *renderer, const char *chemin,
+                               int x, int y, int w, int h)
 {
-    SDL_Surface *img = IMG_Load("img/squelette.png");
+    SDL_Surface *img = IMG_Load(chemin);
+    if (!img) return NULL;
 
-    SDL_Rect rect_monstre = {120, 20, 60, 60};
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
+    SDL_FreeSurface(img);
+    if (!texture) return NULL;
 
-    if(img)
-    {
-        SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
+    SDL_Rect rect = {x, y, w, h};
+    SDL_RenderCopy(renderer, texture, NULL, &rect);
 
-        SDL_RenderCopy(renderer, texture, NULL, &rect_monstre);
-
-        SDL_FreeSurface(img);
-        SDL_DestroyTexture(texture);
-    }
-
-    return rect_monstre;
+    return texture;
 }
 
 
 
 int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
                     int perso_x, int perso_y, int perso_w, int perso_h,
-                    int fuite_bloquee){
-  int lancerCombat = 0;
+                    int fuite_bloquee,const char *chemin_monstre){
+    int lancerCombat = 0;
     int running = 1;
 
+    const int IMG_W  = 60;
+    const int IMG_H  = 60;
     const int MENU_W = 200;
-    const int MENU_H = 130;
+    const int MENU_H = 200;
     const int BTN_W  = 160;
     const int BTN_H  = 35;
     const int MARGIN = 15;
@@ -75,31 +74,25 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
     if (ECRAN_W == 0 || ECRAN_H == 0)
         SDL_GetRendererOutputSize(gRenderer, &ECRAN_W, &ECRAN_H);
 
-    /*
-     * On tente de placer le menu à droite du sprite,
-     * aligné verticalement sur son centre.
-     * Si ça déborde à droite → on passe à gauche.
-     */
-    int mx = perso_x + perso_w + 6;   /* colle à droite du sprite */
-    int my = perso_y + (perso_h - MENU_H) / 2;  /* centré verticalement */
+    /* Placement du menu à droite du sprite, avec repli à gauche */
+    int mx = perso_x + perso_w + 6;
+    int my = perso_y + (perso_h - MENU_H) / 2;
 
     if (mx + MENU_W > ECRAN_W)
-        mx = perso_x - MENU_W - 6;    /* repli à gauche */
+        mx = perso_x - MENU_W - 6;
 
-    /* Clamp vertical */
-    if (my < 0)              my = 0;
+    if (my < 0)                my = 0;
     if (my + MENU_H > ECRAN_H) my = ECRAN_H - MENU_H;
 
     SDL_Rect fond = {mx, my, MENU_W, MENU_H};
 
     int btn_x     = (MENU_W - BTN_W) / 2;
-    int btn_y_atk = MARGIN;
-    int btn_y_run = MARGIN + BTN_H + GAP;
+    int btn_y_atk = MARGIN + IMG_H + GAP;
+    int btn_y_run = MARGIN + IMG_H + GAP + BTN_H + GAP;
 
     SDL_Rect bouton_attaque = {btn_x, btn_y_atk, BTN_W, BTN_H};
     SDL_Rect bouton_fuite   = {btn_x, btn_y_run, BTN_W, BTN_H};
 
-    /* Rectangles en coordonnées écran pour la détection de clic */
     SDL_Rect atk_screen = {fond.x + btn_x, fond.y + btn_y_atk, BTN_W, BTN_H};
     SDL_Rect run_screen = {fond.x + btn_x, fond.y + btn_y_run, BTN_W, BTN_H};
 
@@ -112,6 +105,21 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
     );
     if (!surface) return 0;
 
+    /* Chargement du monstre une seule fois avant la boucle */
+    
+    SDL_Texture *tex_monstre = dessiner_monstre(
+        gRenderer, chemin_monstre,
+        fond.x + (MENU_W - IMG_W) / 2,
+        fond.y + MARGIN,
+        IMG_W, IMG_H
+    );
+
+    SDL_Rect rect_monstre = {
+        fond.x + (MENU_W - IMG_W) / 2,
+        fond.y + MARGIN,
+        IMG_W, IMG_H
+    };
+
     SDL_Event e;
 
     while (running)
@@ -122,6 +130,7 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
             if (e.type == SDL_QUIT)
             {
                 SDL_FreeSurface(surface);
+                if (tex_monstre) SDL_DestroyTexture(tex_monstre);
                 return 0;
             }
 
@@ -162,12 +171,11 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
         SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
         SDL_RenderDrawRect(gRenderer, &fond);
 
-        /* Petite flèche pointant vers le joueur */
+        /* Flèche pointant vers le joueur */
         int arrow_y = fond.y + MENU_H / 2;
 
         if (mx == perso_x + perso_w + 6)
         {
-            /* Menu à droite → flèche à gauche du menu */
             SDL_RenderDrawLine(gRenderer,
                 fond.x,     arrow_y - 6,
                 fond.x - 8, arrow_y);
@@ -177,7 +185,6 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
         }
         else
         {
-            /* Menu à gauche → flèche à droite du menu */
             SDL_RenderDrawLine(gRenderer,
                 fond.x + MENU_W,     arrow_y - 6,
                 fond.x + MENU_W + 8, arrow_y);
@@ -185,6 +192,10 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
                 fond.x + MENU_W + 8, arrow_y,
                 fond.x + MENU_W,     arrow_y + 6);
         }
+
+        /* Sprite du monstre */
+        if (tex_monstre)
+            SDL_RenderCopy(gRenderer, tex_monstre, NULL, &rect_monstre);
 
         /* Dessin des boutons sur la surface locale */
         SDL_FillRect(surface, NULL,
@@ -208,6 +219,9 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
         SDL_Delay(16);
     }
 
+    /* Libération des ressources */
     SDL_FreeSurface(surface);
+    if (tex_monstre) SDL_DestroyTexture(tex_monstre);
+
     return lancerCombat;
 }
