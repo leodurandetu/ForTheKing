@@ -55,10 +55,9 @@ booleen_t utiliser_objet_inventaire(inventaire_t * inventaire, int indice_objet,
     booleen_t objet_trouve = FAUX;
 
     if (indice_objet >= 0 && indice_objet < TAILLE_INVENTAIRE) {
-        objet_t objet = inventaire->contenu[indice_objet];
 
-        if (objet.quantite > 0) {
-            utiliser_objet(&objet, perso);
+        if (inventaire->contenu[indice_objet].quantite > 0) {
+            utiliser_objet(&(inventaire->contenu[indice_objet]), perso);
             inventaire->contenu[indice_objet].quantite--;
             objet_trouve = VRAI;
             *maj_affichage = 1;

@@ -289,6 +289,7 @@ int main(int argc,char *argv[]) {
 
                         if (e.button.button == SDL_BUTTON_LEFT) {
                             clic_gauche = 1; 
+                            majAffichage = 1;
 
                             int fen_w, fen_h;
                             SDL_GetRendererOutputSize(renderer, &fen_w, &fen_h);
@@ -449,6 +450,7 @@ int main(int argc,char *argv[]) {
 
                             if (e.button.button == SDL_BUTTON_LEFT) {
                                 clic_gauche = 1;
+                                majAffichage = 1;
                             }
 
                             point.x = e.button.x;
@@ -569,7 +571,6 @@ int main(int argc,char *argv[]) {
             } else {
                 /* On dessine toujours la carte */
                 if (etat == CARTE || etat == GAME_OVER) {
-                
                     afficher_carte_sdl(renderer, carte, ressources.cases, ressources.obstacles, ressources.brouillard, ressources.monstres,
                         ressources.batiments, ressources.sanctuaires, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
                         perso);
