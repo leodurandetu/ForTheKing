@@ -51,7 +51,7 @@ Pour gagner, il faut vaincre le boss final afin de sauver le royaume.
 - ⚙️ **Valgrind** : Pour vérifier les fuites de mémoire
 - 🌐 **Git** : Travail collaboratif
 - 📄 **Doxygen** : Génération automatique de documentation
-- 📅 **Diagramme de Gantt** : Pour planifier les tâchese
+- 📅 **Diagramme de Gantt** : Pour planifier les tâches
 - 📑 **Latex** : Rédaction du rapport de projet
 
 ## 🚀 Comment Installer le Jeu
