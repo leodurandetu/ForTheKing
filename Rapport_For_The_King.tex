@@ -4,6 +4,7 @@
 \usepackage[francais]{babel}
 \usepackage{color}
 \usepackage{graphicx}
+\usepackage{float}
 \author{Durand Leo, Tsamarayev Massoud, Mohamed Saandi}
 \date{\today}
 \begin{document}
@@ -19,9 +20,10 @@
 
 \begin{figure}[t]
 \centering
-\includegraphics[height=1.5cm]{logolemansU.png}
+\includegraphics[height=1cm]{logolemansU.png}
 \hfill
 \includegraphics[height=1.5cm]{logo_IC2.png}
+
 \end{figure}
 
 \maketitle
@@ -29,6 +31,7 @@
 \newpage
 
 \tableofcontents
+
 \newpage
 
 \section{Introduction}
@@ -108,17 +111,55 @@ La figure \ref{fig1} % Refaire les ref
 
 \subsection{Répartition des tâches}
 
-Massoud : génération de l'eau, affichage des hexagones, mécaniques du combat, menus, graphismes, système de niveau, affichage des combats, placement des monstres, quêtes
-Leo : placement du personnage sur la carte, mécaniques de déplacement, inventaire, système de sauvegarde, affichage de la carte en SDL, affichage des combats, tests unitaires, boss final
-Saandi : documentation Doxygen, génération des biomes, affichage des informations lors des interactions en SDL, Gantt prévisionnel.
-Toute l'équipe : création des monstres et leur attributs, création des personnages et leur attributs, carte
+\begin{table}[H]
+\begin{tabular}{|l|c|}
+\hline
+Tâche effectuée & Nom et prénom \\
+\hline
+Placement du personnage sur la carte & Durand Léo \\
+Mécaniques de déplacement & Durand Léo \\
+Système d'inventaire & Durand Léo \\
+Sauvegarde des parties & Durand Léo \\
+Affichage de la carte & Durand Léo \\
+Tests Unitaires & Durand Léo \\
+Boss final et son combat & Durand Léo \\
+Affichage des combats & Durand Léo, Tsamarayev Massoud \\
+Génération de l'eau & Tsamarayev Massoud \\
+Affichage hexagonal & Tsamarayev Massoud \\
+Mécaniques du combat & Tsamarayev Massoud \\
+Menu principal & Tsamarayev Massoud \\
+Menu de pause & Tsamarayev Massoud \\
+Graphismes & Tsamarayev Massoud \\
+Système de niveau & Tsamarayev Massoud \\
+Placement aléatoire des monstres & Tsamarayev Massoud \\
+Quêtes & Tsamarayev Massoud \\
+Interactions avec les sanctuaires & Tsamarayev Massoud \\
+Documentation Doxygen & Mohamed Saandi \\
+Génération des biomes & Mohamed Saandi \\
+Interactions avec les batiments & Mohamed Saandi \\
+Gantt prévisionnel & Mohamed Saandi \\
+Création des monstres et leur attributs & Toute l'équipe \\
+Création des personnages et leur attributs & Toute l'équipe \\
+Génération de la carte & Toute l'équipe \\
+\hline
+\end{tabular}
+\label{tab_taches}
+\caption{Ceci est un tableau présentant les différents étudiants qui ont travaillé sur ce projet ainsi que les tâches qu'ils ont effectué.}
+\end{table}
+Ici, je fais référence à mon tableau \ref{tab_taches}
 
-\subsection{Outils de travail}
+\subsection{Outils techniques utilisés}
 
 \begin{itemize}
-\item Git
-\item Doxygen
-\item LaTeX
+\item Le langage C consiste en un langage de programmation bas niveau créé en 1972 par Dennis Ritchie et Ken Thompson. C'est le langage que nous utilisons dans ce projet.
+\item GCC est un compilateur très connu et utilisé pour transformer le code source en langage C en programme binaire exécutable.
+\item SDL2 est une librairie en C qui permet de créer des interfaces graphiques.
+\item Makefile sert à mettre des règles de compilation automatique, et ne recompile que les fichiers qui ont changé.
+\item Valgrind permet de vérifier les fuites de mémoire dans un programme binaire exécutable.
+\item Git est un gestionnaire de version, c'est-à-dire un système qui enregistre l'évolution d'un fichier ou d'un ensemble de fichiers au cours du temps de manière à ce que l'on puisse rappeler une version antérieure d'un fichier à tout moment (ProGit, S. Shacon, B. Straub).
+\item Doxygen est utilisé dans notre projet en tant que générateur de documentation, plus précisement c'est un outil de programmation qui crée de la documentation destinée aux programmeurs ou aux utilisateurs finaux. Le générateur se base sur les codes sources commentés et les fichiers binaires.
+\item Des diagrammes de Gantt sont utilisés pour planifier les tâches dans notre projet.
+\item LaTeX permet de formatter à l'aide de commandes un document, un rapport, un article etc. Il a été utilisé pour ce rapport.
 \end{itemize}
 
 \section{Développement}
@@ -127,7 +168,24 @@ gh
 
 \subsection{Génération aléatoire de la carte}
 
-ij
+La carte du jeu est une matrice 2D composée de cases.
+Elle est crée par allocation dynamique pour qu'on puisse régler la taille de la carte, on le fait notamment dans les tests unitaires.
+Chaque case a ses propres caractéristiques:
+
+\begin{itemize}
+\item Le type de sanctuaire présent sur la case.
+\item Un entier représentant si le bonus du sanctuaire a été saisi.
+\item Le biome de la case: FORET, DESERT, NEIGE, EAU, TERRE.
+\item Le terrain ou l'obstacle de la case, comme des montagnes, des arbres, un cactus etc.
+\item Le bâtiment sur la case, si il existe, comme un campement par exemple.
+\item Un pointeur sur un monstre, si il existe.
+\item Un entier représentant si la case est visible ou couverte par le brouillard.
+\end{itemize}
+
+La génération de la carte est basée sur l'algorithme de Perlin Noise.
+L'avantage de cet algorithme est qu'il donne des résultats plus naturels que simplement un générateur de nombres aléatoires.
+Au lieu d'utiliser de l'aléatoire pur, le Perlin noise organise des valeurs sur une grille et les mélange doucement pour éviter les cassures.
+On obtient alors un bruit "fluide" et continu, qui ressemble à des formes naturelles.
 
 \subsection{Affichage du jeu}
 
@@ -147,29 +205,26 @@ ij
 
 \subsection{Gestion de la sauvegarde}
 
-90
+Avant que le programme se termine, une sauvegarde de la partie est effectuée.
+Il est donc conseillé de terminer le programme proprement, en appuyant sur le bouton "Quitter" du menu principal.
+Cette sauvegarde contient les données du personnage, ainsi que la carte et les différents bâtiments et monstres qui se trouvent sur chaque case.
+Lorsqu'on relance le jeu à nouveau, et qu'on appuie sur le bouton "Continuer", le jeu charge la dernière et unique sauvegarde.
+Au lieu de générer une nouvelle carte, le jeu va récupérer les informations de l'ancienne partie.
+Les sauvegardes sont stockées dans un fichier .txt sous format binaire.
+A chaque sauvegarde, on écrase l'ancien fichier, et donc le nouveau fichier commence vide.
+D'abord, il faut sauvegarder la carte.
+Comme chaque case a les mêmes attributs et la même structure en mémoire, la sauvegarde de la carte devient simple.
+Il suffit de faire une boucle sur toutes les cases de la carte et de stocker dans le fichier tous les attributs à la suite.
 
 \section{Bilan et résultats}
 
-\begin{table}
-\begin{tabular}{|l|cc|}
-OS & Plateforme & Part des serveurs http \\
-\hline
-Unix & Toutes & 32\% \\
-Linux & Toutes & 26\% \\
-Windows NT & Intel & 23\% \\
-\end{tabular}
-\caption{Ceci est un tableau présentant la part des serveurs
-occupés par chaque système d’exploitation.}\label{tab_serveur}
-\end{table}
-Ici, je fais référence à mon tableau \ref{tab_serveur}
+blablabla
 
 \section{Bibliographie}
 
 \begin{thebibliography}{REF}
 
-	\bibitem{WIKI LATEX} http://fr.wikibooks.org/wiki/LaTeX
-	\bibitem{SCRIBBR} https://www.scribbr.fr/category/normes-apa/
+	\bibitem{Le bruit de Perlin} https://fr.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-noise/a/perlin-noise
 
 \end{thebibliography}
 
