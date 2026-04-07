@@ -21,6 +21,22 @@ void utiliser_kit_de_soins(perso_t * perso) {
     perso->sante = nouveauPv;
 }
 
+void utiliser_objet(objet_t * objet, perso_t * perso) {
+
+    if (objet != NULL) {
+
+        switch(objet->type) {
+
+            case KIT_DE_SOINS:
+                utiliser_kit_de_soins(perso);
+                break;
+
+        }
+        
+    }
+
+}
+
 /* Leo
  * Cette fonction crée un nouvel objet
  * de type kit de soins et le renvoie
@@ -29,11 +45,30 @@ objet_t creer_kit_de_soins(SDL_Renderer * renderer) {
     objet_t objet;
 
     objet.type = KIT_DE_SOINS;
-    objet.nom = "Kit de Soins";
     objet.quantite = 1;
-    objet.utiliser = utiliser_kit_de_soins;
+    objet.texture = texture_kit_de_soins(renderer);
 
-    // Chargement de l'image
+    return objet;
+}
+
+void remplir_texture_objet(objet_t * objet, SDL_Renderer * renderer) {
+
+    if (objet != NULL) {
+
+        switch(objet->type) {
+
+            case KIT_DE_SOINS:
+                objet->texture = texture_kit_de_soins(renderer);
+
+                break;
+
+        }
+
+    }
+
+}
+
+SDL_Texture * texture_kit_de_soins(SDL_Renderer * renderer) {
     SDL_Texture *texture_objet = NULL;
     SDL_Surface *img_objet = IMG_Load("img/kit_de_soins.png");
     if (img_objet) {
@@ -42,9 +77,7 @@ objet_t creer_kit_de_soins(SDL_Renderer * renderer) {
         SDL_FreeSurface(img_objet);
     }
 
-    objet.texture = texture_objet;
-
-    return objet;
+    return texture_objet;
 }
 
 /* Leo

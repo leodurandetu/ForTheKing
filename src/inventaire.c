@@ -58,7 +58,7 @@ booleen_t utiliser_objet_inventaire(inventaire_t * inventaire, int indice_objet,
         objet_t objet = inventaire->contenu[indice_objet];
 
         if (objet.quantite > 0) {
-            objet.utiliser(perso);
+            utiliser_objet(&objet, perso);
             inventaire->contenu[indice_objet].quantite--;
             objet_trouve = VRAI;
             *maj_affichage = 1;
@@ -79,7 +79,6 @@ void initialiser_inventaire(inventaire_t * inventaire) {
 
     for (i = 0; i < TAILLE_INVENTAIRE; i++) {
         inventaire->contenu[i].quantite = -1;
-        inventaire->contenu[i].nom = NULL;
         inventaire->contenu[i].texture = NULL;
     }
 

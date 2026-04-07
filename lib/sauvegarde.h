@@ -16,9 +16,10 @@
  * @param nomFichier Nom du fichier dans lequel sauvegarder les données
  * @param perso Pointeur vers le personnage du jeu
  * @param carte Carte du jeu
+ * @param renderer Moteur de rendu du jeu
  * @return 1 si succès, 0 sinon.
  */
-int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte);
+int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SDL_Renderer * renderer);
 
 /**
  * @author Léo
@@ -26,9 +27,10 @@ int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte
  *  @param nomFichier Nom du fichier depuis lequel charger les données
  * @param perso Pointeur vers le personnage du jeu
  * @param carte Carte du jeu
+ * @param renderer Moteur de rendu du jeu
  * @details Alloue la mémoire nécessaire pour les monstres.
  * @return 1 si succès, 0 sinon.
  */
-int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte);
+int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SDL_Renderer * renderer);
 
 #endif

@@ -132,7 +132,7 @@ int main(int argc,char *argv[]) {
 
     if (charger_sauvegarde == 1) {
         perso = malloc(sizeof(perso_t));
-        charger_partie("sauvegarde_01.txt", perso, carte);
+        charger_partie("sauvegarde_01.txt", perso, carte, renderer);
     } else {
         generer_eau(carte);
         generer_biomes(carte);
@@ -657,7 +657,7 @@ int main(int argc,char *argv[]) {
     }
 
     // Sauvegarde dans un fichier
-    sauvegarder_partie("sauvegarde_01.txt", perso, carte);
+    sauvegarder_partie("sauvegarde_01.txt", perso, carte, renderer);
 
     // --- Nettoyage des ressources ---
     liberer_ressources(&ressources);

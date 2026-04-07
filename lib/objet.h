@@ -23,20 +23,12 @@ typedef enum {
 /** * @author Léo
  * @brief Structure représentant un objet de l'inventaire.
  * @details Utilise un pointeur de fonction pour définir un comportement 
- * spécifique lors de l'utilisation de l'objet (Polymorphisme en C).
+ * spécifique lors de l'utilisation de l'objet.
  */
 typedef struct {
     objet_type_t type;      /**< Identifiant du type d'objet. */
-    char * nom;             /**< Nom affiché dans l'interface. */
-    SDL_Texture * texture;  /**< Icône visuelle de l'objet. */
     int quantite;           /**< Nombre d'exemplaires possédés. */
-
-    /** * @author Léo
-     * @brief Pointeur vers la fonction d'effet de l'objet.
-     * @param perso Le personnage qui subit l'effet lors de l'utilisation.
-     */
-    void (*utiliser)(perso_t *);
-
+    SDL_Texture * texture;  /**< Icône visuelle de l'objet. */
 } objet_t;
 
 /* --- Prototypes des fonctions --- */
@@ -62,5 +54,29 @@ objet_t creer_kit_de_soins(SDL_Renderer * renderer);
  * @param objet Pointeur vers l'objet à détruire.
  */
 void detruire_objet(objet_t * objet);
+
+/**
+ * @author Léo
+ * @brief Remplit l'attribut texture d'un objet en fonction de son type.
+ * @param objet Pointeur vers l'objet
+ * @param renderer Le moteur de rendu pour charger la texture associée.
+ */
+void remplir_texture_objet(objet_t * objet, SDL_Renderer * renderer);
+
+/**
+ * @author Léo
+ * @brief Crée une texture pour un objet de type kit de soins.
+ * @param renderer Le moteur de rendu pour charger la texture associée.
+ * @return Un pointeur sur un SDL_Texture correspondant à un kit de soins.
+ */
+SDL_Texture * texture_kit_de_soins(SDL_Renderer * renderer);
+
+/**
+ * @author Léo
+ * @brief Utilise un objet.
+ * @param objet Pointeur vers l'objet à utiliser.
+ * @param perso Le personnage qui utilise l'objet.
+ */
+void utiliser_objet(objet_t * objet, perso_t * perso);
 
 #endif

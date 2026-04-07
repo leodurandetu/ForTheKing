@@ -1,6 +1,6 @@
 #include "../lib/sauvegarde.h"
 
-int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte) {
+int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SDL_Renderer * renderer) {
     FILE *fichier = fopen(nomFichier, "wb");
 
     if (!fichier) {
@@ -239,7 +239,7 @@ int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte
     return 1;
 }
 
-int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte) {
+int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SDL_Renderer * renderer) {
     FILE *fichier = fopen(nomFichier, "rb");
 
     if (!fichier) {
@@ -254,13 +254,8 @@ int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte) {
         return 0;
     }
 
-    /* IMPORTANT : L'inventaire contient des pointeurs (nom, texture, fonction utiliser).
-     * On les remet à zéro pour éviter d'utiliser des adresses mémoires périmées.
-     */
     for (int k = 0; k < TAILLE_INVENTAIRE; k++) {
-        perso->inventaire.contenu[k].nom = NULL;
-        perso->inventaire.contenu[k].texture = NULL;
-        perso->inventaire.contenu[k].utiliser = NULL;
+        remplir_texture_objet(&(perso->inventaire.contenu[k]), renderer);
     }
 
     /* Chargement de la carte */
