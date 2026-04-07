@@ -77,7 +77,7 @@ make clean all
 
 **Test du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
-_./bin/menu_  : lance le menu du jeu pour choisir le personnage.  
+_./bin/menu_  : lance le menu du jeu pour choisir le personnage ou accéder aux réglages.  
 _./bin/fortheking_ : lance directement le jeu avec un mage comme personnage par défaut.
 
 ## 🎮 Comment Jouer au Jeu
@@ -86,7 +86,7 @@ Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.
 
 #### _Voici les commandes pour jouer au jeu :_
 
-|        Touche        | Action          | Déscription                                                                               |
+|        Touche ⌨️       | Action          | Déscription                                                                               |
 | :------------------: | :-------------- | :---------------------------------------------------------------------------------------- |
 |   **<kbd>Z</kbd>**   | Avancer         | Se déplacer vers l'avant                                                                  |
 |   **<kbd>Q</kbd>**   | Aller à gauche  | Se déplacer vers la gauche                                                                |
@@ -95,7 +95,7 @@ Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.
 |   **<kbd>N</kbd>**   | Remplir         | Réinitialiser le compteur de point de déplacement pour permettre au joueur de se déplacer |
 | **<kbd>ECHAP</kbd>** | Mettre en pause | Ouvrir le menu pause                                                                      |
 
-|            Souris            | Action            | Déscription                                                                                                                                                                                        |
+|            Souris  🖱️          | Action            | Déscription                                                                                                                                                                                        |
 | :--------------------------: | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 |    **<kbd>Molette</kbd>**    | Zoomer / Dézoomer | La molette de la souris vous permet de zoomer/dézoomer sur la carte                                                                                                                                  |
 | **<kbd>Clic Gauche</kbd>** | Se Déplacer       | Le clic gauche de la souris vous permet de vous déplacer sur la case que vous avez cliqué. <br>Vous pouvez vous déplacer uniquement sur les cases avec un carré au milieu (qui représente un point de déplacement). |
