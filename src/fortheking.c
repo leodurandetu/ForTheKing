@@ -115,12 +115,12 @@ int main(int argc,char *argv[]) {
     SDL_Point point;
     
     case_t ** carte;
-    carte = malloc(sizeof(case_t *) * TAILLE_CARTE); 
+    carte = calloc(TAILLE_CARTE, sizeof(case_t *)); 
 
     int k;
 
     for (k = 0; k < TAILLE_CARTE; k++) {
-        carte[k] = malloc(sizeof(case_t) * TAILLE_CARTE);
+        carte[k] = calloc(TAILLE_CARTE, sizeof(case_t));
     }
 
     monstre_t * boss_final = creer_boss_final();
@@ -138,16 +138,15 @@ int main(int argc,char *argv[]) {
         generer_biomes(carte);
         ajout_obstacles(carte);
         placer_sanctuaires(carte);
+        placer_monstres(carte);
+        placer_batiments(carte);
     }
-    
-    placer_monstres(carte);
-    placer_batiments(carte);
 
     preparer_avant_affichage();
 
     if (musique) Mix_FadeInMusic(musique, 1, 3000);
 
-    //if (charger_sauvegarde == 0) {
+    if (charger_sauvegarde == 0) {
         int xApparition;
         int yApparition;
 
@@ -156,7 +155,7 @@ int main(int argc,char *argv[]) {
 
         remplir_brouillard(carte);
         devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
-    //}
+    }
 
     int tailleCase = TAILLE_CASE_DEPART;
     int case_selection_x = -1;

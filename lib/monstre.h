@@ -14,7 +14,8 @@ typedef enum {
     SQUELETTE,
     TROLL,
     YETI,
-    BOSS_FINAL
+    BOSS_FINAL,
+    PAS_DE_MONSTRE
 } type_monstre_t;
 
 /** * @author Léo, Saandi & Massoud
