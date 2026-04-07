@@ -18,7 +18,7 @@
  * @param combat Pointeur vers la structure d'état contenant toutes les données du combat en cours.
  * @param clicGauche État logique du clic souris (1 si le bouton est pressé, 0 sinon).
  */
-void maj_affichage_fenetre_combat(combat_t * combat, int clicGauche);
+void maj_affichage_fenetre_combat(combat_t * combat, int clicGauche, int * maj_affichage);
 
 /**
  * @author Massoud & Léo

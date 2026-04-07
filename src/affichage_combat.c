@@ -74,7 +74,7 @@ static void dessiner_fond_ecran(combat_t *combat, int largeur, int hauteur)
  * côté à propos d'un personnage ou un monstre
  */
 static void dessiner_interface_combat(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, int a_gauche,
-    const char* nom, int pv, int pv_max, int force, int intel, int rapidite, int evasion, perso_t * perso, int clic_gauche)
+    const char* nom, int pv, int pv_max, int force, int intel, int rapidite, int evasion, perso_t * perso, int clic_gauche, int * maj_affichage)
 {
     int fen_w, fen_h;
     SDL_GetRendererOutputSize(renderer, &fen_w, &fen_h);
@@ -146,9 +146,7 @@ static void dessiner_interface_combat(SDL_Renderer* renderer, TTF_Font* font, SD
     }
 
     if (perso != NULL) {
-        /* il ne sert à rien mais c'est pour éviter d'avoir un pointeur à NULL */
-        int maj_affichage = 0;
-        dessiner_inventaire(renderer, font, perso, fond, r_nom, clic_gauche, &maj_affichage, INV_VERTICAL, -1);
+        dessiner_inventaire(renderer, font, perso, fond, r_nom, clic_gauche, maj_affichage, INV_VERTICAL, -1);
     }
 
 }
@@ -157,7 +155,7 @@ static void dessiner_interface_combat(SDL_Renderer* renderer, TTF_Font* font, SD
  * Cette fonction dessine et met à jour
  * l'affichage de la fenêtre de combat
  */
-void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche)
+void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche, int * maj_affichage)
 {
     SDL_Renderer *renderer = combat->renderer;
 
@@ -241,16 +239,18 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche)
     perso_t * perso = combat->perso;
     monstre_t * monstre = combat->monstre;
 
-    dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion, perso, clicGauche);
+    dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion, perso, clicGauche, maj_affichage);
     
+    int nul = 0;
+
     if(combat->monstre->type == SQUELETTE) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0, &nul);
     } else if (combat->monstre->type == TROLL) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0, &nul);
     } else if (combat->monstre->type == YETI) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Yeti", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Yeti", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0, &nul);
     } else if (combat->monstre->type == BOSS_FINAL) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Boss Final", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Boss Final", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0, &nul);
     }
 
     SDL_RenderPresent(renderer);

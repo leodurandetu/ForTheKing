@@ -172,7 +172,6 @@ void dessiner_inventaire(SDL_Renderer * renderer, TTF_Font * font, perso_t * per
         objet_t * obj = &(inventaire->contenu[i]);
 
         if (obj->quantite > 0 && obj->texture != NULL) {
-
             SDL_Rect rect_icone = {
                 case_inv.x + 2,
                 case_inv.y + 2,

@@ -563,7 +563,7 @@ int main(int argc,char *argv[]) {
             if (etat == COMBAT) {
 
                 if (majAffichage) {
-                    maj_affichage_fenetre_combat(combat_actuel, clic_gauche);
+                    maj_affichage_fenetre_combat(combat_actuel, clic_gauche, &majAffichage);
                     majAffichage = 0;
                 }
 
