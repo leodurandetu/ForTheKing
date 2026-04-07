@@ -35,12 +35,19 @@ void dessiner_bouton(SDL_Surface *surface, TTF_Font *font,
 
 /**
  * @author Saandi
- * @brief Charge et affiche le sprite du monstre (squelette) dans le renderer.
+ * @brief Charge le sprite d'un monstre et l'affiche dans le renderer à la position donnée.
  *
  * @param renderer Le moteur de rendu SDL utilisé pour l'affichage.
- * @return SDL_Rect Rectangle représentant la zone occupée par le monstre à l'écran.
+ * @param chemin   Chemin vers le fichier image du sprite.
+ * @param x        Position horizontale (en pixels) où afficher le monstre.
+ * @param y        Position verticale (en pixels) où afficher le monstre.
+ * @param w        Largeur d'affichage du sprite (en pixels).
+ * @param h        Hauteur d'affichage du sprite (en pixels).
+ * @return SDL_Texture* Texture chargée (à détruire avec SDL_DestroyTexture),
+ *                      ou NULL en cas d'échec.
  */
-SDL_Rect dessiner_monstre(SDL_Renderer *renderer);
+SDL_Texture* dessiner_monstre(SDL_Renderer *renderer, const char *chemin,
+                               int x, int y, int w, int h);
 
 
 /* --- Logique de sélection et fenêtrage --- */
@@ -62,11 +69,12 @@ SDL_Rect dessiner_monstre(SDL_Renderer *renderer);
  * @param perso_w      Largeur en pixels du sprite du joueur.
  * @param perso_h      Hauteur en pixels du sprite du joueur.
  * @param fuite_bloquee 1 si la fuite est interdite (max de fuites atteint), 0 sinon.
+ * @param chemin_monstre L'image du monstre 
  * @return int          1 si le joueur choisit d'attaquer, 0 s'il choisit de fuir.
  */
 int afficher_option(SDL_Renderer *gRenderer, TTF_Font *gFont,
                     int perso_x, int perso_y, int perso_w, int perso_h,
-                    int fuite_bloquee);
+                    int fuite_bloquee,const char *chemin_monstre);
 
 /**
  * @author Saandi
