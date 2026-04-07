@@ -364,13 +364,31 @@ int main(int argc,char *argv[]) {
                                                 // Taille du sprite à l'écran (même logique que dans afficher_personnage)
                                                 int sprite_w = tailleCase;
                                                 int sprite_h = tailleCase;
-
                                                 int choix;
-
-                                                choix = afficher_option(renderer, police2,
+                                                switch (monstre->type){
+                                                    case SQUELETTE :
+                                                        choix = afficher_option(renderer, police2,
                                                                             perso_px, perso_py,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE);
+                                                                            nb_fuites >= MAX_FUITE,"img/squelette.png");break;
+                                                    case TROLL : 
+                                                        choix = afficher_option(renderer, police2,
+                                                                            perso_px, perso_py,
+                                                                            sprite_w, sprite_h,
+                                                                            nb_fuites >= MAX_FUITE,"img/troll.png");break;
+                                                    case YETI : 
+                                                            choix = afficher_option(renderer, police2,
+                                                                            perso_px, perso_py,
+                                                                            sprite_w, sprite_h,
+                                                                            nb_fuites >= MAX_FUITE,"img/yeti.png");break;
+                                                    case BOSS_FINAL : 
+                                                        choix = afficher_option(renderer, police2,
+                                                                            perso_px, perso_py,
+                                                                            sprite_w, sprite_h,
+                                                                            nb_fuites >= MAX_FUITE,"img/boss_final.png");break;
+                                                    default:
+                                                        break;
+                                                }
                                                 if(choix == 1)
                                                 {
                                                     ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, &combat_actuel, carte, &vies_globales);
@@ -401,13 +419,31 @@ int main(int argc,char *argv[]) {
                                                 // Taille du sprite à l'écran (même logique que dans afficher_personnage)
                                                 int sprite_w = tailleCase;
                                                 int sprite_h = tailleCase;
-
                                                 int choix;
-
-                                                choix = afficher_option(renderer, police2,
+                                                switch (monstre->type){
+                                                    case SQUELETTE :
+                                                        choix = afficher_option(renderer, police2,
                                                                             perso_px, perso_py,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE);
+                                                                            nb_fuites >= MAX_FUITE,"img/squelette.png");break;
+                                                    case TROLL : 
+                                                        choix = afficher_option(renderer, police2,
+                                                                            perso_px, perso_py,
+                                                                            sprite_w, sprite_h,
+                                                                            nb_fuites >= MAX_FUITE,"img/troll.png");break;
+                                                    case YETI : 
+                                                            choix = afficher_option(renderer, police2,
+                                                                            perso_px, perso_py,
+                                                                            sprite_w, sprite_h,
+                                                                            nb_fuites >= MAX_FUITE,"img/yeti.png");break;
+                                                    case BOSS_FINAL : 
+                                                        choix = afficher_option(renderer, police2,
+                                                                            perso_px, perso_py,
+                                                                            sprite_w, sprite_h,
+                                                                            nb_fuites >= MAX_FUITE,"img/boss_final.png");break;
+                                                    default:
+                                                        break;
+                                                }
                                                 if(choix == 1)
                                                 {
                                                     ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, &combat_actuel, carte, &vies_globales);
