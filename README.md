@@ -22,25 +22,22 @@ Le jeu comporte une dimension de survie : si tous les héros meurent, la partie 
 ## ⚙️ Fonctionnalités détaillées
 
 **Composition de l’équipe**  
-Le joueur contrôle une équipe de 1 à 3 personnages. Chaque personnage a une classe, des statistiques et un rôle différent.
+Le joueur contrôle un personnage. Le personnage a une classe, des statistiques et un rôle différent selon le personnage choisi.
 
 **Déplacements**  
-Les personnages se déplacent tour par tour sur la carte. Chaque déplacement consomme des points, et certains terrains sont plus dangereux que d’autres.
+Le personnage se déplace tour par tour sur la carte. Chaque déplacement consomme des points, et certains terrains sont plus dangereux que d’autres.
 
 **Exploration**  
-La carte est partiellement cachée au début. En se déplaçant, les joueurs découvrent des villes, des donjons, des sanctuaires et des événements aléatoires.
+La carte est partiellement cachée au début. En se déplaçant, le joueur découvre des campements, des sanctuaires.
 
 **Combats**  
 Les combats se déroulent au tour par tour. Les attaques et défenses utilisent des jets de dés. La réussite dépend des statistiques, de l’équipement et du hasard.
 
 **Équipement et objets**  
-Les héros peuvent acheter ou trouver des armes, des armures et des objets. L’équipement améliore les statistiques et influence les combats.
-
-**Or et ressources**  
-L’or est partagé entre les héros et sert à acheter de l’équipement ou des services. Des objets de soin et de survie sont nécessaires pour continuer l’aventure.
+Le héros peut trouver des armes, des objets. L’équipement améliore les statistiques et influence les combats.
 
 **Mort des personnages**  
-Si un personnage meurt, il peut parfois être ressuscité. Si toute l’équipe meurt, la partie est perdue.
+Le personnage possède trois vies. Si le personnage perd ses trois vies, il meurt et la partie est perdue.
 
 **Objectif final**  
 Pour gagner, il faut accomplir les quêtes principales et vaincre le boss final afin de sauver le royaume.
@@ -51,9 +48,11 @@ Pour gagner, il faut accomplir les quêtes principales et vaincre le boss final 
 - 🧠 **Langage C** : Langage de programmation
 - ⚙️ **GCC** : Compilation en C 
 - 🧩 **Makefile** : Compilation automatique
+- ⚙️ **Valgrind** : Pour vérifier les fuites de mémoire
 - 🌐 **Git** : Travail collaboratif
-- 📚 **Doxygen** : Génération automatique de documentation
-- 📅 **Diagramme de Gantt** : Pour planifier les tâches
+- 📄 **Doxygen** : Génération automatique de documentation
+- 📅 **Diagramme de Gantt** : Pour planifier les tâchese
+- 📑 **Latex** : Rédaction du rapport de projet
 
 ## 🚀 Comment Installer le Jeu
 
@@ -61,14 +60,15 @@ Remarque : ce guide est valable pour les machines Unix ou Linux.
 
 **Initialisation du dépôt git**  
 cd chemin/ou/stocker/le/projet  
-git clone https://github.com/leodurandetu/ForTheKing.git ForTheKing  
+git clone https://github.com/leodurandetu/ForTheKing.git  
 cd ForTheKing
 
 **Installation des librairies nécessaires**  
 Ce projet utilise SDL2.  
 Voici un court guide pour l'installer sur Unix ou Linux :  
 sudo apt update  
-sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev<br/>
+_sudo apt install gcc (si vous n'avez pas installé de compilateur gcc)_
 
 **Compilation du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
@@ -77,9 +77,9 @@ make clean all
 
 **Test du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
-./bin/menu  
+./bin/menu  : Lance le menu du jeu pour choisir le personnage.
 Ou, alternativement,  
-./bin/fortheking
+./bin/fortheking : Lance directement le jeu avec un mage comme personnage par défaut.
 
 ## 🎮 Comment Jouer au Jeu
 
@@ -100,3 +100,5 @@ Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.
 | :--------------------------: | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 |    **<kbd>Molette</kbd>**    | Zoomer / Dézoomer | La molette de la souris vous permet de zoomer/dézoomer sur la carte                                                                                                                                  |
 | **<kbd>Clic Gauche</kbd>** | Se Déplacer       | Le clic gauche de la souris vous permet de vous déplacer sur la case que vous avez cliqué. <br>Vous pouvez vous déplacer uniquement sur les cases avec un carré au milieu (qui représente un point de déplacement). |
+
+
