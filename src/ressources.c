@@ -11,6 +11,7 @@ int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res, perso_type
     /* Chargement des polices d'écriture */
     res->police_max = init_ttf_max();
     res->police_min = init_ttf_min();
+    res->police_medium = init_ttf_medium();
 
     /* Chargement des textures correspondant aux différents biomes */
     char *nom_images[NB_BIOMES] = {
@@ -154,4 +155,5 @@ void liberer_ressources(ressources_jeu_t* res) {
     /* Fermeture et libération des polices d'écriture TTF */
     if (res->police_max) TTF_CloseFont(res->police_max);
     if (res->police_min) TTF_CloseFont(res->police_min);
+    if (res->police_medium) TTF_CloseFont(res->police_medium);
 }

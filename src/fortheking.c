@@ -105,6 +105,7 @@ int main(int argc,char *argv[]) {
 
     TTF_Font* police = ressources.police_max;
     TTF_Font* police2 = ressources.police_min;
+    TTF_Font* police3 = ressources.police_medium;
 
     // Initialisation des vies globales
     int vies_globales = 3;
@@ -331,7 +332,7 @@ int main(int argc,char *argv[]) {
                                         }
                                     }
                                     if (est_voisin_sanctuaire) {
-                                        afficher_menu_sanctuaire(renderer, police2,
+                                        afficher_menu_sanctuaire(renderer, police3,
                                             perso, carte, carte_x, carte_y, tailleCase);
                                         majAffichage = 1;
                                     } else {
@@ -347,7 +348,6 @@ int main(int argc,char *argv[]) {
 
                                             if (monstre != NULL && combat_actuel == NULL) {
                                                 combat_actuel = creer_combat(perso, monstre);
-                                                TTF_Font *gFont = TTF_OpenFont("Fonts/Enchanted Land.otf", 20);
 
                                                 // Conversion coordonnées carte → pixels écran
                                                 int windowW, windowH;
@@ -366,7 +366,7 @@ int main(int argc,char *argv[]) {
 
                                                 int choix;
 
-                                                choix = afficher_option(renderer, gFont,
+                                                choix = afficher_option(renderer, police2,
                                                                             perso_px, perso_py,
                                                                             sprite_w, sprite_h,
                                                                             nb_fuites >= MAX_FUITE);
@@ -385,7 +385,6 @@ int main(int argc,char *argv[]) {
                                                 case_selection_y = carte_y;
                                             } else if (carte[carte_y][carte_x].batiment.type == TOUR_DU_BOSS) {
                                                 combat_actuel = creer_combat(perso, boss_final);
-                                                TTF_Font *gFont = TTF_OpenFont("Fonts/Enchanted Land.otf", 20);
 
                                                 // Conversion coordonnées carte → pixels écran
                                                 int windowW, windowH;
@@ -404,7 +403,7 @@ int main(int argc,char *argv[]) {
 
                                                 int choix;
 
-                                                choix = afficher_option(renderer, gFont,
+                                                choix = afficher_option(renderer, police2,
                                                                             perso_px, perso_py,
                                                                             sprite_w, sprite_h,
                                                                             nb_fuites >= MAX_FUITE);
@@ -579,7 +578,7 @@ int main(int argc,char *argv[]) {
                         afficher_personnage(renderer, ressources.perso, perso, tailleCase);
                     }
 
-                    dessiner_interface_carte(renderer, police2, ressources.perso, perso, clic_gauche, &majAffichage);
+                    dessiner_interface_carte(renderer, police3, ressources.perso, perso, clic_gauche, &majAffichage);
                     char info_a_afficher[50];
                     
                     /* Affichage du texte des points de déplacement */

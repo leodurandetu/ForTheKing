@@ -30,10 +30,16 @@ int init_sdl_global(void);
 Mix_Music* init_sdl_musique(void);
 
 /**
- * @brief Charge la police d'écriture par défaut en petite taille (24).
+ * @brief Charge la police d'écriture par défaut en petite taille (20).
  * * @return Un pointeur vers la police TTF_Font chargée, ou NULL en cas d'erreur.
  */
 TTF_Font* init_ttf_min(void);
+
+/**
+ * @brief Charge la police d'écriture par défaut en moyenne taille (24).
+ * * @return Un pointeur vers la police TTF_Font chargée, ou NULL en cas d'erreur.
+ */
+TTF_Font* init_ttf_medium(void);
 
 /**
  * @brief Charge la police d'écriture par défaut en grande taille (32).

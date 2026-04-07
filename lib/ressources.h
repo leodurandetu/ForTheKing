@@ -31,6 +31,7 @@ typedef struct {
     
     TTF_Font* police_max;            /**< Police d'écriture grande taille */
     TTF_Font* police_min;            /**< Police d'écriture petite taille */
+    TTF_Font* police_medium;         /**< Police d'écriture moyenne taille */
 } ressources_jeu_t;
 
 /**

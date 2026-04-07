@@ -300,7 +300,7 @@ void choix_attaque_monstre(combat_t *combat){
 }
 /*Saandi*/
 /**
-* Fonction qui creer un combat
+* Fonction qui crée un combat
 */
 combat_t* creer_combat(perso_t *perso, monstre_t *monstre) {
     combat_t *combat = malloc(sizeof(combat_t));
@@ -317,6 +317,8 @@ combat_t* creer_combat(perso_t *perso, monstre_t *monstre) {
     combat->texture_texte_leger = NULL;
     combat->texture_texte_lourd = NULL;
     combat->font = NULL;
+    combat->survole_bouton_leger = 0;
+    combat->survole_bouton_lourd = 0;
 
     return combat;
 }

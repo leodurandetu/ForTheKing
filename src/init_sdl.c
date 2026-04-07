@@ -44,13 +44,24 @@ Mix_Music* init_sdl_musique() {
     return musique;
 }
 
-TTF_Font* init_ttf_min(){
-
+TTF_Font* init_ttf_medium(){
     TTF_Font* police;
 
-    /* Chargement de la police d'écriture en taille réduite (24) pour les textes standards */
+    /* Chargement de la police d'écriture en taille moyenne (24) pour les textes standards */
     if ((police = TTF_OpenFont("Fonts/Enchanted Land.otf", 24)) == NULL) {
         fprintf(stderr, "Erreur : Impossible de charger la police 'Enchanted Land' (taille 24) : %s\n", TTF_GetError());
+        return NULL;
+    }
+    
+    return police;
+}
+
+TTF_Font* init_ttf_min() {
+    TTF_Font* police;
+
+    /* Chargement de la police d'écriture en taille moyenne (24) pour les textes standards */
+    if ((police = TTF_OpenFont("Fonts/Enchanted Land.otf", 20)) == NULL) {
+        fprintf(stderr, "Erreur : Impossible de charger la police 'Enchanted Land' (taille 20) : %s\n", TTF_GetError());
         return NULL;
     }
     
