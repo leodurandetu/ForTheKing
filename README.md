@@ -31,16 +31,16 @@ Le personnage se déplace tour par tour sur la carte. Chaque déplacement consom
 La carte est partiellement cachée au début. En se déplaçant, le joueur découvre des campements, des sanctuaires.
 
 **Combats**  
-Les combats se déroulent au tour par tour. Les attaques et défenses utilisent des jets de dés. La réussite dépend des statistiques, de l’équipement et du hasard.
+Les combats se déroulent au tour par tour. Les attaques et les défenses se basent sur un système aléatoire et les statistiques du personnage. Il y a deux choix d'attaque : attaque lourde et légère.
 
 **Équipement et objets**  
-Le héros peut trouver des armes, des objets. L’équipement améliore les statistiques et influence les combats.
+Le héros peut trouver des objets comme des kits de soins. Les objets peuvent être utilisés pour regagner des statistiques par exemple.
 
 **Mort des personnages**  
 Le personnage possède trois vies. Si le personnage perd ses trois vies, il meurt et la partie est perdue.
 
 **Objectif final**  
-Pour gagner, il faut accomplir les quêtes principales et vaincre le boss final afin de sauver le royaume.
+Pour gagner, il faut vaincre le boss final afin de sauver le royaume.
 
 ## 🛠️ Outils Techniques utilisés
 
