@@ -331,7 +331,7 @@ int main() {
         surf = TTF_RenderText_Blended(policeMenu, "Quitter", couleurTexte);
         texQuitter = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texQuitter, NULL, NULL, &wQuitter, &hQuitter); SDL_FreeSurface(surf);
 
-        surf = TTF_RenderText_Blended(policeTitre, "FOR THE KING", couleurTexte);
+        surf = TTF_RenderText_Blended(policeTitre, "FOR     THE     KING", couleurTexte);
         texTitre = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texTitre, NULL, NULL, &wTitre, &hTitre); SDL_FreeSurface(surf);
 
         surf = TTF_RenderText_Blended(policeMenu, "Volume Musique", couleurTexte);
