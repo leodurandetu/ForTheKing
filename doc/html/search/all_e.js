@@ -1,14 +1,15 @@
 var searchData=
 [
-  ['objet_2ec_198',['objet.c',['../objet_8c.html',1,'']]],
-  ['objet_2eh_199',['objet.h',['../objet_8h.html',1,'']]],
-  ['objet_5ft_200',['objet_t',['../structobjet__t.html',1,'']]],
-  ['objet_5ftype_5ft_201',['objet_type_t',['../objet_8h.html#a9d34c65170a24dcdb1343c631c6f5c46',1,'objet.h']]],
-  ['option_2ec_202',['option.c',['../option_8c.html',1,'']]],
-  ['option_2eh_203',['option.h',['../option_8h.html',1,'']]],
-  ['orange_5fbg_204',['ORANGE_BG',['../couleur_8h.html#aea186afabdd394559efa5e93a40d2554',1,'couleur.h']]],
-  ['orange_5ftext_205',['ORANGE_TEXT',['../couleur_8h.html#a9ff9d46c0e7ff13b7b6d6267404df407',1,'couleur.h']]],
-  ['orientation_5finv_5ft_206',['orientation_inv_t',['../affichage__commun_8h.html#afb92c708d098cf765c0bcb952bd823b6',1,'affichage_commun.h']]],
-  ['ouvrir_5ffenetre_5fchoix_207',['ouvrir_fenetre_choix',['../option_8c.html#a19bf4464318ba4b5649a709659fc32b9',1,'ouvrir_fenetre_choix(combat_t *combat):&#160;option.c'],['../option_8h.html#a19bf4464318ba4b5649a709659fc32b9',1,'ouvrir_fenetre_choix(combat_t *combat):&#160;option.c']]],
-  ['ouvrir_5ffenetre_5fcombat_208',['ouvrir_fenetre_combat',['../combat_8c.html#a73bc80a28237ed14db88102b1d71ff1c',1,'ouvrir_fenetre_combat(SDL_Window *pFenetrePrincipal, SDL_Renderer *rendererPrincipal, biome_t biome, combat_t **combat, case_t **carte, int *vies_globales):&#160;combat.c'],['../combat_8h.html#a73bc80a28237ed14db88102b1d71ff1c',1,'ouvrir_fenetre_combat(SDL_Window *pFenetrePrincipal, SDL_Renderer *rendererPrincipal, biome_t biome, combat_t **combat, case_t **carte, int *vies_globales):&#160;combat.c']]]
+  ['objet_2ec_0',['objet.c',['../objet_8c.html',1,'']]],
+  ['objet_2eh_1',['objet.h',['../objet_8h.html',1,'']]],
+  ['objet_5ft_2',['objet_t',['../structobjet__t.html',1,'']]],
+  ['objet_5ftype_5ft_3',['objet_type_t',['../objet_8h.html#a9d34c65170a24dcdb1343c631c6f5c46',1,'objet.h']]],
+  ['obstacles_4',['obstacles',['../structressources__jeu__t.html#a5e104cf0c11d280edf29230418eb4131',1,'ressources_jeu_t']]],
+  ['option_2ec_5',['option.c',['../option_8c.html',1,'']]],
+  ['option_2eh_6',['option.h',['../option_8h.html',1,'']]],
+  ['or_5ffonce_5fb_7',['OR_FONCE_B',['../sanctuaire__menu_8c.html#a3b82d02870d8ed07bab433284325b802',1,'sanctuaire_menu.c']]],
+  ['or_5ffonce_5fg_8',['OR_FONCE_G',['../sanctuaire__menu_8c.html#a4f918c11a7f23725e25729f95bc70031',1,'sanctuaire_menu.c']]],
+  ['or_5ffonce_5fr_9',['OR_FONCE_R',['../sanctuaire__menu_8c.html#a3016a7dc0e85885ed57240e6c66fc328',1,'sanctuaire_menu.c']]],
+  ['orientation_5finv_5ft_10',['orientation_inv_t',['../affichage__commun_8h.html#afb92c708d098cf765c0bcb952bd823b6',1,'affichage_commun.h']]],
+  ['ouvrir_5ffenetre_5fcombat_11',['ouvrir_fenetre_combat',['../combat_8c.html#aadc4538f08cf659c0416ee99ebdd7d7c',1,'ouvrir_fenetre_combat(SDL_Window *pFenetrePrincipal, SDL_Renderer *rendererPrincipal, biome_t biome, combat_t **combat, case_t **carte, int *vies_globale1s, SDL_Texture *portraitPerso):&#160;combat.c'],['../combat_8h.html#af62b3711e06f30623da1b7993fe1ecf7',1,'ouvrir_fenetre_combat(SDL_Window *pFenetrePrincipal, SDL_Renderer *rendererPrincipal, biome_t biome, combat_t **combat, case_t **carte, int *vies_globales, SDL_Texture *portraitPerso):&#160;combat.c']]]
 ];

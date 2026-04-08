@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['sanctuaires_475',['sanctuaires',['../structcase__s.html#a358f85cad0a9e975f89f6a5d2f488b2e',1,'case_s']]],
-  ['sante_476',['sante',['../structmonstre__t.html#a098caaeaa2c01ef776581dc3d8c8274c',1,'monstre_t::sante()'],['../structperso__s.html#ab4e5c75b69e47127e3122bb45817500b',1,'perso_s::sante()']]],
-  ['sante_5fmax_477',['sante_max',['../structmonstre__t.html#a226e62b8eb771ee52a41c28330b37473',1,'monstre_t::sante_max()'],['../structperso__s.html#abd1687be592bcff769cbca66a9bcebd0',1,'perso_s::sante_max()']]],
-  ['survole_5fbouton_5fleger_478',['survole_bouton_leger',['../structcombat__t.html#ad4e0edb413bdac7e3cd12895084567b1',1,'combat_t']]],
-  ['survole_5fbouton_5flourd_479',['survole_bouton_lourd',['../structcombat__t.html#af00771040922e5c534502657ad917e76',1,'combat_t']]]
+  ['rapidite_0',['rapidite',['../structmonstre__t.html#ab4567e3e2927a6405d92c2cc29c63f89',1,'monstre_t::rapidite'],['../structperso__s.html#a9c2c2ac6a9e49fb6f87bd8dffefb8835',1,'perso_s::rapidite']]],
+  ['rect_5ftexte_5fleger_1',['rect_texte_leger',['../structcombat__t.html#aacf502fe0f9bf20c8a880e69e45ce1ea',1,'combat_t']]],
+  ['rect_5ftexte_5flourd_2',['rect_texte_lourd',['../structcombat__t.html#aeb2af98a8e74ecac20df2e6e1d52cfa3',1,'combat_t']]],
+  ['renderer_3',['renderer',['../structcombat__t.html#ac667e3683cbaa40f0bf06b04333389cb',1,'combat_t']]]
 ];
