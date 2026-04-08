@@ -241,8 +241,10 @@ int main(int argc,char *argv[]) {
                         point.x = e.motion.x;
                         point.y = e.motion.y;
 
-                        combat_actuel->survole_bouton_leger = SDL_PointInRect(&point, &(combat_actuel->bouton_leger));
-                        combat_actuel->survole_bouton_lourd = SDL_PointInRect(&point, &(combat_actuel->bouton_lourd));
+                        if (combat_actuel != NULL) {
+                            combat_actuel->survole_bouton_leger = SDL_PointInRect(&point, &(combat_actuel->bouton_leger));
+                            combat_actuel->survole_bouton_lourd = SDL_PointInRect(&point, &(combat_actuel->bouton_lourd));
+                        }
 
                         majAffichage = 1;
                     }

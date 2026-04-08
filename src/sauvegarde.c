@@ -9,7 +9,97 @@ int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte
     }
 
     /* Sauvegarde du personnage */
-    if (fwrite(perso, sizeof(perso_t), 1, fichier) != 1) {
+    if (fwrite(&(perso->x), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->y), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->degats), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->force), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->sante), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->sante_max), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->intelligence), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->rapidite), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->evasion), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->pts_deplacements), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->niveau), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->exp), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->mort), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->pieces), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->inventaire), sizeof(inventaire_t), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    if (fwrite(&(perso->type), sizeof(perso_type_t), 1, fichier) != 1) {
         fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
         fclose(fichier);
         return 0;
@@ -59,8 +149,15 @@ int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte
 
             /* Sauvegarde du monstre sur la case */
             monstre_t * monstre = carte[i][j].monstre;
+            int monstreExiste = (monstre != NULL);
 
-            if (monstre != NULL) {
+            if (fwrite(&monstreExiste, sizeof(int), 1, fichier) != 1) {
+                fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
+                fclose(fichier);
+                return 0;
+            }
+
+            if (monstreExiste) {
 
                 if (fwrite(&(monstre->type), sizeof(type_monstre_t), 1, fichier) != 1) {
                     fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
@@ -128,106 +225,6 @@ int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte
                     return 0;
                 }
 
-            } else {
-                /* type du monstre */
-                type_monstre_t typeMonstre = PAS_DE_MONSTRE;
-
-                if (fwrite(&(typeMonstre), sizeof(type_monstre_t), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* x */
-                int x = 0;
-
-                if (fwrite(&(x), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* y */
-                int y = 0;
-
-                if (fwrite(&(y), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* degats */
-                int degats = 0;
-
-                if (fwrite(&(degats), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* force */
-                int force = 0;
-
-                if (fwrite(&(force), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* sante */
-                int sante = 0;
-
-                if (fwrite(&(sante), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* sante max */
-                int sante_max = 0;
-
-                if (fwrite(&(sante_max), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* intelligence */
-                int intelligence = 0;
-
-                if (fwrite(&(intelligence), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* rapidite */
-                int rapidite = 0;
-
-                if (fwrite(&(rapidite), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* evasion */
-                int evasion = 0;
-
-                if (fwrite(&(evasion), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
-                /* niveau */
-                int niveau = 1;
-
-                if (fwrite(&(niveau), sizeof(int), 1, fichier) != 1) {
-                    fprintf(stderr, "Erreur lors de l'écriture de la case [%d][%d].\n", i, j);
-                    fclose(fichier);
-                    return 0;
-                }
-
             }
 
         }
@@ -248,11 +245,150 @@ int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SD
     }
 
     /* Chargement du personnage */
-    if (fread(perso, sizeof(perso_t), 1, fichier) != 1) {
+    int x;
+
+    if (fread(&x, sizeof(int), 1, fichier) != 1) {
         fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
         fclose(fichier);
         return 0;
     }
+
+    perso->x = x;
+    int y;
+
+    if (fread(&y, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->y = y;
+    int degats;
+
+    if (fread(&degats, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->degats = degats;
+    int force;
+
+    if (fread(&force, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->force = force;
+    int sante;
+
+    if (fread(&sante, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->sante = sante;
+    int sante_max;
+
+    if (fread(&sante_max, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->sante_max = sante_max;
+    int intelligence;
+
+    if (fread(&intelligence, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->intelligence = intelligence;
+    int rapidite;
+
+    if (fread(&rapidite, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->rapidite = rapidite;
+    int evasion;
+
+    if (fread(&evasion, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->evasion = evasion;
+    int pts_deplacements;
+
+    if (fread(&pts_deplacements, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->pts_deplacements = pts_deplacements;
+    int niveau;
+
+    if (fread(&niveau, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->niveau = niveau;
+    int exp;
+
+    if (fread(&exp, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->exp = exp;
+    int mort;
+
+    if (fread(&mort, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->mort = mort;
+    int pieces;
+
+    if (fread(&pieces, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->pieces = pieces;
+    inventaire_t inventaire;
+
+    if (fread(&inventaire, sizeof(inventaire_t), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->inventaire = inventaire;
+    perso_type_t type;
+
+    if (fread(&type, sizeof(perso_type_t), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    perso->type = type;
 
     for (int k = 0; k < TAILLE_INVENTAIRE; k++) {
         remplir_texture_objet(&(perso->inventaire.contenu[k]), renderer);
@@ -320,9 +456,9 @@ int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SD
 
             temp_case.estVisible = estVisible;
 
-            type_monstre_t type_monstre;
+            int monstreExiste;
 
-            if (fread(&type_monstre, sizeof(type_monstre_t), 1, fichier) != 1) {
+            if (fread(&monstreExiste, sizeof(int), 1, fichier) != 1) {
                 fprintf(stderr, "Erreur lors de la lecture de la case [%d][%d].\n", i, j);
                 fclose(fichier);
                 return 0;
@@ -331,8 +467,16 @@ int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SD
             monstre_t * monstre = NULL;
 
             /* si le monstre existe */
-            if (type_monstre != PAS_DE_MONSTRE) {
+            if (monstreExiste) {
                 monstre = malloc(sizeof(monstre_t));
+
+                type_monstre_t type_monstre;
+
+                if (fread(&type_monstre, sizeof(type_monstre_t), 1, fichier) != 1) {
+                    fprintf(stderr, "Erreur lors de la lecture de la case [%d][%d].\n", i, j);
+                    fclose(fichier);
+                    return 0;
+                }
 
                 monstre->type = type_monstre;
 
@@ -428,13 +572,6 @@ int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SD
                 monstre->niveau = niveau;
             } else {
                 monstre = NULL;
-
-                int tmp;
-
-                for (int k = 0; k < 10; k++) {
-                    fread(&tmp, sizeof(int), 1, fichier);
-                }
-
             }
 
             temp_case.monstre = monstre;
