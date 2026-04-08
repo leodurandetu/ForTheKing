@@ -114,4 +114,12 @@ void preparer_avant_affichage();
  */
 void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* ffont, SDL_Texture* portrait, perso_t * perso, int clic_gauche, int * maj_affichage);
 
+/**
+ * @author Massoud
+ * @brief Affiche un message et un filtre sombre lors de la fin de l'aventure (perso mort).
+ * @param renderer Le moteur de rendu SDL
+ * @param police La police de caractères pour les textes.
+ */
+void afficher_fin_aventure(SDL_Renderer *renderer, TTF_Font* police);
+
 #endif

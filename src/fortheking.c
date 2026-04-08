@@ -634,39 +634,7 @@ int main(int argc,char *argv[]) {
                 
                 /* Si fin aventure, on ajoute le filtre sombre et le message */
                 if (etat == GAME_OVER) {
-                    int w, h;
-                    SDL_GetRendererOutputSize(renderer, &w, &h);
-
-                    // Voile noir semi-transparent sur toute la carte
-                    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-                    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 160); 
-                    SDL_Rect ecran_complet = {0, 0, w, h};
-                    SDL_RenderFillRect(renderer, &ecran_complet);
-
-                    // Boîte
-                    int box_w = 400;
-                    int box_h = 120;
-                    SDL_Rect fond = { (w - box_w)/2, (h - box_h)/2, box_w, box_h };
-
-                    SDL_SetRenderDrawColor(renderer, 25, 30, 25, 245); 
-                    SDL_RenderFillRect(renderer, &fond);
-                    
-                    SDL_SetRenderDrawColor(renderer, 140, 150, 120, 255);
-                    SDL_RenderDrawRect(renderer, &fond);
-                    
-                    SDL_Rect fond_int = { fond.x + 1, fond.y + 1, fond.w - 2, fond.h - 2 };
-                    SDL_RenderDrawRect(renderer, &fond_int);
-
-                    // Texte central
-                    SDL_Color blanc = {255, 255, 255, 255};
-                    SDL_Surface *surf = TTF_RenderUTF8_Blended(police, "L'aventure prend fin", blanc);
-                    if (surf) {
-                        SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
-                        SDL_Rect pos = { (w - surf->w)/2, (h - surf->h)/2, surf->w, surf->h };
-                        SDL_RenderCopy(renderer, tex, NULL, &pos);
-                        SDL_DestroyTexture(tex);
-                        SDL_FreeSurface(surf);
-                    }
+                    afficher_fin_aventure(renderer, police);
                 }
 
                 SDL_RenderPresent(renderer);
