@@ -314,10 +314,10 @@ int main(int argc,char *argv[]) {
 
                                                 if (monstre != NULL && combat_actuel == NULL) {
                                                     demander_et_lancer_combat(renderer, police2, perso, monstre, tailleCase, &nb_fuites, &vies_globales, 
-                                                        &etat, carte, carte_x, carte_y, &combat_actuel, pFenetre);
+                                                        &etat, carte, carte_x, carte_y, &combat_actuel, pFenetre, ressources.perso);
                                                 } else if (carte[carte_y][carte_x].batiment.type == TOUR_DU_BOSS) {
                                                     demander_et_lancer_combat(renderer, police2, perso, boss_final, tailleCase, &nb_fuites, &vies_globales,
-                                                        &etat, carte, carte_x, carte_y, &combat_actuel, pFenetre);
+                                                        &etat, carte, carte_x, carte_y, &combat_actuel, pFenetre, ressources.perso);
                                                 }
 
                                                 case_selection_x = carte_x;
@@ -360,17 +360,11 @@ int main(int argc,char *argv[]) {
                             if(combat_actuel->tour == TOUR_JOUEUR) {
 
                                 if (combat_actuel->survole_bouton_leger) {
-                                    printf("Attaque légère\n");
                                     attaque_legere(combat_actuel);
                                     combat_actuel->tour = changer_tour(combat_actuel);
-                                    printf("Le joueur a joué\n");
-                                    printf("santé monstre : %d",combat_actuel->monstre->sante);
                                 } else if (combat_actuel->survole_bouton_lourd) {
-                                    printf("Attaque lourde\n");
                                     attaque_lourde(combat_actuel);
                                     combat_actuel->tour = changer_tour(combat_actuel);
-                                    printf("Le joueur a joué\n");
-                                    printf("santé monstre : %d",combat_actuel->monstre->sante);
                                 }
 
                             }
@@ -384,11 +378,8 @@ int main(int argc,char *argv[]) {
                             } else {
                             
                                 if (combat_actuel->tour == TOUR_MONSTRE) {
-                                    printf("\nTour du monstre\n");
                                     choix_attaque_monstre(combat_actuel);
                                     combat_actuel->tour = changer_tour(combat_actuel);
-                                    printf("Le monstre a joué\n");
-                                    printf("Santé joueur : %d\n",combat_actuel->perso->sante);
 
                                     majAffichage = 1;
                                 }
@@ -399,7 +390,7 @@ int main(int argc,char *argv[]) {
 
                                     if (vies_globales >= 0) {
                                         // S'il reste des vies, on ressuscite directement dans le combat
-                                        afficher_message_combat(combat_actuel, "Une vie est utilisee...");
+                                        afficher_message_combat(combat_actuel, "Une vie est utilisée...");
 
                                         // On lui redonne ses 75% de PV max
                                         combat_actuel->perso->sante = (int)(0.75f * combat_actuel->perso->sante_max);

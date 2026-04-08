@@ -573,7 +573,7 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
     /* On le garde en bas */
     int y_menu = (fenetre_hauteur - hauteur_menu - 15);
 
-    const char *noms_classes[] = {"Brute", "Chasseur", "Assassin", "Mage Joueur"};
+    const char *noms_classes[] = {"Brute", "Chasseur", "Assassin", "Mage"};
     const char *nom_perso = noms_classes[perso->type];
 
     dessiner_interface_carte_bis(renderer, font, portrait, nom_perso, x_menu, y_menu, largeur_menu, hauteur_menu, perso, clic_gauche, maj_affichage);

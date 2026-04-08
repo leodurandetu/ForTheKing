@@ -47,6 +47,7 @@ extern void afficher_message_combat(combat_t *combat, const char *texte);
  */
 void demander_et_lancer_combat(SDL_Renderer * renderer, TTF_Font * police2, perso_t * perso, 
     monstre_t * monstre, int tailleCase, int * nbFuites, int * vies_globales, etat_jeu_t * etat,
-    case_t ** carte, int carte_x, int carte_y, combat_t ** combat_actuel, SDL_Window * pFenetre);
+    case_t ** carte, int carte_x, int carte_y, combat_t ** combat_actuel, SDL_Window * pFenetre,
+    SDL_Texture * portraitPerso);
 
 #endif

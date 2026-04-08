@@ -26,7 +26,8 @@
  * @param carte Matrice de la carte de jeu.
  * @param vies_globales Pointeur vers le compteur de vies du joueur.
  */
-extern void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, biome_t biome, combat_t ** combat, case_t ** carte, int *vies_globales);
+extern void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, biome_t biome, combat_t ** combat, 
+    case_t ** carte, int *vies_globales, SDL_Texture * portraitPerso);
 
 /**
  * @author Léo

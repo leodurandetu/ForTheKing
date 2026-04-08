@@ -6,7 +6,8 @@
  * également de commencer un combat
  * en parallèle.
  */
-void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, biome_t biome, combat_t ** combat, case_t ** carte, int *vies_globales) {
+void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, biome_t biome,
+    combat_t ** combat, case_t ** carte, int *vies_globale1s, SDL_Texture * portraitPerso) {
     (*combat)->pFenetre = pFenetrePrincipal;
 
     if (!((*combat)->pFenetre)) {
@@ -22,15 +23,7 @@ void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * render
     }
 
     // Chargement du sprite du personnage
-    (*combat)->texture_perso = NULL;
-    SDL_Surface *img_perso = IMG_Load("img/mage.png");
-    if (img_perso) {
-        // Rend la couleur blanche (255, 255, 255) transparente
-        SDL_SetColorKey(img_perso, SDL_TRUE, SDL_MapRGB(img_perso->format, 255, 255, 255));
-        (*combat)->texture_perso = (SDL_CreateTextureFromSurface((*combat)->renderer, img_perso));
-        SDL_SetTextureBlendMode((*combat)->texture_perso, SDL_BLENDMODE_BLEND);
-        SDL_FreeSurface(img_perso);
-    }
+    (*combat)->texture_perso = portraitPerso;
  
     // Chargement du sprite du monstre en fonction de son type(troll et squelette pour le moment)
     (*combat)->texture_monstre = NULL;
@@ -344,11 +337,6 @@ void detruire_combat(combat_t ** combat) {
         if ((*combat)->texture_monstre != NULL) {
             SDL_DestroyTexture((*combat)->texture_monstre);
             (*combat)->texture_monstre = NULL;
-        }
-
-        if ((*combat)->texture_perso != NULL) {
-            SDL_DestroyTexture((*combat)->texture_perso);
-            (*combat)->texture_perso = NULL;
         }
 
         if ((*combat)->texture_fond_ecran != NULL) {

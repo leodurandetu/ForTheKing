@@ -267,7 +267,10 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche, int * maj_af
     perso_t * perso = combat->perso;
     monstre_t * monstre = combat->monstre;
 
-    dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Joueur", NULL, perso, clicGauche, maj_affichage);
+    const char *noms_classes[] = {"Brute", "Chasseur", "Assassin", "Mage"};
+    const char *nom_perso = noms_classes[perso->type];
+
+    dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, nom_perso, NULL, perso, clicGauche, maj_affichage);
     
     int nul = 0;
 
@@ -328,7 +331,8 @@ void afficher_message_combat(combat_t *combat, const char *texte) {
 
 void demander_et_lancer_combat(SDL_Renderer * renderer, TTF_Font * police2, perso_t * perso,
     monstre_t * monstre, int tailleCase, int * nbFuites, int * vies_globales, etat_jeu_t * etat,
-    case_t ** carte, int carte_x, int carte_y, combat_t ** combat_actuel, SDL_Window * pFenetre) {
+    case_t ** carte, int carte_x, int carte_y, combat_t ** combat_actuel, SDL_Window * pFenetre,
+    SDL_Texture * portraitPerso) {
     *combat_actuel = creer_combat(perso, monstre);
 
     // Taille du sprite à l'écran (même logique que dans afficher_personnage)
@@ -364,7 +368,7 @@ void demander_et_lancer_combat(SDL_Renderer * renderer, TTF_Font * police2, pers
         (*nbFuites >= MAX_FUITE), cheminTexture, carte_x, carte_y, tailleCase);
     if(choix == 1)
     {
-        ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, combat_actuel, carte, vies_globales);
+        ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, combat_actuel, carte, vies_globales, portraitPerso);
         *etat = COMBAT;
         (*nbFuites) = 0;
     } else if (choix == 0) {
