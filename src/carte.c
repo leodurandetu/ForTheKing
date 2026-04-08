@@ -12,7 +12,7 @@ void coords_case_libre(case_t ** carte, int *x, int *y) {
     *x = rand() % TAILLE_CARTE;
     *y = rand() % TAILLE_CARTE;
 
-    while (!deplacement_possible(carte, *x, *y) || carte[*y][*x].monstre != NULL) {
+    while (!deplacement_possible(carte, *x, *y) || case_occupee(carte, *x, *y, -1, -1)) {
         *x = rand() % TAILLE_CARTE;
         *y = rand() % TAILLE_CARTE;
     }
@@ -684,7 +684,7 @@ void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t ** carte, perso_
                         peut_bouger = 1;
                     } else if (monstre->type == YETI && carte[ny][nx].biome == NEIGE) {
                         peut_bouger = 1;
-                    } else if (monstre->type != SQUELETTE && monstre->type != TROLL) {
+                    } else if (monstre->type != SQUELETTE && monstre->type != TROLL && monstre->type != YETI) {
                         // Pour les monstres sans restriction de biome
                         peut_bouger = 1;
                     }
