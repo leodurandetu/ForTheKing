@@ -22,17 +22,12 @@
 #include "../lib/init_sdl.h"
 #include "../lib/sauvegarde.h"
 #include "../lib/sanctuaire_menu.h"
+#include "../lib/commun.h"
 
 #define TAILLE_CASE_MAXI 250
 #define TAILLE_CASE_DEPART 150
 #define TAILLE_CASE_MINI 100
 #define RAYON_DECOUVERTE_BROUILLARD 5
-
-typedef enum {
-    CARTE,
-    GAME_OVER,
-    COMBAT
-} etat_jeu_t;
 
 int main(int argc,char *argv[]) {
     int plein_ecran_depart = 0;
@@ -337,135 +332,37 @@ int main(int argc,char *argv[]) {
                                             perso, carte, carte_x, carte_y, tailleCase);
                                         majAffichage = 1;
                                     } else {
+                                        int portee = get_pers_movements_points(perso);
+                                        int distReelle = -1;
+                                        int cheminTrouve = chemin_valide(carte, TAILLE_CARTE, perso->x, perso->y, carte_x, carte_y, portee, perso, &distReelle);
 
-                                    int portee = get_pers_movements_points(perso);
-                                    int distReelle = -1;
-                                    int cheminTrouve = chemin_valide(carte, TAILLE_CARTE, perso->x, perso->y, carte_x, carte_y, portee, perso, &distReelle);
+                                        if (cheminTrouve && distReelle != -1) {
 
-                                    if (cheminTrouve && distReelle != -1) {
+                                            if (case_occupee(carte, carte_x, carte_y, perso->x, perso->y) == VRAI) {
+                                                monstre_t * monstre = carte[carte_y][carte_x].monstre;
 
-                                        if (case_occupee(carte, carte_x, carte_y, perso->x, perso->y) == VRAI) {
-                                            monstre_t * monstre = carte[carte_y][carte_x].monstre;
-
-                                            if (monstre != NULL && combat_actuel == NULL) {
-                                                combat_actuel = creer_combat(perso, monstre);
-
-                                                // Taille du sprite à l'écran (même logique que dans afficher_personnage)
-                                                int sprite_w = tailleCase;
-                                                int sprite_h = tailleCase;
-                                                int choix;
-                                                switch (monstre->type){
-                                                    case SQUELETTE :
-                                                        choix = afficher_option(renderer, police2,
-                                                                            perso->x, perso->y,
-                                                                            sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/squelette.png",
-                                                                            carte_x, carte_y, tailleCase);
-                                                        break;
-                                                    case TROLL : 
-                                                        choix = afficher_option(renderer, police2,
-                                                                            perso->x, perso->y,
-                                                                            sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/troll.png",
-                                                                            carte_x, carte_y, tailleCase);
-                                                        break;
-                                                    case YETI : 
-                                                            choix = afficher_option(renderer, police2,
-                                                                            perso->x, perso->y,
-                                                                            sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/yeti.png",
-                                                                            carte_x, carte_y, tailleCase);
-                                                            break;
-                                                    case BOSS_FINAL : 
-                                                        choix = afficher_option(renderer, police2,
-                                                                            perso->x, perso->y,
-                                                                            sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/boss_final.png",
-                                                                            carte_x, carte_y, tailleCase);
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-                                                if(choix == 1)
-                                                {
-                                                    ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, &combat_actuel, carte, &vies_globales);
-                                                    etat = COMBAT;
-                                                    nb_fuites = 0;
-                                                } else if (choix == 0) {
-                                                    detruire_combat(&combat_actuel);
-                                                    etat = CARTE;
-                                                    nb_fuites++;
-                                                }
-
-                                                case_selection_x = carte_x;
-                                                case_selection_y = carte_y;
-                                            } else if (carte[carte_y][carte_x].batiment.type == TOUR_DU_BOSS) {
-                                                combat_actuel = creer_combat(perso, boss_final);
-
-                                                // Taille du sprite à l'écran (même logique que dans afficher_personnage)
-                                                int sprite_w = tailleCase;
-                                                int sprite_h = tailleCase;
-                                                int choix;
-                                                switch (monstre->type){
-                                                    case SQUELETTE :
-                                                        choix = afficher_option(renderer, police2,
-                                                                            perso->x, perso->y,
-                                                                            sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/squelette.png",
-                                                                            carte_x, carte_y, tailleCase);
-                                                        break;
-                                                    case TROLL : 
-                                                        choix = afficher_option(renderer, police2,
-                                                                            perso->x, perso->y,
-                                                                            sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/troll.png",
-                                                                            carte_x, carte_y, tailleCase);
-                                                        break;
-                                                    case YETI : 
-                                                            choix = afficher_option(renderer, police2,
-                                                                            perso->x, perso->y,
-                                                                            sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/yeti.png",
-                                                                            carte_x, carte_y, tailleCase);
-                                                        break;
-                                                    case BOSS_FINAL : 
-                                                        choix = afficher_option(renderer, police2,
-                                                                            perso->x, perso->y,
-                                                                            sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/boss_final.png",
-                                                                            carte_x, carte_y, tailleCase);
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-                                                if(choix == 1)
-                                                {
-                                                    ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, &combat_actuel, carte, &vies_globales);
-                                                    etat = COMBAT;
-                                                } else if (choix == 0) {
-                                                    detruire_combat(&combat_actuel);
-                                                    etat = CARTE;
+                                                if (monstre != NULL && combat_actuel == NULL) {
+                                                    demander_et_lancer_combat(renderer, police2, perso, monstre, tailleCase, &nb_fuites, &vies_globales, 
+                                                        &etat, carte, carte_x, carte_y, &combat_actuel, pFenetre);
+                                                } else if (carte[carte_y][carte_x].batiment.type == TOUR_DU_BOSS) {
+                                                    demander_et_lancer_combat(renderer, police2, perso, boss_final, tailleCase, &nb_fuites, &vies_globales,
+                                                        &etat, carte, carte_x, carte_y, &combat_actuel, pFenetre);
                                                 }
 
                                                 case_selection_x = carte_x;
                                                 case_selection_y = carte_y;
                                             } else {
-                                                case_selection_x = carte_x;
-                                                case_selection_y = carte_y;
+                                                perso->x = carte_x; 
+                                                perso->y = carte_y;
+                                                perso->pts_deplacements -= distReelle; 
+                                                case_selection_x = -1; 
+                                                case_selection_y = -1;
                                             }
 
                                         } else {
-                                            perso->x = carte_x; 
-                                            perso->y = carte_y;
-                                            perso->pts_deplacements -= distReelle; 
-                                            case_selection_x = -1; 
-                                            case_selection_y = -1;
+                                            case_selection_x = carte_x; 
+                                            case_selection_y = carte_y;
                                         }
-
-                                    } else {
-                                        case_selection_x = carte_x; 
-                                        case_selection_y = carte_y;
-                                    }
                                     } // fin else (pas un sanctuaire voisin)
                                 }
                                 majBrouillard = 1;

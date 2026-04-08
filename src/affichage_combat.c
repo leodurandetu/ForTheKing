@@ -297,3 +297,52 @@ void afficher_message_combat(combat_t *combat, const char *texte) {
     
     SDL_RenderPresent(r);
 }
+
+void demander_et_lancer_combat(SDL_Renderer * renderer, TTF_Font * police2, perso_t * perso,
+    monstre_t * monstre, int tailleCase, int * nbFuites, int * vies_globales, etat_jeu_t * etat,
+    case_t ** carte, int carte_x, int carte_y, combat_t ** combat_actuel, SDL_Window * pFenetre) {
+    *combat_actuel = creer_combat(perso, monstre);
+
+    // Taille du sprite à l'écran (même logique que dans afficher_personnage)
+    int sprite_w = tailleCase;
+    int sprite_h = tailleCase;
+    int choix;
+
+    char * cheminTexture;
+
+    switch (monstre->type){
+        case SQUELETTE :
+            cheminTexture = "img/squelette.png";
+            break;
+
+        case TROLL:
+            cheminTexture = "img/troll.png";
+            break;
+
+        case YETI:
+            cheminTexture = "img/yeti.png";
+            break;
+
+        case BOSS_FINAL:
+            cheminTexture = "img/boss_final.png";
+            break;
+        
+        default:
+            return;
+        
+    }
+
+    choix = afficher_option(renderer, police2, perso->x, perso->y, sprite_w, sprite_h,
+        (*nbFuites >= MAX_FUITE), cheminTexture, carte_x, carte_y, tailleCase);
+    if(choix == 1)
+    {
+        ouvrir_fenetre_combat(pFenetre, renderer, carte[carte_y][carte_x].biome, combat_actuel, carte, vies_globales);
+        *etat = COMBAT;
+        (*nbFuites) = 0;
+    } else if (choix == 0) {
+        detruire_combat(combat_actuel);
+        *etat = CARTE;
+        (*nbFuites)++;
+    }
+
+}

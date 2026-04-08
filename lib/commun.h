@@ -16,4 +16,16 @@ typedef enum {
     VRAI  /**< Représente la valeur logique vraie (1). */
 } booleen_t;
 
+/**
+ * @author Léo
+ * @brief Type énuméré représentant l'état du jeu.
+ */
+typedef enum {
+    CARTE, /**< Lorsqu'on est sur la carte. */
+    GAME_OVER, /**< Lorsqu'on a fini l'aventure (perso mort). */
+    COMBAT /**< Lorsqu'on est en combat contre un monstre. */
+} etat_jeu_t;
+
+#define MAX_FUITE 3 /* le nombre de fuites au maximum avant de ne plus avoir le choix d'attaquer */
+
 #endif

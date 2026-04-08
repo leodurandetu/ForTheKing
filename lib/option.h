@@ -9,8 +9,6 @@
 #include "../lib/monstre.h"
 #include "../lib/combat.h"
 
-#define MAX_FUITE 3
-
 /**
  * @file option_af.h
  * @author Saandi
