@@ -22,19 +22,19 @@ Le jeu comporte une dimension de survie : si tous les héros meurent, la partie 
 ## ⚙️ Fonctionnalités détaillées
 
 **Composition de l’équipe**  
-Le joueur contrôle un personnage. Le personnage a une classe, des statistiques et un rôle différent selon le personnage choisi.
+Le joueur contrôle un personnage. Le personnage a des statistiques (points de vie, dégâts, force etc.) différentes selon la classe choisie.
 
 **Déplacements**  
-Le personnage se déplace tour par tour sur la carte. Chaque déplacement consomme des points, et certains terrains sont plus dangereux que d’autres.
+Le personnage se déplace tour par tour sur la carte. Chaque déplacement consomme des points de déplacement. Il faut passer son tour pour récupérer des points. Sur certaines cases comme l'eau, on ne peut pas se déplacer.
 
 **Exploration**  
-La carte est partiellement cachée au début. En se déplaçant, le joueur découvre des campements, des sanctuaires.
+La carte est partiellement cachée au début par un brouillard. En se déplaçant, le joueur découvre des campements et des sanctuaires.
 
 **Combats**  
 Les combats se déroulent au tour par tour. Les attaques et les défenses se basent sur un système aléatoire et les statistiques du personnage. Il y a deux choix d'attaque : attaque lourde et légère.
 
 **Équipement et objets**  
-Le héros peut trouver des objets comme des kits de soins. Les objets peuvent être utilisés pour regagner des statistiques par exemple.
+Le héros peut trouver des objets comme des kits de soins. Les objets peuvent être utilisés pour regagner des statistiques pour le personnage.
 
 **Mort des personnages**  
 Le personnage possède trois vies. Si le personnage perd ses trois vies, il meurt et la partie est perdue.
