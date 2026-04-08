@@ -66,7 +66,7 @@ int main(int argc,char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // --- Chargement musique ---
+    // Chargement musique 
     Mix_Music *musique = init_sdl_musique();
 
     TTF_Font* police = ressources.police_max;
@@ -75,6 +75,10 @@ int main(int argc,char *argv[]) {
 
     // Initialisation des vies globales
     int vies_globales = 3;
+
+    // Initialisation des quêtes 
+    quetes_t systeme_quetes;
+    init_quetes(&systeme_quetes);
 
     combat_t * combat_actuel = NULL;
     vainqueur_t vainqueur = PAS_DE_VAINQUEUR;
@@ -98,7 +102,7 @@ int main(int argc,char *argv[]) {
     init_carte(carte);
 
     if (charger_sauvegarde == 1) {
-        perso = malloc(sizeof(perso_t));
+        perso = calloc(1,sizeof(perso_t));
         charger_partie("sauvegarde_01.txt", perso, carte, renderer);
     } else {
         generer_eau(carte);
@@ -142,6 +146,7 @@ int main(int argc,char *argv[]) {
     etat_jeu_t etat = CARTE;
 
     int nb_fuites = 0;
+    int afficher_bandeau_quete = 0;
 
     while (running) {
         SDL_Event e;
@@ -374,9 +379,18 @@ int main(int argc,char *argv[]) {
                             /* Vérification de la mort du monstre */
                             if(combat_actuel->monstre->sante <= 0) {
                                 vainqueur = JOUEUR_VAINQUEUR;
+                                
+                                // Sauvegarder le type du monstre avant qu'il soit détruit 
+                                type_monstre_t monstre_tue = combat_actuel->monstre->type;
+                                
                                 combat_termine(renderer, &combat_actuel, carte, vainqueur, &vies_globales);
                                 detruire_combat(&combat_actuel);
                                 etat = CARTE;
+
+                                // Mettre à jour la quête et afficher l'accomplissement si validé
+                                if (notifier_mort_monstre(&systeme_quetes, monstre_tue)) {
+                                    afficher_bandeau_quete = 1;
+                                }
                             } else {
                             
                                 if (combat_actuel->tour == TOUR_MONSTRE) {
@@ -493,11 +507,21 @@ int main(int argc,char *argv[]) {
                             SDL_RenderCopy(renderer, ressources.vie, NULL, &rect_vie);
                         }
                     }
+
+                    // Affichage du panneau des quêtes
+                    afficher_quetes(renderer, police3, &systeme_quetes);
                 } 
                 
                 /* Si fin aventure, on ajoute le filtre sombre et le message */
                 if (etat == GAME_OVER) {
                     afficher_fin_aventure(renderer, police);
+                }
+
+                // Affichage de bandeau de la quete après le combat
+                if (afficher_bandeau_quete == 1) {
+                    afficher_quete_accomplie(renderer, police3, perso, &systeme_quetes);
+                    afficher_bandeau_quete = 0; // On réinitialise pour ne pas boucler
+                    majAffichage = 1;           // On force un rafraîchissement au tour d'après
                 }
 
                 SDL_RenderPresent(renderer);
