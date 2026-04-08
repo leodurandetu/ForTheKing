@@ -383,15 +383,18 @@ int main(int argc,char *argv[]) {
                             point.x = e.button.x;
                             point.y = e.button.y;
 
+                            combat_actuel->survole_bouton_leger = SDL_PointInRect(&point, &(combat_actuel->bouton_leger));
+                            combat_actuel->survole_bouton_lourd = SDL_PointInRect(&point, &(combat_actuel->bouton_lourd));
+
                             if(combat_actuel->tour == TOUR_JOUEUR) {
 
-                                if (SDL_PointInRect(&point, &(combat_actuel->bouton_leger))) {
+                                if (combat_actuel->survole_bouton_leger) {
                                     printf("Attaque légère\n");
                                     attaque_legere(combat_actuel);
                                     combat_actuel->tour = changer_tour(combat_actuel);
                                     printf("Le joueur a joué\n");
                                     printf("santé monstre : %d",combat_actuel->monstre->sante);
-                                } else if (SDL_PointInRect(&point, &(combat_actuel->bouton_lourd))) {
+                                } else if (combat_actuel->survole_bouton_lourd) {
                                     printf("Attaque lourde\n");
                                     attaque_lourde(combat_actuel);
                                     combat_actuel->tour = changer_tour(combat_actuel);
@@ -421,7 +424,6 @@ int main(int argc,char *argv[]) {
 
                                 /* Vérification de la mort du joueur */
                                 if(combat_actuel->perso->sante <= 0) {
-                                    
                                     vies_globales--; 
 
                                     if (vies_globales >= 0) {

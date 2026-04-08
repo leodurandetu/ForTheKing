@@ -57,6 +57,18 @@ void dessiner_barre(SDL_Renderer* r, TTF_Font* f, const char* label, int val, in
 void afficherMessageCentre(SDL_Renderer *renderer, TTF_Font *font, const char *message, int fenetre_w, int fenetre_h, SDL_Texture **texture, char *ancienMessage);
 
 /**
+ * @author Léo
+ * @brief Vérifie si le personnage clique un objet pour l'utiliser dans l'inventaire.
+ * @param perso Pointeur vers le personnage possédant l'inventaire.
+ * @param clic_gauche État du bouton gauche de la souris pour les interactions.
+ * @param maj_affichage Pointeur permettant de notifier une modification graphique (ex: après consommation d'un objet).
+ * @param fond_interface Rectangle définissant la zone de fond de l'inventaire.
+ * @param orientation Choix entre un affichage en ligne (horizontal) ou en colonne (vertical).
+ * @param start_droite_x Coordonnée de départ X si l'affichage doit être décalé sur la droite.
+ */
+void traiter_inventaire(perso_t * perso, int clic_gauche, int * maj_affichage, SDL_Rect fond_interface, orientation_inv_t orientation, int start_droite_x);
+
+/**
  * @author Saandi & Léo
  * @brief Gère l'affichage complet et l'interaction de l'inventaire du personnage.
  * @param renderer Le moteur de rendu SDL.

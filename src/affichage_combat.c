@@ -74,7 +74,7 @@ static void dessiner_fond_ecran(combat_t *combat, int largeur, int hauteur)
  * côté à propos d'un personnage ou un monstre
  */
 static void dessiner_interface_combat(SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* portrait, int a_gauche,
-    const char* nom, int pv, int pv_max, int force, int intel, int rapidite, int evasion, perso_t * perso, int clic_gauche, int * maj_affichage)
+    const char* nom, monstre_t * monstre, perso_t * perso, int clic_gauche, int * maj_affichage)
 {
     int fen_w, fen_h;
     SDL_GetRendererOutputSize(renderer, &fen_w, &fen_h);
@@ -111,6 +111,38 @@ static void dessiner_interface_combat(SDL_Renderer* renderer, TTF_Font* font, SD
         SDL_DestroyTexture(t_nom);
     }
 
+    if (perso != NULL) {
+        dessiner_inventaire(renderer, font, perso, fond, r_nom, clic_gauche, maj_affichage, INV_VERTICAL, -1);
+    }
+
+    /* on récupère les statistiques après avoir affiché l'inventaire, 
+     * car le personnage notamment peut utiliser des objets dans
+     * l'inventaire, et on vérifie ça dans dessiner_inventaire
+     * (les objets peuvent augmenter les statistiques).
+    */
+    int pv = 0;
+    int pv_max = 0;
+    int force = 0;
+    int intel = 0;
+    int rapidite = 0;
+    int evasion = 0;
+
+    if (monstre != NULL) {
+        pv = monstre->sante;
+        pv_max = monstre->sante_max;
+        force = monstre->force;
+        intel = monstre->intelligence;
+        rapidite = monstre->rapidite;
+        evasion = monstre->evasion;
+    } else if (perso != NULL) {
+        pv = perso->sante;
+        pv_max = perso->sante_max;
+        force = perso->force;
+        intel = perso->intelligence;
+        rapidite = perso->rapidite;
+        evasion = perso->evasion;
+    }
+
     /* Portrait (Taille adaptée à la hauteur du menu) */
     int taille_p = h_menu * 0.25; // Le portrait prend 25% de la hauteur du menu
     if (taille_p > 100) taille_p = 100; // On le plafonne pour ne pas qu'il soit géant
@@ -143,10 +175,6 @@ static void dessiner_interface_combat(SDL_Renderer* renderer, TTF_Font* font, SD
             SDL_RenderCopy(renderer, texture_texte, NULL, &pos);
             SDL_DestroyTexture(texture_texte);
         }
-    }
-
-    if (perso != NULL) {
-        dessiner_inventaire(renderer, font, perso, fond, r_nom, clic_gauche, maj_affichage, INV_VERTICAL, -1);
     }
 
 }
@@ -239,18 +267,18 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche, int * maj_af
     perso_t * perso = combat->perso;
     monstre_t * monstre = combat->monstre;
 
-    dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Mage Joueur", perso->sante, perso->sante_max, perso->force, perso->intelligence, perso->rapidite, perso->evasion, perso, clicGauche, maj_affichage);
+    dessiner_interface_combat(renderer, combat->font, combat->texture_perso, 1, "Joueur", NULL, perso, clicGauche, maj_affichage);
     
     int nul = 0;
 
     if(combat->monstre->type == SQUELETTE) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0, &nul);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre, NULL, 0, &nul);
     } else if (combat->monstre->type == TROLL) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0, &nul);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre, NULL, 0, &nul);
     } else if (combat->monstre->type == YETI) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Yeti", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0, &nul);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Yeti", monstre, NULL, 0, &nul);
     } else if (combat->monstre->type == BOSS_FINAL) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Boss Final", monstre->sante, monstre->sante_max, monstre->force, monstre->intelligence, monstre->rapidite, monstre->evasion, NULL, 0, &nul);
+        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Boss Final", monstre, NULL, 0, &nul);
     }
 
     SDL_RenderPresent(renderer);
