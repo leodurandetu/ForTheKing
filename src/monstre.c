@@ -10,7 +10,7 @@
  * générés aléatoirement.
  */
 monstre_t * creer_monstre_aleatoire(type_monstre_t type, int x, int y) {
-    monstre_t *monstre = malloc(sizeof(monstre_t));
+    monstre_t *monstre = calloc(1,sizeof(monstre_t));
 
     if (!monstre) {
         printf("Erreur d'allocation mémoire lors de la création d'un monstre.");
@@ -37,7 +37,7 @@ monstre_t * creer_monstre_aleatoire(type_monstre_t type, int x, int y) {
 }
 
 monstre_t * creer_boss_final() {
-    monstre_t *monstre = malloc(sizeof(monstre_t));
+    monstre_t *monstre = calloc(1,sizeof(monstre_t));
 
     if (!monstre) {
         printf("Erreur d'allocation mémoire lors de la création d'un monstre.");
