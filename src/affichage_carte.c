@@ -579,7 +579,7 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
     dessiner_interface_carte_bis(renderer, font, portrait, nom_perso, x_menu, y_menu, largeur_menu, hauteur_menu, perso, clic_gauche, maj_affichage);
 }
 
-void afficher_fin_aventure(SDL_Renderer *renderer, TTF_Font* police) {
+static void afficher_boite_avec_message(SDL_Renderer * renderer, TTF_Font * police, char * message) {
     int w, h;
     SDL_GetRendererOutputSize(renderer, &w, &h);
 
@@ -605,7 +605,7 @@ void afficher_fin_aventure(SDL_Renderer *renderer, TTF_Font* police) {
 
     // Texte central
     SDL_Color blanc = {255, 255, 255, 255};
-    SDL_Surface *surf = TTF_RenderUTF8_Blended(police, "L'aventure prend fin", blanc);
+    SDL_Surface *surf = TTF_RenderUTF8_Blended(police, message, blanc);
 
     if (surf) {
         SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, surf);
@@ -614,5 +614,12 @@ void afficher_fin_aventure(SDL_Renderer *renderer, TTF_Font* police) {
         SDL_DestroyTexture(tex);
         SDL_FreeSurface(surf);
     }
+}
 
+void afficher_fin_aventure(SDL_Renderer *renderer, TTF_Font* police) {
+    afficher_boite_avec_message(renderer, police, "L'aventure prend fin");
+}
+
+void afficher_victoire(SDL_Renderer *renderer, TTF_Font* police) {
+    afficher_boite_avec_message(renderer, police, "Victoire ! Le royaume est désormais en paix.");
 }

@@ -23,7 +23,8 @@ typedef enum {
 typedef enum {
     CARTE, /**< Lorsqu'on est sur la carte. */
     GAME_OVER, /**< Lorsqu'on a fini l'aventure (perso mort). */
-    COMBAT /**< Lorsqu'on est en combat contre un monstre. */
+    COMBAT, /**< Lorsqu'on est en combat contre un monstre. */
+    VICTOIRE /**<Lorsqu'on a fini l'aventure (boss final tué). */
 } etat_jeu_t;
 
 #define MAX_FUITE 3 /* le nombre de fuites au maximum avant de ne plus avoir le choix d'attaquer */

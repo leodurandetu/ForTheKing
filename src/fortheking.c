@@ -392,6 +392,11 @@ int main(int argc,char *argv[]) {
                                 if (notifier_mort_monstre(&systeme_quetes, monstre_tue)) {
                                     lancer_affichage_quete(renderer, perso, &systeme_quetes, &affichage_quete);
                                 }
+
+                                if (monstre_tue == BOSS_FINAL) {
+                                    etat = VICTOIRE;
+                                    majAffichage = 1;
+                                }
                                 
                             } else {
                             
@@ -479,7 +484,7 @@ int main(int argc,char *argv[]) {
                 clic_gauche = 0;
             } else {
                 /* On dessine toujours la carte */
-                if (etat == CARTE || etat == GAME_OVER) {
+                if (etat == CARTE || etat == GAME_OVER || etat == VICTOIRE) {
                     afficher_carte_sdl(renderer, carte, ressources.cases, ressources.obstacles, ressources.brouillard, ressources.monstres,
                         ressources.batiments, ressources.sanctuaires, tailleCase, perso->x, perso->y, case_selection_x, case_selection_y,
                         perso);
@@ -519,13 +524,17 @@ int main(int argc,char *argv[]) {
                     afficher_fin_aventure(renderer, police);
                 }
 
+                if (etat == VICTOIRE) {
+                    afficher_victoire(renderer, police);
+                }
+
                 // Affichage du bandeau de la récompense de la quête
                 update_affichage_quete(renderer, police, &affichage_quete);
 
                 SDL_RenderPresent(renderer);
                 
                 /* Transition vers le menu */
-                if (etat == GAME_OVER) {
+                if (etat == GAME_OVER || etat == VICTOIRE) {
                     SDL_Delay(2000);     
                     relancer_menu = 1;   
                     running = 0;         
@@ -540,7 +549,9 @@ int main(int argc,char *argv[]) {
     }
 
     // Sauvegarde dans un fichier
-    sauvegarder_partie("sauvegarde_01.txt", perso, carte, renderer);
+    if (etat != VICTOIRE) {
+        sauvegarder_partie("sauvegarde_01.txt", perso, carte, renderer);
+    }
 
     // --- Nettoyage des ressources ---
     liberer_ressources(&ressources);

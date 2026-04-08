@@ -122,4 +122,12 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* ffont, SDL_Textu
  */
 void afficher_fin_aventure(SDL_Renderer *renderer, TTF_Font* police);
 
+/**
+ * @author Léo
+ * @brief Affiche un message et un filtre sombre lors de la fin de l'aventure (victoire, boss final tué).
+ * @param renderer Le moteur de rendu SDL
+ * @param police La police de caractères pour les textes.
+ */
+void afficher_victoire(SDL_Renderer *renderer, TTF_Font* police);
+
 #endif
