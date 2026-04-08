@@ -71,4 +71,18 @@ void afficherMessageCentre(SDL_Renderer *renderer, TTF_Font *font, const char *m
  */
 void dessiner_inventaire(SDL_Renderer * renderer, TTF_Font * font, perso_t * perso, SDL_Rect fond_interface, SDL_Rect rect_nom, int clic_gauche, int * maj_affichage, orientation_inv_t orientation, int start_droite_x);
 
+/**
+ * @author Massoud
+ * @brief Calcule la position pixel (cx, cy) du centre d'une case hexagonale à partir de ses coordonnées carte, de la taille de case et du joueur.
+ * @param cx_carte La position pixel X du centre de la case hexagonale.
+ * @param cy_carte La position pixel Y du centre de la case hexagonale.
+ * @param perso_x La position X du personnage.
+ * @param perso_y La position Y du personnage.
+ * @param tailleCase La taille d'une case hexagonale.
+ * @param renderer Le moteur de rendu SDL.
+ * @param px Pointeur qui contiendra le résultat en X.
+ * @param py Pointeur qui contiendra le résultat en Y.
+ */
+void case_vers_pixels(int cx_carte, int cy_carte, int perso_x, int perso_y, int tailleCase, SDL_Renderer *renderer, float *px, float *py);
+
 #endif

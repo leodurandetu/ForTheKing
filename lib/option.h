@@ -62,19 +62,23 @@ SDL_Texture* dessiner_monstre(SDL_Renderer *renderer, const char *chemin,
  * Si @p fuite_bloquee est non nul, le bouton "Fuir" est affiché en gris
  * et les clics sur celui-ci sont ignorés.
  *
- * @param gRenderer    Le moteur de rendu SDL utilisé pour l'affichage.
- * @param gFont        La police de caractères utilisée pour les boutons.
- * @param perso_x      Position X en pixels du sprite du joueur à l'écran.
- * @param perso_y      Position Y en pixels du sprite du joueur à l'écran.
- * @param perso_w      Largeur en pixels du sprite du joueur.
- * @param perso_h      Hauteur en pixels du sprite du joueur.
+ * @param gRenderer     Le moteur de rendu SDL utilisé pour l'affichage.
+ * @param gFont         La police de caractères utilisée pour les boutons.
+ * @param perso_x       Position X du joueur sur la carte.
+ * @param perso_y       Position Y du joueur sur la carte.
+ * @param perso_w       Largeur en pixels du sprite du joueur.
+ * @param perso_h       Hauteur en pixels du sprite du joueur.
  * @param fuite_bloquee 1 si la fuite est interdite (max de fuites atteint), 0 sinon.
  * @param chemin_monstre L'image du monstre 
+ * @param monstre_x     Position X de la case ou se trouve le monstre.
+ * @param monstre_y     Position Y de la case ou se trouve le monstre.
+ * @param taille_case   Taille de la case en pixels
  * @return int          1 si le joueur choisit d'attaquer, 0 s'il choisit de fuir.
  */
 int afficher_option(SDL_Renderer *gRenderer, TTF_Font *gFont,
                     int perso_x, int perso_y, int perso_w, int perso_h,
-                    int fuite_bloquee,const char *chemin_monstre);
+                    int fuite_bloquee,const char *chemin_monstre,
+                    int monstre_x, int monstre_y, int tailleCase);
 
 /**
  * @author Saandi

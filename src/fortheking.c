@@ -311,9 +311,9 @@ int main(int argc,char *argv[]) {
                                 souris_vers_case(e.button.x, e.button.y, &carte_x, &carte_y, tailleCase, perso, renderer);
 
                                 if (carte_x >= 0 && carte_y >= 0) {
-
                                     /* Si la case cliquée est un sanctuaire adjacent au joueur,
                                      * on ouvre directement le menu sans déplacement */
+
                                     int dx_hex[2][6] = {
                                         { +1,  0, -1, -1,  0, +1 },
                                         { +1,  0, -1, -1,  0, +1 }
@@ -350,17 +350,6 @@ int main(int argc,char *argv[]) {
                                             if (monstre != NULL && combat_actuel == NULL) {
                                                 combat_actuel = creer_combat(perso, monstre);
 
-                                                // Conversion coordonnées carte → pixels écran
-                                                int windowW, windowH;
-                                                SDL_GetWindowSize(pFenetre, &windowW, &windowH);
-
-                                                int centre_x = windowW / 2;
-                                                int centre_y = windowH / 2;
-
-                                                // Position pixel du personnage à l'écran (il est toujours centré)
-                                                int perso_px = centre_x;
-                                                int perso_py = centre_y;
-
                                                 // Taille du sprite à l'écran (même logique que dans afficher_personnage)
                                                 int sprite_w = tailleCase;
                                                 int sprite_h = tailleCase;
@@ -368,24 +357,32 @@ int main(int argc,char *argv[]) {
                                                 switch (monstre->type){
                                                     case SQUELETTE :
                                                         choix = afficher_option(renderer, police2,
-                                                                            perso_px, perso_py,
+                                                                            perso->x, perso->y,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/squelette.png");break;
+                                                                            nb_fuites >= MAX_FUITE,"img/squelette.png",
+                                                                            carte_x, carte_y, tailleCase);
+                                                        break;
                                                     case TROLL : 
                                                         choix = afficher_option(renderer, police2,
-                                                                            perso_px, perso_py,
+                                                                            perso->x, perso->y,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/troll.png");break;
+                                                                            nb_fuites >= MAX_FUITE,"img/troll.png",
+                                                                            carte_x, carte_y, tailleCase);
+                                                        break;
                                                     case YETI : 
                                                             choix = afficher_option(renderer, police2,
-                                                                            perso_px, perso_py,
+                                                                            perso->x, perso->y,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/yeti.png");break;
+                                                                            nb_fuites >= MAX_FUITE,"img/yeti.png",
+                                                                            carte_x, carte_y, tailleCase);
+                                                            break;
                                                     case BOSS_FINAL : 
                                                         choix = afficher_option(renderer, police2,
-                                                                            perso_px, perso_py,
+                                                                            perso->x, perso->y,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/boss_final.png");break;
+                                                                            nb_fuites >= MAX_FUITE,"img/boss_final.png",
+                                                                            carte_x, carte_y, tailleCase);
+                                                        break;
                                                     default:
                                                         break;
                                                 }
@@ -405,17 +402,6 @@ int main(int argc,char *argv[]) {
                                             } else if (carte[carte_y][carte_x].batiment.type == TOUR_DU_BOSS) {
                                                 combat_actuel = creer_combat(perso, boss_final);
 
-                                                // Conversion coordonnées carte → pixels écran
-                                                int windowW, windowH;
-                                                SDL_GetWindowSize(pFenetre, &windowW, &windowH);
-
-                                                int centre_x = windowW / 2;
-                                                int centre_y = windowH / 2;
-
-                                                // Position pixel du personnage à l'écran (il est toujours centré)
-                                                int perso_px = centre_x;
-                                                int perso_py = centre_y;
-
                                                 // Taille du sprite à l'écran (même logique que dans afficher_personnage)
                                                 int sprite_w = tailleCase;
                                                 int sprite_h = tailleCase;
@@ -423,24 +409,32 @@ int main(int argc,char *argv[]) {
                                                 switch (monstre->type){
                                                     case SQUELETTE :
                                                         choix = afficher_option(renderer, police2,
-                                                                            perso_px, perso_py,
+                                                                            perso->x, perso->y,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/squelette.png");break;
+                                                                            nb_fuites >= MAX_FUITE,"img/squelette.png",
+                                                                            carte_x, carte_y, tailleCase);
+                                                        break;
                                                     case TROLL : 
                                                         choix = afficher_option(renderer, police2,
-                                                                            perso_px, perso_py,
+                                                                            perso->x, perso->y,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/troll.png");break;
+                                                                            nb_fuites >= MAX_FUITE,"img/troll.png",
+                                                                            carte_x, carte_y, tailleCase);
+                                                        break;
                                                     case YETI : 
                                                             choix = afficher_option(renderer, police2,
-                                                                            perso_px, perso_py,
+                                                                            perso->x, perso->y,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/yeti.png");break;
+                                                                            nb_fuites >= MAX_FUITE,"img/yeti.png",
+                                                                            carte_x, carte_y, tailleCase);
+                                                        break;
                                                     case BOSS_FINAL : 
                                                         choix = afficher_option(renderer, police2,
-                                                                            perso_px, perso_py,
+                                                                            perso->x, perso->y,
                                                                             sprite_w, sprite_h,
-                                                                            nb_fuites >= MAX_FUITE,"img/boss_final.png");break;
+                                                                            nb_fuites >= MAX_FUITE,"img/boss_final.png",
+                                                                            carte_x, carte_y, tailleCase);
+                                                        break;
                                                     default:
                                                         break;
                                                 }

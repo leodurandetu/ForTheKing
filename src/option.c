@@ -1,5 +1,5 @@
 #include "../lib/option.h"
-/*#include "../lib/combat.h"*/
+#include "../lib/affichage_commun.h"
 
 void dessiner_bouton(SDL_Surface *surface, TTF_Font *font,
                      SDL_Rect *bouton, const char *texte,
@@ -55,7 +55,8 @@ SDL_Texture* dessiner_monstre(SDL_Renderer *renderer, const char *chemin,
 
 int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
                     int perso_x, int perso_y, int perso_w, int perso_h,
-                    int fuite_bloquee,const char *chemin_monstre){
+                    int fuite_bloquee,const char *chemin_monstre,
+                    int monstre_x, int monstre_y, int tailleCase) {
     int lancerCombat = 0;
     int running = 1;
 
@@ -68,21 +69,40 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
     const int MARGIN = 15;
     const int GAP    = 10;
 
+    float cx_monstre, cy_monstre;
+    case_vers_pixels(monstre_x, monstre_y, perso_x, perso_y,
+                    tailleCase, gRenderer, &cx_monstre, &cy_monstre);
+
     /* Récupération dynamique de la taille du renderer */
-    int ECRAN_W, ECRAN_H;
-    SDL_RenderGetLogicalSize(gRenderer, &ECRAN_W, &ECRAN_H);
-    if (ECRAN_W == 0 || ECRAN_H == 0)
-        SDL_GetRendererOutputSize(gRenderer, &ECRAN_W, &ECRAN_H);
+    int fen_w, fen_h;
+    SDL_GetRendererOutputSize(gRenderer, &fen_w, &fen_h);
 
     /* Placement du menu à droite du sprite, avec repli à gauche */
-    int mx = perso_x + perso_w + 6;
+    /*int mx = perso_x + perso_w + 6;
     int my = perso_y + (perso_h - MENU_H) / 2;
 
     if (mx + MENU_W > ECRAN_W)
         mx = perso_x - MENU_W - 6;
 
     if (my < 0)                my = 0;
-    if (my + MENU_H > ECRAN_H) my = ECRAN_H - MENU_H;
+    if (my + MENU_H > ECRAN_H) my = ECRAN_H - MENU_H;*/
+
+    int rayon_hex = tailleCase / 2;
+    int mx = (int)(cx_monstre + rayon_hex + 8);
+
+    if (mx + MENU_W > fen_w) {
+        mx = (int)(cx_monstre - rayon_hex - 8 - MENU_W);
+    }
+
+    int my = (int)(cy_monstre - MENU_H / 2);
+    
+    if (my < 0) {
+        my = 0;
+    }
+
+    if (my + MENU_H > fen_h) {
+        my = fen_h - MENU_H;
+    }
 
     SDL_Rect fond = {mx, my, MENU_W, MENU_H};
 
@@ -174,8 +194,9 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
         /* Flèche pointant vers le joueur */
         int arrow_y = fond.y + MENU_H / 2;
 
-        if (mx == perso_x + perso_w + 6)
+        if (mx > (int)cx_monstre)
         {
+            // menu à droite : flèche à gauche
             SDL_RenderDrawLine(gRenderer,
                 fond.x,     arrow_y - 6,
                 fond.x - 8, arrow_y);
@@ -185,6 +206,7 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
         }
         else
         {
+            // menu à gauche : flèche à droite
             SDL_RenderDrawLine(gRenderer,
                 fond.x + MENU_W,     arrow_y - 6,
                 fond.x + MENU_W + 8, arrow_y);

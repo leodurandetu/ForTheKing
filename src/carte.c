@@ -6,7 +6,7 @@
 /*
  * Cette fonction renvoie les coordonnées
  * d'une case libre sur la carte choisie aléatoirement
- * (sans monstres, batiments et pas dans l'eau) 
+ * (sans monstres, batiments et pas dans l'eau)
 */
 void coords_case_libre(case_t ** carte, int *x, int *y) {
     *x = rand() % TAILLE_CARTE;
@@ -28,10 +28,10 @@ booleen_t deplacement_possible(case_t ** carte, int x, int y) {
     //  On vérifie les bords D'ABORD -> sinon seg fault
     if (x < 0 || x >= TAILLE_CARTE || y < 0 || y >= TAILLE_CARTE) {
         return FAUX;
-    } 
-    
+    }
+
     case_t maCase = carte[y][x];
- 
+
     if (maCase.biome == EAU) {
         return FAUX;
     } else if (maCase.terrain != PAS_DE_TERRAIN) {
@@ -43,7 +43,7 @@ booleen_t deplacement_possible(case_t ** carte, int x, int y) {
     } else {
         return VRAI;
     }
- 
+
 }
 
 /* Leo */
@@ -168,7 +168,6 @@ void remplir_brouillard(case_t ** carte) {
  * l'algorithme de Perlin Noise.
  */
 void generer_eau(case_t **carte) {
-
     float echelle = 0.08f;
 
     for (int y = 0; y < TAILLE_CARTE; y++) {
@@ -188,7 +187,7 @@ void remplir_zone(case_t ** carte, biome_t biome, coordonnee_t dep, coordonnee_t
     int x_max = fmin(TAILLE_CARTE - 1, fmax(dep.x, arr.x));
     int y_min = fmax(0, fmin(dep.y, arr.y));
     int y_max = fmin(TAILLE_CARTE - 1, fmax(dep.y, arr.y));
-    
+
     for (int i = y_min; i <= y_max; i++) {
         for (int j = x_min; j <= x_max; j++) {
             carte[i][j].biome = biome;
@@ -201,7 +200,7 @@ void generer_biomes(case_t **carte) {
 
     for (int y = 0; y < TAILLE_CARTE; y++) {
         for (int x = 0; x < TAILLE_CARTE; x++) {
-            if (carte[y][x].biome == EAU) continue; 
+            if (carte[y][x].biome == EAU) continue;
 
             /* Trois échantillons décalés dans l'espace */
             float foret  = perlin_2d(x * echelle + 50.0f, y * echelle);
@@ -224,23 +223,23 @@ void generer_biomes(case_t **carte) {
 // Massoud
 // Vérifie à un rayon de 2 cases pour éviter que les monstres s'agglutinent
 booleen_t a_un_voisin_monstre(case_t ** carte, int cx, int cy) {
-    // On scanne un petit carré de 5x5 autour de la case cible 
+    // On scanne un petit carré de 5x5 autour de la case cible
     for (int y = cy - 2; y <= cy + 2; y++) {
         for (int x = cx - 2; x <= cx + 2; x++) {
-            
+
             // On vérifie qu'on ne sort pas de la carte
             if (x >= 0 && x < TAILLE_CARTE && y >= 0 && y < TAILLE_CARTE) {
-                
+
                 // Si ce n'est pas la case centrale ET qu'il y a un monstre
                 if ((x != cx || y != cy) && carte[y][x].monstre != NULL) {
-                    
+
                     // Calcul simplifié de la distance sur grille hexagonale
                     int diff_x = abs(x - cx);
                     int diff_y = abs(y - cy);
-                    
+
                     // Si c'est dans un rayon de  environ 2 cases -> on refuse
-                    if (diff_x + diff_y <= 3) { 
-                        return VRAI; 
+                    if (diff_x + diff_y <= 3) {
+                        return VRAI;
                     }
                 }
             }
@@ -252,24 +251,24 @@ booleen_t a_un_voisin_monstre(case_t ** carte, int cx, int cy) {
 // Massoud
 void faire_apparaitre_groupe(case_t ** carte, type_monstre_t type, coordonnee_t cases_dispos[], int nb_cases_dispos) {
     // Minimum 15 cases de biome (évite les monstres isolés sur les bords)
-    if (nb_cases_dispos < 15) return; 
+    if (nb_cases_dispos < 15) return;
 
     // 1 monstre pour 12 cases libres + un léger aléatoire)
     int nb_a_placer = (nb_cases_dispos / 20) + (rand() % 2);
-    if (nb_a_placer > nb_cases_dispos) nb_a_placer = nb_cases_dispos; 
-    
+    if (nb_a_placer > nb_cases_dispos) nb_a_placer = nb_cases_dispos;
+
     int monstres_places = 0;
 
     while (monstres_places < nb_a_placer && nb_cases_dispos > 0) {
         int index = rand() % nb_cases_dispos;
         int cx = cases_dispos[index].x;
         int cy = cases_dispos[index].y;
-        
+
         if (!a_un_voisin_monstre(carte, cx, cy)) {
             carte[cy][cx].monstre = creer_monstre_aleatoire(type, cx, cy);
             monstres_places++;
         }
-        
+
         // On retire la case testée de la liste pour ne pas boucler dessus à l'infini
         cases_dispos[index] = cases_dispos[nb_cases_dispos - 1];
         nb_cases_dispos--;
@@ -283,22 +282,22 @@ void faire_apparaitre_groupe(case_t ** carte, type_monstre_t type, coordonnee_t 
  */
 void placer_monstres(case_t ** carte) {
     // Taille du secteur scanné (12x12 cases)
-    int taille_secteur = 12; 
+    int taille_secteur = 12;
 
     for (int i = 0; i < TAILLE_CARTE; i += taille_secteur) {
         for (int j = 0; j < TAILLE_CARTE; j += taille_secteur) {
-            coordonnee_t cases_foret[144]; 
+            coordonnee_t cases_foret[144];
             coordonnee_t cases_desert[144];
             coordonnee_t cases_neige[144];
             int nb_foret = 0, nb_desert = 0, nb_neige = 0;
-            
+
             // Scan du secteur pour lister les cases libres par biome
             for (int y = i; y < i + taille_secteur && y < TAILLE_CARTE; y++) {
                 for (int x = j; x < j + taille_secteur && x < TAILLE_CARTE; x++) {
-                    
-                    if (carte[y][x].monstre == NULL && carte[y][x].terrain == PAS_DE_TERRAIN && 
+
+                    if (carte[y][x].monstre == NULL && carte[y][x].terrain == PAS_DE_TERRAIN &&
                         carte[y][x].biome != EAU && carte[y][x].batiment.type == PAS_DE_BATIMENT) {
-                        
+
                         if (carte[y][x].biome == FORET) {
                             cases_foret[nb_foret].x = x;
                             cases_foret[nb_foret].y = y;
@@ -318,7 +317,7 @@ void placer_monstres(case_t ** carte) {
                 }
 
             }
-            
+
             faire_apparaitre_groupe(carte, TROLL, cases_foret, nb_foret);
             faire_apparaitre_groupe(carte, SQUELETTE, cases_desert, nb_desert);
             faire_apparaitre_groupe(carte, YETI, cases_neige, nb_neige);
@@ -331,14 +330,14 @@ void placer_monstres(case_t ** carte) {
 /*
  * Cette fonction permet de libérer la mémoire à la fin
  * du programme, tout ce qui est relié à la carte.
- * Notamment les pointeurs vers les monstres qui sont 
+ * Notamment les pointeurs vers les monstres qui sont
  * stockés (ou pas) sur chaque case de la carte.
  */
 void liberer_memoire_carte(case_t *** carte, int taille_carte) {
     int i, j;
 
     if (carte != NULL) {
-    
+
         for (i = 0; i < taille_carte; i++) {
 
             for (j = 0; j < taille_carte; j++) {
@@ -401,15 +400,15 @@ void placer_batiments(case_t ** carte) {
 void souris_vers_case(int mouseX, int mouseY,
     int *carte_x, int *carte_y, int tailleCase,
     perso_t *perso, SDL_Renderer *renderer) {
-   
+
     int fenetre_taille_x, fenetre_taille_y;
     SDL_GetRendererOutputSize(renderer, &fenetre_taille_x, &fenetre_taille_y);
 
     // Mathématiques de la grille "flat-top"
-    float rayon = tailleCase / 2.0f;                    
-    float hex_w = 2.0f * rayon;                        
-    float hex_h = sqrtf(3) * rayon;                    
-    float espacement_colonnes = hex_w * 0.75f; 
+    float rayon = tailleCase / 2.0f;
+    float hex_w = 2.0f * rayon;
+    float hex_h = sqrtf(3) * rayon;
+    float espacement_colonnes = hex_w * 0.75f;
 
     // Décalage de la caméra centrée sur le joueur
     float camX = perso->x * espacement_colonnes;
@@ -421,7 +420,7 @@ void souris_vers_case(int mouseX, int mouseY,
     int result_y = -1;
 
     // Détection du clic hexagonal par calcul de distance
-    float dist_min_carree = rayon * rayon; 
+    float dist_min_carree = rayon * rayon;
 
     // Approximation de la zone pour ne pas vérifier les milliers de cases
     int approx_x = (int)((mouseX - decalageX) / espacement_colonnes);
@@ -458,14 +457,14 @@ void souris_vers_case(int mouseX, int mouseY,
  * mais plutôt chemin_valide
  *
  * Cette fonction retourne la distance d'un chemin, si il y a un
- * chemin constitué de cases valides (pas d'eau, pas de monstre, 
- * pas de batiment par-dessus) pour arriver à une case 
+ * chemin constitué de cases valides (pas d'eau, pas de monstre,
+ * pas de batiment par-dessus) pour arriver à une case
  * destination, ou INFINI sinon.
- * 
+ *
  * Elle est récursive pour l'instant.
  */
 static int peut_atteindre_rec(case_t ** carte,
-    int taille_carte, int xDepart, int yDepart, int xCible, int yCible, 
+    int taille_carte, int xDepart, int yDepart, int xCible, int yCible,
     int pts_deplacement_restants, perso_t *perso)
 {
 
@@ -539,15 +538,15 @@ static int peut_atteindre_rec(case_t ** carte,
 /* Leo */
 /*
  * Cette fonction permet de savoir si il y a un chemin
- * constitué de cases valides (pas d'eau, pas de monstre, 
- * pas de batiment par-dessus) pour arriver à une case 
+ * constitué de cases valides (pas d'eau, pas de monstre,
+ * pas de batiment par-dessus) pour arriver à une case
  * destination.
  * Elle retourne également la distance du chemin, à travers
  * le paramètre pointeur sur entier *distance, ou -1 si il
  * n'y a pas de chemin valide.
  */
 int chemin_valide(case_t ** carte, int taille_carte,
-    int xDepart, int yDepart, int xCible, int yCible, 
+    int xDepart, int yDepart, int xCible, int yCible,
     int pts_deplacement_max, perso_t *perso, int *distance)
 {
 
@@ -556,7 +555,7 @@ int chemin_valide(case_t ** carte, int taille_carte,
     }
 
     int resultat = peut_atteindre_rec(
-        carte, taille_carte, xDepart, yDepart, xCible, 
+        carte, taille_carte, xDepart, yDepart, xCible,
         yCible, pts_deplacement_max, perso
     );
 
@@ -721,17 +720,17 @@ void placer_sanctuaires(case_t ** carte){
         int x = rand() % TAILLE_CARTE;
         int y = rand() % TAILLE_CARTE;
 
-        /* On vérifie que la case est libre : pas d'eau, pas d'obstacle, 
-         * qu'il n'y a pas de bâtiment, ni de monstre, 
+        /* On vérifie que la case est libre : pas d'eau, pas d'obstacle,
+         * qu'il n'y a pas de bâtiment, ni de monstre,
          * et qu'elle n'a pas déjà un sanctuaire.
          */
-        if (deplacement_possible(carte, x, y) && 
-            carte[y][x].monstre == NULL && 
+        if (deplacement_possible(carte, x, y) &&
+            carte[y][x].monstre == NULL &&
             carte[y][x].batiment.type == PAS_DE_BATIMENT &&
             carte[y][x].sanctuaires == PAS_DE_SANCTUAIRE) {
-            
+
             /* Choisir un type de sanctuaire au hasard entre 1 et 4,
-             * 1=PUISSANCE, 2=RAPIDITE, 3=INTELLIGENCE, 4=EXPERIENCE 
+             * 1=PUISSANCE, 2=RAPIDITE, 3=INTELLIGENCE, 4=EXPERIENCE
              */
             carte[y][x].sanctuaires = (rand() % 4) + 1;
             nb_sanc_places++;

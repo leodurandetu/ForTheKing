@@ -16,6 +16,33 @@ SDL_Texture* creer_texte(SDL_Renderer* renderer, TTF_Font* police, const char* t
     return texture;
 }
 
+/* Calcule la position pixel (cx, cy) du centre d'une case hexagonale
+ * à partir de ses coordonnées carte, de la taille de case et du joueur */
+void case_vers_pixels(int cx_carte, int cy_carte,
+    int perso_x, int perso_y,
+    int tailleCase,
+    SDL_Renderer *renderer,
+    float *px, float *py)
+{
+    int fen_w, fen_h;
+    SDL_GetRendererOutputSize(renderer, &fen_w, &fen_h);
+
+    float rayon         = tailleCase / 2.0f;
+    float hex_w         = 2.0f * rayon;
+    float hex_h         = sqrtf(3.0f) * rayon;
+    float espacement_x  = hex_w * 0.75f;
+
+    /* Position du joueur en pixels */
+    float cam_x = perso_x * espacement_x;
+    float cam_y = perso_y * hex_h + (perso_x % 2 ? hex_h / 2.0f : 0.0f);
+
+    int decalage_x = (int)(fen_w / 2 - cam_x - hex_w / 2);
+    int decalage_y = (int)(fen_h / 2 - cam_y - hex_h / 2);
+
+    *px = cx_carte * espacement_x + hex_w / 2.0f + decalage_x;
+    *py = cy_carte * hex_h + (cx_carte % 2 ? hex_h / 2.0f : 0.0f) + hex_h / 2.0f + decalage_y;
+}
+
 /* Leo
  * Cette fonction dessine une barre de statistiques,
  * pour l'instant seulement les points de vie (la santé)
