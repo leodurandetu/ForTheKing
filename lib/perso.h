@@ -1,3 +1,10 @@
+/**
+ * @file quetes.h
+ * @author Massoud
+ * @brief Définitions et structures pour le système de quêtes annexes.
+ */
+ 
+
 #ifndef PERSO_H
 #define PERSO_H
 
@@ -46,6 +53,7 @@ typedef struct perso_s {
     int exp;              /**< Expérience accumulée. */
     int mort;             /**< État vital (0 pour vivant, 1 pour mort). */
     int pieces;           /**< Argent, permettant d'acheter des objets (soins, parchemins de téléportation). */
+    int nb_victime;       /** Nombre de monstre tués. */
     /* Composants */
     inventaire_t inventaire; /**< Sac à dos contenant les objets. */
     perso_type_t type;       /**< Classe choisie au début de la partie. */
