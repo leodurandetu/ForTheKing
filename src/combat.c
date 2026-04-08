@@ -135,6 +135,7 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
         monstre_t * combat_monstre = (*combat)->monstre;
         int y = combat_monstre->y;
         int x = combat_monstre->x;
+        perso->nb_victime++;
 
         if (combat_monstre != NULL) {
 
@@ -296,7 +297,7 @@ void choix_attaque_monstre(combat_t *combat){
 * Fonction qui crée un combat
 */
 combat_t* creer_combat(perso_t *perso, monstre_t *monstre) {
-    combat_t *combat = malloc(sizeof(combat_t));
+    combat_t *combat = calloc(1,sizeof(combat_t));
 
     combat->perso = perso;
     combat->monstre = monstre;
