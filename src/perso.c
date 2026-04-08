@@ -12,7 +12,7 @@
  */
 perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 {
-    perso_t * perso = malloc(sizeof(perso_t));
+    perso_t * perso = calloc(1,sizeof(perso_t));
 
     perso->x = xDepart;
     perso->y = yDepart;
@@ -23,6 +23,7 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
     perso->exp = 0;
     perso->pieces = 15;
     perso->mort = 0;
+    perso->nb_victime = 0;
 
     switch (persoType)
     {
