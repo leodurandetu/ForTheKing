@@ -146,7 +146,8 @@ int main(int argc,char *argv[]) {
     etat_jeu_t etat = CARTE;
 
     int nb_fuites = 0;
-    int afficher_bandeau_quete = 0;
+
+    affichage_quete_t affichage_quete = {0};
 
     while (running) {
         SDL_Event e;
@@ -389,8 +390,9 @@ int main(int argc,char *argv[]) {
 
                                 // Mettre à jour la quête et afficher l'accomplissement si validé
                                 if (notifier_mort_monstre(&systeme_quetes, monstre_tue)) {
-                                    afficher_bandeau_quete = 1;
+                                    lancer_affichage_quete(renderer, perso, &systeme_quetes, &affichage_quete);
                                 }
+                                
                             } else {
                             
                                 if (combat_actuel->tour == TOUR_MONSTRE) {
@@ -509,7 +511,7 @@ int main(int argc,char *argv[]) {
                     }
 
                     // Affichage du panneau des quêtes
-                    afficher_quetes(renderer, police3, &systeme_quetes);
+                    afficher_panneau_lateral_quetes(renderer, police3, &systeme_quetes);
                 } 
                 
                 /* Si fin aventure, on ajoute le filtre sombre et le message */
@@ -517,12 +519,8 @@ int main(int argc,char *argv[]) {
                     afficher_fin_aventure(renderer, police);
                 }
 
-                // Affichage de bandeau de la quete après le combat
-                if (afficher_bandeau_quete == 1) {
-                    afficher_quete_accomplie(renderer, police3, perso, &systeme_quetes);
-                    afficher_bandeau_quete = 0; // On réinitialise pour ne pas boucler
-                    majAffichage = 1;           // On force un rafraîchissement au tour d'après
-                }
+                // Affichage du bandeau de la récompense de la quête
+                update_affichage_quete(renderer, police, &affichage_quete);
 
                 SDL_RenderPresent(renderer);
                 

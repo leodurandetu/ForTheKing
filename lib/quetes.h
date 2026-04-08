@@ -45,6 +45,17 @@ typedef struct {
 } quetes_t;
 
 /**
+ * @struct affichage_quetes_t
+ * @brief Structure qui gère l'affichage d'une quête.
+ */
+typedef struct {
+    int active;                 // 0 = pas affiché, 1 = en cours
+    Uint32 debut;               // SDL_GetTicks() du début
+    SDL_Rect bandeau;
+    const char * lignes[2];
+} affichage_quete_t;
+
+/**
  * @brief Initialise la structure de quêtes.
  * @param quetes Pointeur sur la structure de quêtes à initialiser.
  */
@@ -64,15 +75,21 @@ int notifier_mort_monstre(quetes_t * quetes, type_monstre_t type_monstre_tue);
  * @param font La police utilisée pour générer les textes.
  * @param quetes Pointeur sur la structure de quêtes.
  */
-void afficher_quetes(SDL_Renderer * renderer, TTF_Font * font, const quetes_t * quetes);
+void afficher_panneau_lateral_quetes(SDL_Renderer * renderer, TTF_Font * font, const quetes_t * quetes);
 
-/**
- * @brief Affiche le bandeau "Quête accomplie !", applique les bonus, puis passe à la suivante.
+/** @brief Prépare le bandeau "Quête accomplie !"
  * @param renderer Le renderer SDL utilisé pour l'affichage.
- * @param font La police utilisée pour générer les textes.
  * @param perso Pointeur sur le personnage afin d'appliquer les récompenses.
  * @param quetes Pointeur sur la structure de quêtes.
+ * @param affichage Pointeur sur la structure d'affichage de récompense d'une quête
  */
-void afficher_quete_accomplie(SDL_Renderer * renderer, TTF_Font * font, perso_t * perso, quetes_t * quetes);
+void lancer_affichage_quete(SDL_Renderer * renderer, perso_t * perso, quetes_t * quetes, affichage_quete_t * affichage);
+
+/** @brief Affiche le bandeau "Quête accomplie !", applique les bonus, puis passe à la suivante.
+ * @param renderer Le renderer SDL utilisé pour l'affichage.
+ * @param font La police utilisée pour générer les textes.
+ * @param affichage Pointeur sur la structure d'affichage de récompense d'une quête
+ */
+void update_affichage_quete(SDL_Renderer * renderer, TTF_Font * font, affichage_quete_t * affichage);
 
 #endif

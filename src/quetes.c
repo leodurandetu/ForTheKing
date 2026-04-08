@@ -110,7 +110,7 @@ int notifier_mort_monstre(quetes_t * quetes, type_monstre_t type_monstre_tue) {
  * Cette fonction permet d'afficher le panneau latéral
  * pour suivre l'avancement de la quête en cours
  */
-void afficher_quetes(SDL_Renderer * renderer, TTF_Font * font, const quetes_t * quetes) {
+void afficher_panneau_lateral_quetes(SDL_Renderer * renderer, TTF_Font * font, const quetes_t * quetes) {
     
     if (renderer == NULL || font == NULL || quetes == NULL) {
         return;
@@ -170,19 +170,14 @@ void afficher_quetes(SDL_Renderer * renderer, TTF_Font * font, const quetes_t * 
     afficher_ligne(renderer, font, progression, px + MARGE, ty);
 }
 
+void lancer_affichage_quete(SDL_Renderer * renderer, perso_t * perso, quetes_t * quetes, affichage_quete_t * affichage) {
 
-void afficher_quete_accomplie(SDL_Renderer * renderer, TTF_Font * font, perso_t * perso, quetes_t * quetes) {
-    
-    if (renderer == NULL || font == NULL || perso == NULL || quetes == NULL) {
-        return;
-    }
-    
-    if (quetes->actuelle == QUETE_TOUTES_FINIES) {
-        return;
-    }
+    if (renderer == NULL || perso == NULL || quetes == NULL || affichage == NULL) return;
+    if (quetes->actuelle == QUETE_TOUTES_FINIES) return;
 
     const info_quete_t * q = &QUETES_TAB[quetes->actuelle];
 
+    // Appliquer les bonus
     perso->degats += q->bonus_degats;
     perso->sante += q->bonus_sante;
     perso->sante_max += q->bonus_sante;
@@ -193,50 +188,47 @@ void afficher_quete_accomplie(SDL_Renderer * renderer, TTF_Font * font, perso_t 
     char ligne_recompense[96];
     sprintf(ligne_recompense, "Vous gagnez +%d degats et +%d sante !", q->bonus_degats, q->bonus_sante);
 
-    const char * lignes[2] = { "Quete accomplie !", ligne_recompense };
+    // Initialiser l'affichage
+    affichage->lignes[0] = "Quete accomplie !";
+    affichage->lignes[1] = ligne_recompense;
+    affichage->active = 1;
+    affichage->debut = SDL_GetTicks();
 
+    // Calcul position bandeau
     int fenetre_w, fenetre_h;
     SDL_GetRendererOutputSize(renderer, &fenetre_w, &fenetre_h);
-
     const int largeur_bandeau = 380;
     const int hauteur_bandeau = 80;
     int bx = (fenetre_w - largeur_bandeau) / 2;
     int by = (fenetre_h - hauteur_bandeau) / 2;
+    affichage->bandeau = (SDL_Rect){ bx, by, largeur_bandeau, hauteur_bandeau };
+}
 
-    SDL_Rect bandeau = { bx, by, largeur_bandeau, hauteur_bandeau };
-    Uint32 debut = SDL_GetTicks();
+void update_affichage_quete(SDL_Renderer * renderer, TTF_Font * font, affichage_quete_t * affichage) {
+    if (!affichage->active) return;
 
-    while (SDL_GetTicks() - debut < DUREE_BANDEAU_MS) {
-        SDL_Event e;
-        
-        while (SDL_PollEvent(&e)) {
-            
-            if (e.type == SDL_QUIT) {
-                return;
-            }
+    Uint32 now = SDL_GetTicks();
+    if (now - affichage->debut >= DUREE_BANDEAU_MS) {
+        affichage->active = 0; // fin de l'affichage
+        return;
+    }
 
+    // Dessin du panneau
+    dessiner_panneau(renderer, affichage->bandeau);
+    int ty = affichage->bandeau.y + MARGE + 4;
+
+    for (int i = 0; i < 2; i++) {
+        SDL_Rect r;
+        SDL_Color or_fonce = { OR_FONCE_R, OR_FONCE_G, OR_FONCE_B, 255 };
+        SDL_Texture * t = creer_texte(renderer, font, affichage->lignes[i], or_fonce, &r);
+
+        if (t) {
+            SDL_Rect pos = { affichage->bandeau.x + (affichage->bandeau.w - r.w) / 2, ty, r.w, r.h };
+            SDL_RenderCopy(renderer, t, NULL, &pos);
+            SDL_DestroyTexture(t);
+            ty += r.h + 6;
         }
 
-        dessiner_panneau(renderer, bandeau);
-        int ty = by + MARGE + 4;
-        
-        for (int i = 0; i < 2; i++) {
-            SDL_Rect r;
-            SDL_Color or_fonce = { OR_FONCE_R, OR_FONCE_G, OR_FONCE_B, 255 };
-            SDL_Texture * t = creer_texte(renderer, font, lignes[i], or_fonce, &r);
-            
-            if (t) {
-                SDL_Rect pos = { bx + (largeur_bandeau - r.w) / 2, ty, r.w, r.h };
-                SDL_RenderCopy(renderer, t, NULL, &pos);
-                SDL_DestroyTexture(t);
-                ty += r.h + 6;
-            }
-
-        }
-
-        SDL_RenderPresent(renderer);
-        SDL_Delay(16);
     }
 
 }
-
