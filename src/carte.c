@@ -12,7 +12,7 @@ void coords_case_libre(case_t ** carte, int *x, int *y) {
     *x = rand() % TAILLE_CARTE;
     *y = rand() % TAILLE_CARTE;
 
-    while (!deplacement_possible(carte, *x, *y)) {
+    while (!deplacement_possible(carte, *x, *y) || carte[*y][*x].monstre != NULL) {
         *x = rand() % TAILLE_CARTE;
         *y = rand() % TAILLE_CARTE;
     }
