@@ -122,7 +122,7 @@ int main(int argc,char *argv[]) {
         int yApparition;
 
         coords_case_libre(carte, &xApparition, &yApparition);
-        perso = init_perso(classe_choisie, xApparition, yApparition, renderer);
+        perso = init_perso(classe_choisie, xApparition, yApparition);
 
         remplir_brouillard(carte);
         devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);
@@ -300,16 +300,38 @@ int main(int argc,char *argv[]) {
                                     for (int dir = 0; dir < 6; dir++) {
                                         int vx = perso->x + dx_hex[perso->x % 2][dir];
                                         int vy = perso->y + dy_hex[perso->x % 2][dir];
-                                        if (vx == carte_x && vy == carte_y &&
+                                        if (vx == carte_x && vy == carte_y && 
                                             (carte[carte_y][carte_x].sanctuaires != PAS_DE_SANCTUAIRE)) {
+
                                             est_voisin_sanctuaire = 1;
                                             break;
                                         }
                                     }
+
+                                    /* Vérification campement adjacent */
+                                    int est_voisin_campement = 0;
+                                    for (int dir = 0; dir < 6; dir++) {
+                                        int vx = perso->x + dx_hex[perso->x % 2][dir];
+                                        int vy = perso->y + dy_hex[perso->x % 2][dir];
+                                        if (vx == carte_x && vy == carte_y &&
+                                            carte[carte_y][carte_x].batiment.type == CAMPEMENT) {
+
+                                            est_voisin_campement = 1;
+                                            break;
+                                        }
+                                    }
+
+                                    /* Sanctuaire */
                                     if (est_voisin_sanctuaire) {
                                         afficher_menu_sanctuaire(renderer, police3,
-                                            perso, carte, carte_x, carte_y, tailleCase);
+                                        perso, carte, carte_x, carte_y, tailleCase);
                                         majAffichage = 1;
+                                    /* Campement*/
+                                    } else if (est_voisin_campement) {
+                                        afficher_menu_campement(renderer, police3,
+                                        perso, carte_x, carte_y, tailleCase);
+                                        majAffichage = 1;
+                                    /* Déplacement normal*/
                                     } else {
                                         int portee = get_pers_movements_points(perso);
                                         int distReelle = -1;
