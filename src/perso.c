@@ -10,7 +10,7 @@
  * du type du personnage.
  * Elle renvoie un pointeur sur le personnage créé.
  */
-perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
+perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart, SDL_Renderer * renderer)
 {
     perso_t * perso = calloc(1,sizeof(perso_t));
 
@@ -21,7 +21,6 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 
     perso->niveau = 1;
     perso->exp = 0;
-    perso->pieces = 15;
     perso->mort = 0;
     perso->nb_victime = 0;
 
@@ -72,9 +71,29 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart)
 
     initialiser_inventaire(&(perso->inventaire));
 
+    ajouter_pieces(renderer, perso, 15);
+
     restaurer_points_deplacements(perso);
 
     return perso;
+}
+
+/* Leo */
+/*
+ * Cette fonction compte et
+ * renvoie le nombre de pièces
+ * dans l'inventaire d'un personnage
+ */
+int get_pieces(perso_t * perso) {
+    return compter_objet_inventaire(&(perso->inventaire), PIECE_DOR);
+}
+
+void ajouter_pieces(SDL_Renderer * renderer, perso_t * perso, int quantite) {
+    ajouter_quantite_inventaire(renderer, &(perso->inventaire), PIECE_DOR, quantite);
+}
+
+void enlever_pieces(perso_t * perso, int quantite) {
+    enlever_quantite_inventaire(&(perso->inventaire), PIECE_DOR, quantite);
 }
 
 /* Leo */

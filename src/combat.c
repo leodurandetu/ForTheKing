@@ -154,7 +154,7 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
 
         monstre_tue(perso);
 
-        objet_t kit_de_soins = creer_kit_de_soins(rendererPrincipal);
+        objet_t kit_de_soins = creer_objet(rendererPrincipal, KIT_DE_SOINS, 1);
         ajouter_objet_inventaire(&(perso->inventaire), kit_de_soins);
     } else if (vainqueur == MONSTRE_VAINQUEUR || perso->sante <= 0) {
         // Si on arrive ici, c'est que le combat est perdu et qu'il n'y a plus de vies.

@@ -564,7 +564,7 @@ void dessiner_interface_carte(SDL_Renderer *renderer, TTF_Font* font, SDL_Textur
     SDL_GetRendererOutputSize(renderer, &fenetre_largeur, &fenetre_hauteur);
 
     /* On réduit un peu la taille  */
-    int largeur_menu = 300;
+    int largeur_menu = 312;
     int hauteur_menu = 160;
 
     /* On le place à gauche au lieu de le centrer */

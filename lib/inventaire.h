@@ -27,6 +27,34 @@ typedef struct {
 
 /**
  * @author Léo
+ * @brief Compte le nombre d'objets d'un certain type dans l'inventaire.
+ * @param inventaire Pointeur vers l'inventaire cible.
+ * @param objet L'instance de l'objet à compter dans le sac à dos.
+ * @return int La quantité totale de ce type d'objet dans l'inventaire.
+ */
+int compter_objet_inventaire(inventaire_t * inventaire, objet_type_t objet_type);
+
+/**
+ * @author Léo
+ * @brief Ajoute une certaine quantité à un type d'objet dans l'inventaire.
+ * @param renderer Le moteur de rendu SDL.
+ * @param inventaire Pointeur vers l'inventaire cible.
+ * @param objet_type Le type de l'objet
+ * @param quantite La quantité à ajouter
+ */
+void ajouter_quantite_inventaire(SDL_Renderer * renderer, inventaire_t * inventaire, objet_type_t objet_type, int quantite);
+
+/**
+ * @author Léo
+ * @brief Enlève une certaine quantité à un type d'objet dans l'inventaire.
+ * @param inventaire Pointeur vers l'inventaire cible.
+ * @param objet_type Le type de l'objet
+ * @param quantite La quantité à enlever
+ */
+void enlever_quantite_inventaire(inventaire_t * inventaire, objet_type_t objet_type, int quantite);
+
+/**
+ * @author Léo
  * @brief Tente d'ajouter un objet dans le premier emplacement libre de l'inventaire.
  * @param inventaire Pointeur vers l'inventaire cible.
  * @param objet L'instance de l'objet à copier dans le sac à dos.

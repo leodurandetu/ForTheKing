@@ -130,7 +130,7 @@ void dessiner_inventaire(SDL_Renderer * renderer, TTF_Font * font, perso_t * per
     int souris_x, souris_y;
     SDL_GetMouseState(&souris_x, &souris_y);
 
-    int espacement = 3;
+    int espacement = 6;
     int nb_cases_par_ligne = (orientation == INV_HORIZONTAL) ? 5 : 1;
     int taille_case;
     if (orientation == INV_VERTICAL) {
@@ -217,8 +217,8 @@ void dessiner_inventaire(SDL_Renderer * renderer, TTF_Font * font, perso_t * per
 
             if (texte_quantite) {
                 SDL_Rect rect_quantite = {
-                    case_inv.x + case_inv.w - rect_texte.w - 2,
-                    case_inv.y + case_inv.h - rect_texte.h - 2,
+                    case_inv.x + case_inv.w - rect_texte.w + 4,
+                    case_inv.y + case_inv.h - rect_texte.h + 4,
                     rect_texte.w,
                     rect_texte.h
                 };

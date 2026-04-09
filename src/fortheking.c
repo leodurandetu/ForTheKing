@@ -122,7 +122,7 @@ int main(int argc,char *argv[]) {
         int yApparition;
 
         coords_case_libre(carte, &xApparition, &yApparition);
-        perso = init_perso(classe_choisie, xApparition, yApparition);
+        perso = init_perso(classe_choisie, xApparition, yApparition, renderer);
 
         remplir_brouillard(carte);
         devoiler_brouillard_rayon(carte, perso->x, perso->y, RAYON_DECOUVERTE_BROUILLARD);

@@ -11,6 +11,8 @@
 #include <SDL2/SDL.h>
 #include "inventaire.h"
 
+#define NB_PIECES_DEPART 15
+
 /**
  * @file perso.h
  * @author Léo
@@ -52,7 +54,6 @@ typedef struct perso_s {
     int niveau;           /**< Niveau actuel du personnage. */
     int exp;              /**< Expérience accumulée. */
     int mort;             /**< État vital (0 pour vivant, 1 pour mort). */
-    int pieces;           /**< Argent, permettant d'acheter des objets (soins, parchemins de téléportation). */
     int nb_victime;       /** Nombre de monstre tués. */
     /* Composants */
     inventaire_t inventaire; /**< Sac à dos contenant les objets. */
@@ -78,9 +79,10 @@ void afficher_personnage(SDL_Renderer * renderer, SDL_Texture * texture_perso, p
  * @param persoType La classe sélectionnée par le joueur.
  * @param xDepart Coordonnée X de départ.
  * @param yDepart Coordonnée Y de départ.
+ * @param renderer Moteur de rendu SDL.
  * @return perso_t* Un pointeur vers l'instance créée, ou NULL en cas d'échec.
  */
-perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart);
+perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart, SDL_Renderer * renderer);
 
 /**
  * @author Léo
@@ -88,6 +90,31 @@ perso_t * init_perso(perso_type_t persoType, int xDepart, int yDepart);
  * @param perso Pointeur de pointeur vers le personnage à désallouer.
  */
 void detruire_perso(perso_t ** perso);
+
+/**
+ * @author Léo
+ * @brief Récupère le nombre de pièces d'un personnage.
+ * @param perso Pointeur vers le personnage concerné.
+ * @return int Le nombre de pièces du personnage.
+ */
+int get_pieces(perso_t *perso);
+
+/**
+ * @author Léo
+ * @brief Ajoute un certain nombre de pièces au personnage.
+ * @param renderer Le moteur de rendu SDL.
+ * @param perso Pointeur vers le personnage concerné.
+ * @param quantite Le nombre de pièces à ajouter.
+ */
+void ajouter_pieces(SDL_Renderer * renderer, perso_t * perso, int quantite);
+
+/**
+ * @author Léo
+ * @brief Enlève un certain nombre de pièces au personnage.
+ * @param perso Pointeur vers le personnage concerné.
+ * @param quantite Le nombre de pièces à enlever.
+ */
+void enlever_pieces(perso_t * perso, int quantite);
 
 /**
  * @author Massoud

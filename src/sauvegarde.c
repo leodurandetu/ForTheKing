@@ -87,12 +87,6 @@ int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte
         return 0;
     }
 
-    if (fwrite(&(perso->pieces), sizeof(int), 1, fichier) != 1) {
-        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
-        fclose(fichier);
-        return 0;
-    }
-
     if (fwrite(&(perso->inventaire), sizeof(inventaire_t), 1, fichier) != 1) {
         fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
         fclose(fichier);
@@ -362,15 +356,6 @@ int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SD
     }
 
     perso->mort = mort;
-    int pieces;
-
-    if (fread(&pieces, sizeof(int), 1, fichier) != 1) {
-        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
-        fclose(fichier);
-        return 0;
-    }
-
-    perso->pieces = pieces;
     inventaire_t inventaire;
 
     if (fread(&inventaire, sizeof(inventaire_t), 1, fichier) != 1) {

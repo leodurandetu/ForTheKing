@@ -31,6 +31,9 @@ void utiliser_objet(objet_t * objet, perso_t * perso) {
                 utiliser_kit_de_soins(perso);
                 break;
 
+            case PIECE_DOR:
+                break;
+
         }
         
     }
@@ -39,14 +42,15 @@ void utiliser_objet(objet_t * objet, perso_t * perso) {
 
 /* Leo
  * Cette fonction crée un nouvel objet
- * de type kit de soins et le renvoie
+ * d'un certain type avec une certaine
+ * quantité et le renvoie
  */
-objet_t creer_kit_de_soins(SDL_Renderer * renderer) {
+objet_t creer_objet(SDL_Renderer * renderer, objet_type_t type, int nombre) {
     objet_t objet;
 
-    objet.type = KIT_DE_SOINS;
-    objet.quantite = 1;
-    objet.texture = texture_kit_de_soins(renderer);
+    objet.type = type;
+    objet.quantite = nombre;
+    objet.texture = texture_objet(renderer, type);
 
     return objet;
 }
@@ -54,23 +58,14 @@ objet_t creer_kit_de_soins(SDL_Renderer * renderer) {
 void remplir_texture_objet(objet_t * objet, SDL_Renderer * renderer) {
 
     if (objet != NULL) {
-
-        switch(objet->type) {
-
-            case KIT_DE_SOINS:
-                objet->texture = texture_kit_de_soins(renderer);
-
-                break;
-
-        }
-
+        objet->texture = texture_objet(renderer, objet->type);
     }
 
 }
 
-SDL_Texture * texture_kit_de_soins(SDL_Renderer * renderer) {
+static SDL_Texture * texture(SDL_Renderer * renderer, char * chemin) {
     SDL_Texture *texture_objet = NULL;
-    SDL_Surface *img_objet = IMG_Load("img/kit_de_soins.png");
+    SDL_Surface *img_objet = IMG_Load(chemin);
     if (img_objet) {
         texture_objet = SDL_CreateTextureFromSurface(renderer, img_objet);
         SDL_SetTextureBlendMode(texture_objet, SDL_BLENDMODE_BLEND);
@@ -78,6 +73,26 @@ SDL_Texture * texture_kit_de_soins(SDL_Renderer * renderer) {
     }
 
     return texture_objet;
+}
+
+SDL_Texture * texture_objet(SDL_Renderer * renderer, objet_type_t type) {
+
+    switch(type) {
+
+        case KIT_DE_SOINS:
+            return texture(renderer, "img/kit_de_soins.png");
+            break;
+
+        case PIECE_DOR:
+            return texture(renderer, "img/piece_dor.png");
+            break;
+
+        default:
+            return NULL;
+            break;
+
+    }
+
 }
 
 /* Leo

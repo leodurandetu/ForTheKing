@@ -17,7 +17,8 @@ typedef struct perso_s perso_t;
  * @brief Types d'objets disponibles dans le jeu.
  */
 typedef enum {
-    KIT_DE_SOINS
+    KIT_DE_SOINS, /**< Kit de soin, permettant de restaurer des points de vie. */
+    PIECE_DOR /**< Argent, permettant d'acheter des objets (soins, parchemins de téléportation). */
 } objet_type_t;
 
 /** * @author Léo
@@ -42,11 +43,13 @@ void utiliser_kit_de_soins(perso_t * perso);
 
 /**
  * @author Léo
- * @brief Constructeur pour un objet de type Kit de Soins.
+ * @brief Constructeur pour un objet.
  * @param renderer Le moteur de rendu pour charger la texture associée.
+ * @param type Le type de l'objet.
+ * @param nombre La quantité de l'objet.
  * @return objet_t L'instance de l'objet initialisée.
  */
-objet_t creer_kit_de_soins(SDL_Renderer * renderer);
+objet_t creer_objet(SDL_Renderer * renderer, objet_type_t type, int nombre);
 
 /**
  * @author Léo
@@ -65,11 +68,11 @@ void remplir_texture_objet(objet_t * objet, SDL_Renderer * renderer);
 
 /**
  * @author Léo
- * @brief Crée une texture pour un objet de type kit de soins.
+ * @brief Crée une texture pour un objet d'un certain type.
  * @param renderer Le moteur de rendu pour charger la texture associée.
  * @return Un pointeur sur un SDL_Texture correspondant à un kit de soins.
  */
-SDL_Texture * texture_kit_de_soins(SDL_Renderer * renderer);
+SDL_Texture * texture_objet(SDL_Renderer * renderer, objet_type_t type);
 
 /**
  * @author Léo
