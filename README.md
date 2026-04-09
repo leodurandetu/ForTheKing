@@ -66,14 +66,14 @@ cd ForTheKing
 **Installation des librairies nécessaires**  
 Ce projet utilise SDL2.  
 Voici un court guide pour l'installer sur Unix ou Linux :  
-sudo apt update  
-sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev<br/>
+_sudo apt update_  
+_sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev_  
 _sudo apt install gcc (si vous n'avez pas installé de compilateur gcc)_
 
 **Compilation du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
 Important : pour compiler le projet, vous devez avoir le compilateur C gcc.  
-make clean all
+_make all_
 
 **Test du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
