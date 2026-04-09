@@ -12,11 +12,21 @@
  * @brief Liste les actions possibles en sortie du menu campement.
  */
 typedef enum {
-    CAMPEMENT_REPOS,   /**< Le joueur a choisi de se reposer pour regagner des PV. */
-    CAMPEMENT_SOINS,   /**< Le joueur a choisi d'acheter des objets de soins. */
-    CAMPEMENT_QUITTE   /**< Le joueur a cliqué à côté sans action. */
+    CAMPEMENT_REPOS_COMPLET, /**< Repos total (15 pièces). */
+    CAMPEMENT_REPOS_PARTIEL, /**< Repos partiel (7 pièces). */
+    CAMPEMENT_REPOS,         /**< Le joueur a choisi de se reposer pour regagner des PV. */
+    CAMPEMENT_SOINS,         /**< Le joueur a choisi d'acheter des objets de soins. */
+    CAMPEMENT_QUITTE         /**< Le joueur a cliqué à côté sans action. */
 } resultat_campement_t;
 
+/**
+ * @enum etat_menu_t
+ * @brief Gère la navigation interne (les différentes pages) du menu.
+ */
+typedef enum {
+    MENU_ACCUEIL,      /**< Page principale : Repos ou Soins. */
+    MENU_CHOIX_REPOS   /**< Page secondaire : Complet ou Partiel. */
+} etat_menu_t;
 
 /**
  * @author Massoud
