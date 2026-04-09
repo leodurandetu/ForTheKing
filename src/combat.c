@@ -135,6 +135,7 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
         monstre_t * combat_monstre = (*combat)->monstre;
         int y = combat_monstre->y;
         int x = combat_monstre->x;
+        type_monstre_t type = combat_monstre->type;
         perso->nb_victime++;
 
         if (combat_monstre != NULL) {
@@ -154,8 +155,39 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
 
         monstre_tue(perso);
 
-        objet_t kit_de_soins = creer_objet(rendererPrincipal, KIT_DE_SOINS, 1);
-        ajouter_objet_inventaire(&(perso->inventaire), kit_de_soins);
+        /* 1 chance sur 3 d'avoir un kit de soins */
+        if (rand() % 3 == 0) {
+            objet_t kit_de_soins = creer_objet(rendererPrincipal, KIT_DE_SOINS, 1);
+            ajouter_objet_inventaire(&(perso->inventaire), kit_de_soins);
+        }
+
+        /* on gagne un certain nombre de pièces */
+        int nb_pieces = 0;
+
+        switch(type) {
+
+            case TROLL:
+                /* 1 à 3 pièces */
+                nb_pieces = 1 + (rand() % 3);
+                break;
+
+            case SQUELETTE:
+                /* 1 à 5 pièces */
+                nb_pieces = 1 + (rand() % 5);
+                break;
+
+            case YETI:
+                /* 2 à 6 pièces */
+                nb_pieces = 2 + (rand() % 5);
+                break;
+
+            default:
+                nb_pieces = 0;
+                break;
+
+        }
+
+        ajouter_pieces(rendererPrincipal, perso, nb_pieces);
     } else if (vainqueur == MONSTRE_VAINQUEUR || perso->sante <= 0) {
         // Si on arrive ici, c'est que le combat est perdu et qu'il n'y a plus de vies.
         // La résurrection est gérée directement pendant le combat.
