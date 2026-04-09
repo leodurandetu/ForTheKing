@@ -116,7 +116,7 @@ Bâtiments sur la carte & Campement qui sert à regagner des PVs. \\
 Sanctuaires sur la carte & Donnent un bonus si découverts et validés. \\
 Expérience & Gagner un combat rapporte de l'EXP. \\
 Niveau & Monter en niveau améliore les statistiques. \\
-
+Quêtes & Finir les quêtes pour avoir des récompenses. \\
 \hline
 \end{tabular}
 \label{tab_taches}
@@ -125,9 +125,11 @@ Niveau & Monter en niveau améliore les statistiques. \\
 
 \section{Organisation du projet}
 
-1234
-
 \subsection{Planning prévisionnel}
+
+Pour planifier les tâches, nous avons utilisé un outil spécifique : les diagrammes de Gantt.
+Cet outil nous a permis de créer un planning prévisionnel au début du projet, ainsi qu'un planning réel à la fin du projet.
+Cela nous a permis de comparer les deux pour voir si on avait respecté le planning prévisionnel initial.
 
 \begin{enumerate}
 \item D'abord on a fait ça...
@@ -144,11 +146,13 @@ Tâche effectuée & Nom et prénom \\
 \hline
 Placement du personnage sur la carte & Durand Léo \\
 Mécaniques de déplacement & Durand Léo \\
+Création et utilisation des objets & Durand Léo \\
 Système d'inventaire & Durand Léo \\
 Sauvegarde des parties & Durand Léo \\
 Affichage de la carte & Durand Léo \\
 Tests Unitaires & Durand Léo \\
 Boss final et son combat & Durand Léo \\
+Musique & Durand Léo, Tsamarayev Massoud \\
 Affichage des combats & Durand Léo, Tsamarayev Massoud \\
 Génération de l'eau & Tsamarayev Massoud \\
 Affichage hexagonal & Tsamarayev Massoud \\
@@ -160,10 +164,12 @@ Système de niveau & Tsamarayev Massoud \\
 Placement aléatoire des monstres & Tsamarayev Massoud \\
 Quêtes & Tsamarayev Massoud \\
 Interactions avec les sanctuaires & Tsamarayev Massoud \\
+Interactions avec les campements & Tsamarayev Massoud \\
 Documentation Doxygen & Mohamed Saandi \\
 Génération des biomes & Mohamed Saandi \\
-Interactions avec les batiments & Mohamed Saandi \\
+Interactions avec les monstres & Mohamed Saandi \\
 Gantt prévisionnel & Mohamed Saandi \\
+Bruitages & Mohamed Saandi \\
 Création des monstres et leur attributs & Toute l'équipe \\
 Création des personnages et leur attributs & Toute l'équipe \\
 Génération de la carte & Toute l'équipe \\
@@ -186,6 +192,8 @@ Ici, je fais référence à mon tableau \ref{tab_taches}
 \item Doxygen est utilisé dans notre projet en tant que générateur de documentation, plus précisement c'est un outil de programmation qui crée de la documentation destinée aux programmeurs ou aux utilisateurs finaux. Le générateur se base sur les codes sources commentés et les fichiers binaires.
 \item Des diagrammes de Gantt sont utilisés pour planifier les tâches dans notre projet.
 \item LaTeX permet de formatter à l'aide de commandes un document, un rapport, un article etc. Il a été utilisé pour ce rapport.
+\item Des IA génératives comme ChatGPT et Gemini ont été utilisées pour générer les images, les textures et les sprites du jeu.
+\item Certains éditeurs d'image en ligne ont également servis à recadrer, redimensionner ou dessiner sur les images.
 \end{itemize}
 
 \section{Développement}
@@ -194,7 +202,7 @@ gh
 
 \subsection{Génération aléatoire de la carte}
 
-La carte du jeu est une matrice 2D composée de cases.
+La carte du jeu est un tableau en deux dimensions composée de structures de cases.
 Elle est crée par allocation dynamique pour qu'on puisse régler la taille de la carte, on le fait notamment dans les tests unitaires.
 Chaque case a ses propres caractéristiques:
 
@@ -244,7 +252,21 @@ Il suffit de faire une boucle sur toutes les cases de la carte et de stocker dan
 
 \section{Bilan et résultats}
 
-blablabla
+Le bilan de notre projet est assez positif.
+En effet, les fonctionnalités principales de notre jeu ont été réalisées.
+Malgré tout, plusieurs fonctionnalités secondaires n'ont pas pu être implementé, comme par exemple les équipements qui augmentent les statistiques du joueur.
+Le planning prévisionnel quant à lui n'a pas été entièrement respecté.
+D'abord, nous avons souvent pris du retard sur certaines tâches à faire.
+De plus, nous sommes parfois revenus sur des fonctionnalités précédemment implémentées pour les améliorer ou les modifier.
+Les raisons qui pourraient expliquer cela sont tout d'abord des bugs imprévus qui retardent le développement, mais également une mauvaise planification initiale des tâches et de leur durée.
+Pour améliorer notre projet, si on devait le continuer, on pourrait améliorer les graphismes, rajouter des animations, rajouter des nouveaux objets, monstres, etc.
+Ce projet nous a apporté plusieurs choses et compétences intéressantes.
+D'abord, il nous a appris une nouvelle compétence technique : l'utilisation de SDL2.
+Il nous a également permis de renforcer nos connaissances techniques en algorithmique, et sur les outils techniques comme Git et le débogage.
+Concrètement, réaliser ce projet nous a aidé à appliquer les connaissances théoriques vues en cours pour un projet plus "pratique".
+Nous avons également appris à organiser, planifier et communiquer correctement pour faire un travail de groupe.
+Le projet nous a par exemple familiarisé avec les diagrammes de Gantt pour la planification des tâches.
+Il nous a aussi permis de connaître nos limites et comment les surmonter.
 
 \section{Bibliographie}
 
