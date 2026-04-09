@@ -11,7 +11,7 @@ MENU=bin/menu
 all: mon_prog mon_menu test_deplacements
 
 mon_prog: src/fortheking.c
-	${CC} -o ${PROG} src/fortheking.c src/quetes.c src/sanctuaire_menu.c src/init_sdl.c src/sauvegarde.c src/ressources.c src/niveau.c src/perlin_noise.c src/adapter_niveau.c src/inventaire.c src/objet.c src/combat.c src/affichage_carte.c src/affichage_combat.c src/affichage_commun.c src/maths.c src/pause_menu.c src/carte.c src/perso.c src/monstre.c src/affichage_infos.c src/option.c ${LIBS} ${INCS} ${FLAGS}
+	${CC} -o ${PROG} src/fortheking.c src/campement_menu.c src/quetes.c src/sanctuaire_menu.c src/init_sdl.c src/sauvegarde.c src/ressources.c src/niveau.c src/perlin_noise.c src/adapter_niveau.c src/inventaire.c src/objet.c src/combat.c src/affichage_carte.c src/affichage_combat.c src/affichage_commun.c src/maths.c src/pause_menu.c src/carte.c src/perso.c src/monstre.c src/affichage_infos.c src/option.c ${LIBS} ${INCS} ${FLAGS}
 
 mon_menu: src/menu.c
 	${CC} -o ${MENU} src/menu.c ${LIBS} ${INCS} ${FLAGS}
