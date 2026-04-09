@@ -184,6 +184,9 @@ int main(int argc,char *argv[]) {
                         }
 
                     } else {
+                        /* On obtient les coordonnées de la souris sur l'écran */
+                        int souris_x, souris_y;
+                        SDL_GetMouseState(&souris_x, &souris_y);
 
                         // Déplacements au clavier
                         switch(e.key.keysym.scancode) {
@@ -232,6 +235,9 @@ int main(int argc,char *argv[]) {
                             default: break;
                         }
 
+                        souris_vers_case(souris_x, souris_y,
+                                &case_selection_x, &case_selection_y,
+                                tailleCase, perso, renderer);
                     }
 
                     break;
