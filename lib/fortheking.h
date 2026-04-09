@@ -27,6 +27,7 @@
 #include "../lib/sanctuaire_menu.h"
 #include "../lib/commun.h"
 #include "../lib/quetes.h"
+#include "../lib/campement_menu.h"
 
 #define TAILLE_CASE_MAXI 250
 #define TAILLE_CASE_DEPART 150
