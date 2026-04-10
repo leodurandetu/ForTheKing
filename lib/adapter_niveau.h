@@ -33,4 +33,12 @@ void appliquer_bonus_monstre(monstre_t *monstre);
  */
 void niveau_monstre(monstre_t *monstre, type_monstre_t type);
 
+/**
+ * @author Massoud
+ * @brief Adapte l'expérience gagnée en fonction du niveau des monstres tués.
+ * @param perso Pointeur vers la structure du personnage.
+ * @param monstre Pointeur vers la structure monstre.
+ */
+void attribuer_experience_victoire(perso_t *perso, monstre_t *monstre);
+
 #endif
