@@ -1,6 +1,8 @@
 #ifndef COMBAT_TYPES_H
 #define COMBAT_TYPES_H
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include "perso.h"
 #include "monstre.h"
 #include "math.h"
