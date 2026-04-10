@@ -256,7 +256,35 @@ Toutes les dimensions et positions sont calculées dynamiquement via SDL2 en fon
 
 \subsection{Gestion des combats}
 
-34
+Dans ce jeu, il y a deux types de combat : 
+le combat classique effectué avec les différents monstres et le combat final avec le \emph{BOSS\_FINAL}.
+
+L'initialisation du combat se fait via la fonction \emph{creer\_combat}, qui alloue la structure \emph{combat\_t} et lie le personnage au monstre rencontré. 
+Les combats sont gérés dans une autre fenêtre que celle de la carte avec la fonction \emph{ouvrir\_fenetre\_combat}. 
+Cette dernière charge dynamiquement les textures selon le biome (via \emph{fond\_biome}) et initialise le système audio avec \emph{Mix\_OpenAudio} pour les bruitages d'attaque.
+Pour assurer le bon déroulement du combat, les éléments nécessaires sont regroupés dans une structure qui contient :
+\begin{itemize}
+\item \textbf{Le personnage, le monstre et le tour :} Le tour, géré par \emph{changer\_tour}, identifie l'attaquant actif (\emph{TOUR\_JOUEUR} ou \emph{TOUR\_MONSTRE}).
+\item \textbf{L'interface visuelle :} La fenêtre SDL (\emph{pFenetre}) et son moteur de rendu (\emph{renderer}) pour afficher la scène.
+\item \textbf{Les textures et polices :} Utilisées pour afficher les informations (du personnage et du monstre) tels que les statisques, le point vie restant et le type du personage et du monstre.
+ Les boutons d'action sont rendus via \emph{texture\_attaque\_legere} et \emph{texture\_attaque\_lourde}.
+\item \textbf{L'IA décisionnelle :} Pour le monstre, la fonction \emph{choix\_attaque\_monstre} analyse les points de vie restants pour décider de la puissance de l'attaque à porter.
+\end{itemize}
+
+Une fois le duel terminé, la fonction \emph{combat\_termine} met à jour (gain d'XP, apparition d'une \emph{TOMBE} sur la carte ou état de mort du joueur), puis la fonction \emph{detruire\_combat} libère proprement toutes les ressources mémoire et audio.
+
+\begin{figure}[!]
+\centering
+\includegraphics[height=6cm]{img jeu/combat.png}
+\caption{{\emph{Combat classique}}}
+\end{figure}
+\hfill
+\begin{figure}[!]
+\centering
+\includegraphics[height=6cm]{img jeu/combat_final.png}
+\caption{{\emph{Combat avec le boss final}}}
+\end{figure}
+\newpage
 
 \subsection{Gestion du menu}
 
