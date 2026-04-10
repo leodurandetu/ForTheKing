@@ -194,11 +194,13 @@ Ici, je fais référence à mon tableau \ref{tab_taches}
 \item LaTeX permet de formatter à l'aide de commandes un document, un rapport, un article etc. Il a été utilisé pour ce rapport.
 \item Des IA génératives comme ChatGPT et Gemini ont été utilisées pour générer les images, les textures et les sprites du jeu.
 \item Certains éditeurs d'image en ligne ont également servis à recadrer, redimensionner ou dessiner sur les images.
+\item Adobe Photoshop pour dessiner et modifier à partir des sprites générés par ChatGPT et Gemini.
 \end{itemize}
 
 \section{Développement}
 
-gh
+Cette partie décrit en détail les aspects techniques du développement du projet.
+Nous présentons les principaux systèmes du jeu ainsi que leur implémentation en langage C, notamment la génération aléatoire de la carte, l’affichage du jeu avec SDL2, la gestion des combats, la gestion du menu, du personnage et des sauvegardes.
 
 \subsection{Génération aléatoire de la carte}
 
@@ -223,8 +225,18 @@ On obtient alors un bruit "fluide" et continu, qui ressemble à des formes natur
 
 \subsection{Affichage du jeu}
 
-12
+L'affichage du jeu est basé sur la grille hexagonales \textit{flat-top}, cela signifie que le haut et le bas de l'hexagone sont plats.
+Chaque hexagone a trois données : le rayon, la largeur et la hauteur, qui sont calculées à partir de la taille de la case définie. 
+Pour placer correctement chaque case, leurs coordonnées de grille sont converties en pixels.
+Les colonnes impaires sont décalées verticalement d'une demi-case vers le bas. \\
 
+L'espacement horizontal entre deux colonnes est calculé de sorte que les hexagones s'emboîtent correctement sans trou visible.
+La caméra est centrée sur le personnage. À chaque image, on calcule la position du personnage en pixels, puis on fait un décalage global qu'on applique pour chaque case.
+Donc, chaque déplacement du personnage, implique le mouvement de la carte entière autour de lui et le personnage reste visuellement au centre de l'écran. \\
+
+L'ordre du rendu suit les étapes suivantes : dessin des tuiles hexagonales avec leur biome, puis les éléments du décor tels que les obstacles et les bâtiments.
+Ensuite, le personnage est affiché par-dessus la carte et, finalement, l'interface utilisateur : barre de vie, barre d'expérience, inventaire, panneaux de quêtes et menus.
+Toutes les dimensions et positions sont calculées dynamiquement via SDL2 en fonction de la taille réelle de la fenêtre, ce qui permet au jeu de s'adapter à n'importe quelle résolution sans déformation de l'affichage. 
 \subsection{Gestion des combats}
 
 34
