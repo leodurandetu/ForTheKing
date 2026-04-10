@@ -100,7 +100,7 @@ void niveau_monstre(monstre_t *monstre, type_monstre_t type) {
 
         switch(type) {
                 case TROLL:
-                        niveau_final = 1 + rand() % 2;
+                        niveau_final = 1 + rand() % 1;
                         break;
                 case SQUELETTE:
                         niveau_final = 2 + rand() % 2;
@@ -120,4 +120,24 @@ void niveau_monstre(monstre_t *monstre, type_monstre_t type) {
                 appliquer_bonus_monstre(monstre);
         }
 
+}
+
+
+/* Massoud 
+ * Calcule et attribue l'expérience gagnée après la mort d'un monstre
+ * en fonction de la différence de niveau.
+ */
+void attribuer_experience_victoire(perso_t *perso, monstre_t *monstre) {
+    int diff_niveau = monstre->niveau - perso->niveau;
+    int exp_gagnee = 4; /* Valeur de base  */
+
+    if (diff_niveau == 1 || diff_niveau == 2) {
+        exp_gagnee = 5;
+    } else if (diff_niveau == 3) {
+        exp_gagnee = 6;
+    } else if (diff_niveau >= 4) {
+        exp_gagnee = 7;
+    }
+
+    perso->exp += exp_gagnee;
 }
