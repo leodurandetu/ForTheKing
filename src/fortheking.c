@@ -334,9 +334,34 @@ int main(int argc,char *argv[]) {
                                         majAffichage = 1;
                                     /* Campement*/
                                     } else if (est_voisin_campement) {
-                                        afficher_menu_campement(renderer, police3,
-                                        perso, carte_x, carte_y, tailleCase);
+                                        resultat_campement_t resultat = afficher_menu_campement(renderer, police3,
+                                            perso, carte_x, carte_y, tailleCase);
                                         majAffichage = 1;
+
+                                        if (resultat == CAMPEMENT_REPOS_COMPLET) {
+                                            /* 15 pièces d'or : 100% de PVs récupérés */
+                                            if (get_pieces(perso) >= 15) {
+                                                enlever_pieces(perso, 15);
+                                                perso->sante = perso->sante_max;
+                                            }
+
+                                        } else if (resultat == CAMPEMENT_REPOS_PARTIEL) {
+                                            /* 7 pièces d'or : 50% de PVs récupérés */
+                                             if (get_pieces(perso) >= 7) {
+                                                enlever_pieces(perso, 7);
+
+                                                float pv_recuperes = perso->sante * 0.5;
+                                                int nouv_sante = (int) (perso->sante + pv_recuperes);
+
+                                                if (nouv_sante > perso->sante_max) {
+                                                    nouv_sante = perso->sante_max;
+                                                }
+
+                                                perso->sante = nouv_sante;
+                                            }
+
+                                        }
+
                                     /* Déplacement normal*/
                                     } else {
                                         int portee = get_pers_movements_points(perso);
