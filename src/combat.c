@@ -8,6 +8,17 @@
  */
 void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, biome_t biome,
     combat_t ** combat, case_t ** carte, int *vies_globale1s, SDL_Texture * portraitPerso) {
+
+    /*Initialisation du décodeur MP3 et du système audio SDL_mixer.*/
+    Mix_Init(MIX_INIT_MP3);
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        fprintf(stderr, "Mix_OpenAudio error: %s\n", Mix_GetError());
+    }
+
+    /*Chargement des bruitages d'attaque depuis le dossier sounds/.*/
+    (*combat)->son_attaque_legere = Mix_LoadWAV("audio/Sound_effect_attack.mp3");
+    (*combat)->son_attaque_lourde = Mix_LoadWAV("audio/Sound_effect_attack.mp3");
+    
     (*combat)->pFenetre = pFenetrePrincipal;
 
     if (!((*combat)->pFenetre)) {
@@ -222,6 +233,10 @@ tour_t changer_tour(combat_t *combat){
  */
 
 void attaque_legere(combat_t *combat){
+    /* Lecture du bruitage d'attaque légère du joueur.*/
+    if (combat->son_attaque_legere)
+        Mix_PlayChannel(-1, combat->son_attaque_legere, 0);
+    
     int pourcentage = 20 + rand() % 21; // 20% à 40%
     int vrai_degats = (pourcentage * combat->perso->degats)/100;
 
@@ -233,6 +248,10 @@ void attaque_legere(combat_t *combat){
 }
 
 void attaque_lourde(combat_t *combat){
+     /* Lecture du bruitage d'attaque lourd. */
+    if (combat->son_attaque_lourde)
+        Mix_PlayChannel(-1, combat->son_attaque_lourde, 0);   
+    
     int pourcentage = 30 + rand() % 31; // 30% à 60%
     int vrai_degats = (pourcentage * combat->perso->degats)/100;
 
@@ -244,6 +263,10 @@ void attaque_lourde(combat_t *combat){
 }
 
 void attaque_legere_monstre(combat_t *combat){
+    /* Le son est joué en début de fonction, avant le calcul des dégâts*/
+    if (combat->son_attaque_legere)
+        Mix_PlayChannel(-1, combat->son_attaque_legere, 0);
+    
     int pourcentage = 5 + rand() % 26; // 5% à 30%
     int vrai_degats = (pourcentage * combat->monstre->degats)/100;
 
@@ -255,6 +278,10 @@ void attaque_legere_monstre(combat_t *combat){
 }
 
 void attaque_lourde_monstre(combat_t *combat){
+    /* Le son est joué en début de fonction, avant le calcul des dégâts*/
+    if (combat->son_attaque_lourde)
+        Mix_PlayChannel(-1, combat->son_attaque_lourde, 0);
+
     int pourcentage = 20 + rand() % 31; // 20% à 50%
     int vrai_degats = (pourcentage * combat->monstre->degats)/100;
 
@@ -345,7 +372,9 @@ combat_t* creer_combat(perso_t *perso, monstre_t *monstre) {
     combat->font = NULL;
     combat->survole_bouton_leger = 0;
     combat->survole_bouton_lourd = 0;
-
+    combat->son_attaque_legere = NULL;
+    combat->son_attaque_lourde = NULL;
+    
     return combat;
 }
 
@@ -357,6 +386,17 @@ void detruire_combat(combat_t ** combat) {
 
     if (combat != NULL && *combat != NULL) {
 
+        /* Libération des sons indépendamment des textures.*/
+        if ((*combat)->son_attaque_legere != NULL) {
+            Mix_FreeChunk((*combat)->son_attaque_legere);
+            (*combat)->son_attaque_legere = NULL;
+        }
+
+        if ((*combat)->son_attaque_lourde != NULL) {
+            Mix_FreeChunk((*combat)->son_attaque_lourde);
+            (*combat)->son_attaque_lourde = NULL;
+        }
+        
         if ((*combat)->texture_attaque_legere != NULL) {
             SDL_DestroyTexture((*combat)->texture_attaque_legere);
             (*combat)->texture_attaque_legere = NULL;
@@ -392,6 +432,9 @@ void detruire_combat(combat_t ** combat) {
             (*combat)->font = NULL;
         }
 
+        Mix_CloseAudio();
+        Mix_Quit();      
+        
         free(*combat);
         *combat = NULL;
     }
