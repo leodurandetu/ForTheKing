@@ -11,6 +11,8 @@
  * @brief Gestion de l'interface des menus et de la sélection des personnages.
  */
 
+#define NB_SLOTS_PERSO 1
+
 /**
  * @author Massoud
  * @brief États de navigation dans l'interface du menu.

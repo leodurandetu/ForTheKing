@@ -264,7 +264,7 @@ void afficher_carte_sdl(SDL_Renderer * renderer,
 
                     }
 
-                    dessiner_texture(renderer, texture_batiment, cx, cy, largeurHex, 0.85f);
+                    dessiner_texture(renderer, texture_batiment, cx, cy, largeurHex, 0.8f);
                 }
 
             }

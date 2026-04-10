@@ -352,7 +352,7 @@ int main() {
         surf = TTF_RenderText_Blended(policeMenu, "< Retour", couleurTexte);
         texRetour = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texRetour, NULL, NULL, &wRetour, &hRetour); SDL_FreeSurface(surf);
 
-        surf = TTF_RenderText_Blended(policeTitre, "Choisissez vos heros", couleurTexte);
+        surf = TTF_RenderText_Blended(policeTitre, "Choisissez votre hero", couleurTexte);
         texChoixTitre = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texChoixTitre, NULL, NULL, &wChoixTitre, &hChoixTitre); SDL_FreeSurface(surf);
 
         surf = TTF_RenderText_Blended(policeMenu, "Etes-vous sur de vouloir quitter ?", couleurTexte);
@@ -393,9 +393,11 @@ int main() {
     SDL_Rect btnCases[3], btnLancer, btnRetour;
 
     /* Slots personnages */
-    SlotPerso slots[3] = {
-        {SLOT_VIDE, 0},
-        {SLOT_VIDE, 0},
+    /* Remarque : on garde un tableau
+    * au cas où on ajouterai plusieurs slots
+    * pour les personnages
+    */
+    SlotPerso slots[NB_SLOTS_PERSO] = {
         {SLOT_VIDE, 0}
     };
 
@@ -463,13 +465,23 @@ int main() {
         rectTxtTitre = (SDL_Rect){titleX, startY - 180, wTitre, hTitre};
 
         /* Mise en page des 3 slots de selection */
+        /*
+        
         int slotW = 200, slotH = 280, slotGap = 40;
         int totalW = slotW * 3 + slotGap * 2;
         int slotStartX = (windowW - totalW) / 2;
         int slotY = (windowH - slotH) / 2 - 20;
-
-        for (int i = 0; i < 3; i++)
+        
+        for (int i = 0; i < NB_SLOTS_PERSO; i++)
             btnCases[i] = (SDL_Rect){slotStartX + i * (slotW + slotGap), slotY, slotW, slotH};
+        */
+
+        /* On n'a plus qu'un slot de selection maintenant */
+        int slotW = 200, slotH = 280;
+        int slotStartX = (windowW - slotW) / 2;
+        int slotY = (windowH - slotH) / 2 - 20;
+
+        btnCases[0] = (SDL_Rect){slotStartX, slotY, slotW, slotH};
 
         btnRetour = (SDL_Rect){(windowW/2 - btnWidth)/2, slotY + slotH + 40, btnWidth, btnHeight};
         btnLancer = (SDL_Rect){(windowW/2 - btnWidth)/2 + windowW/4, slotY + slotH + 40, btnWidth, btnHeight};
@@ -519,7 +531,7 @@ int main() {
                 /* Clics menu principal */
                 if (etat == ETAT_PRINCIPAL) {
                     if (SDL_PointInRect(&p, &btnJouer)) {
-                        for (int i = 0; i < 3; i++) { slots[i].type = SLOT_VIDE; slots[i].flash_debut = 0; }
+                        for (int i = 0; i < NB_SLOTS_PERSO; i++) { slots[i].type = SLOT_VIDE; slots[i].flash_debut = 0; }
                         etat = ETAT_SELECTION_PERSO;
                         afficher_options = 0;
                     }
@@ -545,7 +557,7 @@ int main() {
 
                 /* Clics ecran selection personnages */
                 else if (etat == ETAT_SELECTION_PERSO) {
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < NB_SLOTS_PERSO; i++) {
                         if (SDL_PointInRect(&p, &btnCases[i])) {
                             slots[i].flash_debut = SDL_GetTicks();
                             /* Cycle : VIDE -> MAGE -> ASSASSIN -> BRUTE -> CHASSEUR -> VIDE */
@@ -555,7 +567,7 @@ int main() {
                     if (SDL_PointInRect(&p, &btnRetour)) etat = ETAT_PRINCIPAL;
                     if (SDL_PointInRect(&p, &btnLancer)) {
                         int has_perso = 0;
-                        for (int i = 0; i < 3; i++)
+                        for (int i = 0; i < NB_SLOTS_PERSO; i++)
                             if (slots[i].type != SLOT_VIDE) has_perso = 1;
                         if (has_perso) { lancer_jeu = 1; menuActif = 0; }
                     }
@@ -720,8 +732,8 @@ int main() {
                 SDL_SetTextureColorMod(texChoixTitre, 255, 255, 255);
             }
 
-            /* Les 3 slots */
-            for (int i = 0; i < 3; i++)
+            /* Dessiner les slots */
+            for (int i = 0; i < NB_SLOTS_PERSO; i++)
                 dessinerSlot(renderer, policePerso, policeGrand, btnCases[i], &slots[i], mousePos, textures_perso);
 
             /* Bouton Retour */
@@ -733,7 +745,7 @@ int main() {
 
             /* Bouton Lancer : grise si aucun perso selectionne */
             int has_perso = 0;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < NB_SLOTS; i++)
                 if (slots[i].type != SLOT_VIDE) has_perso = 1;
 
             SDL_Rect rTxtLancer = {
@@ -859,7 +871,7 @@ int main() {
             /* Trouve le type du premier slot non vide */
             const char *noms_classes[] = {"", "mage", "assassin", "brute", "chasseur"};
             const char *classe = "mage"; // valeur par défaut
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < NB_SLOTS; i++) {
                 if (slots[i].type != SLOT_VIDE) {
                     classe = noms_classes[slots[i].type];
                     break;
