@@ -1,56 +1,88 @@
 #include "../lib/option.h"
 #include "../lib/affichage_commun.h"
+#include <SDL2/SDL_image.h>
 
-void dessiner_bouton(SDL_Surface *surface, TTF_Font *font,
-                     SDL_Rect *bouton, const char *texte,
-                     SDL_Color couleur)
-{
-    /* Couleur du bouton */
-    Uint32 col = SDL_MapRGB(surface->format,
-                            couleur.r, couleur.g, couleur.b);
+/* Couleurs du thème */
+#define COULEUR_FOND_R 25
+#define COULEUR_FOND_G 25
+#define COULEUR_FOND_B 30
+#define COULEUR_FOND_A 240
 
-    /* Dessin du rectangle du bouton */
-    SDL_FillRect(surface, bouton, col);
+/* Doré foncé */
+#define OR_FONCE_R 160
+#define OR_FONCE_G 120
+#define OR_FONCE_B 10
+
+/* Doré plus clair pour les survols et reliefs */
+#define OR_CLAIR_R 210
+#define OR_CLAIR_G 170
+#define OR_CLAIR_B 40
+
+/*
+ * Dessine un bouton avec un effet de relief 3D.
+ * Si "bloque" est à 1, le bouton sera grisé.
+ */
+static void dessiner_bouton_option(SDL_Renderer *renderer, TTF_Font *font, SDL_Rect rect, const char *label, int survole, int bloque) {
+    
+    /* Fond du bouton */
+    if (bloque) {
+        SDL_SetRenderDrawColor(renderer, 25, 20, 15, 255); 
+    } else if (survole) {
+        SDL_SetRenderDrawColor(renderer, 65, 60, 25, 255); 
+    } else {
+        SDL_SetRenderDrawColor(renderer, 35, 30, 15, 255);
+    }
+    SDL_RenderFillRect(renderer, &rect);
+
+    /* Effet 3D de bordure */
+    if (bloque) {
+        SDL_SetRenderDrawColor(renderer, 60, 50, 40, 255);
+    } else if (survole) {
+        SDL_SetRenderDrawColor(renderer, OR_CLAIR_R, OR_CLAIR_G, OR_CLAIR_B, 255);
+    } else {
+        SDL_SetRenderDrawColor(renderer, 100, 80, 20, 255);
+    }
+    
+    /* Bordure Haut et Gauche */
+    SDL_RenderDrawLine(renderer, rect.x, rect.y, rect.x + rect.w, rect.y);
+    SDL_RenderDrawLine(renderer, rect.x, rect.y, rect.x, rect.y + rect.h);
+
+    /* Bordure Bas et Droite */
+    SDL_SetRenderDrawColor(renderer, 15, 10, 0, 255);
+    SDL_RenderDrawLine(renderer, rect.x, rect.y + rect.h, rect.x + rect.w, rect.y + rect.h);
+    SDL_RenderDrawLine(renderer, rect.x + rect.w, rect.y, rect.x + rect.w, rect.y + rect.h);
 
     /* Couleur du texte */
-    SDL_Color noir = {0,0,0,255};
+    SDL_Color couleur_texte;
+    if (bloque) {
+        couleur_texte = (SDL_Color){100, 100, 100, 255}; 
+    } else if (survole) {
+        couleur_texte = (SDL_Color){OR_CLAIR_R, OR_CLAIR_G, OR_CLAIR_B, 255};
+    } else {
+        couleur_texte = (SDL_Color){OR_FONCE_R, OR_FONCE_G, OR_FONCE_B, 255};
+    }
 
-    /* Création de la surface contenant le texte */
-    SDL_Surface *surfTexte = TTF_RenderUTF8_Blended(font, texte, noir);
-    if(!surfTexte) return;
-
-    /* Position du texte (centré dans le bouton) */
-    SDL_Rect posTexte;
-
-    posTexte.w = surfTexte->w;
-    posTexte.h = surfTexte->h;
-
-    posTexte.x = bouton->x + (bouton->w - posTexte.w) / 2;
-    posTexte.y = bouton->y + (bouton->h - posTexte.h) / 2;
-
-    /* Copie du texte sur la surface principale */
-    SDL_BlitSurface(surfTexte, NULL, surface, &posTexte);
-
-    /* Libération de la surface texte */
-    SDL_FreeSurface(surfTexte);
+    /* Rendu du texte centré */
+    SDL_Rect r_txt;
+    SDL_Texture *t = creer_texte(renderer, font, label, couleur_texte, &r_txt);
+    if (t) {
+        SDL_Rect pos = { rect.x + (rect.w - r_txt.w) / 2, rect.y + (rect.h - r_txt.h) / 2, r_txt.w, r_txt.h };
+        SDL_RenderCopy(renderer, t, NULL, &pos);
+        SDL_DestroyTexture(t);
+    }
 }
 
-SDL_Texture* dessiner_monstre(SDL_Renderer *renderer, const char *chemin,
-                               int x, int y, int w, int h)
-{
+/*
+ * Charge l'image du monstre depuis le disque 
+ */
+SDL_Texture* charger_texture_monstre(SDL_Renderer *renderer, const char *chemin) {
     SDL_Surface *img = IMG_Load(chemin);
     if (!img) return NULL;
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
     SDL_FreeSurface(img);
-    if (!texture) return NULL;
-
-    SDL_Rect rect = {x, y, w, h};
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
-
     return texture;
 }
-
 
 
 int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
@@ -60,14 +92,14 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
     int lancerCombat = 0;
     int running = 1;
 
-    const int IMG_W  = 60;
-    const int IMG_H  = 60;
-    const int MENU_W = 200;
-    const int MENU_H = 200;
-    const int BTN_W  = 160;
-    const int BTN_H  = 35;
-    const int MARGIN = 15;
-    const int GAP    = 10;
+    const int IMG_W = 60;
+    const int IMG_H = 60;
+    const int PANNEAU_W = 200;
+    const int PANNEAU_H = 200;
+    const int BTN_W = 160;
+    const int BTN_H = 35;
+    const int MARGE = 15;
+    const int GAP = 10;
 
     float cx_monstre, cy_monstre;
     case_vers_pixels(monstre_x, monstre_y, perso_x, perso_y,
@@ -78,172 +110,122 @@ int afficher_option(SDL_Renderer* gRenderer, TTF_Font *gFont,
     SDL_GetRendererOutputSize(gRenderer, &fen_w, &fen_h);
 
     /* Placement du menu à droite du sprite, avec repli à gauche */
-    /*int mx = perso_x + perso_w + 6;
-    int my = perso_y + (perso_h - MENU_H) / 2;
-
-    if (mx + MENU_W > ECRAN_W)
-        mx = perso_x - MENU_W - 6;
-
-    if (my < 0)                my = 0;
-    if (my + MENU_H > ECRAN_H) my = ECRAN_H - MENU_H;*/
-
     int rayon_hex = tailleCase / 2;
-    int mx = (int)(cx_monstre + rayon_hex + 8);
+    int panneau_x = (int)(cx_monstre + rayon_hex + 8);
 
-    if (mx + MENU_W > fen_w) {
-        mx = (int)(cx_monstre - rayon_hex - 8 - MENU_W);
+    if (panneau_x + PANNEAU_W > fen_w) {
+        panneau_x = (int)(cx_monstre - rayon_hex - 8 - PANNEAU_W);
     }
 
-    int my = (int)(cy_monstre - MENU_H / 2);
+    int panneau_y = (int)(cy_monstre - PANNEAU_H / 2);
     
-    if (my < 0) {
-        my = 0;
-    }
+    if (panneau_y < 0) panneau_y = 10;
+    if (panneau_y + PANNEAU_H > fen_h) panneau_y = fen_h - PANNEAU_H - 10;
 
-    if (my + MENU_H > fen_h) {
-        my = fen_h - MENU_H;
-    }
+    SDL_Rect panneau = {panneau_x, panneau_y, PANNEAU_W, PANNEAU_H};
 
-    SDL_Rect fond = {mx, my, MENU_W, MENU_H};
+    /* Positionnement des éléments internes */
+    int btn_x = panneau.x + (PANNEAU_W - BTN_W) / 2;
+    
+    int img_x = panneau.x + (PANNEAU_W - IMG_W) / 2;
+    int img_y = panneau.y + MARGE;
 
-    int btn_x     = (MENU_W - BTN_W) / 2;
-    int btn_y_atk = MARGIN + IMG_H + GAP;
-    int btn_y_run = MARGIN + IMG_H + GAP + BTN_H + GAP;
+    int btn_y_atk = img_y + IMG_H + MARGE;
+    int btn_y_run = btn_y_atk + BTN_H + GAP;
 
     SDL_Rect bouton_attaque = {btn_x, btn_y_atk, BTN_W, BTN_H};
-    SDL_Rect bouton_fuite   = {btn_x, btn_y_run, BTN_W, BTN_H};
-
-    SDL_Rect atk_screen = {fond.x + btn_x, fond.y + btn_y_atk, BTN_W, BTN_H};
-    SDL_Rect run_screen = {fond.x + btn_x, fond.y + btn_y_run, BTN_W, BTN_H};
-
-    SDL_Color rouge = {150, 0,   0,   255};
-    SDL_Color vert  = {0,   150, 0,   255};
-    SDL_Color gris  = {120, 120, 120, 255};
-
-    SDL_Surface *surface = SDL_CreateRGBSurfaceWithFormat(
-        0, MENU_W, MENU_H, 32, SDL_PIXELFORMAT_RGBA8888
-    );
-    if (!surface) return 0;
+    SDL_Rect bouton_fuite = {btn_x, btn_y_run, BTN_W, BTN_H};
+    SDL_Rect rect_monstre = {img_x, img_y, IMG_W, IMG_H};
 
     /* Chargement du monstre une seule fois avant la boucle */
-    
-    SDL_Texture *tex_monstre = dessiner_monstre(
-        gRenderer, chemin_monstre,
-        fond.x + (MENU_W - IMG_W) / 2,
-        fond.y + MARGIN,
-        IMG_W, IMG_H
-    );
-
-    SDL_Rect rect_monstre = {
-        fond.x + (MENU_W - IMG_W) / 2,
-        fond.y + MARGIN,
-        IMG_W, IMG_H
-    };
+    SDL_Texture *tex_monstre = charger_texture_monstre(gRenderer, chemin_monstre);
 
     SDL_Event e;
 
     while (running)
     {
+        /* Récupération position souris pour les effets de survol */
+        int souris_x, souris_y;
+        SDL_GetMouseState(&souris_x, &souris_y);
+        SDL_Point souris = {souris_x, souris_y};
+
+        int survole_atk = SDL_PointInRect(&souris, &bouton_attaque);
+        int survole_run = SDL_PointInRect(&souris, &bouton_fuite);
+
         /* === Événements === */
         while (SDL_PollEvent(&e))
         {
-            if (e.type == SDL_QUIT)
-            {
-                SDL_FreeSurface(surface);
-                if (tex_monstre) SDL_DestroyTexture(tex_monstre);
-                return 0;
+            if (e.type == SDL_QUIT) {
+                running = 0;
+                break;
             }
 
-            if (e.type == SDL_MOUSEBUTTONDOWN)
+            if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
             {
-                SDL_Point p = {e.button.x, e.button.y};
+                SDL_Point clic = {e.button.x, e.button.y};
 
-                if (SDL_PointInRect(&p, &atk_screen))
-                {
-                    printf("Combat lancé\n");
+                if (SDL_PointInRect(&clic, &bouton_attaque)) {
                     lancerCombat = 1;
                     running = 0;
-                }
-
-                if (SDL_PointInRect(&p, &run_screen) && !fuite_bloquee)
-                {
-                    printf("Fuite\n");
+                } else if (SDL_PointInRect(&clic, &bouton_fuite) && !fuite_bloquee) {
                     lancerCombat = 0;
                     running = 0;
-                }
+                } 
             }
         }
 
-        /* === Affichage === */
+        /* Affichage */
 
-        /* Overlay sombre semi-transparent */
         SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND);
-        SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 120);
-        SDL_Rect overlay = {fond.x - 6, fond.y - 6,
-                            fond.w + 12, fond.h + 12};
-        SDL_RenderFillRect(gRenderer, &overlay);
 
-        /* Fond du menu */
-        SDL_SetRenderDrawColor(gRenderer, 200, 200, 200, 255);
-        SDL_RenderFillRect(gRenderer, &fond);
+        /* Ombre sous le panneau */
+        SDL_Rect ombre = {panneau.x + 4, panneau.y + 4, panneau.w, panneau.h};
+        SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 150);
+        SDL_RenderFillRect(gRenderer, &ombre);
 
-        /* Bordure */
-        SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
-        SDL_RenderDrawRect(gRenderer, &fond);
+        /* Fond principal */
+        SDL_SetRenderDrawColor(gRenderer, COULEUR_FOND_R, COULEUR_FOND_G, COULEUR_FOND_B, COULEUR_FOND_A);
+        SDL_RenderFillRect(gRenderer, &panneau);
 
-        /* Flèche pointant vers le joueur */
-        int arrow_y = fond.y + MENU_H / 2;
+        /* Double Bordure */
+        SDL_SetRenderDrawColor(gRenderer, OR_FONCE_R, OR_FONCE_G, OR_FONCE_B, 255);
+        SDL_RenderDrawRect(gRenderer, &panneau);
 
-        if (mx > (int)cx_monstre)
-        {
-            // menu à droite : flèche à gauche
-            SDL_RenderDrawLine(gRenderer,
-                fond.x,     arrow_y - 6,
-                fond.x - 8, arrow_y);
-            SDL_RenderDrawLine(gRenderer,
-                fond.x - 8, arrow_y,
-                fond.x,     arrow_y + 6);
-        }
-        else
-        {
-            // menu à gauche : flèche à droite
-            SDL_RenderDrawLine(gRenderer,
-                fond.x + MENU_W,     arrow_y - 6,
-                fond.x + MENU_W + 8, arrow_y);
-            SDL_RenderDrawLine(gRenderer,
-                fond.x + MENU_W + 8, arrow_y,
-                fond.x + MENU_W,     arrow_y + 6);
+        SDL_Rect panneau_int = {panneau.x + 3, panneau.y + 3, panneau.w - 6, panneau.h - 6};
+        SDL_SetRenderDrawColor(gRenderer, 15, 15, 20, 255);
+        SDL_RenderDrawRect(gRenderer, &panneau_int);
+
+        /* Flèche pointant vers le monstre sur la carte */
+        SDL_SetRenderDrawColor(gRenderer, OR_FONCE_R, OR_FONCE_G, OR_FONCE_B, 255);
+        int arrow_y = panneau.y + PANNEAU_H / 2;
+
+        if (panneau_x > (int)cx_monstre) {
+            /* menu à droite : flèche à gauche */
+            SDL_RenderDrawLine(gRenderer, panneau.x, arrow_y - 6, panneau.x - 7, arrow_y);
+            SDL_RenderDrawLine(gRenderer, panneau.x - 7, arrow_y, panneau.x, arrow_y + 6);
+        } else {
+            /* menu à gauche : flèche à droite */
+            SDL_RenderDrawLine(gRenderer, panneau.x + PANNEAU_W, arrow_y - 6, panneau.x + PANNEAU_W + 7, arrow_y);
+            SDL_RenderDrawLine(gRenderer, panneau.x + PANNEAU_W + 7, arrow_y, panneau.x + PANNEAU_W, arrow_y + 6);
         }
 
         /* Sprite du monstre */
-        if (tex_monstre)
+        if (tex_monstre) {
             SDL_RenderCopy(gRenderer, tex_monstre, NULL, &rect_monstre);
-
-        /* Dessin des boutons sur la surface locale */
-        SDL_FillRect(surface, NULL,
-            SDL_MapRGBA(surface->format, 0, 0, 0, 0));
-
-        dessiner_bouton(surface, gFont, &bouton_attaque, "Attaquer", rouge);
-
-        if (fuite_bloquee)
-            dessiner_bouton(surface, gFont, &bouton_fuite, "Fuir", gris);
-        else
-            dessiner_bouton(surface, gFont, &bouton_fuite, "Fuir", vert);
-
-        SDL_Texture *texture = SDL_CreateTextureFromSurface(gRenderer, surface);
-        if (texture)
-        {
-            SDL_RenderCopy(gRenderer, texture, NULL, &fond);
-            SDL_DestroyTexture(texture);
         }
+
+        /* Dessin des boutons */
+        dessiner_bouton_option(gRenderer, gFont, bouton_attaque, "Attaquer", survole_atk, 0);
+        dessiner_bouton_option(gRenderer, gFont, bouton_fuite, "Fuir", survole_run, fuite_bloquee);
 
         SDL_RenderPresent(gRenderer);
         SDL_Delay(16);
     }
 
     /* Libération des ressources */
-    SDL_FreeSurface(surface);
-    if (tex_monstre) SDL_DestroyTexture(tex_monstre);
+    if (tex_monstre) {
+        SDL_DestroyTexture(tex_monstre);
+    }
 
     return lancerCombat;
 }
