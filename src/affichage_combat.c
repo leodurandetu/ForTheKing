@@ -274,15 +274,20 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche, int * maj_af
     
     int nul = 0;
 
+    char nom_monstre_formate[64];
+
     if(combat->monstre->type == SQUELETTE) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Squelette", monstre, NULL, 0, &nul);
+        sprintf(nom_monstre_formate, "Squelette (Niv. %d)",monstre->niveau);
     } else if (combat->monstre->type == TROLL) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Troll", monstre, NULL, 0, &nul);
+        sprintf(nom_monstre_formate, "Troll (Niv. %d)",monstre->niveau);
     } else if (combat->monstre->type == YETI) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Yeti", monstre, NULL, 0, &nul);
+        sprintf(nom_monstre_formate, "Yeti (Niv. %d)",monstre->niveau);
     } else if (combat->monstre->type == BOSS_FINAL) {
-        dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, "Boss Final", monstre, NULL, 0, &nul);
+        sprintf(nom_monstre_formate, "Boss Final (Niv. %d)",monstre->niveau);
     }
+
+    /* Appel unique à la fonction de dessin avec le nom complet */
+    dessiner_interface_combat(renderer, combat->font, combat->texture_monstre, 0, nom_monstre_formate, monstre, NULL, 0, &nul);
 
     SDL_RenderPresent(renderer);
 }
