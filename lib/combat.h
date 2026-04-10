@@ -11,6 +11,7 @@
 #include "affichage_combat.h"
 #include "niveau.h"
 #include "combat_types.h"
+#include "../lib/adapter_niveau.h"
 
 /* --- Gestion du cycle de vie du combat --- */
 
