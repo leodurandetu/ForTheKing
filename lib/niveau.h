@@ -2,6 +2,7 @@
 #define NIVEAU_H
 
 #include "perso.h"
+#include "monstre.h"
 
 /**
  * @file niveau.h
@@ -35,7 +36,8 @@ void verif_xp(perso_t *perso);
  * @details Calcule et ajoute l'expérience au personnage, puis appelle verif_xp() 
  * pour actualiser son état de progression.
  * @param perso Pointeur vers le personnage qui reçoit l'expérience.
+ * @param monstre Pointeur vers la structure du monstre.
  */
-void monstre_tue(perso_t *perso);
+void monstre_tue(perso_t *perso, monstre_t *monstre);
 
 #endif
