@@ -66,6 +66,10 @@ typedef struct {
     SDL_Rect rect_texte_leger;         /**< Position et taille du texte léger. */
     SDL_Rect rect_texte_lourd;         /**< Position et taille du texte lourd. */
 
+    /* --- Audio --- */
+    Mix_Chunk *son_attaque_legere; /**< Bruitage joué lors d'une attaque légère. */
+    Mix_Chunk *son_attaque_lourde; /**< Bruitage joué lors d'une attaque lourde. */
+
     /* --- Environnement --- */
     biome_t biome; /**< Type de biome récupéré de la carte pour le décor. */
 
