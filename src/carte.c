@@ -368,7 +368,7 @@ void liberer_memoire_carte(case_t *** carte, int taille_carte) {
  */
 void placer_batiments(case_t ** carte) {
     int i;
-    int nb = 60 + rand() % 38;
+    int nb = 15 + rand() % 10;
 
     for (i = 0; i < nb; i++) {
         int x = rand() % TAILLE_CARTE;
@@ -597,13 +597,13 @@ void ajout_obstacles(case_t ** carte){
             switch(carte[i][j].biome){
 
                 case FORET:
-                    if(r < 8){
+                    if(r < 10){
                         carte[i][j].terrain = ARBRES;
                     }
                     break;
 
                 case NEIGE:
-                    if(r < 8){
+                    if(r < 10){
                         carte[i][j].terrain = MONTAGNES;
                     }
                     break;
@@ -615,7 +615,7 @@ void ajout_obstacles(case_t ** carte){
                     break;
 
                 case TERRE:
-                    if(r < 8){
+                    if(r < 10){
                         carte[i][j].terrain = BASSIN_EAU;
                     }
                     break;
@@ -716,7 +716,7 @@ void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t ** carte, perso_
 void placer_sanctuaires(case_t ** carte){
     int nb_sanc_places = 0;
 
-    while (nb_sanc_places < 100) {
+    while (nb_sanc_places < 30) {
         int x = rand() % TAILLE_CARTE;
         int y = rand() % TAILLE_CARTE;
 
