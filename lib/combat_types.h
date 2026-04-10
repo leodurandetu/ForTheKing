@@ -75,6 +75,10 @@ typedef struct {
     /* --- Environnement --- */
     biome_t biome; /**< Type de biome récupéré de la carte pour le décor. */
 
+    /* --- Messages --- */
+    char message_combat[100]; /**< Stocke le texte à afficher. */
+    Uint32 message_expiration; /**< Moment (en millisecondes) où le message doit disparaître. */
+
 } combat_t;
 
 #endif
