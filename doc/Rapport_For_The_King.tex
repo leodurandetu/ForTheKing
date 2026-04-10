@@ -190,9 +190,9 @@ Génération de la carte & Toute l'équipe \\
 \hline
 \end{tabular}
 \label{tab_taches}
-\caption{Ceci est un tableau présentant les différents étudiants qui ont travaillé sur ce projet ainsi que les tâches qu'ils ont effectué.}
+\caption{Ceci est un tableau présentant les différents étudiants qui ont travaillé sur ce projet ainsi que les tâches qu'ils ont effectué.} 
 \end{table}
-Ici, je fais référence à mon tableau \ref{tab_taches}
+Tableau répartition des tâches \ref{tab_taches}
 
 \subsection{Outils techniques utilisés}
 
@@ -248,9 +248,11 @@ L'espacement horizontal entre deux colonnes est calculé de sorte que les hexago
 La caméra est centrée sur le personnage. À chaque image, on calcule la position du personnage en pixels, puis on fait un décalage global qu'on applique pour chaque case.
 Donc, chaque déplacement du personnage, implique le mouvement de la carte entière autour de lui et le personnage reste visuellement au centre de l'écran. \\
 
-\begin{center}
+\begin{figure}[h]
+\centering
 \includegraphics[height=5cm]{carte.png}
-\end{center}
+\caption{Carte}
+\end{figure}
 
 L'ordre du rendu suit les étapes suivantes : dessin des tuiles hexagonales avec leur biome, puis les éléments du décor tels que les obstacles et les bâtiments.
 Ensuite, le personnage est affiché par-dessus la carte et, finalement, l'interface utilisateur : barre de vie, barre d'expérience, inventaire, panneaux de quêtes et menus.
@@ -270,7 +272,7 @@ Pour assurer le bon déroulement du combat, les éléments nécessaires sont reg
 \item \textbf{L'interface visuelle :} La fenêtre SDL (\emph{pFenetre}) et son moteur de rendu (\emph{renderer}) pour afficher la scène.
 \item \textbf{Les textures et polices :} Utilisées pour afficher les informations (du personnage et du monstre) tels que les statisques, le point vie restant et le type du personage et du monstre.
  Les boutons d'action sont rendus via \emph{texture\_attaque\_legere} et \emph{texture\_attaque\_lourde}.
-\item \textbf{L'IA décisionnelle :} Pour le monstre, la fonction \emph{choix\_attaque\_monstre} analyse les points de vie restants pour décider de la puissance de l'attaque à porter.
+\item \textbf{L'IA décisionnelle :} Pour le monstre, la fonction \sloppy \emph{choix\_attaque\_monstre} analyse les points de vie restants pour décider de la puissance de l'attaque à porter.
 \end{itemize}
 
 Une fois le duel terminé, la fonction \emph{combat\_termine} met à jour (gain d'XP, apparition d'une \emph{TOMBE} sur la carte ou état de mort du joueur), puis la fonction \emph{detruire\_combat} libère proprement toutes les ressources mémoire et audio.
@@ -290,9 +292,11 @@ Une fois le duel terminé, la fonction \emph{combat\_termine} met à jour (gain 
 
 \subsection{Gestion du menu}
 
-\begin{center}
+\begin{figure}[h]
+\centering
 \includegraphics[height=5cm]{menu.png}
-\end{center}
+\caption{Page principale menu}
+\end{figure}
 
 Le menu est la page principale. On peut effectuer plusieurs actions : 
 
