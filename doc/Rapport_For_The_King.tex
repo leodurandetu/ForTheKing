@@ -257,7 +257,41 @@ Toutes les dimensions et positions sont calculées dynamiquement via SDL2 en fon
 
 \subsection{Gestion du personnage}
 
-78
+
+Un personnage est défini par son type (\emph{BRUTE, CHASSEUR, ASSASIN et MAGE}) qui est de type énuméré.
+Chaque personnage possède des caractèristiques qui varient selon le type de personnage. Ces caractèristiques sont regroupés dans une structure qui permet de réprésenter le personnage.
+Le fonctionnement du personnage repose sur plusieurs étapes :
+
+\begin{itemize}
+\item \textbf{Initialisation et typage :}
+Le personnage est créé et configuré via la fonction \emph{init\_perso}. Cette fonction alloue la mémoire, 
+définit les coordonnées de départ et applique un switch sur le type choisi pour attribuer les statistiques de base (force, intelligence, etc.) propres à chaque personnage.
+
+\item \textbf{Position sur la carte :}
+\begin{description}
+\item Les coordonnées du personnage, représentées par deux entiers \emph{x} et \emph{y}, permettent de connaître la position du joueur sur la carte. 
+Ensuite, la fonction \emph{afficher\_personnage} transforme ces coordonnées en pixels pour dessiner le joueur au bon endroit sur l'écran et s'assure que la vue reste bien centrée sur lui.
+\end{description}
+
+\item \textbf{Statistiques et combat :}
+\begin{description}
+\item Des entiers représentent les dégâts, la force, la santé actuelle (\emph{sante}), le maximum de points de vie (\emph{sante\_max}), l'intelligence, 
+la rapidité et le pourcentage d'éviter un coup (\emph{evasion}).
+En combat, ces valeurs sont utilisées par des fonctions comme \emph{attaque\_legere} ou \emph{attaque\_lourde} pour calculer l'issue du combat.
+\end{description}
+
+\item \textbf{Gestion des tours et progression :}
+\begin{description}
+\item \textbf{Déplacements :} Le joueur possède des points de déplacements (\emph{pts\_deplacements}). À chaque mouvement, ces points sont décrémentés. 
+La fonction \emph{restaurer\_points\_deplacements} est appelée à chaque début de tour pour réinitialiser ces points de façon aléatoire selon la classe. 
+La valeur actuelle peut être consultée via \emph{get\_pers\_movements\_points}.
+\item \textbf{Progression :} Le niveau évolue avec l'expérience accumulée (\emph{exp}). En cas de victoire, la fonction \emph{monstre\_tue} (appelée dans \emph{combat\_termine}) gère l'attribution de l'expérience et l'incrémentation du compteur \emph{nb\_victime}.
+\item \textbf{Économie :} La variable \emph{pieces} permet l'achat d'objets dans l'inventaire, lequel est initialisé par \emph{initialiser\_inventaire} lors de la création du personnage.
+\end{description}
+
+\item \textbf{Libération de la mémoire :}
+Lorsque la partie se termine ou que le personnage a perdu, la fonction \emph{detruire\_perso} assure la libération de la structure et de son inventaire associé pour éviter toute fuite mémoire.
+\end{itemize}
 
 \subsection{Gestion de la sauvegarde}
 
