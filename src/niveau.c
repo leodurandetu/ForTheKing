@@ -35,7 +35,7 @@ void verif_xp(perso_t *perso) {
  * points d'XP à un personnage
  * lorsqu'il a tué un monstre
  */
-void monstre_tue(perso_t *perso) {
-    perso->exp += 4;
+void monstre_tue(perso_t *perso, monstre_t *monstre) {
+    attribuer_experience_victoire(perso, monstre);
     verif_xp(perso);
 }
