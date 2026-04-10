@@ -253,7 +253,16 @@ Toutes les dimensions et positions sont calculées dynamiquement via SDL2 en fon
 
 \subsection{Gestion du menu}
 
-56
+Le menu est la page principale. On peut effectuer plusieurs actions : 
+
+\begin{itemize}
+	\item \textbf{Nouvelle aventure} : Lorsqu'on clique sur le bouton "Nouvelle Aventure", un nouveau menu s'ouvre avec un bouton "+" qui permet de choisir un personnage. À chaque clic, le type de personnage change, ce qui permet de choisir le personnage souhaité
+	\item \textbf{Continuer} : Le bouton "Continuer" permet de charger la partie sauvegardée auparavant depuis un fichier .txt
+	\item \textbf{Options} : Le bouton "Options" permet de baisser ou augmenter le volume, et affiche également toutes les commandes du jeu
+	\item \textbf{Quitter} : Lorsque le bouton "Quitter" est cliqué, un message s'affiche au centre de l'écran qui demande une confirmation, si l'utilisateur confirme, le jeu se ferme
+\end{itemize}
+
+Le menu est essentiel dans l’expérience utilisateur. Il a été implémenté avec la bibliothèque SDL2, qui permet de gérer les événements (clics, clavier) ainsi que le rendu graphique des éléments interactifs. Cette approche assure une navigation fluide et intéractive.
 
 \subsection{Gestion du personnage}
 
