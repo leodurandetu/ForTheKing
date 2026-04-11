@@ -82,7 +82,7 @@ _./bin/fortheking_ : lance directement le jeu avec un mage comme personnage par 
 
 ## 🎮 Comment Jouer au Jeu
 
-Si vous êtes dans le menu, cliquez sur "JOUER" uniquement.  
+Si vous êtes dans le menu, cliquez sur "Nouvelle Aventure", puis choisissez un personnage et cliquez sur "Lancer l'Aventure".  
 
 #### _Voici les commandes pour jouer au jeu :_
 
