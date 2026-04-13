@@ -871,7 +871,7 @@ int main() {
             /* Trouve le type du premier slot non vide */
             const char *noms_classes[] = {"", "mage", "assassin", "brute", "chasseur"};
             const char *classe = "mage"; // valeur par défaut
-            for (int i = 0; i < NB_SLOTS; i++) {
+            for (int i = 0; i < NB_SLOTS_PERSO; i++) {
                 if (slots[i].type != SLOT_VIDE) {
                     classe = noms_classes[slots[i].type];
                     break;
@@ -883,7 +883,7 @@ int main() {
 
                 if (charger_sauvegarde == 1) {
                     snprintf(commande, sizeof(commande),
-                        "./bin/fortheking --plein-ecran --classe %s --charger-sauvegarde", classe);
+                        "./bin/fortheking --plein-ecran --charger-sauvegarde");
                 } else {
                     snprintf(commande, sizeof(commande),
                         "./bin/fortheking --plein-ecran --classe %s", classe);
@@ -893,7 +893,7 @@ int main() {
                 
                 if (charger_sauvegarde == 1) {
                     snprintf(commande, sizeof(commande),
-                        "./bin/fortheking --classe %s --charger-sauvegarde", classe);
+                        "./bin/fortheking --charger-sauvegarde");
                 } else {
                     snprintf(commande, sizeof(commande),
                         "./bin/fortheking --classe %s", classe);
