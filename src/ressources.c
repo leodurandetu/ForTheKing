@@ -16,7 +16,7 @@ int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res, perso_type
     /* Chargement des textures correspondant aux différents biomes */
     char *nom_images[NB_BIOMES] = {
         "img/terrev1.png", "img/eauv2.png",
-        "img/desertv1.png", "img/neigev4.png",
+        "img/desertv1.png", "img/neigev2.png",
         "img/foretv2.png"
     };
     for (int i = 0; i < NB_BIOMES; i++) {
@@ -94,8 +94,8 @@ int charger_ressources(SDL_Renderer* renderer, ressources_jeu_t* res, perso_type
 
     /* Chargement des éléments de décor agissant comme obstacles */
     char *nom_images_obstacles[4] = {
-        "img/arbres.png", "img/montagnes.png",
-        "img/cactus.png", "img/boue.png" 
+        "img/arbres.png", "img/montagne1.png",
+        "img/cactus.png", "img/boue1.png" 
     };
     for (int i = 0; i < 4; i++) {
         SDL_Surface *image_obs = IMG_Load(nom_images_obstacles[i]);
