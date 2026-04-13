@@ -8,6 +8,37 @@
  */
 void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * rendererPrincipal, biome_t biome,
     combat_t ** combat, case_t ** carte, int *vies_globale1s, SDL_Texture * portraitPerso) {
+
+    /*Initialisation du décodeur MP3 et du système audio SDL_mixer*/
+    Mix_Init(MIX_INIT_MP3);
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        fprintf(stderr, "Mix_OpenAudio error: %s\n", Mix_GetError());
+    }
+
+    /*Chargement des bruitages d'attaque selon le type de personnage/*/
+    switch((*combat)->perso->type){
+        case BRUTE : 
+            (*combat)->son_attaque_legere = Mix_LoadWAV("audio/attaque_marteau.mp3");
+            (*combat)->son_attaque_lourde = Mix_LoadWAV("audio/attaque_marteau.mp3");
+            break;
+        case CHASSEUR : 
+            (*combat)->son_attaque_legere = Mix_LoadWAV("audio/attaque_fleche.mp3");
+            (*combat)->son_attaque_lourde = Mix_LoadWAV("audio/attaque_fleche.mp3");
+            break;
+        case ASSASSIN : 
+            (*combat)->son_attaque_legere = Mix_LoadWAV("audio/attaque_epee.mp3");
+            (*combat)->son_attaque_lourde = Mix_LoadWAV("audio/attaque_epee.mp3");
+            break;
+        case MAGE : 
+            (*combat)->son_attaque_legere = Mix_LoadWAV("audio/explosion.mp3");
+            (*combat)->son_attaque_lourde = Mix_LoadWAV("audio/explosion.mp3");
+            break;
+        default : 
+            (*combat)->son_attaque_legere = Mix_LoadWAV("audio/sound_effect.mp3");
+            (*combat)->son_attaque_lourde = Mix_LoadWAV("audio/sound_effect.mp3");
+            break;
+    }
+    
     (*combat)->pFenetre = pFenetrePrincipal;
 
     if (!((*combat)->pFenetre)) {
@@ -75,7 +106,14 @@ void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * render
 
     // Chargement des symboles de l'attaque legère
     (*combat)->texture_attaque_legere = NULL;
-    SDL_Surface *img_legere = IMG_Load("img/attaque_l.png"); 
+    SDL_Surface *img_legere = NULL;
+    switch((*combat)->perso->type){
+        case BRUTE : img_legere = IMG_Load("img/attaque_massue_leger.png");break;
+        case CHASSEUR : img_legere = IMG_Load("img/attaque_fleche_leger.png");break;
+        case ASSASSIN : img_legere = IMG_Load("img/attaque_epee_leger.png");break;
+        case MAGE : img_legere = IMG_Load("img/attaque_mage_leger.png");break;
+        default : img_legere = IMG_Load("img/attaque_l.png");break;
+    }
     if (img_legere) {
         (*combat)->texture_attaque_legere = SDL_CreateTextureFromSurface((*combat)->renderer, img_legere);
         SDL_SetTextureBlendMode((*combat)->texture_attaque_legere, SDL_BLENDMODE_BLEND);
@@ -84,7 +122,14 @@ void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * render
 
     // Chargement des symboles de l'attaque lourde
     (*combat)->texture_attaque_lourde = NULL;
-    SDL_Surface *img_lourde = IMG_Load("img/attaque_L.png"); 
+    SDL_Surface *img_lourde = NULL;
+    switch((*combat)->perso->type){
+        case BRUTE : img_lourde = IMG_Load("img/attaque_massue_lourd.png");break;
+        case CHASSEUR : img_lourde = IMG_Load("img/attaque_fleche_lourd.png");break;
+        case ASSASSIN : img_lourde = IMG_Load("img/attaque_epee_lourd.png");break;
+        case MAGE : img_lourde = IMG_Load("img/attaque_mage_lourd.png");break;
+        default : img_lourde = IMG_Load("img/attaque_L1.png");break;
+    } 
     if (img_lourde) {
         (*combat)->texture_attaque_lourde = SDL_CreateTextureFromSurface((*combat)->renderer, img_lourde);
         SDL_SetTextureBlendMode((*combat)->texture_attaque_lourde, SDL_BLENDMODE_BLEND);
