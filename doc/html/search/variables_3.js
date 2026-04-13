@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['estvisible_0',['estVisible',['../structcase__s.html#acc9e44ae0e4cd12eb9cc7a22bf583966',1,'case_s']]],
-  ['evasion_1',['evasion',['../structmonstre__t.html#ae961057aa141e8b986e3ded3fad0c5f6',1,'monstre_t::evasion'],['../structperso__s.html#a7880e0e4a092c53ad7238c2dc01190f1',1,'perso_s::evasion']]],
-  ['exp_2',['exp',['../structperso__s.html#a69535ec62b96be24fe804b91012e988e',1,'perso_s']]]
+  ['debut_583',['debut',['../structaffichage__quete__t.html#a9159c6959eeaebf7b80d59349a714f5e',1,'affichage_quete_t']]],
+  ['degats_584',['degats',['../structmonstre__t.html#a2950a5623864c5f8696c51ad92a4c2c6',1,'monstre_t::degats()'],['../structperso__s.html#a1f321dadca95d13b9abd456c8fb7c1ee',1,'perso_s::degats()']]]
 ];

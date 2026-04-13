@@ -1,12 +1,7 @@
 var searchData=
 [
-  ['perso_0',['perso',['../structcombat__t.html#a8f6705a5fdc6bc26df32d1a80478e019',1,'combat_t::perso'],['../structressources__jeu__t.html#a4a41b30e2d731e93acc0af3504661596',1,'ressources_jeu_t::perso']]],
-  ['pfenetre_1',['pFenetre',['../structcombat__t.html#ad7240c69f31ca7835df6041edd6920f1',1,'combat_t']]],
-  ['pieces_2',['pieces',['../structperso__s.html#a4c3b3b1649db2f4b477e313db9b63a89',1,'perso_s']]],
-  ['pointy_5fhex_5fcos_3',['POINTY_HEX_COS',['../affichage__carte_8c.html#a5e9239948949a9cd7f869667e8183dc1',1,'affichage_carte.c']]],
-  ['pointy_5fhex_5fsin_4',['POINTY_HEX_SIN',['../affichage__carte_8c.html#a7808f9011710df4eef1b818b0eb6182e',1,'affichage_carte.c']]],
-  ['police_5fmax_5',['police_max',['../structressources__jeu__t.html#a3a0ce923e5459567b37f399e8ec8a777',1,'ressources_jeu_t']]],
-  ['police_5fmedium_6',['police_medium',['../structressources__jeu__t.html#abc8d6838aecec29bf815893db26f2e88',1,'ressources_jeu_t']]],
-  ['police_5fmin_7',['police_min',['../structressources__jeu__t.html#aaf4500844dc8229740ef72796ba76070',1,'ressources_jeu_t']]],
-  ['pts_5fdeplacements_8',['pts_deplacements',['../structperso__s.html#a0375173cef343d2e222ec1c8c8e188f8',1,'perso_s']]]
+  ['nb_5ftues_603',['nb_tues',['../structquetes__t.html#ac383f05d4ad7178abec17bd41ebe3b1d',1,'quetes_t']]],
+  ['nb_5fvictime_604',['nb_victime',['../structperso__s.html#aed76994657b947bbd627259703d9dc2e',1,'perso_s']]],
+  ['niveau_605',['niveau',['../structmonstre__t.html#ae4122bcce82daaa996ee015d95d3a1e8',1,'monstre_t::niveau()'],['../structperso__s.html#adab91e6e8c0fba17967c6facd0a36784',1,'perso_s::niveau()']]],
+  ['nom_5fslot_606',['NOM_SLOT',['../menu_8c.html#aefa7761085ee27d4619eecf9d8f665dd',1,'NOM_SLOT():&#160;menu.c'],['../menu_8h.html#aefa7761085ee27d4619eecf9d8f665dd',1,'NOM_SLOT():&#160;menu.c']]]
 ];

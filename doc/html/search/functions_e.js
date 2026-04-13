@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['texture_5fkit_5fde_5fsoins_0',['texture_kit_de_soins',['../objet_8c.html#aa68dbfa13eb5ba20cec58cab2430d5a6',1,'texture_kit_de_soins(SDL_Renderer *renderer):&#160;objet.c'],['../objet_8h.html#aa68dbfa13eb5ba20cec58cab2430d5a6',1,'texture_kit_de_soins(SDL_Renderer *renderer):&#160;objet.c']]]
+  ['texture_5fobjet_562',['texture_objet',['../objet_8c.html#a7d427b682037e97b429ec402f5681429',1,'texture_objet(SDL_Renderer *renderer, objet_type_t type):&#160;objet.c'],['../objet_8h.html#a7d427b682037e97b429ec402f5681429',1,'texture_objet(SDL_Renderer *renderer, objet_type_t type):&#160;objet.c']]]
 ];

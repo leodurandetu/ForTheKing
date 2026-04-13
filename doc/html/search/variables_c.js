@@ -1,7 +1,11 @@
 var searchData=
 [
-  ['rapidite_0',['rapidite',['../structmonstre__t.html#ab4567e3e2927a6405d92c2cc29c63f89',1,'monstre_t::rapidite'],['../structperso__s.html#a9c2c2ac6a9e49fb6f87bd8dffefb8835',1,'perso_s::rapidite']]],
-  ['rect_5ftexte_5fleger_1',['rect_texte_leger',['../structcombat__t.html#aacf502fe0f9bf20c8a880e69e45ce1ea',1,'combat_t']]],
-  ['rect_5ftexte_5flourd_2',['rect_texte_lourd',['../structcombat__t.html#aeb2af98a8e74ecac20df2e6e1d52cfa3',1,'combat_t']]],
-  ['renderer_3',['renderer',['../structcombat__t.html#ac667e3683cbaa40f0bf06b04333389cb',1,'combat_t']]]
+  ['perso_608',['perso',['../structcombat__t.html#a8f6705a5fdc6bc26df32d1a80478e019',1,'combat_t::perso()'],['../structressources__jeu__t.html#a4a41b30e2d731e93acc0af3504661596',1,'ressources_jeu_t::perso()']]],
+  ['pfenetre_609',['pFenetre',['../structcombat__t.html#ad7240c69f31ca7835df6041edd6920f1',1,'combat_t']]],
+  ['pointy_5fhex_5fcos_610',['POINTY_HEX_COS',['../affichage__carte_8c.html#a5e9239948949a9cd7f869667e8183dc1',1,'affichage_carte.c']]],
+  ['pointy_5fhex_5fsin_611',['POINTY_HEX_SIN',['../affichage__carte_8c.html#a7808f9011710df4eef1b818b0eb6182e',1,'affichage_carte.c']]],
+  ['police_5fmax_612',['police_max',['../structressources__jeu__t.html#a3a0ce923e5459567b37f399e8ec8a777',1,'ressources_jeu_t']]],
+  ['police_5fmedium_613',['police_medium',['../structressources__jeu__t.html#abc8d6838aecec29bf815893db26f2e88',1,'ressources_jeu_t']]],
+  ['police_5fmin_614',['police_min',['../structressources__jeu__t.html#aaf4500844dc8229740ef72796ba76070',1,'ressources_jeu_t']]],
+  ['pts_5fdeplacements_615',['pts_deplacements',['../structperso__s.html#a0375173cef343d2e222ec1c8c8e188f8',1,'perso_s']]]
 ];

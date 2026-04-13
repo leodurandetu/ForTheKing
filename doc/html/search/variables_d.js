@@ -1,9 +1,4 @@
 var searchData=
 [
-  ['sanctuaire_5fpris_0',['sanctuaire_pris',['../structcase__s.html#a34868aee13953a70d2348e77336868e4',1,'case_s']]],
-  ['sanctuaires_1',['sanctuaires',['../structcase__s.html#a358f85cad0a9e975f89f6a5d2f488b2e',1,'case_s::sanctuaires'],['../structressources__jeu__t.html#a4a24ee08c0dff20b978d4d9d2c07f58c',1,'ressources_jeu_t::sanctuaires']]],
-  ['sante_2',['sante',['../structmonstre__t.html#a098caaeaa2c01ef776581dc3d8c8274c',1,'monstre_t::sante'],['../structperso__s.html#ab4e5c75b69e47127e3122bb45817500b',1,'perso_s::sante']]],
-  ['sante_5fmax_3',['sante_max',['../structmonstre__t.html#a226e62b8eb771ee52a41c28330b37473',1,'monstre_t::sante_max'],['../structperso__s.html#abd1687be592bcff769cbca66a9bcebd0',1,'perso_s::sante_max']]],
-  ['survole_5fbouton_5fleger_4',['survole_bouton_leger',['../structcombat__t.html#ad4e0edb413bdac7e3cd12895084567b1',1,'combat_t']]],
-  ['survole_5fbouton_5flourd_5',['survole_bouton_lourd',['../structcombat__t.html#af00771040922e5c534502657ad917e76',1,'combat_t']]]
+  ['quantite_616',['quantite',['../structobjet__t.html#a79402ce385a46e68c9a4319340bf0298',1,'objet_t']]]
 ];
