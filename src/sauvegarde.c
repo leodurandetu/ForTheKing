@@ -1,5 +1,35 @@
 #include "../lib/sauvegarde.h"
 
+int sauvegarder_inventaire(FILE *fichier, inventaire_t *inv) {
+
+    for (int i = 0; i < TAILLE_INVENTAIRE; i++) {
+        // On ne sauvegarde que le type et la quantité
+        if (fwrite(&(inv->contenu[i].type), sizeof(objet_type_t), 1, fichier) != 1) return 0;
+        if (fwrite(&(inv->contenu[i].quantite), sizeof(int), 1, fichier) != 1) return 0;
+    }
+
+    return 1;
+}
+
+int charger_inventaire(FILE *fichier, inventaire_t *inv, SDL_Renderer *renderer) {
+
+    for (int i = 0; i < TAILLE_INVENTAIRE; i++) {
+        objet_type_t type;
+        int quantite;
+
+        if (fread(&type, sizeof(objet_type_t), 1, fichier) != 1) return 0;
+        if (fread(&quantite, sizeof(int), 1, fichier) != 1) return 0;
+
+        inv->contenu[i].type = type;
+        inv->contenu[i].quantite = quantite;
+
+        // On reconstruit la texture à partir du type chargé
+        remplir_texture_objet(&(inv->contenu[i]), renderer);
+    }
+
+    return 1;
+}
+
 int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SDL_Renderer * renderer) {
     FILE *fichier = fopen(nomFichier, "wb");
 
@@ -87,14 +117,15 @@ int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte
         return 0;
     }
 
-    if (fwrite(&(perso->inventaire), sizeof(inventaire_t), 1, fichier) != 1) {
+    if (fwrite(&(perso->type), sizeof(perso_type_t), 1, fichier) != 1) {
         fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
         fclose(fichier);
         return 0;
     }
 
-    if (fwrite(&(perso->type), sizeof(perso_type_t), 1, fichier) != 1) {
-        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+    /* Sauvegarde de l'inventaire */
+    if (!sauvegarder_inventaire(fichier, &(perso->inventaire))) {
+        fprintf(stderr, "Erreur inventaire\n");
         fclose(fichier);
         return 0;
     }
@@ -356,15 +387,6 @@ int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SD
     }
 
     perso->mort = mort;
-    inventaire_t inventaire;
-
-    if (fread(&inventaire, sizeof(inventaire_t), 1, fichier) != 1) {
-        fprintf(stderr, "Erreur lors de la lecture des données du personnage.\n");
-        fclose(fichier);
-        return 0;
-    }
-
-    perso->inventaire = inventaire;
     perso_type_t type;
 
     if (fread(&type, sizeof(perso_type_t), 1, fichier) != 1) {
@@ -375,10 +397,13 @@ int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SD
 
     perso->type = type;
 
-    for (int k = 0; k < TAILLE_INVENTAIRE; k++) {
-        remplir_texture_objet(&(perso->inventaire.contenu[k]), renderer);
+    /* Sauvegarde de l'inventaire */
+    if (!charger_inventaire(fichier, &(perso->inventaire), renderer)) {
+        fprintf(stderr, "Erreur inventaire\n");
+        fclose(fichier);
+        return 0;
     }
-
+    
     /* Chargement de la carte */
     for (int i = 0; i < TAILLE_CARTE; i++) {
 
