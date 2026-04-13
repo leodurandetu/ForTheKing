@@ -14,6 +14,7 @@ typedef enum {
     SQUELETTE,
     TROLL,
     YETI,
+    VER_GEANT,
     BOSS_FINAL
 } type_monstre_t;
 

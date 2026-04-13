@@ -66,6 +66,8 @@ void ouvrir_fenetre_combat(SDL_Window * pFenetrePrincipal, SDL_Renderer * render
         img_monstre = IMG_Load("img/troll.png");
     } else if ((*combat)->monstre->type == YETI) {
         img_monstre = IMG_Load("img/yeti.png");
+    } else if ((*combat)->monstre->type == VER_GEANT) {
+        img_monstre = IMG_Load("img/ver_geant.png");
     } else if ((*combat)->monstre->type == BOSS_FINAL) {
         img_monstre = IMG_Load("img/boss_final.png");
     }
@@ -224,9 +226,14 @@ void combat_termine(SDL_Renderer * rendererPrincipal, combat_t ** combat, case_t
                 nb_pieces = 1 + (rand() % 5);
                 break;
 
-            case YETI:
+            case VER_GEANT:
                 /* 2 à 6 pièces */
                 nb_pieces = 2 + (rand() % 5);
+                break;
+
+            case YETI:
+                /* 3 à 7 pièces */
+                nb_pieces = 3 + (rand() % 5);
                 break;
 
             default:

@@ -92,8 +92,6 @@ void appliquer_bonus_monstre(monstre_t *monstre) {
  * Attribue un niveau aléatoire au monstre
  * selon son type, appelée dans monstre.c
  * lors de la création du monstre.
- * - TROLL     : niveau 1 ou 2
- * - SQUELETTE : niveau 2 ou 3
  */
 void niveau_monstre(monstre_t *monstre, type_monstre_t type) {
         int niveau_final = 1;
@@ -105,11 +103,14 @@ void niveau_monstre(monstre_t *monstre, type_monstre_t type) {
                 case SQUELETTE:
                         niveau_final = 2 + rand() % 2;
                         break;
+                case VER_GEANT:
+                        niveau_final = 3 + rand() % 2;
+                        break;
                 case YETI:
                         niveau_final = 4 + rand() % 2;
                         break;
                 default:
-                        printf("Erreur niveau : func niveau_troll.\n");
+                        printf("Erreur niveau : fonction niveau_monstre.\n");
                         break;
         }
 

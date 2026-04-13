@@ -329,6 +329,8 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche, int * maj_af
         sprintf(nom_monstre_formate, "Troll (Niv. %d)",monstre->niveau);
     } else if (combat->monstre->type == YETI) {
         sprintf(nom_monstre_formate, "Yeti (Niv. %d)",monstre->niveau);
+    } else if (combat->monstre->type == VER_GEANT) {
+        sprintf(nom_monstre_formate, "Ver Geant (Niv. %d)",monstre->niveau);
     } else if (combat->monstre->type == BOSS_FINAL) {
         sprintf(nom_monstre_formate, "Boss Final (Niv. %d)",monstre->niveau);
     }
@@ -380,6 +382,10 @@ void demander_et_lancer_combat(SDL_Renderer * renderer, TTF_Font * police2, pers
 
         case YETI:
             cheminTexture = "img/yeti.png";
+            break;
+
+        case VER_GEANT:
+            cheminTexture = "img/ver_geant.png";
             break;
 
         case BOSS_FINAL:

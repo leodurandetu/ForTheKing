@@ -221,7 +221,6 @@ resultat_campement_t afficher_menu_campement(SDL_Renderer *renderer, TTF_Font *f
         }
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(16);
     }
     return resultat;
 }
