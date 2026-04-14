@@ -207,7 +207,8 @@ int chemin_valide(case_t **carte, int taille_carte, int xDepart, int yDepart, in
  * @param dy Le décalage sur l'axe des ordonnées
  * @param majAffichage Pointeur sur l'entier dans le main qui dit si on doit mettre à jour l'affichage
  * @param majBrouillard Pointeur sur l'entier dans le main qui dit si on doit mettre à jour le brouillard
+ * @return int Renvoie VRAI si on peut se déplacer, FAUX sinon.
  */
-void deplacer_perso_si_possible(perso_t * perso, case_t ** carte, int dx, int dy, int * majAffichage, int * majBrouillard);
+int deplacer_perso_si_possible(perso_t * perso, case_t ** carte, int dx, int dy, int * majAffichage, int * majBrouillard);
 
 #endif

@@ -212,7 +212,22 @@ int main(int argc,char *argv[]) {
                                 break;
 
                             case SDL_SCANCODE_A:
-                                deplacer_perso_si_possible(perso, carte, -1, 0, &majAffichage, &majBrouillard);
+                                /* pair */
+                                if ((perso->x % 2) == 0) {
+
+                                    if (deplacer_perso_si_possible(perso, carte, -1, 0, &majAffichage, &majBrouillard) == FAUX) {
+                                        deplacer_perso_si_possible(perso, carte, -1, -1, &majAffichage, &majBrouillard);
+                                    }
+
+                                } 
+                                /* impair */
+                                else {
+                                    if (deplacer_perso_si_possible(perso, carte, -1, 1, &majAffichage, &majBrouillard) == FAUX) {
+                                        deplacer_perso_si_possible(perso, carte, -1, 0, &majAffichage, &majBrouillard);
+                                    }
+
+                                }
+
                                 break;
 
                             case SDL_SCANCODE_S:
@@ -220,7 +235,22 @@ int main(int argc,char *argv[]) {
                                 break;
 
                             case SDL_SCANCODE_D:
-                                deplacer_perso_si_possible(perso, carte, 1, 0, &majAffichage, &majBrouillard);
+                                /* pair */
+                                if ((perso->x % 2) == 0) {
+
+                                    if (deplacer_perso_si_possible(perso, carte, 1, -1, &majAffichage, &majBrouillard) == FAUX) {
+                                        deplacer_perso_si_possible(perso, carte, 1, 0, &majAffichage, &majBrouillard);
+                                    }
+
+                                } 
+                                /* impair */
+                                else {
+                                    if (deplacer_perso_si_possible(perso, carte, 1, 0, &majAffichage, &majBrouillard) == FAUX) {
+                                        deplacer_perso_si_possible(perso, carte, 1, 1, &majAffichage, &majBrouillard);
+                                    }
+
+                                }
+
                                 break;
 
                             case SDL_SCANCODE_N:

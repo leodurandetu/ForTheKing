@@ -752,7 +752,7 @@ void placer_sanctuaires(case_t ** carte){
  * personnage d'un certain décalage si
  * possible, sinon elle ne fait rien.
  */
-void deplacer_perso_si_possible(perso_t * perso, case_t ** carte, int dx, int dy, int * majAffichage, int * majBrouillard) {
+int deplacer_perso_si_possible(perso_t * perso, case_t ** carte, int dx, int dy, int * majAffichage, int * majBrouillard) {
     int dest_x = perso->x + dx;
     int dest_y = perso->y + dy;
 
@@ -767,6 +767,9 @@ void deplacer_perso_si_possible(perso_t * perso, case_t ** carte, int dx, int dy
         perso->y = dest_y;
         perso->x = dest_x;
         perso->pts_deplacements--;
+
+        return VRAI;
     }
 
+    return FAUX;
 }
