@@ -277,15 +277,15 @@ Pour assurer le bon déroulement du combat, les éléments nécessaires sont reg
 
 Une fois le duel terminé, la fonction \emph{combat\_termine} met à jour (gain d'XP, apparition d'une \emph{TOMBE} sur la carte ou état de mort du joueur), puis la fonction \emph{detruire\_combat} libère proprement toutes les ressources mémoire et audio.
 
-\begin{figure}[!]
+\begin{figure}[H]
 \centering
-\includegraphics[height=6cm]{img_jeu/combat.png}
+\includegraphics[height=6cm]{../img_jeu/combat_mage.png}
 \caption{{\emph{Combat classique}}}
 \end{figure}
 \hfill
-\begin{figure}[!]
+\begin{figure}[H]
 \centering
-\includegraphics[height=6cm]{img_jeu/combat_final.png}
+\includegraphics[height=6cm]{../img_jeu/combat_final.png}
 \caption{{\emph{Combat avec le boss final}}}
 \end{figure}
 \newpage
@@ -347,6 +347,19 @@ La valeur actuelle peut être consultée via \emph{get\_pers\_movements\_points}
 \item \textbf{Libération de la mémoire :}
 Lorsque la partie se termine ou que le personnage a perdu, la fonction \emph{detruire\_perso} assure la libération de la structure et de son inventaire associé pour éviter toute fuite mémoire.
 \end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=6cm]{../img_jeu/interaction_monstre4.png}
+\caption{{\emph{Intéraction du personnage avec un monstre}}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=6cm]{../img_jeu/interaction_sanctuaire1.png}
+\caption{{\emph{Intéraction du personnage avec un sanctuaire}}}
+\end{figure}
+
 
 \subsection{Gestion de la sauvegarde}
 
