@@ -37,8 +37,6 @@
 
 \section{Introduction}
 
-\textit{Cette introduction présentera le sujet qui sera traité et le travail avec une présentation du plan adopté} \\
-
 \textbf{Contexte du projet} \\
 Ce document présente le projet de développement du jeu For The King, réalisé dans le cadre de la deuxième année de licence Informatique à l'université du Mans, pendant la période de de janvier à février 2026.
 L'objectif principal est la conception et l'implémentation d'un jeu vidéo en langage C, en utilisant la bibliothèque graphique SDL2 pour la gestion de l'affichage et des interactions.
@@ -292,23 +290,43 @@ Une fois le duel terminé, la fonction \emph{combat\_termine} met à jour (gain 
 
 \subsection{Gestion du menu}
 
+
+Le menu est le premier élément avec lequel le joueur entre en contact. Au lieu d'un simple menu statique, nous avons choisi une approche centrée sur l'UI/UX (User Interface / User Experience) afin de garantir une navigation intuitive, fluide et cohérente avec le style artistique du jeu.
+
 \begin{figure}[h]
 \centering
 \includegraphics[height=5cm]{menu.png}
 \caption{Page principale menu}
 \end{figure}
 
-Le menu est la page principale. On peut effectuer plusieurs actions : 
-
+\medskip
+\textbf{Mécanique visuelle et interaction} \\
+L'interface repose sur une boucle de rendu continue qui gère les interactions de manière dynamique :
 \begin{itemize}
-	\item \textbf{Nouvelle aventure} : Lorsqu'on clique sur le bouton "Nouvelle Aventure", un nouveau menu s'ouvre avec un bouton "+" qui permet de choisir un personnage. À chaque clic, le type de personnage change, ce qui permet de choisir le personnage souhaité
-	\item \textbf{Continuer} : Le bouton "Continuer" permet de charger la partie sauvegardée auparavant depuis un fichier .txt
-	\item \textbf{Options} : Le bouton "Options" permet de baisser ou augmenter le volume, et affiche également toutes les commandes du jeu
-	\item \textbf{Quitter} : Lorsque le bouton "Quitter" est cliqué, un message s'affiche au centre de l'écran qui demande une confirmation, si l'utilisateur confirme, le jeu se ferme
+    \item \textbf{Détection de survol et retour visuel :} À chaque itération de la boucle, la position de la souris est récupérée via \emph{SDL\_GetMouseState}. La fonction \emph{SDL\_PointInRect} permet de vérifier si le curseur survole un bouton (hitbox). Si c'est le cas, les couleurs de rendu (fond et bordures) sont modifiées en temps réel, offrant un retour visuel intuitif au joueur.
+    \item \textbf{Animations :} Lors de la sélection d'un personnage, un effet de "flash" blanc est calculé dynamiquement grâce à la fonction \emph{SDL\_GetTicks}, faisant diminuer l'opacité (\emph{alpha}) sur une durée de 300 millisecondes pour marquer le clic.
+    \item \textbf{Gestion Audio :} Un système de fondu enchaîné (\emph{crossfade}) est mis en place avec \emph{Mix\_FadeOutMusic} et \emph{Mix\_FadeInMusic}. Le programme surveille le temps écoulé pour enchaîner deux pistes musicales en boucle sans coupure brutale.
 \end{itemize}
 
 
-Le menu est essentiel dans l’expérience utilisateur. Il a été implémenté avec la bibliothèque SDL2, qui permet de gérer les événements (clics, clavier) ainsi que le rendu graphique des éléments interactifs. Les animations au survol des boutons permettent d'améliorer le visuel du menu et ce qui rend agréable l'expérience utilisateur. Cette approche assure une navigation fluide et intéractive. 
+\medskip
+\textbf{Machine à états et lancement} \\
+
+Le déroulement du menu est géré par une machine à états (les états \emph{ETAT\_PRINCIPAL} et \emph{ETAT\_SELECTION\_PERSO}), ce qui permet d'afficher différents panneaux et logiques sans recharger la fenêtre. 
+Une fois que l'utilisateur valide ses choix, le menu prépare le lancement du jeu :
+\begin{itemize}
+	\item \textbf{Nouvelle aventure} : Le joueur alterne entre les différentes classes de personnages (Mage, Assassin, Brute, Chasseur). Lors de la confirmation, le menu prépare une commande système incluant l'argument \emph{--classe} suivi de la classe sélectionnée, puis lance le jeu.
+	\item \textbf{Continuer} : Le menu prépare la commande système avec l'argument \emph{--charger-sauvegarde}.
+	\item \textbf{Options} : Un panneau permet d'ajuster le volume général, de basculer en mode plein écran, et d'afficher les commandes (générées dynamiquement avec des encadrés imitant des touches de clavier).
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\includegraphics[height=5cm]{menu_schema.jpeg}
+\caption{Schéma fonctionnement menu}
+\end{figure}
+
+Pour finaliser la transition, le menu libère proprement toute la mémoire allouée avec \emph{SDL\_DestroyTexture} et ferme SDL2 avec \emph{SDL\_Quit}, puis exécute la commande finale via la fonction \emph{system()}. Cela lance l'exécutable principal du jeu (\emph{fortheking}), garantissant une séparation totale entre l'interface d'accueil et le moteur du jeu. Cela permet ainsi d'éviter toute fuite de mémoire et de rendre le programme robuste.
 
 \subsection{Gestion du personnage}
 
