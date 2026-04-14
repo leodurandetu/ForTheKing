@@ -245,7 +245,6 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche, int * maj_af
     dessiner_fond_ecran(combat, largeur, hauteur);
 
     int taille = largeur * 0.18f;
-    int marge  = largeur * 0.03f;
 
     int w_fond, h_fond;
     // On récupère les dimensions originales de l'image de fond
@@ -259,28 +258,7 @@ void maj_affichage_fenetre_combat(combat_t *combat, int clicGauche, int * maj_af
     float hauteur_fond_affichee = h_fond * echelle;
     float y_image_fond = (hauteur - hauteur_fond_affichee) / 2.0f;
     float y_sol = y_image_fond + (hauteur_fond_affichee * 0.78f);
-    // On place les personnages pour qu'ils touchent ce sol
     int y_personnage = (int)y_sol - taille;
-
-    SDL_Rect rect_perso = {
-        marge,
-        y_personnage,
-        taille,
-        taille
-    };
-
-    SDL_Rect rect_monstre = {
-        largeur - marge - taille,
-        y_personnage,
-        taille,
-        taille
-    };
-
-    if (combat->texture_perso)
-        SDL_RenderCopy(renderer, combat->texture_perso, NULL, &rect_perso);
-
-    if (combat->texture_monstre)
-        SDL_RenderCopy(renderer, combat->texture_monstre, NULL, &rect_monstre);
 
     /* boutons */
 
