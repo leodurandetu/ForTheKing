@@ -54,25 +54,6 @@ int main(int argc,char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    // --- Chargement des ressources ---
-    ressources_jeu_t ressources = {0};
-
-    if (charger_ressources(renderer, &ressources, classe_choisie) != 0) {
-        fprintf(stderr, "Erreur critique lors du chargement des ressources.\n");
-        liberer_ressources(&ressources);
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(pFenetre);
-        SDL_Quit();
-        return EXIT_FAILURE;
-    }
-
-    // Chargement musique 
-    Mix_Music *musique = init_sdl_musique();
-
-    TTF_Font* police = ressources.police_max;
-    TTF_Font* police2 = ressources.police_min;
-    TTF_Font* police3 = ressources.police_medium;
-
     // Initialisation des vies globales
     int vies_globales = 3;
 
@@ -104,6 +85,7 @@ int main(int argc,char *argv[]) {
     if (charger_sauvegarde == 1) {
         perso = calloc(1,sizeof(perso_t));
         charger_partie("sauvegarde_01.txt", perso, carte, renderer);
+        classe_choisie = perso->type;
     } else {
         generer_eau(carte);
         generer_biomes(carte);
@@ -112,6 +94,25 @@ int main(int argc,char *argv[]) {
         placer_monstres(carte);
         placer_batiments(carte);
     }
+
+    // --- Chargement des ressources ---
+    ressources_jeu_t ressources = {0};
+
+    if (charger_ressources(renderer, &ressources, classe_choisie) != 0) {
+        fprintf(stderr, "Erreur critique lors du chargement des ressources.\n");
+        liberer_ressources(&ressources);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(pFenetre);
+        SDL_Quit();
+        return EXIT_FAILURE;
+    }
+
+    // Chargement musique 
+    Mix_Music *musique = init_sdl_musique();
+
+    TTF_Font* police = ressources.police_max;
+    TTF_Font* police2 = ressources.police_min;
+    TTF_Font* police3 = ressources.police_medium;
 
     preparer_avant_affichage();
 
