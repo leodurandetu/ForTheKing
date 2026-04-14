@@ -38,7 +38,7 @@
 \section{Introduction}
 
 \textbf{Contexte du projet} \\
-Ce document présente le projet de développement du jeu For The King, réalisé dans le cadre de la deuxième année de licence Informatique à l'université du Mans, pendant la période de de janvier à février 2026.
+Ce document présente le projet de développement du jeu For The King, réalisé dans le cadre de la deuxième année de licence Informatique à l'université du Mans, pendant la période de janvier à février 2026.
 L'objectif principal est la conception et l'implémentation d'un jeu vidéo en langage C, en utilisant la bibliothèque graphique SDL2 pour la gestion de l'affichage et des interactions.
 
 \medskip
@@ -62,11 +62,11 @@ Une bibliographie et une annexe sont également disponibles.
 
 \section{Conception}
 
-La phase de conception permet de réfléchir sur, comment le jeu sera construit avant de coder. L'idée principale est de créer un système composé de plusieurs parties qui fonctionnent de manière indépendante, c'est-à-dire, chaque élément du jeu, comme la carte, les combats et l'interface utilisateur, peut être développé et testé séparément sans affecter les autres parties du jeu. Cette façon de réfléxion est basée sur trois principes simples :
+La phase de conception permet de réfléchir sur, comment le jeu sera construit avant de coder. L'idée principale est de créer un système composé de plusieurs parties qui fonctionnent de manière indépendante, c'est-à-dire, chaque élément du jeu, comme la carte, les combats et l'interface utilisateur, peut être développé et testé séparément sans affecter les autres parties du jeu. Cette façon de réflexion est basée sur trois principes simples :
 
 \begin{itemize}
     \item \textbf{Séparation des éléments} : chaque fonctionnalité est séparée pour éviter qu'une modification ne casse pas le reste du programme (\textbf{flexible}).
-    \item \textbf{Évolutivité} : la structure facilite les ajours futurs de nouveaux personnages ou de nouvelles mécaniques par exemple (\textbf{réutilisable}).
+    \item \textbf{Évolutivité} : la structure facilite les ajouts futurs de nouveaux personnages ou de nouvelles mécaniques par exemple (\textbf{réutilisable}).
     \item \textbf{Flexibilité} : l'architecture permet une meilleure gestion de la carte générée dynamiquement (\textbf{évolutif}).
     \item \textbf{Clarté du code} : l'organisation permet de comprendre rapidement comment le programme fonctionne sans perdre du temps (\textbf{lisible} et \textbf{maintenable}).
 \end{itemize}
@@ -79,13 +79,13 @@ Cela permet donc de maintenir et que les mécaniques de gameplay pourront être 
 
 \noindent\textit{For The King} est un jeu de rôle (RPG) et d'aventure intégrant des mécaniques de combat au tour par tour. 
 Le joueur est placé dans le royaume, plongé dans le chaos. 
-L'objetic est de préparer le héros à un affrontement contre le boss final pour restaurer la paix dans le royaume. 
+L'objetif est de préparer le héros à un affrontement contre le boss final pour restaurer la paix dans le royaume. 
 
 Le gameplay repose sur une boucle de progression stratégique autour de trois axes : 
 
 \begin{itemize}
 	\item \textbf{L'exploration et les quêtes} : Le joueur parcourt la carte pour découvrir des campements, des sanctuaires et remplir des objectifs secondaires.
-	\item \textbf{Le combat au tour par tour} : Les affrontements opposent le personnage aux diffrérents monstres. Chaque tour permet de choisir entre une attaque légère (précise mais moins puissante) et une attaque lourde (dégâts élevés mais probabilité d'échec élevés).
+	\item \textbf{Le combat au tour par tour} : Les affrontements opposent le personnage aux différents monstres. Chaque tour permet de choisir entre une attaque légère (précise mais moins puissante) et une attaque lourde (dégâts élevés mais probabilité d'échec élevés).
 	\item \textbf{La gestion des ressources} : L'élimination des ennemis octroie de l'or et des objets de soin. L'or est une ressource essentielle permettant de se reposer afin de regagner de la vie ou d'acheter des kits de soin dans les campements.
 \end{itemize} 
 
@@ -331,8 +331,8 @@ Pour finaliser la transition, le menu libère proprement toute la mémoire allou
 \subsection{Gestion du personnage}
 
 
-Un personnage est défini par son type (\emph{BRUTE, CHASSEUR, ASSASIN et MAGE}) qui est de type énuméré.
-Chaque personnage possède des caractèristiques qui varient selon le type de personnage. Ces caractèristiques sont regroupés dans une structure qui permet de réprésenter le personnage.
+Un personnage est défini par son type (\emph{BRUTE, CHASSEUR, ASSASSIN et MAGE}) qui est de type énuméré.
+Chaque personnage possède des caractéristiques qui varient selon le type de personnage. Ces caractéristiques sont regroupés dans une structure qui permet de représenter le personnage.
 Le fonctionnement du personnage repose sur plusieurs étapes :
 
 \begin{itemize}
@@ -396,7 +396,7 @@ Il suffit de faire une boucle sur toutes les cases de la carte et de stocker dan
 
 Le bilan de notre projet est assez positif.
 En effet, les fonctionnalités principales de notre jeu ont été réalisées.
-Malgré tout, plusieurs fonctionnalités secondaires n'ont pas pu être implementé, comme par exemple les équipements qui augmentent les statistiques du joueur.
+Malgré tout, plusieurs fonctionnalités secondaires n'ont pas pu être implémenté, comme par exemple les équipements qui augmentent les statistiques du joueur.
 Le planning prévisionnel quant à lui n'a pas été entièrement respecté.
 D'abord, nous avons souvent pris du retard sur certaines tâches à faire.
 De plus, nous sommes parfois revenus sur des fonctionnalités précédemment implémentées pour les améliorer ou les modifier.
