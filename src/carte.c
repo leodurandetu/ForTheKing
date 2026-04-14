@@ -653,27 +653,19 @@ void deplacer_monstres(SDL_Renderer * rendererPrincipal, case_t ** carte, perso_
 
             if (monstre != NULL && !dejaDeplace[y][x]) {
                 int direction = rand() % NB_DIRECTIONS;
-                int nx = x, ny = y;
 
-                switch (direction) {
+                int dx[2][6] = {
+                    { +1,  0, -1, -1,  0, +1 },
+                    { +1,  0, -1, -1,  0, +1 }
+                };
 
-                    case HAUT:
-                        ny = y - 1;
-                        break;
+                int dy[2][6] = {
+                    {  0, +1,  0, -1, -1, -1 },
+                    { +1, +1, +1,  0, -1,  0 }
+                };
 
-                    case BAS:
-                        ny = y + 1;
-                        break;
-
-                    case GAUCHE:
-                        nx = x - 1;
-                        break;
-
-                    case DROITE:
-                        nx = x + 1;
-                        break;
-
-                }
+                int nx = x + dx[x % 2][direction];
+                int ny = y + dy[x % 2][direction];
 
                 dejaDeplace[y][x] = 1;
 

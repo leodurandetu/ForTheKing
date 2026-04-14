@@ -94,8 +94,10 @@ typedef struct {
 typedef enum {
     HAUT,
     BAS,
-    GAUCHE,
-    DROITE,
+    GAUCHE_HAUT,
+    GAUCHE_BAS,
+    DROITE_HAUT,
+    DROITE_BAS,
     NB_DIRECTIONS
 } direction_t;
 
