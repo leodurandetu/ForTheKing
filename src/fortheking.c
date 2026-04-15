@@ -84,7 +84,7 @@ int main(int argc,char *argv[]) {
 
     if (charger_sauvegarde == 1) {
         perso = calloc(1,sizeof(perso_t));
-        charger_partie("sauvegarde_01.txt", perso, carte, renderer);
+        charger_partie("sauvegarde_01.txt", perso, carte, renderer, &vies_globales);
         classe_choisie = perso->type;
     } else {
         generer_eau(carte);
@@ -634,7 +634,7 @@ int main(int argc,char *argv[]) {
 
     // Sauvegarde dans un fichier
     if (etat != VICTOIRE) {
-        sauvegarder_partie("sauvegarde_01.txt", perso, carte, renderer);
+        sauvegarder_partie("sauvegarde_01.txt", perso, carte, renderer, vies_globales);
     }
 
     // --- Nettoyage des ressources ---

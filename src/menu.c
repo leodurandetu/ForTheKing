@@ -573,11 +573,6 @@ int main() {
                     }
                 }
 
-                /* Bouton musique toujours accessible */
-                if (SDL_PointInRect(&p, &btnMusique)) {
-                    if (Mix_PausedMusic()) Mix_ResumeMusic();
-                    else Mix_PauseMusic();
-                }
             }
 
             if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT)

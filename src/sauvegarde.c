@@ -30,11 +30,18 @@ int charger_inventaire(FILE *fichier, inventaire_t *inv, SDL_Renderer *renderer)
     return 1;
 }
 
-int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SDL_Renderer * renderer) {
+int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SDL_Renderer * renderer, int vies_globales) {
     FILE *fichier = fopen(nomFichier, "wb");
 
     if (!fichier) {
         perror("Erreur lors de l'ouverture du fichier de sauvegarde");
+        return 0;
+    }
+
+    /* Sauvegarde des vies globales */
+    if (fwrite(&(vies_globales), sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de l'écriture des données du personnage.\n");
+        fclose(fichier);
         return 0;
     }
 
@@ -267,13 +274,24 @@ int sauvegarder_partie(const char * nomFichier, perso_t * perso, case_t ** carte
     return 1;
 }
 
-int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SDL_Renderer * renderer) {
+int charger_partie(const char * nomFichier, perso_t * perso, case_t ** carte, SDL_Renderer * renderer, int * vies_globales) {
     FILE *fichier = fopen(nomFichier, "rb");
 
     if (!fichier) {
         perror("Erreur lors de l'ouverture du fichier de chargement");
         return 0;
     }
+
+    /* Chargement des vies globales */
+    int vies;
+
+    if (fread(&vies, sizeof(int), 1, fichier) != 1) {
+        fprintf(stderr, "Erreur lors de la lecture des données des vies globales.\n");
+        fclose(fichier);
+        return 0;
+    }
+
+    *vies_globales = vies;
 
     /* Chargement du personnage */
     int x;
