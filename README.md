@@ -25,7 +25,7 @@ Le jeu comporte une dimension de survie : si le personnage meurt, la partie s’
 Le joueur contrôle un personnage. Le personnage a des statistiques (points de vie, dégâts, force etc.) différentes selon la classe choisie.
 
 **Déplacements**  
-Le personnage se déplace tour par tour sur la carte. Chaque déplacement consomme des points de déplacement. Il faut passer son tour pour récupérer  des points. Sur certaines cases comme l'eau, la boue, la montagne et les arbres on ne peut pas se déplacer.
+Le personnage se déplace tour par tour sur la carte. Chaque déplacement consomme des points de déplacement. Les cases où on peut se déplacer ont un carré noir au milieu. Il faut passer son tour pour récupérer des points. Sur certaines cases comme l'eau, la boue, la montagne et les arbres on ne peut pas se déplacer.
 
 **Exploration**  
 La carte est partiellement cachée au début par un brouillard. En se déplaçant, le joueur découvre des campements et des sanctuaires.
@@ -36,6 +36,19 @@ Les combats se déroulent au tour par tour. Les attaques et les défenses se bas
 **Équipement et objets**  
 Le héros peut trouver des objets comme des kits de soins. Les objets peuvent être utilisés pour regagner des statistiques pour le personnage. Il peut aussi augmenter
 ses statistiques (dégâts, force, intélligence, rapidité et expérience) en récupérant des points de chaque statistique dans différents sanctuaires. Le joueur a la possibilité de se reposer dans des campements afin de récupérer soit une partie de ses points de vie ou soit la totalité. Pour cela il devra dépenser des pièces d'or.
+
+**Expérience et niveau**
+Le personnage gagne de l'expérience en tuant des monstres ou en faisant des quêtes.
+Une fois la barre d'expérience pleine, le personnage gagne un niveau.
+Ce gain de niveau fait gagner des statistiques bonus.
+
+**Statistiques des personnages**
+- Force (En rouge) : augmente les dégâts (5 Force = 1 Dégât)
+- Intelligence (En bleu) : pas implémenté
+- Rapidité (En vert) : pas implémenté
+- Evasion (En jaune/or) : pas implémenté
+- Barre rouge : santé du personnage
+- Barre bleue : expérience du personnage
 
 **Mort des personnages**  
 Le personnage possède trois vies. Si le personnage perd ses trois vies, il meurt et la partie est perdue.
