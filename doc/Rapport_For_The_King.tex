@@ -237,8 +237,9 @@ On obtient alors un bruit "fluide" et continu, qui ressemble à des formes natur
 
 \subsection{Affichage du jeu}
 
-L'affichage du jeu principal est basé sur une grille hexagonale \textit{flat-top} (le haut et le bas plats). Ce format est choisi volontairement pour son rendu esthétique, pour l'adapter au style artistique du projet. 
-Pour l'implémentation mathématique de cette grille, la conception s'appuie sur la documentation de référence \textit{Red Blob Games}. La conversion des coordonnées de grille en pixels est assurée par la fonction \emph{case\_vers\_pixels} : les colonnes impaires sont décalées verticalement d'une demi-hauteur, avec un espacement horizontal constant pour assurer l'emboîtement sans trou visible.
+L’affichage du jeu principal repose sur une grille hexagonale \textit{flat-top} (avec le haut et le bas plats). Ce choix est surtout lié au rendu visuel, qui correspond mieux au style artistique du projet.
+Pour la partie mathématique, l’implémentation s’appuie sur la documentation de référence \textit{Red Blob Games}, qui explique bien le fonctionnement des grilles hexagonales. 
+La conversion des coordonnées de la grille en pixels est gérée par la fonction \emph{case\_vers\_pixels} : les colonnes impaires sont décalées verticalement d’une demi-hauteur, tandis que l’espacement horizontal reste constant pour permettre un bon emboîtement des cases sans espace visible.
 
 \begin{figure}[h]
 \centering
@@ -246,10 +247,10 @@ Pour l'implémentation mathématique de cette grille, la conception s'appuie sur
 \caption{Carte hexagonale}
 \end{figure}
 
-Afin d'optimiser la lisibilité pendant une action (le personnage se déplace d'une case), la caméra reste centrée en permanence sur le personnage, ce qui permet ainsi un maximum de visibilité sur l'environnement. Un décalage global (\emph{decalage\_x}, \emph{decalage\_y}) est calculé à chaque image et appliqué à l'ensemble de la carte. Ensuite, le rendu suit un ordre strict en couches (tuiles de biome, décor, brouillard, personnage, puis interface). Cette logique d'empilement évite les erreurs visuelles. Le brouillard de guerre est conçu pour encourager l'exploration et est un simple marqueur dans la structure des cases : une fois la zone découverte, le voile se dissipe de manière permanente.
-
-Dès le début du développement, la création d'une bibliothèque d'affichage commune (\emph{affichage\_commun.c}) constitue une priorité. Cette anticipation garantit un code propre et évite la redondance pour les éléments récurrents (\emph{creer\_texte}, \emph{dessiner\_barre}, \emph{dessiner\_inventaire}). 
-Enfin, pour livrer une application robuste, le jeu s'adapte dynamiquement à n'importe quelle résolution via \emph{SDL\_GetRendererOutputSize}.
+Pour améliorer la lisibilité pendant les déplacements, la caméra reste centrée sur le personnage. Cela permet de garder une bonne visibilité sur la zone autour du joueur. Un décalage global (\emph{decalage\_x}, \emph{decalage\_y}) est recalculé à chaque image et appliqué à toute la carte.
+Le rendu est ensuite effectué par couches : d’abord les tuiles de biome, puis les éléments de décor, ensuite le brouillard de guerre, le personnage, et enfin l’interface. Cette organisation évite les problèmes d’affichage. Le brouillard de guerre sert surtout à encourager l’exploration : il est stocké comme une information dans les cases, et disparaît définitivement une fois la zone découverte.
+Dès le début du projet, une bibliothèque d’affichage commune (\emph{affichage\_commun.c}) a été mise en place. L’objectif était de regrouper les fonctions utilisées fréquemment, comme \emph{creer\_texte}, \emph{dessiner\_barre} ou \emph{dessiner\_inventaire}, afin d’éviter la duplication de code et de garder une structure plus propre.
+Enfin, pour que le jeu reste utilisable sur différentes machines, il s’adapte automatiquement à la résolution de l’écran grâce à \emph{SDL\_GetRendererOutputSize}.
 
 \subsection{Gestion des combats}
 
