@@ -68,9 +68,9 @@ cd ForTheKing
 Ce projet utilise SDL2.  
 Voici un court guide pour l'installer sur Unix ou Linux :  
 _sudo apt update_  
-'''bash 
+```bash 
 _sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev_  
-'''
+```
 _sudo apt install gcc (si vous n'avez pas installé de compilateur gcc)_
 
 **Compilation du projet**  
