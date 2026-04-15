@@ -79,11 +79,16 @@ sudo apt install gcc
 **Compilation du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
 Important : pour compiler le projet, vous devez avoir le compilateur C gcc.  
-_make all_
+```bash 
+make all
+```
 
 **Test du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
-_./bin/menu_  : lance le menu du jeu pour choisir le personnage ou accéder aux réglages.  
+Cette commande lance le menu du jeu pour choisir le personnage ou accéder aux réglages.  
+```bash 
+./bin/menu 
+```
 
 ## 🎮 Comment Jouer au Jeu
 
