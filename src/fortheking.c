@@ -381,7 +381,7 @@ int main(int argc,char *argv[]) {
                                              if (get_pieces(perso) >= 7) {
                                                 enlever_pieces(perso, 7);
 
-                                                float pv_recuperes = perso->sante * 0.5;
+                                                float pv_recuperes = perso->sante_max * 0.5;
                                                 int nouv_sante = (int) (perso->sante + pv_recuperes);
 
                                                 if (nouv_sante > perso->sante_max) {
