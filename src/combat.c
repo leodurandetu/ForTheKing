@@ -293,17 +293,26 @@ void attaque_legere(combat_t *combat){
 
 void attaque_lourde(combat_t *combat){
     /* Lecture du bruitage d'attaque lourde */
-    if (combat->son_attaque_lourde)
+    if (combat->son_attaque_lourde) {
         Mix_PlayChannel(-1, combat->son_attaque_lourde, 0);
-    
-    int pourcentage = 30 + rand() % 31; // 30% à 60%
-    int vrai_degats = (pourcentage * combat->perso->degats)/100;
-
-    combat->monstre->sante -= vrai_degats;
-
-    if (combat->monstre->sante < 0){
-        combat->monstre->sante = 0;
     }
+    
+    /* Nombre aléatoire entre 1 et 3 
+    Si le nombre est != 1, l'attaque réussit
+    2 chances sur 3 de réussir l'attaque lourde
+    */
+    if (((rand() % 3) + 1) != 1) {
+        int pourcentage = 30 + rand() % 31; // 30% à 60%
+        int vrai_degats = (pourcentage * combat->perso->degats)/100;
+
+        combat->monstre->sante -= vrai_degats;
+
+        if (combat->monstre->sante < 0){
+            combat->monstre->sante = 0;
+        }
+
+    }
+
 }
 
 void attaque_legere_monstre(combat_t *combat){
