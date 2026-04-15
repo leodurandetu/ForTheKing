@@ -244,13 +244,19 @@ La conversion des coordonnées de la grille en pixels est gérée par la fonctio
 \begin{figure}[h]
 \centering
 \includegraphics[height=5cm]{carte.png}
-\caption{Carte hexagonale}
+\caption{La carte de notre jeu hexagonale}
 \end{figure}
 
 Pour améliorer la lisibilité pendant les déplacements, la caméra reste centrée sur le personnage. Cela permet de garder une bonne visibilité sur la zone autour du joueur. Un décalage global (\emph{decalage\_x}, \emph{decalage\_y}) est recalculé à chaque image et appliqué à toute la carte.
 Le rendu est ensuite effectué par couches : d’abord les tuiles de biome, puis les éléments de décor, ensuite le brouillard de guerre, le personnage, et enfin l’interface. Cette organisation évite les problèmes d’affichage. Le brouillard de guerre sert surtout à encourager l’exploration : il est stocké comme une information dans les cases, et disparaît définitivement une fois la zone découverte.
 Dès le début du projet, une bibliothèque d’affichage commune (\emph{affichage\_commun.c}) a été mise en place. L’objectif était de regrouper les fonctions utilisées fréquemment, comme \emph{creer\_texte}, \emph{dessiner\_barre} ou \emph{dessiner\_inventaire}, afin d’éviter la duplication de code et de garder une structure plus propre.
 Enfin, pour que le jeu reste utilisable sur différentes machines, il s’adapte automatiquement à la résolution de l’écran grâce à \emph{SDL\_GetRendererOutputSize}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[height=5cm]{../img_jeu/hexagones.png}
+\caption{Principe mathématique de l'affichage hexagonal}
+\end{figure}
 
 \subsection{Gestion des combats}
 
@@ -409,14 +415,14 @@ Il nous a aussi permis de connaître nos limites et comment les surmonter.
 \section{Bibliographie}
 
 \begin{thebibliography}{REF}
-
 	\bibitem{Le bruit de Perlin} https://fr.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-noise/a/perlin-noise
+	\bibitem{Affichage hexagonal} https://www.redblobgames.com/grids/hexagons/
 \end{thebibliography}
 
 \newpage
 
 \section{Annexe}
 
-aaaa
+A completer
 
 \end{document}

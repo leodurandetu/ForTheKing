@@ -1,0 +1,19 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {section}{\numberline {2}Conception}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Présentation du jeu}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Fonctionnalités du jeu}{5}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Organisation du projet}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Planning prévisionnel}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Répartition des tâches}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Outils techniques utilisés}{7}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Développement}{8}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Génération aléatoire de la carte}{8}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Affichage du jeu}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Gestion des combats}{10}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Gestion du menu}{12}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Gestion du personnage}{13}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Gestion de la sauvegarde}{15}{subsection.4.6}%
+\contentsline {section}{\numberline {5}Bilan et résultats}{16}{section.5}%
+\contentsline {section}{\numberline {6}Bibliographie}{16}{section.6}%
+\contentsline {section}{\numberline {7}Annexe}{17}{section.7}%
