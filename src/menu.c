@@ -325,7 +325,7 @@ int main() {
         surf = TTF_RenderText_Blended(policeMenu, "Continuer", couleurTexte);
         texContinuer = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texContinuer, NULL, NULL, &wContinuer, &hContinuer); SDL_FreeSurface(surf);
 
-        surf = TTF_RenderText_Blended(policeMenu, "Options", couleurTexte);
+        surf = TTF_RenderText_Blended(policeMenu, "Options   &   Commandes", couleurTexte);
         texParam = SDL_CreateTextureFromSurface(renderer, surf); SDL_QueryTexture(texParam, NULL, NULL, &wParam, &hParam); SDL_FreeSurface(surf);
 
         surf = TTF_RenderText_Blended(policeMenu, "Quitter", couleurTexte);
