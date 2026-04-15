@@ -54,7 +54,8 @@ Ce gain de niveau fait gagner des statistiques bonus.
 Le personnage possède trois vies. Si le personnage perd ses trois vies, il meurt et la partie est perdue.
 
 **Objectif final**  
-Pour gagner, il faut vaincre le boss final afin de sauver le royaume.
+Pour gagner, il faut vaincre le boss final afin de sauver le royaume. 
+Ce boss final peut être attaqué dans une des 4 tours situées proches des quatres coins de la carte.
 
 ## 🛠️ Outils Techniques utilisés
 
