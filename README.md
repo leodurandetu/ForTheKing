@@ -13,11 +13,11 @@ Ceci est le répertoire GitHub d'un projet de Licence 2 Informatique à l'univer
 Notre projet est basé sur le jeu For The King.
 For The King est un jeu de rôle et d’aventure au tour par tour.
 
-Le but du jeu est de sauver le royaume de Fahrul, plongé dans le chaos après la mort du roi. Le joueur contrôle un groupe de un à trois héros qui doivent explorer le monde, accomplir des quêtes, combattre des ennemis et vaincre une menace finale.
+Le but du jeu est de sauver le royaume de Fahrul, plongé dans le chaos après la mort du roi. Le joueur contrôle un personnage qui doit explorer le monde, accomplir des quêtes, combattre des ennemis et vaincre une menace finale.
 
 Le monde est généré aléatoirement à chaque partie, ce qui rend chaque aventure différente. Les déplacements se font sur une carte où l’on découvre des villes, des donjons et des événements. Les combats sont au tour par tour et reposent sur des statistiques et des jets de dés.
 
-Le jeu comporte une dimension de survie : si tous les héros meurent, la partie s’arrête. L’objectif principal est donc d’explorer, progresser, devenir plus fort et rétablir la paix dans le royaume.
+Le jeu comporte une dimension de survie : si le personnage meurt, la partie s’arrête. L’objectif principal est donc d’explorer, progresser, devenir plus fort et rétablir la paix dans le royaume.
 
 ## ⚙️ Fonctionnalités détaillées
 
@@ -31,11 +31,11 @@ Le personnage se déplace tour par tour sur la carte. Chaque déplacement consom
 La carte est partiellement cachée au début par un brouillard. En se déplaçant, le joueur découvre des campements et des sanctuaires.
 
 **Combats**  
-Les combats se déroulent au tour par tour. Les attaques et les défenses se basent sur un système aléatoire et les statistiques du personnage. Il y a deux choix d'attaque : attaque lourde et légère. Le personnage a deux chance sur trois de réussir a infliger une attaque lourde au monstre.
+Les combats se déroulent au tour par tour. Les attaques et les défenses se basent sur un système aléatoire et les statistiques du personnage. Il y a deux choix d'attaque : attaque lourde et légère. Le personnage a deux chance sur trois de réussir à infliger une attaque lourde au monstre.
 
 **Équipement et objets**  
 Le héros peut trouver des objets comme des kits de soins. Les objets peuvent être utilisés pour regagner des statistiques pour le personnage. Il peut aussi augmenter
-ses statistiques (dégâts, force, intélligence, rapidité et expérience) en récupérant des points de chaque statistique dans différents sanctuaires. Le joueur a la possibilité de se reposer dans des campements afin de récuper soit une partie de ses points de vie ou soit la totalié. Pour cela il devra dépenser des pièces d'or.
+ses statistiques (dégâts, force, intélligence, rapidité et expérience) en récupérant des points de chaque statistique dans différents sanctuaires. Le joueur a la possibilité de se reposer dans des campements afin de récupérer soit une partie de ses points de vie ou soit la totalité. Pour cela il devra dépenser des pièces d'or.
 
 **Mort des personnages**  
 Le personnage possède trois vies. Si le personnage perd ses trois vies, il meurt et la partie est perdue.
