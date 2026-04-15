@@ -385,7 +385,7 @@ int main() {
 
     /* Declarations des rectangles */
     SDL_Rect btnJouer, btnContinuer, btnParam, btnQuitter;
-    SDL_Rect btnMusique, barreVolumeFond, btnFullscreen, btnFermerOptions;
+    SDL_Rect  barreVolumeFond, btnFullscreen, btnFermerOptions;
     SDL_Rect rectTxtJouer, rectTxtContinuer, rectTxtParam, rectTxtQuitter;
     SDL_Rect rectTxtTitre, rectTxtVolume;
     SDL_Rect rectTxtFullscreen, rectTxtCroix;
