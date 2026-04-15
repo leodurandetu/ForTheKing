@@ -407,16 +407,30 @@ Lorsque la partie se termine ou que le personnage a perdu, la fonction \emph{det
 
 \subsection{Gestion de la sauvegarde}
 
-Avant que le programme se termine, une sauvegarde de la partie est effectuée.
-Il est donc conseillé de terminer le programme proprement, en appuyant sur le bouton "Quitter" du menu principal.
-Cette sauvegarde contient les données du personnage, ainsi que la carte et les différents bâtiments et monstres qui se trouvent sur chaque case.
-Lorsqu'on relance le jeu à nouveau, et qu'on appuie sur le bouton "Continuer", le jeu charge la dernière et unique sauvegarde.
-Au lieu de générer une nouvelle carte, le jeu va récupérer les informations de l'ancienne partie.
-Les sauvegardes sont stockées dans un fichier .txt sous format binaire.
-A chaque sauvegarde, on écrase l'ancien fichier, et donc le nouveau fichier commence vide.
-D'abord, il faut sauvegarder la carte.
-Comme chaque case a les mêmes attributs et la même structure en mémoire, la sauvegarde de la carte devient simple.
-Il suffit de faire une boucle sur toutes les cases de la carte et de stocker dans le fichier tous les attributs à la suite.
+La sauvegarde est obligatoire pour permettre au joueur de reprendre sa partie d'une session à l'autre. Pour cela, nous avons mis en place un système de sauvegarde et de chargement binaire via \texttt{sauvegarde.c}. Le binaire nous permet d'écrire les données directement depuis la mémoire, ce qui rend les fichiers plus rapide à lire.
+
+\medskip
+
+\textbf{décomposition des données} \\
+Nous avons rencontré un problème technique : on ne peut pas sauvegarder directement une structure qui contient des pointeurs, comme les monstres ou les textures car les adresses mémoire changent à chaque lancement du jeu. Nous avons donc opté pour une décomposition des éléments en plusieurs étapes :
+
+\begin{itemize}
+    \item \textbf{Sauvegarde par champs} : Pour le personnage, nous écrivons chaque statistique (santé, expérience, coordonnées) une à une avec la fonction \texttt{fwrite}.
+    \item \textbf{L'inventaire} : Nous avons créé une fonction \texttt{sauvegarder\_inventaire} qui n'enregistre que le type de l'objet et sa quantité.
+    \item \textbf{Carte} : On parcourt toute la grille pour enregistrer le biome, les bâtiments et l'état du brouillard de chaque case.
+\end{itemize}
+
+\medskip
+
+\textbf{Chargement de la sauvegarde} \\
+
+Le chargement est l'étape la plus complexe, car nous devons reconstruire le jeu à partir de données brutes :
+
+\begin{itemize}
+    \item \textbf{Allocation de mémoire} : Pour les monstres, nous lisons un indicateur (un booléen) pour savoir s'il y en avait un sur la case. Si oui, on utilise \texttt{malloc} pour allouer une nouvelle structure \texttt{monstre\_t} en mémoire avant d'inserer les statistiques lues.
+    \item \textbf{Rechargement des images} : Une fois les types d'objets chargés dans l'inventaire, nous appelons la fonction \texttt{remplir\_texture\_objet} pour lier à nouveau chaque objet aux images gérées par le moteur graphique SDL2.
+    \item \textbf{Tests} : Nous avons également intégré des tests à chaque étape de lecture avec \texttt{fread}. Si le fichier est corrompu ou incomplet, le programme s'arrête proprement pour éviter de lancer le jeu avec des données erronées. Cela rend le programme plus robuste.
+\end{itemize}
 
 \section{Bilan et résultats}
 
