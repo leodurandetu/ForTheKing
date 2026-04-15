@@ -88,7 +88,9 @@ cd ForTheKing
 **Installation des librairies nécessaires**  
 Ce projet utilise SDL2.  
 Voici un court guide pour l'installer sur Unix ou Linux :  
-_sudo apt update_  
+```bash 
+sudo apt update
+```  
 ```bash 
 sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev_  
 ```
