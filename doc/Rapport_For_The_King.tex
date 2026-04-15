@@ -237,24 +237,19 @@ On obtient alors un bruit "fluide" et continu, qui ressemble à des formes natur
 
 \subsection{Affichage du jeu}
 
-L'affichage du jeu est basé sur la grille hexagonales \textit{flat-top}, cela signifie que le haut et le bas de l'hexagone sont plats.
-Chaque hexagone a trois données : le rayon, la largeur et la hauteur, qui sont calculées à partir de la taille de la case définie. 
-Pour placer correctement chaque case, leurs coordonnées de grille sont converties en pixels.
-Les colonnes impaires sont décalées verticalement d'une demi-case vers le bas. \\
-
-L'espacement horizontal entre deux colonnes est calculé de sorte que les hexagones s'emboîtent correctement sans trou visible.
-La caméra est centrée sur le personnage. À chaque image, on calcule la position du personnage en pixels, puis on fait un décalage global qu'on applique pour chaque case.
-Donc, chaque déplacement du personnage, implique le mouvement de la carte entière autour de lui et le personnage reste visuellement au centre de l'écran. \\
+L'affichage du jeu principal est basé sur une grille hexagonale \textit{flat-top} (le haut et le bas plats). Ce format est choisi volontairement pour son rendu esthétique, pour l'adapter au style artistique du projet. 
+Pour l'implémentation mathématique de cette grille, la conception s'appuie sur la documentation de référence \textit{Red Blob Games}. La conversion des coordonnées de grille en pixels est assurée par la fonction \emph{case\_vers\_pixels} : les colonnes impaires sont décalées verticalement d'une demi-hauteur, avec un espacement horizontal constant pour assurer l'emboîtement sans trou visible.
 
 \begin{figure}[h]
 \centering
 \includegraphics[height=5cm]{carte.png}
-\caption{Carte}
+\caption{Carte hexagonale}
 \end{figure}
 
-L'ordre du rendu suit les étapes suivantes : dessin des tuiles hexagonales avec leur biome, puis les éléments du décor tels que les obstacles et les bâtiments.
-Ensuite, le personnage est affiché par-dessus la carte et, finalement, l'interface utilisateur : barre de vie, barre d'expérience, inventaire, panneaux de quêtes et menus.
-Toutes les dimensions et positions sont calculées dynamiquement via SDL2 en fonction de la taille réelle de la fenêtre, ce qui permet au jeu de s'adapter à n'importe quelle résolution sans déformation de l'affichage. 
+Afin d'optimiser la lisibilité pendant une action (le personnage se déplace d'une case), la caméra reste centrée en permanence sur le personnage, ce qui permet ainsi un maximum de visibilité sur l'environnement. Un décalage global (\emph{decalage\_x}, \emph{decalage\_y}) est calculé à chaque image et appliqué à l'ensemble de la carte. Ensuite, le rendu suit un ordre strict en couches (tuiles de biome, décor, brouillard, personnage, puis interface). Cette logique d'empilement évite les erreurs visuelles. Le brouillard de guerre est conçu pour encourager l'exploration et est un simple marqueur dans la structure des cases : une fois la zone découverte, le voile se dissipe de manière permanente.
+
+Dès le début du développement, la création d'une bibliothèque d'affichage commune (\emph{affichage\_commun.c}) constitue une priorité. Cette anticipation garantit un code propre et évite la redondance pour les éléments récurrents (\emph{creer\_texte}, \emph{dessiner\_barre}, \emph{dessiner\_inventaire}). 
+Enfin, pour livrer une application robuste, le jeu s'adapte dynamiquement à n'importe quelle résolution via \emph{SDL\_GetRendererOutputSize}.
 
 \subsection{Gestion des combats}
 
