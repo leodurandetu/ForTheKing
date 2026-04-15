@@ -75,8 +75,14 @@ Remarque : ce guide est valable pour les machines Unix ou Linux.
 
 **Initialisation du dépôt git**  
 cd chemin/ou/stocker/le/projet  
-git clone https://github.com/leodurandetu/ForTheKing.git  
+_Récupérer le jeu :_ 
+```bash 
+git clone https://github.com/leodurandetu/ForTheKing.git
+```
+_Se déplacer dans le répertoire qui contient le jeu :_ 
+```bash
 cd ForTheKing
+```
 
 **Installation des librairies nécessaires**  
 Ce projet utilise SDL2.  
