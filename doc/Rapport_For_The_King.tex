@@ -63,16 +63,16 @@ Une bibliographie et une annexe sont également disponibles.
 
 \section{Conception}
 
-La phase de conception permet de réfléchir sur comment le jeu sera construit avant de coder. L'idée principale est de créer un système composé de plusieurs parties qui fonctionnent de manière indépendante, c'est-à-dire que chaque élément du jeu comme la carte, les combats et l'interface utilisateur peut être développé et testé séparément sans affecter les autres parties du jeu. Cette façon de réflexion est basée sur trois principes simples :
+La phase de conception permet de réfléchir sur comment le jeu sera construit avant de coder. L'idée principale est de créer un système composé de plusieurs parties qui fonctionnent de manière indépendante, c'est-à-dire que chaque élément du jeu comme la carte, les combats et l'interface utilisateur peut être développé et testé séparément sans affecter les autres parties du jeu. Cette approche est basée sur trois principes simples :
 
 \begin{itemize}
-    \item \textbf{Séparation des éléments} : chaque fonctionnalité est séparée pour éviter qu'une modification ne casse pas le reste du programme (\textbf{flexible}).
+    \item \textbf{Séparation des éléments} : chaque fonctionnalité est séparée pour éviter qu'une modification ne casse le reste du programme (\textbf{flexible}).
     \item \textbf{Évolutivité} : la structure facilite les ajouts futurs de nouveaux personnages ou de nouvelles mécaniques par exemple (\textbf{réutilisable}).
     \item \textbf{Flexibilité} : l'architecture permet une meilleure gestion de la carte générée dynamiquement (\textbf{évolutif}).
     \item \textbf{Clarté du code} : l'organisation permet de comprendre rapidement comment le programme fonctionne sans perdre du temps (\textbf{lisible} et \textbf{maintenable}).
 \end{itemize}
 
-Cela permet donc de maintenir et que les mécaniques de gameplay pourront être modifiées tout au long du développement du jeu.
+Cela garantit que les mécaniques de gameplay pourront être maintenues et modifiées tout au long du développement du jeu.
 
 \subsection{Présentation du jeu}
 
@@ -80,13 +80,13 @@ Cela permet donc de maintenir et que les mécaniques de gameplay pourront être 
 
 \noindent\textit{For The King} est un jeu de rôle (RPG) et d'aventure intégrant des mécaniques de combat au tour par tour. 
 Le joueur est placé dans le royaume, plongé dans le chaos. 
-L'objetif est de préparer le héros à un affrontement contre le boss final pour restaurer la paix dans le royaume. 
+L'objectif est de préparer le héros à un affrontement contre le boss final pour restaurer la paix dans le royaume. 
 
 Le gameplay repose sur une boucle de progression stratégique autour de trois axes : 
 
 \begin{itemize}
 	\item \textbf{L'exploration et les quêtes} : Le joueur parcourt la carte pour découvrir des campements, des sanctuaires et remplir des objectifs secondaires.
-	\item \textbf{Le combat au tour par tour} : Les affrontements opposent le personnage aux différents monstres. Chaque tour permet de choisir entre une attaque légère (précise mais moins puissante) et une attaque lourde (dégâts élevés mais probabilité d'échec élevés).
+	\item \textbf{Le combat au tour par tour} : Les affrontements opposent le personnage aux différents monstres. Chaque tour permet de choisir entre une attaque légère (précise mais moins puissante) et une attaque lourde (dégâts élevés mais probabilité d'échec élevée).
 	\item \textbf{La gestion des ressources} : L'élimination des ennemis octroie de l'or et des objets de soin. L'or est une ressource essentielle permettant de se reposer afin de regagner de la vie ou d'acheter des kits de soin dans les campements.
 \end{itemize} 
 
@@ -96,7 +96,7 @@ Le gameplay repose sur une boucle de progression stratégique autour de trois ax
 
 \noindent La progression du personnage est nécessaire pour vaincre le boss final. 
 Le joueur peut obtenir des bénédictions via les sanctuaires. 
-Les sanctuaires sont rares c'est pourquoi ils offrent des bonus de statistiques permanents. 
+Les sanctuaires sont rares, c'est pourquoi ils offrent des bonus de statistiques permanents. 
 Chaque sanctuaire ne peut être utilisé qu'une seule fois, ce qui demande au joueur de faire des choix stratégiques durant son aventure.
 De plus, le personnage peut gagner de l'expérience en gagnant des combats contre des monstres. En gagnant de l'expérience, 
 le personnage peut monter de niveau, ce qui augmente ses statistiques légèrement.
@@ -138,13 +138,13 @@ Quêtes & Finir les quêtes pour avoir des récompenses. \\
 
 Pour planifier les tâches, nous avons utilisé un outil spécifique : les diagrammes de Gantt.
 Cet outil nous a permis de créer un planning prévisionnel au début du projet, ainsi qu'un planning réel à la fin du projet.
-Cela nous a permis de comparer les deux pour voir si on avait respecté le planning prévisionnel initial.
+Cela nous a permis de comparer les deux pour voir si nous avions respecté le planning prévisionnel initial.
 
 \begin{enumerate} 
-	\item Dans un premier temps, nous avons commencé par la phase d'initialisation, qui consiste notamment en la mise en place du dépôt GitHub ainsi que l'installation des librairies nécessaires comme SDL2. 
+	\item Dans un premier temps, nous avons commencé par la phase d'initialisation, qui a consisté notamment en la mise en place du dépôt GitHub ainsi que l'installation des librairies nécessaires comme SDL2. 
 	\item Puis dans un second temps, la phase de préparation a consisté à définir les bases du projet: les règles du jeu, les quêtes, les combats, la structure de la carte et les attributs des monstres et personnages. 
 	\item La phase principale du projet a été le codage et les tests, qui se sont étalés sur plusieurs semaines. Nous avons travaillé sur la génération aléatoire de la carte, l'affichage avec SDL2, la création des personnages et des menus, ainsi que la programmation des systèmes de combat, des monstres, des quêtes et du boss final. Cette phase a également inclus la gestion des sauvegardes, des objets et de l'inventaire, ainsi que de nombreux tests et corrections de bugs. On remarque que certaines tâches ont pris plus de temps que prévu, notamment les fonctionnalités complexes comme les combats et la génération de la carte. 
-	\item Enfin, la phase de livraison a regroupé la rédaction du rapport, la préparation de la soutenance ainsi que la documentation du code avec Doxygen. Cette phase a permis de finaliser le projet et de le rendre présentable et compréhensible de tout le monde. 
+	\item Enfin, la phase de livraison a regroupé la rédaction du rapport, la préparation de la soutenance ainsi que la documentation du code avec Doxygen. Cette phase a permis de finaliser le projet et de le rendre présentable et compréhensible par tout le monde. 
 \end{enumerate}
 
 \subsection{Répartition des tâches}
@@ -188,7 +188,7 @@ Génération de la carte & Toute l'équipe \\
 \hline
 \end{tabular}
 \label{tab_taches}
-\caption{Les différents étudiants qui ont travaillé sur ce projet ainsi que les tâches qu'ils ont effectué.} 
+\caption{Les différents étudiants qui ont travaillé sur ce projet ainsi que les tâches qu'ils ont effectuées.} 
 \end{table}
 
 \subsection{Outils techniques utilisés}
@@ -202,9 +202,9 @@ Génération de la carte & Toute l'équipe \\
 \item Git est un gestionnaire de version, c'est-à-dire un système qui enregistre l'évolution d'un fichier ou d'un ensemble de fichiers au cours du temps de manière à ce que l'on puisse rappeler une version antérieure d'un fichier à tout moment (ProGit, S. Shacon, B. Straub).
 \item Doxygen est utilisé dans notre projet en tant que générateur de documentation, plus précisement c'est un outil de programmation qui crée de la documentation destinée aux programmeurs ou aux utilisateurs finaux. Le générateur se base sur les codes sources commentés et les fichiers binaires.
 \item Des diagrammes de Gantt sont utilisés pour planifier les tâches dans notre projet.
-\item LaTeX permet de formatter à l'aide de commandes un document, un rapport, un article etc. Il a été utilisé pour ce rapport.
+\item LaTeX permet de formater à l'aide de commandes un document, un rapport, un article etc. Il a été utilisé pour ce rapport.
 \item Des IA génératives comme ChatGPT et Gemini ont été utilisées pour générer les images, les textures et les sprites du jeu.
-\item Certains éditeurs d'image en ligne ont également servis à recadrer, redimensionner ou dessiner sur les images.
+\item Certains éditeurs d'image en ligne ont également servi à recadrer, redimensionner ou dessiner sur les images.
 \item Adobe Photoshop pour dessiner et modifier à partir des sprites générés par ChatGPT et Gemini.
 \end{itemize}
 
@@ -216,7 +216,7 @@ Nous présentons les principaux systèmes du jeu ainsi que leur implémentation 
 \subsection{Génération aléatoire de la carte}
 
 La carte du jeu est un tableau en deux dimensions composée de structures de cases.
-Elle est crée par allocation dynamique pour qu'on puisse régler la taille de la carte, on le fait notamment dans les tests unitaires.
+Elle est créée par allocation dynamique pour qu'on puisse régler la taille de la carte, on le fait notamment dans les tests unitaires.
 Chaque case a ses propres caractéristiques:
 
 \begin{itemize}
@@ -224,8 +224,8 @@ Chaque case a ses propres caractéristiques:
 \item Un entier représentant si le bonus du sanctuaire a été saisi.
 \item Le biome de la case: FORET, DESERT, NEIGE, EAU, TERRE.
 \item Le terrain ou l'obstacle de la case, comme des montagnes, des arbres, un cactus etc.
-\item Le bâtiment sur la case, si il existe, comme un campement par exemple.
-\item Un pointeur sur un monstre, si il existe.
+\item Le bâtiment sur la case, s'il existe, comme un campement par exemple.
+\item Un pointeur sur un monstre, s'il existe.
 \item Un entier représentant si la case est visible ou couverte par le brouillard.
 \end{itemize}
 
@@ -259,22 +259,38 @@ Enfin, pour que le jeu reste utilisable sur différentes machines, il s’adapte
 
 \subsection{Gestion des combats}
 
-Dans ce jeu, il y a deux types de combat : 
-le combat classique effectué avec les différents monstres et le combat final avec le \emph{BOSS\_FINAL}.
+Dans ce jeu, les affrontements se divisent en deux catégories : les combats classiques contre les monstres de la carte, et l'affrontement contre le boss final. Pour cela, nous concevons un système de combat qui fonctionne de manière autonome, dans sa propre fenêtre graphique et avec sa propre logique de rendu.
 
-L'initialisation du combat se fait via la fonction \emph{creer\_combat}, qui alloue la structure \emph{combat\_t} et lie le personnage au monstre rencontré. 
-Les combats sont gérés dans une autre fenêtre que celle de la carte avec la fonction \emph{ouvrir\_fenetre\_combat}. 
-Cette dernière charge dynamiquement les textures selon le biome (via \emph{fond\_biome}) et initialise le système audio avec \emph{Mix\_OpenAudio} pour les bruitages d'attaque.
-Pour assurer le bon déroulement du combat, les éléments nécessaires sont regroupés dans une structure qui contient :
+\medskip
+
+\textbf{Initialisation et affichage adaptatif} \\
+
+Le déclenchement d'un combat via la fonction \emph{demander\_et\_lancer\_combat} entraîne l'allocation dynamique d'une structure \emph{combat\_t}. La transition visuelle est gérée par la fonction \emph{ouvrir\_fenetre\_combat}, qui se charge d'initialiser les ressources spécifiques pour ce combat. Le moteur audio y est initialisé avec \emph{Mix\_OpenAudio}, attribuant des bruitages uniques (fendage d'épée, explosion magique, etc.) selon la classe du personnage. 
+De plus, nous chargeons dynamiquement la texture de l'arrière-plan en fonction du biome de la case de la carte (forêt, désert, neige...).
+
+Pour l'affichage, géré par \emph{maj\_affichage\_fenetre\_combat}, une logique d'intégration spécifique permet de rendre l'écran \textit{responsive}. L'image de fond est mise à l'échelle dynamiquement via un calcul de ratio (\emph{fmax}) pour couvrir la fenêtre sans subir de déformation. 
+Pour l'affichage de l'interface, nous évitons d'utiliser des positions fixes « en dur » au profit d'une logique de calculs proportionnels au sein de \emph{dessiner\_interface\_combat}. Ce choix technique permet aux menus latéraux, qui regroupent les portraits et les statistiques, de se redimensionner dynamiquement pour occuper l'espace disponible sans jamais déborder de l'écran, quelle que soit la résolution. Enfin, nous renforçons l'interactivité en implémentant un retour visuel (survol) sur les icônes d'attaque : le changement de bordure et de teinte au passage de la souris confirme l'action possible, rendant la navigation plus naturelle et réactive pour le joueur.
+
+\medskip
+
+\textbf{Déroulement du combat et Intelligence Artificielle} \\
+
+Nous basons l'affrontement sur un système de tour par tour, alterné par la fonction \emph{changer\_tour}. À chaque attaque, les dégâts sont calculés de manière semi-aléatoire en appliquant un pourcentage aux dégâts de base de l'attaquant. Par exemple, l'attaque légère du joueur inflige entre 20\% et 40\% de ses dégâts totaux, tandis que son attaque lourde frappe entre 30\% et 60\%.
+L'algorithme décisionnel du monstre est implémenté dans \emph{choix\_attaque\_monstre}. Notre objectif est de créer une IA capable d'évaluer en temps réel la situation en comparant les points de vie restants (les siens et ceux du joueur) pour adapter son comportement :
 \begin{itemize}
-\item \textbf{Le personnage, le monstre et le tour :} Le tour, géré par \emph{changer\_tour}, identifie l'attaquant actif (\emph{TOUR\_JOUEUR} ou \emph{TOUR\_MONSTRE}).
-\item \textbf{L'interface visuelle :} La fenêtre SDL (\emph{pFenetre}) et son moteur de rendu (\emph{renderer}) pour afficher la scène.
-\item \textbf{Les textures et polices :} Utilisées pour afficher les informations (du personnage et du monstre) tels que les statisques, le point vie restant et le type du personage et du monstre.
- Les boutons d'action sont rendus via \emph{texture\_attaque\_legere} et \emph{texture\_attaque\_lourde}.
-\item \textbf{L'IA décisionnelle :} Pour le monstre, la fonction \sloppy \emph{choix\_attaque\_monstre} analyse les points de vie restants pour décider de la puissance de l'attaque à porter.
+    \item \textbf{Comportement agressif :} Si le monstre a peu de vie ($\le 30\%$), il tente le tout pour le tout en privilégiant l'attaque lourde (80\% de chances).
+    \item \textbf{Comportement offensif :} Si le joueur est en excellente santé ($> 60\%$), le monstre cherche à faire un maximum de dégâts en favorisant l'attaque lourde (70\% de chances).
+    \item \textbf{Comportement prudent :} Si le joueur est proche de la mort ($\le 30\%$), le monstre assure le coup de grâce avec une attaque légère, plus précise (70\% de chances).
+    \item Dans les autres cas, le comportement est équilibré, avec 50\% de chances d'utiliser chaque attaque.
 \end{itemize}
 
-Une fois le duel terminé, la fonction \emph{combat\_termine} met à jour (gain d'XP, apparition d'une \emph{TOMBE} sur la carte ou état de mort du joueur), puis la fonction \emph{detruire\_combat} libère proprement toutes les ressources mémoire et audio.
+\medskip
+
+\textbf{Fermeture du combat et gestion mémoire} \\
+
+Lorsque les PV d'un combattant tombent à zéro, la fonction \emph{combat\_termine} prend le relais. Si le joueur sort victorieux, le monstre est retiré du tableau de la carte pour être remplacé par une entité de type bâtiment (\emph{TOMBE}). Le système attribue ensuite les récompenses : gain d'expérience, or variable selon le type d'ennemi (par exemple, 1 à 5 pièces pour un Squelette, contre 3 à 7 pièces pour un Yéti), et une chance sur trois d'obtenir un kit de soins.
+À l'inverse, si le personnage meurt au combat, il perd l'une de ses trois vies. Tant qu'il lui en reste, l'aventure continue ; dans le cas contraire, la partie se termine définitivement et le joueur est contraint de recommencer une nouvelle aventure depuis le début. Cette mécanique de mort permanente partielle nous permet d'ajouter un enjeu réel à chaque décision tactique pendant les combats.
+Enfin, pour éviter les fuites, nous appelons systématiquement la fonction \emph{detruire\_combat} à la fermeture de la fenêtre. Celle-ci libère proprement toutes les ressources de la bibliothèque SDL2 utilisées temporairement, comme les ressources audio (\emph{Mix\_FreeChunk}), les polices d'écriture, et l'ensemble des textures créées pour l'interface du combat.
 
 \begin{figure}[H]
 \centering
@@ -333,7 +349,7 @@ Pour finaliser la transition, le menu libère proprement toute la mémoire allou
 
 
 Un personnage est défini par son type (\emph{BRUTE, CHASSEUR, ASSASSIN et MAGE}) qui est de type énuméré.
-Chaque personnage possède des caractéristiques qui varient selon le type de personnage. Ces caractéristiques sont regroupés dans une structure qui permet de représenter le personnage.
+Chaque personnage possède des caractéristiques qui varient selon le type de personnage. Ces caractéristiques sont regroupées dans une structure qui permet de représenter le personnage.
 Le fonctionnement du personnage repose sur plusieurs étapes :
 
 \begin{itemize}
@@ -406,11 +422,11 @@ Il suffit de faire une boucle sur toutes les cases de la carte et de stocker dan
 
 Le bilan de notre projet est assez positif.
 En effet, les fonctionnalités principales de notre jeu ont été réalisées.
-Malgré tout, plusieurs fonctionnalités secondaires n'ont pas pu être implémenté, comme par exemple les équipements qui augmentent les statistiques du joueur.
+Malgré tout, plusieurs fonctionnalités secondaires n'ont pas pu être implémentées, comme par exemple les équipements qui augmentent les statistiques du joueur.
 Le planning prévisionnel quant à lui n'a pas été entièrement respecté.
 D'abord, nous avons souvent pris du retard sur certaines tâches à faire.
 De plus, nous sommes parfois revenus sur des fonctionnalités précédemment implémentées pour les améliorer ou les modifier.
-Les raisons qui pourraient expliquer cela sont tout d'abord des bugs imprévus qui retardent le développement, mais également une mauvaise planification initiale des tâches et de leur durée.
+Les raisons qui pourraient expliquer cela sont tout d'abord des bugs imprévus qui ont retardé le développement, mais également une mauvaise planification initiale des tâches et de leur durée.
 Pour améliorer notre projet, si on devait le continuer, on pourrait améliorer les graphismes, rajouter des animations, rajouter des nouveaux objets, monstres, etc.
 Ce projet nous a apporté plusieurs choses et compétences intéressantes.
 D'abord, il nous a appris une nouvelle compétence technique : l'utilisation de SDL2.
