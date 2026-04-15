@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.5.13)  15 APR 2026 09:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.5.13)  15 APR 2026 09:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -258,7 +258,11 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count283
 \l__pdf_internal_box=\box53
 )
-No file Rapport_For_The_King.aux.
+(./Rapport_For_The_King.aux
+
+LaTeX Warning: Label `tab_taches' multiply defined.
+
+)
 \openout1 = `Rapport_For_The_King.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
@@ -281,7 +285,7 @@ LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 11.
 LaTeX Font Info:    ... okay on input line 11.
 LaTeX Info: Redefining \degres on input line 11.
 LaTeX Info: Redefining \up on input line 11.
-(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+ (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count284
 \scratchdimen=\dimen157
@@ -304,15 +308,17 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 Package hyperref Info: Link coloring OFF on input line 11.
+
+(./Rapport_For_The_King.out) (./Rapport_For_The_King.out)
 \@outlinefile=\write3
 \openout3 = `Rapport_For_The_King.out'.
 
-<logolemansU.png, id=4, 494.84875pt x 139.52126pt>
+<logolemansU.png, id=76, 494.84875pt x 139.52126pt>
 File: logolemansU.png Graphic file (type png)
 <use logolemansU.png>
 Package pdftex.def Info: logolemansU.png  used on input line 24.
 (pdftex.def)             Requested size: 100.91609pt x 28.45274pt.
-<logo_IC2.png, id=6, 662.9568pt x 261.1356pt>
+<logo_IC2.png, id=78, 662.9568pt x 261.1356pt>
 File: logo_IC2.png Graphic file (type png)
 <use logo_IC2.png>
 Package pdftex.def Info: logo_IC2.png  used on input line 26.
@@ -323,12 +329,14 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 31.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 31.
-
-[1
+ [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/
-dvips/cm-super/cm-super-t1.enc} <./logolemansU.png> <./logo_IC2.png>]
-No file Rapport_For_The_King.toc.
+dvips/cm-super/cm-super-t1.enc} <./logolemansU.png> <./logo_IC2.png>] (./Rappor
+t_For_The_King.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 4.
+)
 \tf@toc=\write4
 \openout4 = `Rapport_For_The_King.toc'.
 
@@ -339,9 +347,6 @@ gramme (\T1/cmr/bx/n/10.95 flexible\T1/cmr/m/n/10.95 ).
  []
 
 [3]
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 108.
-
 Overfull \hbox (96.78642pt too wide) in paragraph at lines 108--131
 [][]
  []
@@ -351,11 +356,7 @@ Overfull \hbox (55.79117pt too wide) in paragraph at lines 153--191
 [][]
  []
 
-[6]
-
-LaTeX Warning: Reference `tab_taches' on page 7 undefined on input line 193.
-
-[7] [8]
+[6] [7] [8]
 Overfull \hbox (2.54381pt too wide) in paragraph at lines 228--229
 []\T1/cmr/m/n/10.95 Le bâ-ti-ment sur la case, si il existe, comme un cam-pe-me
 nt par exemple. 
@@ -367,13 +368,13 @@ Overfull \hbox (5.49661pt too wide) in paragraph at lines 230--231
 erte par le brouillard. 
  []
 
-<carte.png, id=69, 1371.1225pt x 770.88pt>
+<carte.png, id=150, 1371.1225pt x 770.88pt>
 File: carte.png Graphic file (type png)
 <use carte.png>
 Package pdftex.def Info: carte.png  used on input line 246.
 (pdftex.def)             Requested size: 253.02605pt x 142.26378pt.
 [9 <./carte.png>]
-<../img_jeu/hexagones.png, id=76, 778.91pt x 451.6875pt>
+<../img_jeu/hexagones.png, id=157, 778.91pt x 451.6875pt>
 File: ../img_jeu/hexagones.png Graphic file (type png)
 <use ../img_jeu/hexagones.png>
 Package pdftex.def Info: ../img_jeu/hexagones.png  used on input line 257.
@@ -397,18 +398,18 @@ Underfull \hbox (badness 1019) in paragraph at lines 275--276
 de vie res-tants pour
  []
 
-<../img_jeu/combat_mage.png, id=84, 1146.08176pt x 592.01175pt>
+<../img_jeu/combat_mage.png, id=164, 1146.08176pt x 592.01175pt>
 File: ../img_jeu/combat_mage.png Graphic file (type png)
 <use ../img_jeu/combat_mage.png>
 Package pdftex.def Info: ../img_jeu/combat_mage.png  used on input line 282.
 (pdftex.def)             Requested size: 330.48401pt x 170.71652pt.
-<../img_jeu/combat_final.png, id=85, 1156.32pt x 650.43pt>
+<../img_jeu/combat_final.png, id=165, 1156.32pt x 650.43pt>
 File: ../img_jeu/combat_final.png Graphic file (type png)
 <use ../img_jeu/combat_final.png>
 Package pdftex.def Info: ../img_jeu/combat_final.png  used on input line 288.
 (pdftex.def)             Requested size: 303.49443pt x 170.71652pt.
 [11 <../img_jeu/combat_mage.png> <../img_jeu/combat_final.png>]
-<menu.png, id=94, 1371.1225pt x 770.88pt>
+<menu.png, id=174, 1371.1225pt x 770.88pt>
 File: menu.png Graphic file (type png)
 <use menu.png>
 Package pdftex.def Info: menu.png  used on input line 300.
@@ -425,20 +426,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 315--316
  []
 
 [12 <./menu.png>]
-<menu_schema.jpeg, id=101, 1027.84pt x 561.09625pt>
+<menu_schema.jpeg, id=180, 1027.84pt x 561.09625pt>
 File: menu_schema.jpeg Graphic file (type jpg)
 <use menu_schema.jpeg>
 Package pdftex.def Info: menu_schema.jpeg  used on input line 327.
 (pdftex.def)             Requested size: 260.59795pt x 142.26378pt.
  [13 <./menu_schema.jpeg>]
-<../img_jeu/interaction_monstre4.png, id=109, 1153.30875pt x 594.42075pt>
+<../img_jeu/interaction_monstre4.png, id=187, 1153.30875pt x 594.42075pt>
 File: ../img_jeu/interaction_monstre4.png Graphic file (type png)
 <use ../img_jeu/interaction_monstre4.png>
 Package pdftex.def Info: ../img_jeu/interaction_monstre4.png  used on input lin
 e 373.
 (pdftex.def)             Requested size: 331.23053pt x 170.71652pt.
  [14]
-<../img_jeu/interaction_sanctuaire1.png, id=114, 1606.0pt x 903.375pt>
+<../img_jeu/interaction_sanctuaire1.png, id=192, 1606.0pt x 903.375pt>
 File: ../img_jeu/interaction_sanctuaire1.png Graphic file (type png)
 <use ../img_jeu/interaction_sanctuaire1.png>
 Package pdftex.def Info: ../img_jeu/interaction_sanctuaire1.png  used on input 
@@ -462,25 +463,16 @@ L3 programming layer <2024-01-22>
  ***********
 
 
-LaTeX Warning: There were undefined references.
+LaTeX Warning: There were multiply-defined labels.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `Rapport_For_The_King.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `Rapport_For_The_King.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  96449E49EBFC8F1D3B4BF74D0D66DDA4;2709.
+Package rerunfilecheck Info: File `Rapport_For_The_King.out' has not changed.
+(rerunfilecheck)             Checksum: 96449E49EBFC8F1D3B4BF74D0D66DDA4;2709.
  ) 
 Here is how much of TeX's memory you used:
- 10624 strings out of 474222
- 167768 string characters out of 5748733
+ 10654 strings out of 474222
+ 168334 string characters out of 5748733
  1937975 words of memory out of 5000000
- 32717 multiletter control sequences out of 15000+600000
+ 32739 multiletter control sequences out of 15000+600000
  569266 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,8n,79p,711b,617s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -491,10 +483,10 @@ m-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb
 onts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm
 -super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1728.pfb>
 </usr/share/texmf/fonts/type1/public/cm-super/sfti1095.pfb>
-Output written on Rapport_For_The_King.pdf (17 pages, 11996546 bytes).
+Output written on Rapport_For_The_King.pdf (17 pages, 12000917 bytes).
 PDF statistics:
- 192 PDF objects out of 1000 (max. 8388607)
- 136 compressed objects within 2 object streams
+ 267 PDF objects out of 1000 (max. 8388607)
+ 210 compressed objects within 3 object streams
  54 named destinations out of 1000 (max. 500000)
- 51 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 195 words of extra memory for PDF output out of 10000 (max. 10000000)
 
