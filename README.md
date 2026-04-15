@@ -79,7 +79,6 @@ _make all_
 **Test du projet**  
 Important : il faut être à la racine du projet (ForTheKing/)  
 _./bin/menu_  : lance le menu du jeu pour choisir le personnage ou accéder aux réglages.  
-_./bin/fortheking_ : lance directement le jeu avec un mage comme personnage par défaut.
 
 ## 🎮 Comment Jouer au Jeu
 
