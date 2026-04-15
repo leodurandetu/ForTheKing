@@ -257,6 +257,30 @@ Enfin, pour que le jeu reste utilisable sur différentes machines, il s’adapte
 \caption{Principe mathématique de l'affichage hexagonal}
 \end{figure}
 
+Il existe une raison secondaire derrière le choix des hexagones : le concept de 2.5D, ou pseudo-3D.
+De manière générale, les hexagones permettent d'obtenir un rendu visuel plus fluide et attrayant que les tuiles carrées standards.
+Ils peuvent être améliorés pour paraître presque en 3D grâce à quelques manipulations visuelles simples, telles que la superposition de couches, l'ombrage et la génération de sprites sous un angle isométrique.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=5cm]{../img_jeu/hex1_v2.png}
+\caption{Hexagone plat aspect 3D}
+\end{figure}
+
+Par exemple, la figure ci-dessus présente un hexagone qui est une image plate (PNG), mais à laquelle on donne un aspect 3D en modifiant son angle et en ajoutant une base.
+À partir de là, le workflow est presque identique à notre version initiale : nous générons des textures et des éléments via l'IA générative (principalement Gemini et le modèle d'image de ChatGPT), nous les extrayons par découpage, puis nous ajoutons des ombres (une copie du calque de l'élément remplie de noir) via Adobe Photoshop.
+Enfin, nous les empilons dans l'ordre suivant : base, texture du biome, élément principal, ombre, puis les éléments optionnels comme le brouillard de guerre.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=5cm]{../img_jeu/hex2_v2.png}
+\caption{Résultat final}
+\end{figure}
+
+Le résultat obtenu est visuellement plus esthétique et donne l'impression d'une scène presque en 3D.
+La seule différence mécanique concernant le rendu via SDL est le déplacement du centre de l'hexagone : il passe du centre du PNG au centre réel de l'hexagone (\emph{x:25, y:75} au lieu de \emph{x:50, y:50}).
+Nous avons commencé à implémenter ce type de visualisation, mais en raison de contraintes de temps, nous avons décidé de conserver la première version.
+
 \subsection{Gestion des combats}
 
 Dans ce jeu, les affrontements se divisent en deux catégories : les combats classiques contre les monstres de la carte, et l'affrontement contre le boss final. Pour cela, nous concevons un système de combat qui fonctionne de manière autonome, dans sa propre fenêtre graphique et avec sa propre logique de rendu.
@@ -294,13 +318,13 @@ Enfin, pour éviter les fuites, nous appelons systématiquement la fonction \emp
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=6cm]{../img_jeu/combat_mage.png}
+\includegraphics[height=5cm]{../img_jeu/combat_mage.png}
 \caption{{\emph{Combat classique}}}
 \end{figure}
 \hfill
 \begin{figure}[H]
 \centering
-\includegraphics[height=6cm]{../img_jeu/combat_final.png}
+\includegraphics[height=5cm]{../img_jeu/combat_final.png}
 \caption{{\emph{Combat avec le boss final}}}
 \end{figure}
 \newpage
@@ -394,13 +418,13 @@ Lorsque la partie se termine ou que le personnage a perdu, la fonction \emph{det
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=6cm]{../img_jeu/interaction_monstre4.png}
+\includegraphics[height=4.5cm]{../img_jeu/interaction_monstre4.png}
 \caption{{\emph{Interaction du personnage avec un monstre}}}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=6cm]{../img_jeu/interaction_sanctuaire1.png}
+\includegraphics[height=5cm]{../img_jeu/interaction_sanctuaire1.png}
 \caption{{\emph{Interaction du personnage avec un sanctuaire}}}
 \end{figure}
 
