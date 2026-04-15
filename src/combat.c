@@ -282,7 +282,11 @@ void attaque_legere(combat_t *combat){
         Mix_PlayChannel(-1, combat->son_attaque_legere, 0);
     
     int pourcentage = 20 + rand() % 21; // 20% à 40%
-    int vrai_degats = (pourcentage * combat->perso->degats)/100;
+
+    /* 5 points de force = 1 dégât */
+    int force = combat->perso->force;
+
+    int vrai_degats = (int) ((pourcentage * (combat->perso->degats + force / 5.0f)) / 100.0f);
 
     combat->monstre->sante -= vrai_degats;
 
@@ -302,8 +306,12 @@ void attaque_lourde(combat_t *combat){
     2 chances sur 3 de réussir l'attaque lourde
     */
     if (((rand() % 3) + 1) != 1) {
-        int pourcentage = 30 + rand() % 31; // 30% à 60%
-        int vrai_degats = (pourcentage * combat->perso->degats)/100;
+        float pourcentage = 30 + rand() % 31; // 30% à 60%
+
+        /* 5 points de force = 1 dégât */
+        int force = combat->perso->force;
+        
+        int vrai_degats = (int) ((pourcentage * (combat->perso->degats + force / 5.0f)) / 100.0f);
 
         combat->monstre->sante -= vrai_degats;
 
