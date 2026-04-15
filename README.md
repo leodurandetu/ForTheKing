@@ -75,6 +75,7 @@ Remarque : ce guide est valable pour les machines Unix ou Linux.
 
 **Initialisation du dépôt git**  
 cd chemin/ou/stocker/le/projet  
+
 _Récupérer le jeu :_ 
 ```bash 
 git clone https://github.com/leodurandetu/ForTheKing.git
