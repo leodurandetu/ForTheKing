@@ -37,12 +37,12 @@ Les combats se déroulent au tour par tour. Les attaques et les défenses se bas
 Le héros peut trouver des objets comme des kits de soins. Les objets peuvent être utilisés pour regagner des statistiques pour le personnage. Il peut aussi augmenter
 ses statistiques (dégâts, force, intélligence, rapidité et expérience) en récupérant des points de chaque statistique dans différents sanctuaires. Le joueur a la possibilité de se reposer dans des campements afin de récupérer soit une partie de ses points de vie ou soit la totalité. Pour cela il devra dépenser des pièces d'or.
 
-**Expérience et niveau**
+**Expérience et niveau**  
 Le personnage gagne de l'expérience en tuant des monstres ou en faisant des quêtes.
 Une fois la barre d'expérience pleine, le personnage gagne un niveau.
 Ce gain de niveau fait gagner des statistiques bonus.
 
-**Statistiques des personnages**
+**Statistiques des personnages**  
 - Force (En rouge) : augmente les dégâts (5 Force = 1 Dégât)
 - Intelligence (En bleu) : pas implémenté
 - Rapidité (En vert) : pas implémenté
