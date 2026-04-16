@@ -6,6 +6,10 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{xltabular}
+\usepackage{ltablex}
 \author{Durand Leo, Tsamarayev Massoud, Mohamed Saandi}
 \date{\today}
 \begin{document}
@@ -149,47 +153,70 @@ Cela nous a permis de comparer les deux pour voir si nous avions respecté le pl
 
 \subsection{Répartition des tâches}
 
-\begin{table}[H]
-\begin{tabular}{|l|c|}
+La répartition des tâches peut être vue dans le tableau~\ref{tab_taches}.
+
+\begin{xltabular}{\textwidth}{|l|X|}
+\caption{Répartition des fonctionnalités pour chaque étudiant.} \label{tab_taches} \\
 \hline
-Tâche effectuée & Nom et prénom \\
+\textbf{Nom et prénom} & \textbf{Fonctionnalités codées} \\
 \hline
-Placement du personnage sur la carte & Durand Léo \\
-Mécaniques de déplacement & Durand Léo \\
-Création et utilisation des objets & Durand Léo \\
-Système d'inventaire & Durand Léo \\
-Sauvegarde des parties & Durand Léo \\
-Affichage de la carte & Durand Léo \\
-Affichage interface joueur & Durand Léo \\
-Initialisation de la carte & Durand Léo \\
-Tests Unitaires & Durand Léo \\
-Boss final et son combat & Durand Léo \\
-Musique & Durand Léo, Tsamarayev Massoud \\
-Affichage des combats & Durand Léo, Tsamarayev Massoud \\
-Génération de l'eau & Tsamarayev Massoud \\
-Affichage hexagonal & Tsamarayev Massoud \\
-Mécaniques du combat & Tsamarayev Massoud, Mohamed Saandi \\
-Menu principal & Tsamarayev Massoud \\
-Menu de pause & Tsamarayev Massoud \\
-Graphismes & Tsamarayev Massoud, Durand Léo \\
-Système de niveau & Tsamarayev Massoud \\
-Placement aléatoire des monstres & Tsamarayev Massoud \\
-Quêtes & Tsamarayev Massoud \\
-Interactions avec les sanctuaires & Tsamarayev Massoud \\
-Interactions avec les campements & Tsamarayev Massoud \\
-Documentation Doxygen & Mohamed Saandi \\
-Génération des biomes & Mohamed Saandi \\
-Interactions avec les monstres & Mohamed Saandi \\
-Gantt prévisionnel & Mohamed Saandi \\
-Bruitages & Mohamed Saandi \\
-Création des monstres et leur attributs & Toute l'équipe \\
-Création des personnages et leur attributs & Toute l'équipe \\
-Génération de la carte & Toute l'équipe \\
+\endhead % Tout ce qui est au-dessus sera répété si le tableau change de page
+
 \hline
-\end{tabular}
-\label{tab_taches}
-\caption{Les différents étudiants qui ont travaillé sur ce projet ainsi que les tâches qu'ils ont effectuées.} 
-\end{table}
+\endfoot % Ligne de bas de page
+
+Durand Léo & 
+\begin{itemize}[leftmargin=*, noitemsep]
+\item Placement du personnage sur la carte
+\item Mécaniques de déplacement
+\item Création et utilisation des objets
+\item Système d'inventaire
+\item Sauvegarde des parties
+\item Affichage de la carte
+\item Affichage interface joueur
+\item Initialisation de la carte
+\item Tests unitaires
+\item Boss final et son combat
+\item Musique
+\item Affichage des combats
+\item Graphismes
+\end{itemize} \\
+\hline
+Tsamarayev Massoud & 
+\begin{itemize}[leftmargin=*, noitemsep]
+\item Musique
+\item Affichage des combats
+\item Génération de l'eau
+\item Affichage hexagonal
+\item Mécaniques du combat
+\item Menu principal
+\item Menu de pause
+\item Graphismes
+\item Système de niveau
+\item Placement aléatoire des monstres
+\item Quêtes
+\item Interactions avec les sanctuaires
+\item Interactions avec les campements
+\end{itemize} \\
+\hline
+Mohamed Saandi & 
+\begin{itemize}[leftmargin=*, noitemsep]
+\item Mécaniques du combat
+\item Documentation Doxygen
+\item Génération des biomes
+\item Interactions avec les monstres
+\item Gantt prévisionnel
+\item Bruitages
+\end{itemize} \\
+\hline
+Toute l'équipe & 
+\begin{itemize}[leftmargin=*, noitemsep]
+\item Création des monstres et leurs attributs
+\item Création des personnages et leurs attributs
+\item Génération de la carte
+\end{itemize} \\
+\hline
+\end{xltabular}
 
 \subsection{Outils techniques utilisés}
 
