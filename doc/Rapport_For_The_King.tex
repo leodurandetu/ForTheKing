@@ -243,24 +243,33 @@ Nous présentons les principaux systèmes du jeu ainsi que leur implémentation 
 
 \subsection{Génération aléatoire de la carte}
 
-La carte du jeu est un tableau en deux dimensions composée de structures de cases.
-Elle est créée par allocation dynamique pour qu'on puisse régler la taille de la carte, on le fait notamment dans les tests unitaires.
-Chaque case a ses propres caractéristiques:
+La structure de notre monde repose sur un tableau 2D alloué dynamiquement. Chaque case est définie par une structure \emph{case\_t} qui regroupe les informations essentielles au \emph{gameplay} : le biome (\emph{TERRE}, \emph{FORET}, \emph{DESERT}, \emph{NEIGE}, \emph{EAU}), les obstacles (arbres, montagnes, cactus), les bâtiments, un pointeur vers un éventuel monstre, le type de sanctuaire, ainsi qu’un entier gérant le brouillard de guerre.
+
+\medskip
+
+\noindent\textbf{Choix de l'algorithme : Perlin Noise}
+
+\noindent Au début de notre développement, nous avions opté pour une approche très simple : nous utilisions la fonction \emph{rand()} pour assigner un biome à chaque case. Cependant, nous nous sommes vite rendu compte que le rendu était visuellement catastrophique. La carte n'était pas naturelle, ce qui rendait l'exploration peu attirante et le monde peu crédible. 
+Face à ce problème, nous avons fait des recherches sur la génération procédurale. Nous avons étudié des pistes comme l'algorithme \emph{Diamond-Square} ou les automates cellulaires, mais c'est finalement le \emph{Perlin Noise} qui nous a convaincus. C'était pour nous le meilleur choix : il permet de générer un bruit « cohérent » (où deux points proches ont des valeurs similaires), créant ainsi des reliefs et des biomes aux formes naturelles et fluides.
+
+\medskip
+
+\noindent\textbf{Implémentation du Perlin Noise}
+
+Pour commencer, l'initialisation (perlin\_init) : nous avons mis en place une table de permutation de 256 entiers, mélangée par l'algorithme de Fisher-Yates à partir d'une graine (\emph{seed}). Nous l'avons dupliquée à 512 entrées pour simplifier nos calculs d'index et éviter les débordements. C'est cette étape qui garantit que deux parties lancées avec la même seed généreront exactement le même monde.
+Vient ensuite le calcul mathématique (perlin\_2d) : pour chaque point $(x, y)$, nous récupérons les coordonnées de la cellule et les positions relatives $(xf, yf)$. Nous appliquons alors une fonction de lissage cubique (fade : $t \rightarrow 6t^5 - 15t^4 + 10t^3$) pour éviter les transitions trop brusques. Après avoir haché les quatre coins de la cellule via notre table de permutation, nous utilisons la fonction \emph{grad} pour calculer les gradients et une interpolation bilinéaire (\emph{lerp}) pour obtenir une valeur finale comprise entre -1.0 et 1.0.
+Enfin, nous transformons ce bruit en carte de jeu :
 
 \begin{itemize}
-\item Le type de sanctuaire présent sur la case.
-\item Un entier représentant si le bonus du sanctuaire a été saisi.
-\item Le biome de la case: FORET, DESERT, NEIGE, EAU, TERRE.
-\item Le terrain ou l'obstacle de la case, comme des montagnes, des arbres, un cactus etc.
-\item Le bâtiment sur la case, s'il existe, comme un campement par exemple.
-\item Un pointeur sur un monstre, s'il existe.
-\item Un entier représentant si la case est visible ou couverte par le brouillard.
+    \item \textbf{L'eau :} La fonction \emph{generer\_eau} parcourt la grille avec une échelle de 0.08. Si la valeur dépasse 0.25, la case devient de l'eau. Cela crée des lacs et des océans.
+    \item \textbf{Les biomes :} Avec \emph{generer\_biomes}, nous faisons trois appels décalés dans l'espace (avec des \emph{offsets} de $+50.0$ et $+100.0$) pour obtenir des cartes de bruit indépendantes pour la forêt, le désert et la neige. Pour chaque case de terre, nous comparons ces valeurs et choisissons le biome ayant le score le plus élevé (au-dessus d'un seuil de $0.1$).
 \end{itemize}
 
-La génération de la carte est basée sur l'algorithme de Perlin Noise.
-L'avantage de cet algorithme est qu'il donne des résultats plus naturels que simplement un générateur de nombres aléatoires.
-Au lieu d'utiliser de l'aléatoire pur, le Perlin noise organise des valeurs sur une grille et les mélange doucement pour éviter les cassures.
-On obtient alors un bruit "fluide" et continu, qui ressemble à des formes naturelles.
+\medskip
+\noindent\textbf{Peuplement et placement des entités}
+
+\noindent Une fois le relief généré, il nous restait à remplir ce monde. Nous avons implémenté la fonction \emph{ajout\_obstacles} qui parcourt les biomes et place des éléments selon des probabilités fixes : des arbres en forêt (10 \%), des montagnes dans la neige (10 \%), des cactus dans le désert (8 \%) ou des bassins d'eau en terre (10 \%). Nous avons constaté qu'au-dessus de 10 \%, la quantité d'obstacles était énorme, c'est pour cela que nous sommes restés entre 8 \% et 10 \%.
+Pour les ennemis, nous utilisons \emph{faire\_apparaitre\_groupe}. Nous avons décidé de limiter la densité à un monstre pour vingt cases pour ne pas surcharger le joueur. Pour éviter que deux monstres ne se superposent ou ne soient trop proches dès le départ, la fonction \emph{a\_un\_voisin\_monstre} impose une distance minimale de trois cases entre chaque entité. Enfin, nous répartissons aléatoirement trente sanctuaires sur les cases restées libres pour ponctuer l'exploration.
 
 \subsection{Affichage du jeu}
 
@@ -513,6 +522,23 @@ Il nous a aussi permis de connaître nos limites et comment les surmonter.
 	\bibitem{hex}
 	Red Blob Games - Affichage hexagonal.
 	\url{https://www.redblobgames.com/grids/hexagons/}
+
+	\bibitem{IA}
+	ChatGPT - Gemini
+	\url{https://openai.com/fr-FR/index/chatgpt/}
+	\url{https://gemini.google/overview/deep-research/}
+
+	\bibitem{SDL2}
+	bibliothèque SDL2
+	\url{https://wiki.libsdl.org/SDL2/FrontPage}
+
+	\bibitem{LateX}
+	LateX
+	\url{https://www.overleaf.com/learn}
+
+	\bibitem{Doxygen}
+	Doxygen
+	\url{https://www.doxygen.nl/manual/starting.html}
 
 \end{thebibliography}
 
