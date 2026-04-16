@@ -142,12 +142,13 @@ Quêtes & Finir les quêtes pour avoir des récompenses. \\
 
 Pour planifier les tâches, nous avons utilisé un outil spécifique : les diagrammes de Gantt.
 Cet outil nous a permis de créer un planning prévisionnel au début du projet, ainsi qu'un planning réel à la fin du projet.
+Chaque phase a été découpée en tâches hebdomadaires avec des objectifs intermédiaires à réaliser.
 Cela nous a permis de comparer les deux pour voir si nous avions respecté le planning prévisionnel initial.
 
 \begin{enumerate} 
 	\item Dans un premier temps, nous avons commencé par la phase d'initialisation, qui a consisté notamment en la mise en place du dépôt GitHub ainsi que l'installation des librairies nécessaires comme SDL2. 
 	\item Puis dans un second temps, la phase de préparation a consisté à définir les bases du projet: les règles du jeu, les quêtes, les combats, la structure de la carte et les attributs des monstres et personnages. 
-	\item La phase principale du projet a été le codage et les tests, qui se sont étalés sur plusieurs semaines. Nous avons travaillé sur la génération aléatoire de la carte, l'affichage avec SDL2, la création des personnages et des menus, ainsi que la programmation des systèmes de combat, des monstres, des quêtes et du boss final. Cette phase a également inclus la gestion des sauvegardes, des objets et de l'inventaire, ainsi que de nombreux tests et corrections de bugs. On remarque que certaines tâches ont pris plus de temps que prévu, notamment les fonctionnalités complexes comme les combats et la génération de la carte. 
+	\item La phase principale du projet a été le codage et les tests, qui se sont étalés sur plusieurs semaines. Nous avons travaillé sur la génération aléatoire de la carte, l'affichage avec SDL2, la création des personnages et des menus, ainsi que la programmation des systèmes de combat, des monstres, des quêtes et du boss final. Cette phase a également inclus la gestion des sauvegardes, des objets et de l'inventaire, ainsi que de nombreux tests et corrections de bugs. Nous avons également implémenté les campements et les sanctuaires ainsi que leurs interactions. Enfin, un système de quêtes avec leur récompenses associées a été implémenté, ainsi qu'un système de montée de niveau du personnage grâce à l'expérience obtenue en combattant les monstres. On remarque que certaines tâches ont pris plus de temps que prévu, notamment les fonctionnalités complexes comme les combats et la génération de la carte. 
 	\item Enfin, la phase de livraison a regroupé la rédaction du rapport, la préparation de la soutenance ainsi que la documentation du code avec Doxygen. Cette phase a permis de finaliser le projet et de le rendre présentable et compréhensible par tout le monde. 
 \end{enumerate}
 
@@ -504,8 +505,15 @@ Il nous a aussi permis de connaître nos limites et comment les surmonter.
 \section{Bibliographie}
 
 \begin{thebibliography}{REF}
-	\bibitem{Le bruit de Perlin} https://fr.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-noise/a/perlin-noise
-	\bibitem{Affichage hexagonal} https://www.redblobgames.com/grids/hexagons/
+
+	\bibitem{perlin}
+	Bruit de Perlin.
+	\url{https://fr.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-noise/a/perlin-noise}
+
+	\bibitem{hex}
+	Red Blob Games - Affichage hexagonal.
+	\url{https://www.redblobgames.com/grids/hexagons/}
+
 \end{thebibliography}
 
 \newpage
