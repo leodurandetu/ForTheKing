@@ -42,7 +42,7 @@
 \section{Introduction}
 
 \textbf{Contexte du projet} \\
-Ce document présente le projet de développement du jeu For The King, réalisé dans le cadre de la deuxième année de licence Informatique à l'université du Mans, pendant la période de janvier à février 2026.
+Ce document présente le projet de développement du jeu For The King, réalisé dans le cadre de la deuxième année de licence Informatique à l'université du Mans, durant la période de janvier à février 2026.
 L'objectif principal est la conception et l'implémentation d'un jeu vidéo en langage C, en utilisant la bibliothèque graphique SDL2 pour la gestion de l'affichage et des interactions.
 
 \medskip
@@ -53,7 +53,7 @@ Ce projet vise à mettre en pratique des concepts informatiques fondamentaux :
 	\item \textbf{Gestion de la mémoire} : Manipulation des pointeurs et des structures en C pour éviter toute fuite mémoire.
 	\item \textbf{Architecture logicielle} : Structuration du code pour séparer la logique de jeu (moteur) du rendu graphique (SDL2).
 	\item \textbf{Algorithmique} : De façon plus générale, utiliser les concepts clés vus en cours en Algorithmique 2 et Algorithmique 3.
-	\item \textbf{Utilisation d'outils techniques} : Git, Doxygen, Latex, makefile, outils de débogage, etc.
+	\item \textbf{Utilisation d'outils techniques} : Git, Doxygen, LaTeX, makefile, outils de débogage, etc.
 \end{itemize}
 
 \medskip
@@ -67,7 +67,7 @@ Une bibliographie et une annexe sont également disponibles.
 
 \section{Conception}
 
-La phase de conception permet de réfléchir sur comment le jeu sera construit avant de coder. L'idée principale est de créer un système composé de plusieurs parties qui fonctionnent de manière indépendante, c'est-à-dire que chaque élément du jeu comme la carte, les combats et l'interface utilisateur peut être développé et testé séparément sans affecter les autres parties du jeu. Cette approche est basée sur trois principes simples :
+La phase de conception permet de réfléchir à la manière dont le jeu sera construit avant de coder. L'idée principale est de créer un système composé de plusieurs parties qui fonctionnent de manière indépendante, c'est-à-dire que chaque élément du jeu, comme la carte, les combats et l'interface utilisateur peut être développé et testé séparément sans affecter les autres parties du jeu. Cette approche est basée sur trois principes simples :
 
 \begin{itemize}
     \item \textbf{Séparation des éléments} : chaque fonctionnalité est séparée pour éviter qu'une modification ne casse le reste du programme (\textbf{flexible}).
@@ -120,13 +120,13 @@ Inventaire & Chaque personnage a un inventaire qui contient des objets. \\
 Objet & On peut obtenir des objets en tuant des monstres. \\
 Exemples d'objets & Kits de soins et pièces d'or. \\
 Utilisation d'un objet & On peut utiliser tous les objets. \\
-Interaction avec monstre & Cliquer la case du monstre sur la carte. \\
+Interaction avec monstre & Cliquer sur la case du monstre sur la carte. \\
 Options du combat & On peut soit fuir, soit attaquer. \\
 Déroulement du combat & Tour par tour, commence par le personnage joueur. \\
 Attaques possibles & Lourde ou légère. \\
 Obstacles sur la carte & Montagnes, cactus, arbres etc. \\
 Bâtiments sur la carte & Campement qui sert à regagner des PVs. \\
-Sanctuaires sur la carte & Donnent un bonus si découverts et validés. \\
+Sanctuaires sur la carte & Donnent un bonus s'ils sont découverts et validés. \\
 Expérience & Gagner un combat rapporte de l'EXP. \\
 Niveau & Monter en niveau améliore les statistiques. \\
 Quêtes & Finir les quêtes pour avoir des récompenses. \\
@@ -148,7 +148,7 @@ Cela nous a permis de comparer les deux pour voir si nous avions respecté le pl
 \begin{enumerate} 
 	\item Dans un premier temps, nous avons commencé par la phase d'initialisation, qui a consisté notamment en la mise en place du dépôt GitHub ainsi que l'installation des librairies nécessaires comme SDL2. 
 	\item Puis dans un second temps, la phase de préparation a consisté à définir les bases du projet: les règles du jeu, les quêtes, les combats, la structure de la carte et les attributs des monstres et personnages. 
-	\item La phase principale du projet a été le codage et les tests, qui se sont étalés sur plusieurs semaines. Nous avons travaillé sur la génération aléatoire de la carte, l'affichage avec SDL2, la création des personnages et des menus, ainsi que la programmation des systèmes de combat, des monstres, des quêtes et du boss final. Cette phase a également inclus la gestion des sauvegardes, des objets et de l'inventaire, ainsi que de nombreux tests et corrections de bugs. Nous avons également implémenté les campements et les sanctuaires ainsi que leurs interactions. Enfin, un système de quêtes avec leur récompenses associées a été implémenté, ainsi qu'un système de montée de niveau du personnage grâce à l'expérience obtenue en combattant les monstres. On remarque que certaines tâches ont pris plus de temps que prévu, notamment les fonctionnalités complexes comme les combats et la génération de la carte. 
+	\item La phase principale du projet a été le codage et les tests, qui se sont étalés sur plusieurs semaines. Nous avons travaillé sur la génération aléatoire de la carte, l'affichage avec SDL2, la création des personnages et des menus, ainsi que la programmation des systèmes de combat, des monstres, des quêtes et du boss final. Cette phase a également inclus la gestion des sauvegardes, des objets et de l'inventaire, ainsi que de nombreux tests et corrections de bugs. Nous avons également implémenté les campements et les sanctuaires ainsi que leurs interactions. Enfin, un système de quêtes avec leurs récompenses associées a été implémenté, ainsi qu'un système de montée de niveau du personnage grâce à l'expérience obtenue en combattant les monstres. On remarque que certaines tâches ont pris plus de temps que prévu, notamment les fonctionnalités complexes comme les combats et la génération de la carte. 
 	\item Enfin, la phase de livraison a regroupé la rédaction du rapport, la préparation de la soutenance ainsi que la documentation du code avec Doxygen. Cette phase a permis de finaliser le projet et de le rendre présentable et compréhensible par tout le monde. 
 \end{enumerate}
 
@@ -222,17 +222,17 @@ Toute l'équipe &
 \subsection{Outils techniques utilisés}
 
 \begin{itemize}
-\item Le langage C consiste en un langage de programmation bas niveau créé en 1972 par Dennis Ritchie et Ken Thompson. C'est le langage que nous utilisons dans ce projet.
+\item Le langage C est un langage de programmation bas niveau créé en 1972 par Dennis Ritchie et Ken Thompson. C'est le langage que nous utilisons dans ce projet.
 \item GCC est un compilateur très connu et utilisé pour transformer le code source en langage C en programme binaire exécutable.
 \item SDL2 est une librairie en C qui permet de créer des interfaces graphiques.
 \item Makefile sert à mettre des règles de compilation automatique, et ne recompile que les fichiers qui ont changé.
 \item Valgrind permet de vérifier les fuites de mémoire dans un programme binaire exécutable.
 \item Git est un gestionnaire de version, c'est-à-dire un système qui enregistre l'évolution d'un fichier ou d'un ensemble de fichiers au cours du temps de manière à ce que l'on puisse rappeler une version antérieure d'un fichier à tout moment (ProGit, S. Shacon, B. Straub).
-\item Doxygen est utilisé dans notre projet en tant que générateur de documentation, plus précisement c'est un outil de programmation qui crée de la documentation destinée aux programmeurs ou aux utilisateurs finaux. Le générateur se base sur les codes sources commentés et les fichiers binaires.
+\item Doxygen est utilisé dans notre projet en tant que générateur de documentation, plus précisément c'est un outil de programmation qui crée de la documentation destinée aux programmeurs et aux utilisateurs finaux. Le générateur se base sur les codes sources commentés et les fichiers binaires.
 \item Des diagrammes de Gantt sont utilisés pour planifier les tâches dans notre projet.
 \item LaTeX permet de formater à l'aide de commandes un document, un rapport, un article etc. Il a été utilisé pour ce rapport.
 \item Des IA génératives comme ChatGPT et Gemini ont été utilisées pour générer les images, les textures et les sprites du jeu.
-\item Certains éditeurs d'image en ligne ont également servi à recadrer, redimensionner ou dessiner sur les images.
+\item Certains éditeurs d'images en ligne ont également servi à recadrer, redimensionner ou dessiner sur les images.
 \item Adobe Photoshop pour dessiner et modifier à partir des sprites générés par ChatGPT et Gemini.
 \end{itemize}
 
@@ -256,8 +256,8 @@ Face à ce problème, nous avons fait des recherches sur la génération procéd
 
 \noindent\textbf{Implémentation du Perlin Noise}
 
-Pour commencer, l'initialisation (perlin\_init) : nous avons mis en place une table de permutation de 256 entiers, mélangée par l'algorithme de Fisher-Yates à partir d'une graine (\emph{seed}). Nous l'avons dupliquée à 512 entrées pour simplifier nos calculs d'index et éviter les débordements. C'est cette étape qui garantit que deux parties lancées avec la même seed généreront exactement le même monde.
-Vient ensuite le calcul mathématique (perlin\_2d) : pour chaque point $(x, y)$, nous récupérons les coordonnées de la cellule et les positions relatives $(xf, yf)$. Nous appliquons alors une fonction de lissage cubique (fade : $t \rightarrow 6t^5 - 15t^4 + 10t^3$) pour éviter les transitions trop brusques. Après avoir haché les quatre coins de la cellule via notre table de permutation, nous utilisons la fonction \emph{grad} pour calculer les gradients et une interpolation bilinéaire (\emph{lerp}) pour obtenir une valeur finale comprise entre -1.0 et 1.0.
+Pour commencer, l'initialisation (perlin\_init) : nous avons mis en place une table de permutation de 256 entiers, mélangée par l'algorithme de Fisher-Yates à partir d'une graine (\emph{seed}). Nous l'avons dupliquée à 512 entrées pour simplifier nos calculs d'indices et éviter les débordements. C'est cette étape qui garantit que deux parties lancées avec la même seed généreront exactement le même monde.
+Vient ensuite le calcul mathématique (perlin\_2d) : pour chaque point $(x, y)$, nous récupérons les coordonnées de la cellule et les positions relatives $(xf, yf)$. Nous appliquons alors une fonction de lissage cubique (fade : $t \rightarrow 6t^5 - 15t^4 + 10t^3$) pour éviter les transitions trop brusques. Après avoir appliqué un hachage sur les quatre coins de la cellule via notre table de permutation, nous utilisons la fonction \emph{grad} pour calculer les gradients et une interpolation bilinéaire (\emph{lerp}) pour obtenir une valeur finale comprise entre -1.0 et 1.0.
 Enfin, nous transformons ce bruit en carte de jeu :
 
 \begin{itemize}
@@ -409,7 +409,7 @@ Pour finaliser la transition, le menu libère proprement toute la mémoire allou
 \subsection{Gestion du personnage}
 
 
-Un personnage est défini par son type (\emph{BRUTE, CHASSEUR, ASSASSIN et MAGE}) qui est de type énuméré.
+Un personnage est défini par son type (\emph{BRUTE, CHASSEUR, ASSASSIN et MAGE}) qui est un type énuméré.
 Chaque personnage possède des caractéristiques qui varient selon le type de personnage. Ces caractéristiques sont regroupées dans une structure qui permet de représenter le personnage.
 Le fonctionnement du personnage repose sur plusieurs étapes :
 
@@ -433,7 +433,7 @@ En combat, ces valeurs sont utilisées par des fonctions comme \emph{attaque\_le
 
 \item \textbf{Gestion des tours et progression :}
 \begin{description}
-\item \textbf{Déplacements :} Le joueur possède des points de déplacements (\emph{pts\_deplacements}). À chaque mouvement, ces points sont décrémentés. 
+\item \textbf{Déplacements :} Le joueur possède des points de déplacement (\emph{pts\_deplacements}). À chaque mouvement, ces points sont décrémentés. 
 La fonction \emph{restaurer\_points\_deplacements} est appelée à chaque début de tour pour réinitialiser ces points de façon aléatoire selon la classe. 
 La valeur actuelle peut être consultée via \emph{get\_pers\_movements\_points}.
 \item \textbf{Progression :} Le niveau évolue avec l'expérience accumulée (\emph{exp}). En cas de victoire, la fonction \emph{monstre\_tue} (appelée dans \emph{combat\_termine}) gère l'attribution de l'expérience et l'incrémentation du compteur \emph{nb\_victime}.
@@ -515,9 +515,9 @@ Il nous a aussi permis de connaître nos limites et comment les surmonter.
 
 \begin{thebibliography}{REF}
 
-	\bibitem{perlin}
-	Bruit de Perlin.
-	\url{https://fr.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-noise/a/perlin-noise}
+	\bibitem{WikipediaPerlin}
+	Bruit de Perlin - Wikipédia
+	\url{https://fr.wikipedia.org/wiki/Bruit_de_Perlin}
 
 	\bibitem{hex}
 	Red Blob Games - Affichage hexagonal.
@@ -529,10 +529,10 @@ Il nous a aussi permis de connaître nos limites et comment les surmonter.
 	\url{https://gemini.google/overview/deep-research/}
 
 	\bibitem{SDL2}
-	bibliothèque SDL2
+	Bibliothèque SDL2
 	\url{https://wiki.libsdl.org/SDL2/FrontPage}
 
-	\bibitem{LateX}
+	\bibitem{LaTeX}
 	LateX
 	\url{https://www.overleaf.com/learn}
 

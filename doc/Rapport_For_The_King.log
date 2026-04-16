@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.4.10)  16 APR 2026 13:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.4.10)  16 APR 2026 16:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -421,145 +421,139 @@ Overfull \hbox (97.9864pt too wide) in paragraph at lines 113--136
                                                   \__shipout_drop_firstpage_...
 l.229 \item V
              algrind permet de vÃ©rifier les fuites de mÃ©moire dans un prog...
-] [8]
-<carte.png, id=150, 1371.1225pt x 770.88pt>
+] [8] [9]
+<carte.png, id=159, 1371.1225pt x 770.88pt>
 File: carte.png Graphic file (type png)
 <use carte.png>
-Package pdftex.def Info: carte.png  used on input line 273.
+Package pdftex.def Info: carte.png  used on input line 282.
 (pdftex.def)             Requested size: 253.02605pt x 142.26378pt.
- [9 <./carte.png>]
-<../img_jeu/hexagones.png, id=157, 778.91pt x 451.6875pt>
+ [10 <./carte.png>]
+<../img_jeu/hexagones.png, id=165, 778.91pt x 451.6875pt>
 File: ../img_jeu/hexagones.png Graphic file (type png)
 <use ../img_jeu/hexagones.png>
-Package pdftex.def Info: ../img_jeu/hexagones.png  used on input line 284.
+Package pdftex.def Info: ../img_jeu/hexagones.png  used on input line 293.
 (pdftex.def)             Requested size: 245.3223pt x 142.26378pt.
-<../img_jeu/hex1_v2.png, id=158, 1178.4025pt x 1006.76125pt>
+<../img_jeu/hex1_v2.png, id=166, 1178.4025pt x 1006.76125pt>
 File: ../img_jeu/hex1_v2.png Graphic file (type png)
 <use ../img_jeu/hex1_v2.png>
-Package pdftex.def Info: ../img_jeu/hex1_v2.png  used on input line 294.
+Package pdftex.def Info: ../img_jeu/hex1_v2.png  used on input line 303.
 (pdftex.def)             Requested size: 166.5036pt x 142.26378pt.
- [10 <../img_jeu/hexagones.png> <../img_jeu/hex1_v2.png>]
-<../img_jeu/hex2_v2.png, id=167, 269.005pt x 211.79124pt>
+ [11 <../img_jeu/hexagones.png> <../img_jeu/hex1_v2.png>]
+<../img_jeu/hex2_v2.png, id=175, 269.005pt x 211.79124pt>
 File: ../img_jeu/hex2_v2.png Graphic file (type png)
 <use ../img_jeu/hex2_v2.png>
-Package pdftex.def Info: ../img_jeu/hex2_v2.png  used on input line 304.
+Package pdftex.def Info: ../img_jeu/hex2_v2.png  used on input line 313.
 (pdftex.def)             Requested size: 180.70033pt x 142.26378pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 318--319
+Underfull \hbox (badness 10000) in paragraph at lines 327--328
 
  []
 
 
-Overfull \hbox (12.35715pt too wide) in paragraph at lines 320--322
+Overfull \hbox (12.35715pt too wide) in paragraph at lines 329--331
 []\T1/cmr/m/n/10.95 Le dé-clen-che-ment d'un com-bat via la fonc-tion \T1/cmr/m
 /it/10.95 de-man-der_et_lancer_combat
  []
 
-[11 <../img_jeu/hex2_v2.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 328--329
+[12 <../img_jeu/hex2_v2.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 337--338
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 341--342
+Underfull \hbox (badness 10000) in paragraph at lines 350--351
 
  []
 
 
-Overfull \hbox (13.61505pt too wide) in paragraph at lines 343--346
+Overfull \hbox (13.61505pt too wide) in paragraph at lines 352--355
 []\T1/cmr/m/n/10.95 Lorsque les PV d'un com-bat-tant tombent à zéro, la fonc-ti
 on \T1/cmr/m/it/10.95 com-bat_termine
  []
 
-[12]
-<../img_jeu/combat_mage.png, id=181, 1146.08176pt x 592.01175pt>
+[13]
+<../img_jeu/combat_mage.png, id=187, 1146.08176pt x 592.01175pt>
 File: ../img_jeu/combat_mage.png Graphic file (type png)
 <use ../img_jeu/combat_mage.png>
-Package pdftex.def Info: ../img_jeu/combat_mage.png  used on input line 349.
+Package pdftex.def Info: ../img_jeu/combat_mage.png  used on input line 358.
 (pdftex.def)             Requested size: 275.3975pt x 142.26378pt.
-<../img_jeu/combat_final.png, id=182, 1156.32pt x 650.43pt>
+<../img_jeu/combat_final.png, id=188, 1156.32pt x 650.43pt>
 File: ../img_jeu/combat_final.png Graphic file (type png)
 <use ../img_jeu/combat_final.png>
-Package pdftex.def Info: ../img_jeu/combat_final.png  used on input line 355.
+Package pdftex.def Info: ../img_jeu/combat_final.png  used on input line 364.
 (pdftex.def)             Requested size: 252.90909pt x 142.26378pt.
- [13 <../img_jeu/combat_mage.png> <../img_jeu/combat_final.png>]
-<menu.png, id=192, 1371.1225pt x 770.88pt>
+ [14 <../img_jeu/combat_mage.png> <../img_jeu/combat_final.png>]
+<menu.png, id=197, 1371.1225pt x 770.88pt>
 File: menu.png Graphic file (type png)
 <use menu.png>
-Package pdftex.def Info: menu.png  used on input line 367.
+Package pdftex.def Info: menu.png  used on input line 376.
 (pdftex.def)             Requested size: 253.02605pt x 142.26378pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 382--383
+Underfull \hbox (badness 10000) in paragraph at lines 391--392
 
  []
 
-[14 <./menu.png>]
-<menu_schema.jpeg, id=198, 1027.84pt x 514.92375pt>
+[15 <./menu.png>]
+<menu_schema.jpeg, id=203, 1027.84pt x 514.92375pt>
 File: menu_schema.jpeg Graphic file (type jpg)
 <use menu_schema.jpeg>
-Package pdftex.def Info: menu_schema.jpeg  used on input line 394.
+Package pdftex.def Info: menu_schema.jpeg  used on input line 403.
 (pdftex.def)             Requested size: 283.96645pt x 142.26378pt.
- [15 <./menu_schema.jpeg>]
-Overfull \hbox (66.49576pt too wide) in paragraph at lines 427--430
+ [16 <./menu_schema.jpeg>]
+Overfull \hbox (62.2003pt too wide) in paragraph at lines 436--439
 []\T1/cmr/bx/n/10.95 Déplacements : \T1/cmr/m/n/10.95 Le joueur pos-sède des po
-ints de dé-pla-ce-ments (\T1/cmr/m/it/10.95 pts_deplacements\T1/cmr/m/n/10.95 )
-.
+ints de dé-pla-ce-ment (\T1/cmr/m/it/10.95 pts_deplacements\T1/cmr/m/n/10.95 ).
+
  []
 
 
-Overfull \hbox (24.2958pt too wide) in paragraph at lines 427--430
+Overfull \hbox (24.2958pt too wide) in paragraph at lines 436--439
 \T1/cmr/m/n/10.95 La va-leur ac-tuelle peut être consul-tée via \T1/cmr/m/it/10
 .95 get_pers_movements_points\T1/cmr/m/n/10.95 . 
  []
 
-<../img_jeu/interaction_monstre4.png, id=204, 1153.30875pt x 594.42075pt>
+<../img_jeu/interaction_monstre4.png, id=209, 1153.30875pt x 594.42075pt>
 File: ../img_jeu/interaction_monstre4.png Graphic file (type png)
 <use ../img_jeu/interaction_monstre4.png>
 Package pdftex.def Info: ../img_jeu/interaction_monstre4.png  used on input lin
-e 449.
+e 458.
 (pdftex.def)             Requested size: 248.4141pt x 128.0374pt.
-[16]
-<../img_jeu/interaction_sanctuaire1.png, id=213, 1606.0pt x 903.375pt>
+[17]
+<../img_jeu/interaction_sanctuaire1.png, id=218, 1606.0pt x 903.375pt>
 File: ../img_jeu/interaction_sanctuaire1.png Graphic file (type png)
 <use ../img_jeu/interaction_sanctuaire1.png>
 Package pdftex.def Info: ../img_jeu/interaction_sanctuaire1.png  used on input 
-line 455.
+line 464.
 (pdftex.def)             Requested size: 252.89732pt x 142.26378pt.
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4
-62.
+71.
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-Overfull \hbox (1.17046pt too wide) in paragraph at lines 471--472
+Overfull \hbox (1.17046pt too wide) in paragraph at lines 480--481
 []\T1/cmr/bx/n/10.95 L'inventaire \T1/cmr/m/n/10.95 : Nous avons créé une fonc-
 tion \T1/cmtt/m/n/10.95 sauvegarder_inventaire
  []
 
-[17 <../img_jeu/interaction_monstre4.png> <../img_jeu/interaction_sanctuaire1.p
+[18 <../img_jeu/interaction_monstre4.png> <../img_jeu/interaction_sanctuaire1.p
 ng>]
-Underfull \hbox (badness 10000) in paragraph at lines 477--478
+Underfull \hbox (badness 10000) in paragraph at lines 486--487
 
  []
 
-[18]
-Underfull \hbox (badness 10000) in paragraph at lines 510--512
-[]\T1/cmr/m/n/10.95 Bruit de Per-lin. []$\T1/cmtt/m/n/10.95 https : / / fr . kh
-anacademy . org / computing /
+[19]
+Underfull \hbox (badness 1292) in paragraph at lines 519--521
+[]\T1/cmr/m/n/10.95 Bruit de Per-lin - Wi-ki-pé-dia []$\T1/cmtt/m/n/10.95 https
+ : / / fr . wikipedia . org / wiki /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 510--512
-\T1/cmtt/m/n/10.95 computer-[]programming / programming-[]natural-[]simulations
- /
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 514--516
+Underfull \hbox (badness 10000) in paragraph at lines 523--525
 []\T1/cmr/m/n/10.95 Red Blob Games - Af-fi-chage hexa-go-nal. []$\T1/cmtt/m/n/1
 0.95 https : / / www .
  []
 
-[19] [20] (./Rapport_For_The_King.aux)
+[20] [21] (./Rapport_For_The_King.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -567,13 +561,13 @@ Package rerunfilecheck Info: File `Rapport_For_The_King.out' has not changed.
 (rerunfilecheck)             Checksum: 96449E49EBFC8F1D3B4BF74D0D66DDA4;2709.
  ) 
 Here is how much of TeX's memory you used:
- 11011 strings out of 478287
- 176268 string characters out of 5849289
- 494418 words of memory out of 5000000
- 28990 multiletter control sequences out of 15000+600000
+ 11020 strings out of 478287
+ 176357 string characters out of 5849289
+ 494533 words of memory out of 5000000
+ 28994 multiletter control sequences out of 15000+600000
  480770 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,9n,63p,991b,544s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,9n,63p,992b,544s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/adrice/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.60
 0pk> </home/adrice/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/eccc1095.
 600pk> </home/adrice/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti109
@@ -586,12 +580,12 @@ ec/ecrm1200.600pk> </home/adrice/.texlive2021/texmf-var/fonts/pk/ljfour/jknappe
 n/ec/ecrm1728.600pk> </home/adrice/.texlive2021/texmf-var/fonts/pk/ljfour/jknap
 pen/ec/ecbx1728.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
-fb>
-Output written on Rapport_For_The_King.pdf (20 pages, 12495050 bytes).
+mr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on Rapport_For_The_King.pdf (21 pages, 12513177 bytes).
 PDF statistics:
- 708 PDF objects out of 1000 (max. 8388607)
- 254 compressed objects within 3 object streams
- 63 named destinations out of 1000 (max. 500000)
+ 738 PDF objects out of 1000 (max. 8388607)
+ 269 compressed objects within 3 object streams
+ 68 named destinations out of 1000 (max. 500000)
  205 words of extra memory for PDF output out of 10000 (max. 10000000)
 

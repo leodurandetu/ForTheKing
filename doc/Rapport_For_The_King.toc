@@ -9,11 +9,11 @@
 \contentsline {subsection}{\numberline {3.3}Outils techniques utilisés}{7}{subsection.3.3}%
 \contentsline {section}{\numberline {4}Développement}{8}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Génération aléatoire de la carte}{8}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Affichage du jeu}{9}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Gestion des combats}{11}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Gestion du menu}{14}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Gestion du personnage}{15}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Gestion de la sauvegarde}{17}{subsection.4.6}%
-\contentsline {section}{\numberline {5}Bilan et résultats}{18}{section.5}%
-\contentsline {section}{\numberline {6}Bibliographie}{19}{section.6}%
-\contentsline {section}{\numberline {7}Annexe}{20}{section.7}%
+\contentsline {subsection}{\numberline {4.2}Affichage du jeu}{10}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Gestion des combats}{12}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Gestion du menu}{15}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Gestion du personnage}{16}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Gestion de la sauvegarde}{18}{subsection.4.6}%
+\contentsline {section}{\numberline {5}Bilan et résultats}{19}{section.5}%
+\contentsline {section}{\numberline {6}Bibliographie}{20}{section.6}%
+\contentsline {section}{\numberline {7}Annexe}{21}{section.7}%
